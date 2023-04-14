@@ -1,6 +1,5 @@
 <template>
   <el-select
-             size="mini"
              :style="cc.style"
              v-model="dataRef[fieldName()]"
              :disabled="disabled"

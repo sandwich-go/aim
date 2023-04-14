@@ -1,23 +1,22 @@
 <template>
-  <el-input
-      clearable
+  <el-checkbox
       v-model="dataRef[fieldName()]"
-      :disabled="disabled"
+      :border="cc.border"
       :style="cc.style"
-      :placeholder="cc.placeholder"
-      @change="change"
-  >
-  </el-input>
+      :disabled="disabled"
+      @change="change">
+  </el-checkbox>
 </template>
 
 <script>
+
 import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
 
 export default {
-  name: 'FormInput',
+  name: 'FormCheckbox',
   mixins: [MixinComponentConfig],
   created() {
-    this.initComponentConfig()
+    this.initComponentConfig({border: false, style: {position:'absolute',left: 0}})
   },
 }
 </script>

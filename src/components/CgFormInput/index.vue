@@ -83,17 +83,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.cg-component-flex-start {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  z-index: 10;
-}
-.cg-component-flex-end {
-  @extend .cg-component-flex-start;
-  justify-content: flex-end;
-}
-</style>

@@ -41,6 +41,9 @@ export function NewDefaultTableProperty() {
         highlightCurrentRow: true,
         headerCellStyle: {textAlign: 'center', padding: '0', color: '#606266'},
         emptyText: '',
+        rowStyle:{height:"16px",'padding':0},// object of function
+        height:null,
+        heightSubVH:0,
     })
 }
 

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div id="measure-view-hw" style="position: fixed; height: 100vh;width: 100vw"></div>
     <testing-entry/>
   </div>
 </template>

@@ -28,8 +28,8 @@
 
     <el-table
         ref="table"
+        :height="tableHeight()"
         :data="tableData"
-        height="100%"
         :border="tablePropertyData.border"
         :stripe="tablePropertyData.stripe"
         :class="tablePropertyData.class"
@@ -38,6 +38,7 @@
         :header-cell-style="tablePropertyData.headerCellStyle"
         :highlight-current-row="tablePropertyData.highlightCurrentRow"
         :cell-style="cellStyleWrapper"
+        :row-style="tablePropertyData.rowStyle"
         @current-change="currentChange"
         @row-dblclick="rowDblClick"
         @row-click="rowClick"
@@ -155,6 +156,7 @@ export default {
     tableDivStyle: Object,
     tableProperty: Object,
     cellStyle: Function,
+    rowStyle: Function,
     localData: Array,
     schema: Array,
     editConfig: Object,
@@ -222,6 +224,7 @@ export default {
         }
       },
       toolbarConfigData: {
+        enable:true,
         style: {'padding-bottom': '9px'},
         leftSpan: 19,
         leftItems: [],
@@ -295,9 +298,24 @@ export default {
       }
       return configData.leftItems.length === 0 ? 24 : (configData.rightSpan || 24 - configData.leftSpan)
     },
+    tableHeight(){
+      if(!this.tablePropertyData.heightSubVH) {
+        // null或者0根据内容自适应高度
+        if(jsb.isNull(this.tablePropertyData.height) || parseInt(this.tablePropertyData.height) === 0){
+          return null
+        }
+        if(!jsb.isEmpty(this.tablePropertyData.height)){
+          return this.tablePropertyData.height
+        }
+      }
+      let sub = 70+this.tablePropertyData.heightSubVH
+      sub += this.toolbarConfigData.enable?40:0
+      sub += this.pagerConfigData.enable?40:0
+      return `${jsb.clientHeight(sub)}px`
+    },
     // 每一个cell的属性
     cellStyleWrapper({row, column}) {
-      return this.cellStyle ? this.cellStyle({row, column}) : '';
+      return this.cellStyle ? this.cellStyle({row, column}) :null;
     },
     // current-change 回调
     currentChange(row) {

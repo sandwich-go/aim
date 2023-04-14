@@ -21,7 +21,6 @@ export default {
       activeColor: '#13ce66',
       inactiveColor: '#ff4949',
     })
-    console.log(this.cc)
   },
 }
 </script>

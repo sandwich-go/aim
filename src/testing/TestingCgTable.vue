@@ -12,6 +12,7 @@
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
         :toolbar-config="toolbarConfig"
+        :table-property="{}"
         :footer-config="footConfig"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{item}">
@@ -104,6 +105,15 @@ export default {
           slotForm:'FormInput'
         },
         {
+          field: 'Number', name: 'InputNumber', type: 'input', width: 200, sortable: true,
+          placeholder: "xxx.xx",
+          tips: "用户名不要携带@centurygame.com后缀",
+          tips_show_icon: true,
+          required: true,
+          slotForm:'FormInputNumber',
+          formConfig:{min:10,max:100,step:2}
+        },
+        {
           field: 'Online',
           name: '在线',
           type: 'switch',
@@ -131,7 +141,32 @@ export default {
               tags.push({label: item, type: jsb.randomModIsZero(2) ? 'primary' : 'success'})
             }
             return tags
-          }
+          },options:[
+            {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}]
+        },
+        {
+          field: 'Checkbox',
+          name: 'Checkbox',
+          type: 'switch',
+          sortable: true,
+          align: 'center',
+          slotForm:'FormCheckbox',
+        },
+        {
+          field: 'Datetime',
+          name: 'Datetime',
+          slotForm:'FormDatePicker',
+        },
+        {
+          field: 'DatetimeRange',
+          name: 'Datetime',
+          slotForm:'FormDateRangePicker',
+        },
+        {
+          field: 'Color',
+          name: 'Color',
+          slot:'RowSlotColor',
+          slotForm:'FormColorPicker',
         },
       ],
       proxyConfig: {

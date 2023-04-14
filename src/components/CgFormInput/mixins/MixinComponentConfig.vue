@@ -6,18 +6,17 @@ export default {
   props: {
     fieldSchema: Object,     // 字段属性
     data: Object,            // 父对象数据
-    rowTop:Object,           // 顶层行对象
+    rowTop: Object,           // 顶层行对象
     disabled: Boolean,       // 是否只读
-    styleTop:Object,         // 组件组合时在最顶层设定的style
+    styleTop: Object,         // 组件组合时在最顶层设定的style
   },
   data() {
+    const _this = this
     return {
-      dataRef:{},
+      dataRef: {},
       cc: {
-        style:{width:"100%"},
-        change: function (valNew) {
-          this.$emit("input", valNew)
-        }
+        style: {width: "100%"},
+        change: _this.emitChange
       }
     }
   },
@@ -25,16 +24,19 @@ export default {
     this.dataRef = this.data
   },
   methods: {
-    initComponentConfig(initVal){
-      this.cc = initVal?Object.assign(this.cc,initVal):this.cc
-      this.cc = Object.assign(this.cc,jsb.pathGet(this.fieldSchema,'formConfig',this.fieldSchema))
-      if(this.cc.style && this.styleTop){
-        this.cc.style = Object.assign(this.cc.style,this.styleTop)
+    emitChange(valNew) {
+      this.$emit("input", valNew)
+    },
+    initComponentConfig(initVal) {
+      this.cc = initVal ? Object.assign(this.cc, initVal) : this.cc
+      this.cc = Object.assign(this.cc, jsb.pathGet(this.fieldSchema, 'formConfig', this.fieldSchema))
+      if (this.cc.style && this.styleTop) {
+        this.cc.style = Object.assign(this.cc.style, this.styleTop)
       }
     },
-    change(newVal){
+    change(newVal) {
       this.$forceUpdate()
-      if(this.cc.change){
+      if (this.cc.change) {
         this.cc.change(newVal)
       }
     },
@@ -43,15 +45,15 @@ export default {
     },
     options() {
       let ret = this.__fieldOptions(this.cc)
-      if(jsb.isNull(ret)){
+      if (jsb.isNull(ret)) {
         ret = this.__fieldOptions(this.fieldSchema)
       }
       return ret || []
     },
-    __fieldOptions(parent){
-      if(parent.options) {
-        if(jsb.isFunction(parent.options)) {
-          return parent.options({fieldSchema:this.fieldSchema,row:this.rowTop})
+    __fieldOptions(parent) {
+      if (parent.options) {
+        if (jsb.isFunction(parent.options)) {
+          return parent.options({fieldSchema: this.fieldSchema, row: this.rowTop})
         }
         return parent.options
       }
