@@ -1,43 +1,55 @@
 <template>
-  <el-form
-      v-if="data"
-      :model="data"
-      :label-width="labelWidthPixel"
-      :rules="rules"
-      ref="form"
-      show-message
-      label-position="right"
-      size="mini"
-  >
-    <template v-for="(si) in schema">
-      <el-form-item :key="si.field" :label="siName(si)" :prop="si.field" :ref="si.field">
-        <component
-            v-if="siSlot(si) && registeredComponentMap[siSlot(si)]"
-            :is="registeredComponentMap[siSlot(si)]"
-            :top-row="getRow()"
-            :data="data"
-            :field-schema="si"
-            :disabled="privateShouldFieldDisable(si)"
-            :key="`fom_component_field_${si.field}`"
-        ></component>
-      </el-form-item>
-    </template>
-  </el-form>
+  <div>
+    <slot-alert v-if="alertInfo"
+                :center="true"
+                style="position: sticky;font-weight: bold;top:0;margin-bottom: 9px;z-index: 1000000;"
+                :scope="alertInfo"></slot-alert>
+    <el-form
+        v-if="data"
+        :model="data"
+        :label-width="labelWidthPixel"
+        :rules="rules"
+        ref="form"
+        show-message
+        label-position="right"
+        size="mini"
+    >
+      <template v-for="(si) in schema">
+        <el-form-item :key="si.field" :label="siName(si)" :prop="si.field" :ref="si.field">
+          <component
+              v-if="siSlot(si) && registeredComponentMap[siSlot(si)]"
+              :is="registeredComponentMap[siSlot(si)]"
+              :top-row="getRow()"
+              :data="data"
+              :field-schema="si"
+              :disabled="privateShouldFieldDisable(si)"
+              :key="`fom_component_field_${si.field}`"
+          ></component>
+        </el-form-item>
+      </template>
+    </el-form>
+  </div>
 </template>
 
 <script>
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import {calcLabelWidth, CgFormInputModeInsert, CgFormInputModeView} from "@/components/CgFormInput/index";
+import SlotAlert from "@/components/CgTable/components/SlotAlert.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
 export default {
   name: "CgFormInput",
+  components: {SlotAlert},
   mixins:[mixinComponentMap],
   props: {
     schema: Array, // 行schema信息
     data: Object,  // 当前行数据
     mode:String,   // 编辑模式
+    alertInfo:{
+      type:[Object,String],
+      default:null,
+    },
     shouldFieldDisable:Function,
     // 最外层调用不要设定rowTop,递归时传递到最底层便于统一回调外层
     rowTop:Object,

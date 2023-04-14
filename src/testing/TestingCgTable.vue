@@ -8,12 +8,14 @@
               type="info"></el-alert>
     <cg-table
         :debug="true"
+        :radio="true"
         :schema="schema"
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
         :toolbar-config="toolbarConfig"
         :table-property="{class:'cg-table-mini-padding',heightSubVH:70}"
         :footer-config="footConfig"
+        :edit-config="editConfig"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{item}">
         <el-select v-model="toolbarOptionServer" size="mini" @change="item.change">
@@ -79,6 +81,14 @@ export default {
         rightItems:['add','refresh','custom','print'],
         style: {'padding-bottom': '20px'}
       },
+      editConfig:{
+        triggerRowFunc:({row})=>{
+          if(row.Online){
+            return "用户在线，不允许调整数据"
+          }
+          return {alert:{type:'success',title:'用户不在线，改吧改吧'}}
+        }
+      },
       footConfig:{
         leftSpan:12,
         leftItems:[{slot: 'SlotAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
@@ -91,6 +101,7 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
+          summary:true,
           slotForm:'FormInput',
           readOnly: true
         },
@@ -119,7 +130,7 @@ export default {
           align: 'center',
           readOnly: true,
           default: false,
-          width: 200,
+          width: 280,
           slot: 'ColumnSlots',
           slotForm:'FormSwitch',
           valueVirtual: function ({fieldValue}) {
@@ -173,7 +184,7 @@ export default {
           return {
             Data: [
               {id: 4, name: '1111', Online: true, Tag: ["Server", "HPA", "定时收缩"],Color:'red'},
-              {id: 5, name: '2222', Online: true, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
+              {id: 5, name: '2222', Online: false, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
             ],
             Total: 100,
           }

@@ -1,12 +1,12 @@
 const jsb = require("@sandwich-go/jsb")
 
-export function parseWidthToPixelString(width,text){
+export function parseWidthToPixelString(width,text,fixAddWidth=0){
     const widthString = String(width)
     if(widthString.endsWith("px")){
         return widthString
     }
     if(widthString === 'fit'){
-        return `${jsb.textWidth(text)+60}px`
+        return `${jsb.textWidth(text)+60+fixAddWidth}px`
     }
     return `${parseInt(width)}px`
 }

@@ -43,7 +43,14 @@
         @current-change="currentChange"
         @row-dblclick="rowDblClick"
         @row-click="rowClick"
+        :row-key="xidRow"
     >
+      <el-table-column v-if="selection" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
+      <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
+        <template slot-scope="scope">
+          <el-checkbox :value="scope.row === currentRow" @change="(val)=>radioRowChanged(scope.row,val)"></el-checkbox>
+        </template>
+      </el-table-column>
       <template v-for="(fieldSchema,fieldIndex) in schema">
         <el-table-column
             :key="fieldIndex"
@@ -110,9 +117,14 @@
 
     <el-dialog modal width="80%" :visible.sync="rowFormEditorVisible">
       <cg-form-input
+          v-if="currentRow && rowFormEditorVisible"
+          :key="xidRow(currentRow)"
           :schema="schema"
           :data="currentRow"
           :should-field-disable="shouldFieldDisable"
+          :alert-info="rowFormEditorAlert"
+          :mode="rowFormEditorMode"
+          :row-top="currentRow"
       ></cg-form-input>
     </el-dialog>
   </div>
@@ -129,13 +141,10 @@ import {
   fieldValueVirtual,
   fixToolbarItems,
   getProxySlotName,
-  RowEditorForUpdate,
-  RowEditorForView,
   RowEditorInplace,
   ToolbarShortcutCodeAdd,
   ToolbarShortcutCodeRefresh, xidRow
 } from "@/components/CgTable/table";
-import FormInput from "@/components/CgFormInput";
 import MixinCgPager from "@/components/CgTable/mixin/MixinCgPager.vue";
 import {NewDefaultProxyConfigData, NewDefaultTableProperty, NewEitConfigData,} from "@/components/CgTable/default";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -144,6 +153,7 @@ import ColumnSlots from "@/components/CgTable/components/ColumnSlots.vue";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
+import {CgFormInputModeEdit, CgFormInputModeView} from "@/components/CgFormInput/index";
 import CgFormInput from "@/components/CgFormInput/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
@@ -151,8 +161,10 @@ const jsb = require("@sandwich-go/jsb")
 export default {
   name: "CgTable",
   mixins: [MixinCgPager, MixinComponentMap],
-  components: {CgFormInput, ColumnSlots, FormInput, Loading},
+  components: {CgFormInput, ColumnSlots, Loading},
   props: {
+    selection:Boolean,// 是否支持选择
+    radio:Boolean,// 是否支持radio选择
     debug:Boolean,
     tableDivStyle: Object,
     tableProperty: Object,
@@ -204,12 +216,13 @@ export default {
       inLoading: false,
       debugMessage:'',
       tableData: [],
+      radioRow: null,
       // 当前选中的行
       currentRow: null,
       rowFormEditorReadonly: false,
       rowFormEditorVisible: false,
-      rowFormEditorAlert: '',
-      rowFormEditorMode: RowEditorForView,
+      rowFormEditorAlert: null,
+      rowFormEditorMode: CgFormInputModeView,
 
       proxyConfigData: NewDefaultProxyConfigData(),
       tablePropertyData: NewDefaultTableProperty(),
@@ -261,9 +274,12 @@ export default {
     this.getProxySlotName()
   },
   methods: {
+    xidRow,
     fieldValueVirtual,
     getProxySlotName,
-
+    setDebugMessage(msg){
+      this.debugMessage = msg
+    },
     initHeader() {
       this.toolbarConfigData = fixToolbarItems(Object.assign(this.toolbarConfigData, this.toolbarConfig))
     },
@@ -293,6 +309,10 @@ export default {
     thisTarget() {
       return this
     },
+    radioRowChanged(row,selected){
+      this.radioRow = selected?row:null
+      this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`)
+    },
     toolbarSpan(configData, direction) {
       if (direction === 'left') {
         return configData.leftItems.length === 0 ? 0 : configData.leftSpan
@@ -321,7 +341,7 @@ export default {
     },
     // current-change 回调
     currentChange(row) {
-      this.debugMessage = `currentChange row xid: ${xidRow(row)}`
+      this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
     },
@@ -347,21 +367,31 @@ export default {
         return;
       }
       const triggerRet = this.editConfigData.triggerRowFunc({row: row})
-      this.rowFormEditorReadonly = false
+
+      this.rowFormEditorMode = CgFormInputModeEdit
+      this.rowFormEditorAlert = null
+
       if (jsb.isString(triggerRet)) {
-        this.rowFormEditorReadonly = true
+        // 如果只是返回字符串则：view状态，显示alert信息
+        this.rowFormEditorMode = CgFormInputModeView
         this.rowFormEditorAlert = triggerRet
+      }else if (jsb.isObjectOrMap(triggerRet)){
+        // 如果返回的是一个object，索引其中的:active与alert字段
+        // active默认为true, 如为true则进入edit状态
+        // 可根据需求定制返回alert的样式
+        if(jsb.pathGet(triggerRet,'active',true)){
+          this.rowFormEditorMode = CgFormInputModeEdit
+        }
+        this.rowFormEditorAlert = jsb.pathGet(triggerRet,'alert')
       } else if (!triggerRet) {
         // 不允许编辑
         return;
       }
-      // 进入查看或者编辑模式
-      this.rowFormEditorMode = this.rowFormEditorReadonly ? RowEditorForView : RowEditorForUpdate
       this.setEditRow(row)
     },
     // header或者footer的item点击时间事件
     privateCodeItemClick({code, scope}) {
-      this.debugMessage = `privateCodeItemClick code: ${code}`
+      this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
       if (this.codeItemClick({code, scope})) {
         return
       }
@@ -397,7 +427,7 @@ export default {
     },
     // 设定当前编辑的行
     setEditRow(row) {
-      this.debugMessage = `setEditRow row xid: ${xidRow(row)}`
+      this.debug && this.setDebugMessage(`setEditRow row  ${this.summaryRow(row)}`)
       this.currentRow = row
       if (this.editConfigData.rowEditor === RowEditorInplace) {
         this.toastError(`editor mode ${RowEditorInplace} not support yet`)
@@ -406,10 +436,22 @@ export default {
       this.rowFormEditorVisible = true
     },
     addRow(){
-
+      if (jsb.eqNull(this.tableData)) {
+        this.tableData = []
+      }
+      this.editConfigData.addRow()
+    },
+     summaryRow(row){
+      let info = [`xid(${xidRow(row)})`]
+      jsb.each(this.schema,function (fieldSchema){
+        if(fieldSchema.summary){
+          info.push(`${fieldSchema.name}(${row[fieldSchema.field]})`)
+        }
+      })
+      return info.join(" , ")
     },
     tryProxyQueryData() {
-      this.debugMessage = `tryProxyQueryData called`
+      this.debug && (this.debugMessage = `tryProxyQueryData called`)
       const queryFunc = this.proxyConfigData.query
       if (!queryFunc) {
         return
