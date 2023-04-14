@@ -3,6 +3,7 @@
       v-model="scopeData.value"
       v-bind:style="scopeData.style"
       size="mini"
+      :disabled="disabled"
       @change="scopeData.change"
       :placeholder="scopeData.placeholder"
   >

@@ -22,6 +22,9 @@ export const RowEditorFormInput = 'RowEditorFormInput'
 
 export const CtrlDataInRowData ='___x_table_ctrl_data'
 
+export function xidRow(row){
+    return jsb.pathGet(row,`${CtrlDataInRowData}.xid`)
+}
 export function mustCtrlData(item){
     if(!item[CtrlDataInRowData]){
         item[CtrlDataInRowData] = {}

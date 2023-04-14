@@ -7,7 +7,7 @@
       :plain="scopeData.plain"
       :circle="scopeData.circle"
       size="mini"
-      @click="$emit('toolbar_button_click',{code:scopeData.code,button:scopeData})"
+      @click="$emit('code-button-click',{code:scopeData.code,scope:scopeData})"
   >
     <template v-if="!scopeData.circle">{{scopeData.label ? scopeData.label : ""}}</template>
   </el-button>

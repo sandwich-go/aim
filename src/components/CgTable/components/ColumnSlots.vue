@@ -2,12 +2,13 @@
   <el-col :span="span" :style="colStyle">
     <template v-for="(item,index) of items">
       <component
-          v-if="item.slot && registeredComponentMap[item.slot] && shouldToolbarItemHide({item:item,code:item.code ||''})"
+          v-if="item.slot && registeredComponentMap[item.slot] && shouldToolbarItemHide({scope:item,code:item.code ||''})"
           :is="registeredComponentMap[item.slot]"
           :scope="item"
           :target="target"
-          :disabled="shouldToolbarItemDisable({item:item,code:item.code ||''})"
+          :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
           :key="`toolbar_component_${index}`"
+          @code-button-click="({code,scope}) => $emit('code-button-click',{code,scope})"
       ></component>
       <slot v-else-if="item.slot" :name="getProxySlotName(item.slot)" :item="item"></slot>
       <el-divider v-if="isDivider(item)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>

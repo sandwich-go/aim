@@ -1,5 +1,5 @@
 <template>
-  <el-select size="mini" v-model="dataValue" :style="scopeData.style" @change="scopeData.change">
+  <el-select size="mini" v-model="dataValue" :disabled="disabled" :style="scopeData.style" @change="scopeData.change">
     <el-option
         v-for="option in scopeData.options"
         :key="option.value"

@@ -4,6 +4,7 @@
                :style="scopeData.style"
                :label="scopeData.label || scopeData.title"
                :border="scopeData.border"
+               :disabled="disabled"
                @change="scopeData.change">
   </el-checkbox>
 </template>

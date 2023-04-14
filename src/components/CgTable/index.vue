@@ -1,5 +1,13 @@
 <template>
   <div>
+    <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
+    <el-alert v-if="debug"
+              style="height: 28px;margin-bottom: 30px;font-weight: bold"
+              :title="debugMessage"
+              effect="light"
+              show-icon
+              :closable="false"
+              type="info"></el-alert>
     <el-row :style="toolbarConfigData.style">
       <column-slots
           v-for="direction of ['left','right']"
@@ -10,6 +18,7 @@
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+          @code-button-click="privateCodeItemClick"
       >
         <template v-for="item in toolbarConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
@@ -52,6 +61,7 @@
                   :target="thisTarget()"
                   :should-toolbar-item-hide="privateShouldToolbarItemHide"
                   :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+                  @code-button-click="privateCodeItemClick"
               ></column-slots>
               <template v-if="registeredComponentMap[fieldSchema.slot]">
                 <component
@@ -88,6 +98,7 @@
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+          @code-button-click="privateCodeItemClick"
       >
         <template v-for="item in footerConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
@@ -96,10 +107,11 @@
     </el-row>
 
     <el-dialog modal width="80%" :visible.sync="rowFormEditorVisible">
-      <form-input
+      <cg-form-input
           :schema="schema"
-          :row="currentRow"
-      ></form-input>
+          :data="currentRow"
+          :should-field-disable="shouldFieldDisable"
+      ></cg-form-input>
     </el-dialog>
   </div>
 </template>
@@ -117,7 +129,9 @@ import {
   getProxySlotName,
   RowEditorForUpdate,
   RowEditorForView,
-  RowEditorInplace
+  RowEditorInplace,
+  ToolbarShortcutCodeAdd,
+  ToolbarShortcutCodeRefresh, xidRow
 } from "@/components/CgTable/table";
 import FormInput from "@/components/CgFormInput";
 import MixinCgPager from "@/components/CgTable/mixin/MixinCgPager.vue";
@@ -125,13 +139,19 @@ import {NewDefaultProxyConfigData, NewDefaultTableProperty, NewEitConfigData,} f
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import ColumnSlots from "@/components/CgTable/components/ColumnSlots.vue";
 
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+
+import CgFormInput from "@/components/CgFormInput/index.vue";
+
 const jsb = require("@sandwich-go/jsb")
 
 export default {
   name: "CgTable",
   mixins: [MixinCgPager, MixinComponentMap],
-  components: {ColumnSlots, FormInput},
+  components: {CgFormInput, ColumnSlots, FormInput, Loading},
   props: {
+    debug:Boolean,
     tableDivStyle: Object,
     tableProperty: Object,
     cellStyle: Function,
@@ -147,24 +167,39 @@ export default {
     toolbarConfig: Object,
     footerConfig: Object,
     // eslint-disable-next-line no-unused-vars
-    shouldButtonDisable: {
+    shouldToolbarItemDisable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
-      default: function ({code, button}) {
+      default: function ({code, scope}) {
         return false
       },
     },
     // eslint-disable-next-line no-unused-vars
-    shouldButtonHide: {
+    shouldToolbarItemHide: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
-      default: function ({code, button}) {
+      default: function ({code, scope}) {
         return false
+      },
+    },
+    shouldFieldDisable:{
+      type: Function,
+      // eslint-disable-next-line no-unused-vars
+      default: function ({row,fieldSchema}) {
+        return false
+      },
+    },
+    codeItemClick: {
+      type: Function,
+      // eslint-disable-next-line no-unused-vars
+      default: function ({code, scope}) {
       },
     }
   },
   data() {
     return {
+      inLoading: false,
+      debugMessage:'',
       tableData: [],
       // 当前选中的行
       currentRow: null,
@@ -230,18 +265,18 @@ export default {
     },
     initFooter() {
       const _this = this
-      this.footerConfigData =  fixToolbarItems(Object.assign(this.footerConfigData, this.footerConfig))
+      this.footerConfigData = fixToolbarItems(Object.assign(this.footerConfigData, this.footerConfig))
       let pagerFound = false
-      if(this.pagerConfigData.enable){
-        jsb.each(['leftItems','rightItems'],function (val) {
+      if (this.pagerConfigData.enable) {
+        jsb.each(['leftItems', 'rightItems'], function (val) {
           jsb.each(_this.footerConfigData[val], function (codeOrItem) {
-            if(codeOrItem.slot === 'SlotPager') {
+            if (codeOrItem.slot === 'SlotPager') {
               pagerFound = true
             }
           })
         })
-        if(!pagerFound) {
-          this.footerConfigData.rightItems.push({slot:'SlotPager'})
+        if (!pagerFound) {
+          this.footerConfigData.rightItems.push({slot: 'SlotPager'})
         }
       }
     },
@@ -251,8 +286,6 @@ export default {
         this.PagerInit(this.tryProxyQueryData)
       }
     },
-
-
     thisTarget() {
       return this
     },
@@ -268,6 +301,7 @@ export default {
     },
     // current-change 回调
     currentChange(row) {
+      this.debugMessage = `currentChange row xid: ${xidRow(row)}`
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
     },
@@ -305,26 +339,45 @@ export default {
       this.rowFormEditorMode = this.rowFormEditorReadonly ? RowEditorForView : RowEditorForUpdate
       this.setEditRow(row)
     },
-    privateShouldToolbarItemDisable({code, item}) {
-      if (item.disable || item.disabled) {
-        return true
+    // header或者footer的item点击时间事件
+    privateCodeItemClick({code, scope}) {
+      this.debugMessage = `privateCodeItemClick code: ${code}`
+      if (this.codeItemClick({code, scope})) {
+        return
       }
-      if (!this.shouldButtonDisable) {
-        return false
-      }
-      return this.shouldButtonDisable({code, item})
+      this.defaultCodeItemClick({code})
     },
-    privateShouldToolbarItemHide({code, item}) {
-      if (item.hide || jsb.pathGet(item, 'show', true)) {
+    // 默认的code处理逻辑
+    defaultCodeItemClick({code}) {
+      switch (code) {
+        case ToolbarShortcutCodeRefresh:
+          this.tryProxyQueryData()
+          break
+        case ToolbarShortcutCodeAdd:
+          break
+      }
+    },
+    privateShouldToolbarItemDisable({code, scope}) {
+      if (scope.disable || scope.disabled) {
         return true
       }
-      if (!this.shouldButtonHide) {
+      if (!this.shouldToolbarItemDisable) {
         return false
       }
-      return this.shouldButtonHide({code, item})
+      return this.shouldToolbarItemDisable({code, scope})
+    },
+    privateShouldToolbarItemHide({code, scope}) {
+      if (scope.hide || jsb.pathGet(scope, 'show', true)) {
+        return true
+      }
+      if (!this.shouldToolbarItemHide) {
+        return false
+      }
+      return this.shouldToolbarItemHide({code, scope})
     },
     // 设定当前编辑的行
     setEditRow(row) {
+      this.debugMessage = `setEditRow row xid: ${xidRow(row)}`
       this.currentRow = row
       if (this.editConfigData.rowEditor === RowEditorInplace) {
         this.toastError(`editor mode ${RowEditorInplace} not support yet`)
@@ -333,15 +386,20 @@ export default {
       this.rowFormEditorVisible = true
     },
     tryProxyQueryData() {
+      this.debugMessage = `tryProxyQueryData called`
       const queryFunc = this.proxyConfigData.query
       if (!queryFunc) {
         return
       }
       let params = {}
+      this.inLoading = true
       Promise.resolve(queryFunc({params: params})).catch(e => {
         console.error("CgTable tryProxyQueryData got err:", e)
-      }).then((rest) => {
-        this.tableData = cleanData(jsb.pathGet(rest, 'Data'))
+      }).then((ret) => {
+        this.tableData = cleanData(jsb.pathGet(ret, 'Data'))
+        this.PagerTotal = jsb.pathGet(ret, 'Total', this.tableData.length)
+      }).finally(() => {
+        this.inLoading = false
       })
     }
   }

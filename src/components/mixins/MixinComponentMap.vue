@@ -1,15 +1,4 @@
 <script>
-import RowSlotTag from "@/components/CgTable/components/RowSlotTag.vue";
-import RowSlotIcon from "@/components/CgTable/components/RowSlotIcon.vue";
-import RowSlotIconTrueFalse from "@/components/CgTable/components/RowSlotIconTrueFalse.vue";
-import SlotOptions from "@/components/CgTable/components/SlotOptions.vue";
-import SlotAlert from "@/components/CgTable/components/SlotAlert.vue";
-import SlotCheckbox from "@/components/CgTable/components/SlotCheckbox.vue";
-import SlotButton from "@/components/CgTable/components/SlotButton.vue";
-import SlotInput from "@/components/CgTable/components/SlotInput.vue";
-import SlotSelectGroup from "@/components/CgTable/components/SlotSelectGroup.vue";
-import SlotDateTimeRange from "@/components/CgTable/components/SlotDateTimeRange.vue";
-import SlotPager from "@/components/CgTable/components/SlotPager.vue";
 
 export default {
   name: 'MixinComponentMap',
@@ -19,25 +8,24 @@ export default {
     }
   },
   created() {
-    this.registerComponent(RowSlotTag.name, RowSlotTag)
-    this.registerComponent(RowSlotIcon.name, RowSlotIcon)
-    this.registerComponent(RowSlotIconTrueFalse.name, RowSlotIconTrueFalse)
-
-    this.registerComponent(SlotOptions.name, SlotOptions)
-    this.registerComponent(SlotAlert.name, SlotAlert)
-    this.registerComponent(SlotButton.name, SlotButton)
-    this.registerComponent(SlotCheckbox.name, SlotCheckbox)
-    this.registerComponent(SlotDateTimeRange.name, SlotDateTimeRange)
-    this.registerComponent(SlotInput.name, SlotInput)
-    this.registerComponent(SlotSelectGroup.name, SlotSelectGroup)
-    this.registerComponent(SlotPager.name, SlotPager)
+    this.registerFiles(require.context('@/components/CgTable/components', true, /^((?!\.\/_).)*\.vue$/))
+    this.registerFiles(require.context('@/components/CgFormInput/components', true, /^((?!\.\/_).)*\.vue$/))
   },
   methods: {
-    registerComponent(name,component){
-      this.registeredComponentMap[name]=component
+    registerFiles(files){
+      const _this = this
+      files.keys().forEach(key => {
+        const name = key.replace(/(\.\/|\.vue)/g, '')
+        const component = files(key).default
+        _this.registerComponent(name, component)
+      })
+    },
+    registerComponent(name, component) {
+      this.registeredComponentMap[name] = component
     }
   },
-  mounted () {},
+  mounted() {
+  },
   computed: {}
 }
 </script>

@@ -7,6 +7,7 @@
               :closable="false"
               type="success"></el-alert>
     <cg-table
+        :debug="true"
         :schema="schema"
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
@@ -91,6 +92,8 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
+          slotForm:'FormInput',
+          readOnly: true
         },
         {
           field: 'name', name: 'Name', type: 'input', width: 200, sortable: true,
@@ -98,6 +101,7 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
+          slotForm:'FormInput'
         },
         {
           field: 'Online',
@@ -108,18 +112,20 @@ export default {
           readOnly: true,
           default: false,
           slot: 'ColumnSlots',
+          slotForm:'FormSwitch',
           valueVirtual: function () {
             return [{slot: 'SlotAlert', label: "标题内容", style: {width: 'fit'}},{slot:"SlotButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
           }
         },
         {
           field: 'Tag',
-          name: '在线',
+          name: 'Tag',
           type: 'switch',
           sortable: true,
           align: 'center',
           readOnly: true,
           slot: 'RowSlotTag',
+          slotForm:'FormSelect',
           valueVirtual: function ({fieldValue}) {
             let tags = []
             for (const item of fieldValue) {
@@ -133,7 +139,7 @@ export default {
         query() {
           return {
             Data: [{id: 4, name: 'hui.wang', Online: true, Tag: ["Server", "HPA", "定时收缩"]}],
-            total: 100,
+            Total: 100,
           }
         },
       }

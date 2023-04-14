@@ -3,6 +3,7 @@
       size="mini"
       v-model="scopeData.value"
       type="datetimerange"
+      :disabled="disabled"
       :default-time="scopeData.defaultTime"
       :style="scopeData.style"
       :range-separator="scopeData.rangeSeparator"

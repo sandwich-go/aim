@@ -4,6 +4,7 @@
         size="mini"
         clearable
         :style="scopeData.style"
+        :disabled="disabled"
         v-model="scopeData.value"
         @change="scopeData.change"
         :placeholder="scopeData.placeholder">
