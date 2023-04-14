@@ -405,6 +405,9 @@ export default {
       }
       this.rowFormEditorVisible = true
     },
+    addRow(){
+
+    },
     tryProxyQueryData() {
       this.debugMessage = `tryProxyQueryData called`
       const queryFunc = this.proxyConfigData.query

@@ -6,7 +6,7 @@ export function parseWidthToPixelString(width,text){
         return widthString
     }
     if(widthString === 'fit'){
-        return `${jsb.textWidth(text)+40}px`
+        return `${jsb.textWidth(text)+60}px`
     }
     return `${parseInt(width)}px`
 }

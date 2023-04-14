@@ -12,7 +12,7 @@
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
         :toolbar-config="toolbarConfig"
-        :table-property="{class:'',heightSubVH:70}"
+        :table-property="{class:'cg-table-mini-padding',heightSubVH:70}"
         :footer-config="footConfig"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{item}">
@@ -119,10 +119,11 @@ export default {
           align: 'center',
           readOnly: true,
           default: false,
+          width: 200,
           slot: 'ColumnSlots',
           slotForm:'FormSwitch',
-          valueVirtual: function () {
-            return [{slot: 'SlotAlert', label: "标题内容", style: {width: 'fit'}},{slot:"SlotButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
+          valueVirtual: function ({fieldValue}) {
+            return [{slot: 'SlotAlert', label: fieldValue, style: {width: 'fit'}},{slot:"SlotButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
           }
         },
         {
@@ -170,7 +171,10 @@ export default {
       proxyConfig: {
         query() {
           return {
-            Data: [{id: 4, name: 'hui.wang', Online: true, Tag: ["Server", "HPA", "定时收缩"]}],
+            Data: [
+              {id: 4, name: '1111', Online: true, Tag: ["Server", "HPA", "定时收缩"],Color:'red'},
+              {id: 5, name: '2222', Online: true, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
+            ],
             Total: 100,
           }
         },
