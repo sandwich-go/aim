@@ -123,9 +123,8 @@ export default {
           type: 'switch',
           sortable: true,
           align: 'center',
-          readOnly: true,
           slot: 'RowSlotTag',
-          slotForm:'FormSelect',
+          slotForm:'FormSelectInput',
           valueVirtual: function ({fieldValue}) {
             let tags = []
             for (const item of fieldValue) {

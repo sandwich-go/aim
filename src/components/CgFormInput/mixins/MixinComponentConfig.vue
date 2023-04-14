@@ -8,6 +8,7 @@ export default {
     data: Object,            // 父对象数据
     rowTop:Object,           // 顶层行对象
     disabled: Boolean,       // 是否只读
+    styleTop:Object,         // 组件组合时在最顶层设定的style
   },
   data() {
     return {
@@ -27,6 +28,9 @@ export default {
     initComponentConfig(initVal){
       this.cc = initVal?Object.assign(this.cc,initVal):this.cc
       this.cc = Object.assign(this.cc,jsb.pathGet(this.fieldSchema,'formConfig',this.fieldSchema))
+      if(this.cc.style && this.styleTop){
+        this.cc.style = Object.assign(this.cc.style,this.styleTop)
+      }
     },
     change(newVal){
       this.$forceUpdate()
