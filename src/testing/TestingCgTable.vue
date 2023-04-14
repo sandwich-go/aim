@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-alert v-if="alertTitle"
-              style="height: 28px;margin-bottom: 30px;font-weight: bold"
+    <el-alert
+              style="height: 28px;margin-bottom: 9px;font-weight: bold"
               :title="alertTitle"
-              effect="dark"
+              show-icon
               :closable="false"
-              type="success"></el-alert>
+              type="info"></el-alert>
     <cg-table
         :debug="true"
         :schema="schema"
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
         :toolbar-config="toolbarConfig"
-        :table-property="{}"
+        :table-property="{class:'',heightSubVH:70}"
         :footer-config="footConfig"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{item}">
@@ -27,8 +27,6 @@
       </template>
     </cg-table>
   </div>
-
-
 </template>
 
 <script>

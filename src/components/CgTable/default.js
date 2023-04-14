@@ -36,12 +36,12 @@ export function NewDefaultTableProperty() {
     return jsb.clone({
         border: true,
         stripe: true,
-        class: '',
+        class: 'cg-table-small-padding',
         showHeader: true,
         highlightCurrentRow: true,
-        headerCellStyle: {textAlign: 'center', padding: '0', color: '#606266'},
+        headerCellStyle: {textAlign: 'center', padding: '0', color: '#606266',background:'#eceff1'},
         emptyText: '',
-        rowStyle:{height:"16px",'padding':0},// object of function
+        rowStyle:{height:"40px",'padding':0},// object of function
         height:null,
         heightSubVH:0,
     })

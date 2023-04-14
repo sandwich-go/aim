@@ -2,12 +2,13 @@
   <div>
     <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
     <el-alert v-if="debug"
-              style="height: 28px;margin-bottom: 30px;font-weight: bold"
-              :title="debugMessage"
+              style="height: 28px;margin-bottom: 9px;font-weight: bold"
+              :title="`CgTable debug enabled : `+debugMessage"
               effect="light"
               show-icon
               :closable="false"
-              type="info"></el-alert>
+              type="info">
+    </el-alert>
     <el-row :style="toolbarConfigData.style">
       <column-slots
           v-for="direction of ['left','right']"
@@ -311,6 +312,7 @@ export default {
       let sub = 70+this.tablePropertyData.heightSubVH
       sub += this.toolbarConfigData.enable?40:0
       sub += this.pagerConfigData.enable?40:0
+      sub += this.debug?37:0
       return `${jsb.clientHeight(sub)}px`
     },
     // 每一个cell的属性
@@ -423,3 +425,20 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-table.cg-table-normal-padding td, .el-table.cg-table-normal-padding th {
+}
+
+.el-table.cg-table-medium-padding td, .el-table.cg-table-medium-padding th {
+  padding:6px
+}
+
+.el-table.cg-table-small-padding td, .el-table.cg-table-small-padding th {
+  padding:3px
+}
+
+.el-table.cg-table-mini-padding td, .el-table.cg-table-mini-padding th {
+  padding:1px
+}
+</style>
