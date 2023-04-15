@@ -145,7 +145,7 @@ import {
   ToolbarShortcutCodeAdd,
   ToolbarShortcutCodeRefresh, xidRow
 } from "@/components/CgTable/table";
-import MixinCgPager from "@/components/CgTable/mixin/MixinCgPager.vue";
+import MixinCgPager from "@/components/CgTable/components/mixin/MixinCgPager.vue";
 import {NewDefaultProxyConfigData, NewDefaultTableProperty, NewEitConfigData,} from "@/components/CgTable/default";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import ColumnSlots from "@/components/CgTable/components/ColumnSlots.vue";
@@ -290,13 +290,14 @@ export default {
       if (this.pagerConfigData.enable) {
         jsb.each(['leftItems', 'rightItems'], function (val) {
           jsb.each(_this.footerConfigData[val], function (codeOrItem) {
-            if (codeOrItem.slot === 'SlotPager') {
+            if (codeOrItem.slot === 'CgPager') {
               pagerFound = true
+              codeOrItem.dataWrapper = _this.thisTarget()
             }
           })
         })
         if (!pagerFound) {
-          this.footerConfigData.rightItems.push({slot: 'SlotPager'})
+          this.footerConfigData.rightItems.push({slot: 'CgPager',dataWrapper:_this.thisTarget()})
         }
       }
     },

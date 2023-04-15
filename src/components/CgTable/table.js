@@ -1,3 +1,5 @@
+import {makeButton} from "@/components/types/types";
+
 const jsb = require("@sandwich-go/jsb")
 
 
@@ -105,31 +107,6 @@ code2OptionsMapping[ToolbarShortcutCodeRefresh] = {icon:'el-icon-refresh',type:'
 code2OptionsMapping[ToolbarShortcutCodePrint] = {icon:'el-icon-s-grid',type:'primary',code:ToolbarShortcutCodePrint,circle:true}
 code2OptionsMapping[ToolbarShortcutCodeCustom] = {icon:'el-icon-printer',type:'primary',code:ToolbarShortcutCodeCustom,circle:true}
 
-
-export function makeButton(options){
-    let btn =  {
-        code: '',
-        icon: '',
-        label: '',
-        type: 'primary',
-        plain: false,
-        disabled: false,
-        show: true,
-        circle:false,
-        style: {},
-        slot:'SlotButton',
-    }
-    if(!jsb.isEmpty(options)) {
-        btn = Object.assign(btn,options)
-    }
-    if(!btn.code){
-        btn.code = "CODE_INVALID"
-    }
-    if(!btn.icon && !btn.label){
-        btn.label = btn.code
-    }
-    return btn
-}
 
 export function fixToolbarItems(toolbarConfigData) {
     jsb.each(['leftItems','rightItems'],function (val){

@@ -9,7 +9,7 @@
 
 <script>
 import RowSlotIcon from "@/components/CgTable/components/RowSlotIcon.vue";
-import MixinRowSlotProperty from "@/components/CgTable/mixin/MixinRowSlotProperty.vue";
+import MixinRowSlotProperty from "@/components/CgTable/components/mixin/MixinRowSlotProperty.vue";
 
 export default {
   name: "RowSlotIconTrueFalse",

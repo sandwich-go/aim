@@ -1,10 +1,11 @@
 <template>
   <el-select
-             :style="cc.style"
-             v-model="dataRef[fieldName()]"
-             :disabled="disabled"
-             clearable
-             @change="change">
+      :style="cc.style"
+      v-model="dataRef[fieldName]"
+      :disabled="disabled"
+      clearable
+      :size="cc.size"
+      @change="change">
     <el-option-group
         v-for="group in options()"
         :key="group.label"
@@ -14,8 +15,7 @@
           :key="optionItem.value"
           :label="optionItem.label"
           :disabled="optionItem.disabled"
-          :value="optionItem.value"
-      >
+          :value="optionItem.value">
       </el-option>
     </el-option-group>
   </el-select>
@@ -23,10 +23,10 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
+import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
 
 export default {
-  name: 'FormSelectGroup',
+  name: 'CgSelectGroup',
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig()

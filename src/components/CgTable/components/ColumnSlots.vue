@@ -4,9 +4,10 @@
       <component
           v-if="item.slot && registeredComponentMap[item.slot] && shouldToolbarItemHide({scope:item,code:item.code ||''})"
           :is="registeredComponentMap[item.slot]"
-          :scope="item"
-          :target="target"
+          :scope-config="item"
           :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
+          :data="item.dataWrapper || item"
+          :target="target"
           :key="`toolbar_component_${index}`"
           @code-button-click="({code,scope}) => $emit('code-button-click',{code,scope})"
       ></component>
@@ -41,7 +42,7 @@ export default {
   created() {
     jsb.each(this.items || [],function (item) {
       if(!item.slot && item.code) {
-        item.slot = 'SlotButton'
+        item.slot = 'CgButton'
       }
     })
   },

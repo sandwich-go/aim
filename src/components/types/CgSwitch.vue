@@ -1,6 +1,7 @@
 <template>
   <el-switch
-      v-model="data[fieldName()]"
+      :size="cc.size"
+      v-model="data[fieldName]"
       :active-color="cc.activeColor"
       :inactive-color="cc.inactiveColor"
       @change="change"
@@ -11,10 +12,10 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
+import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
 
 export default {
-  name: 'FormSwitch',
+  name: 'CgSwitch',
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig({

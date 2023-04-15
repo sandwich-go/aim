@@ -1,7 +1,8 @@
 <template>
   <el-select
-      v-model="dataRef[fieldName()]"
+      v-model="dataRef[fieldName]"
       multiple
+      :size="cc.size"
       :style="cc.style"
       filterable
       default-first-option
@@ -18,10 +19,10 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
+import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
 
 export default {
-  name: 'FormSelectMultiple',
+  name: 'CgSelectMultiple',
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig({

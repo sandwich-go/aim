@@ -1,14 +1,12 @@
 <template>
-  <el-input-number
+  <el-checkbox
       v-model="dataRef[fieldName]"
-      :min="cc.min"
-      :max="cc.max"
-      :step="cc.step"
-      :disabled="disabled"
+      :border="cc.border"
       :style="cc.style"
-      @change="change"
+      :disabled="disabled"
       :size="cc.size"
-  ></el-input-number>
+      @change="change">
+  </el-checkbox>
 </template>
 
 <script>
@@ -16,14 +14,16 @@
 import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
 
 export default {
-  name: 'CgInputNumber',
+  name: 'CgCheckbox',
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig({
-      min: -Infinity,
-      max: Infinity,
-      step: 1,
-    })
+          border: false,
+          style: {
+            width:null,// checkbox不应该设定宽度
+          }
+        }
+    )
   },
 }
 </script>

@@ -1,9 +1,10 @@
 <template>
   <el-select
-             v-model="dataRef[fieldName()]"
-             :disabled="disabled"
-             :style="cc.style"
-             @change="change">
+      v-model="dataRef[fieldName]"
+      :disabled="disabled"
+      :style="cc.style"
+      :size="cc.size"
+      @change="change">
     <el-option
         v-for="option in options()"
         :key="option.value"
@@ -15,10 +16,10 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
+import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
 
 export default {
-  name: 'FormSelect',
+  name: 'CgSelect',
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig()

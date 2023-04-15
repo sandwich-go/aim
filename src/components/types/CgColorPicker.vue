@@ -1,23 +1,24 @@
 <template>
   <el-color-picker
-      v-model="dataRef[fieldName()]"
+      v-model="dataRef[fieldName]"
       show-alpha
       :style="cc.style"
+      :size="cc.size"
       :predefine="cc.predefineColors"
       :disabled="disabled">
   </el-color-picker>
 </template>
 
 <script>
-import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
+import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
 import {ReservedColorList} from "@/utils/ui";
 const jsb = require("@sandwich-go/jsb")
 export default {
-  name: 'FormInput',
+  name: 'CgInput',
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig({
-      style: {position:'absolute',left: 0},
+      style: {width:null},
       predefineColors:jsb.cc('predefineColors',ReservedColorList)
     })
   },

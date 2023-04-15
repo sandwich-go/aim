@@ -10,6 +10,7 @@ export function parseWidthToPixelString(width,text,fixAddWidth=0){
     }
     return `${parseInt(width)}px`
 }
+
 export const ReservedColorList = [
     "#1E90FF", // 适中的蓝色
     "#00CED1", // 暗青色

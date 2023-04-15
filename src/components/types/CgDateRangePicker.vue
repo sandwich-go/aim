@@ -1,6 +1,6 @@
 <template>
   <el-date-picker
-      v-model="dataRef[fieldName()]"
+      v-model="dataRef[fieldName]"
       type="datetimerange"
       :disabled="disabled"
       :default-time="cc.defaultTime"
@@ -10,16 +10,17 @@
       :start-placeholder="cc.startPlaceholder"
       :end-placeholder="cc.endPlaceholder"
       @change="change"
+      :size="cc.size"
   >
   </el-date-picker>
 </template>
 
 <script>
 
-import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
+import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
 
 export default {
-  name: 'FormSelect',
+  name: 'CgSelect',
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig({

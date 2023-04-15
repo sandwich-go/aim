@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import MixinRowSlotProperty from "@/components/CgTable/mixin/MixinRowSlotProperty.vue";
+import MixinRowSlotProperty from "@/components/CgTable/components/mixin/MixinRowSlotProperty.vue";
 import {getItemStyle} from "@/components/CgTable/table";
 
 const jsb = require("@sandwich-go/jsb")

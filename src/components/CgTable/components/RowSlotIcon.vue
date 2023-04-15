@@ -1,27 +1,22 @@
 <template>
   <span v-if="fieldValueVirtual">
-    <template v-if="!check(fieldValueVirtual)">
-      {{ check(fieldValueVirtual) }}
+    <template style="align-items: center" >
+      <i v-if="isString(fieldValueVirtual)" :class="fieldValueVirtual"></i>
+      <i v-else :class="fieldValueVirtual.class || fieldValueVirtual.icon" :style="fieldValueVirtual.style || {}"></i>
+      <span v-if="fieldValueVirtual.label" style="padding-left: 3px">{{fieldValueVirtual.label}}</span>
     </template>
-    <i :class="fieldValueVirtual.class || fieldValueVirtual.icon" :style="fieldValueVirtual.style"></i>
   </span>
 </template>
 
 <script>
-import MixinRowSlotProperty from "@/components/CgTable/mixin/MixinRowSlotProperty.vue";
-
-const jsb = require("@sandwich-go/jsb")
+import MixinRowSlotProperty from "@/components/CgTable/components/mixin/MixinRowSlotProperty.vue";
+import {isString} from "xe-utils";
 
 export default {
   name: "RowSlotIcon",
-  mixins:[MixinRowSlotProperty],
+  mixins: [MixinRowSlotProperty],
   methods: {
-    check(fieldValVirtual) {
-      if (!jsb.isPlainObject(fieldValVirtual)) {
-        return "fieldValVirtual should be object"
-      }
-      return ''
-    },
+    isString,
   }
 }
 </script>

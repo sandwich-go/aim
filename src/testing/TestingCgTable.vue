@@ -8,7 +8,6 @@
               type="info"></el-alert>
     <cg-table
         :debug="true"
-        :radio="true"
         :schema="schema"
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
@@ -49,13 +48,13 @@ export default {
       toolbarConfig: {
         leftSpan:21,
         leftItems: [
-          {slot: 'SlotAlert', label: "标题内容", style: {width: 'fit'}},
+          {slot: 'CgAlert', label: "标题内容",showIcon:false, style: {width: 'fit'}},
           {},
           {
-            slot: 'SlotOptions',
+            slot: 'CgSelect',
             options: [{label: "s1", value: "s1"}, {label: "s2", value: "s2"}],
             style: {'padding-right': '10px',width:'120px'},
-            change: (val) => this.toolbarAlert('SlotOptions', val)
+            change: (val) => this.toolbarAlert('CgSelect', val)
           },
           {
             slot: 'SlotOptionsUseDefineSlot',
@@ -63,12 +62,12 @@ export default {
             change: (val) => this.toolbarAlert('SlotOptionsUseDefineSlot', val)
           },
           {},
-          {slot: 'SlotCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('SlotCheckbox', val)},
+          {slot: 'CgCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CgCheckbox', val)},
           {},
-          {slot: 'SlotDateTimeRange', change:  (val) => this.toolbarAlert('SlotDateTimeRange', val)},
-          {slot: 'SlotInput', change: (val) => this.toolbarAlert('SlotInput', val)},
+          {slot: 'CgDateRangePicker', change:  (val) => this.toolbarAlert('CgDateRangePicker', val)},
+          {slot: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val),style:{width:"120px"}},
 
-          {slot: 'SlotSelectGroup',options:[
+          {slot: 'CgSelectGroup',options:[
               {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}],
             change: (val) => this.toolbarAlert('SlotSelectGroup', val)},
 
@@ -91,8 +90,8 @@ export default {
       },
       footConfig:{
         leftSpan:12,
-        leftItems:[{slot: 'SlotAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
-        rightItems:[{slot:'SlotPager'},{slot: 'SlotAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
+        leftItems:[{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
+        rightItems:[{slot:'CgPager'},{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
       },
       schema: [
         {
@@ -102,7 +101,7 @@ export default {
           tips_show_icon: true,
           required: true,
           summary:true,
-          slotForm:'FormInput',
+          slotForm:'CgInput',
           readOnly: true
         },
         {
@@ -111,7 +110,7 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          slotForm:'FormInput'
+          slotForm:'CgSelect'
         },
         {
           field: 'Number', name: 'InputNumber', type: 'input', width: 200, sortable: true,
@@ -119,8 +118,20 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          slotForm:'FormInputNumber',
-          formConfig:{min:10,max:100,step:2}
+          slotForm:'CgInputNumber',
+          CgFormInput:{min:10,max:100,step:2}
+        },
+        {
+          field: 'Icon', name: 'Icon', type: 'input', width: 200, sortable: true,
+          placeholder: "xxx.xx",
+          tips: "用户名不要携带@centurygame.com后缀",
+          tips_show_icon: true,
+          required: true,
+          slot:'RowSlotIcon',
+          slotForm:'CgIconSelectorInput',
+          valueVirtual: function ({fieldValue}) {
+            return {class:fieldValue,label:fieldValue}
+          }
         },
         {
           field: 'Online',
@@ -132,9 +143,9 @@ export default {
           default: false,
           width: 280,
           slot: 'ColumnSlots',
-          slotForm:'FormSwitch',
+          slotForm:'CgSwitch',
           valueVirtual: function ({fieldValue}) {
-            return [{slot: 'SlotAlert', label: fieldValue, style: {width: 'fit'}},{slot:"SlotButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
+            return [{slot: 'CgAlert', label: fieldValue, style: {width: 'fit'}},{slot:"CgButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
           }
         },
         {
@@ -144,7 +155,7 @@ export default {
           sortable: true,
           align: 'center',
           slot: 'RowSlotTag',
-          slotForm:'FormSelectInput',
+          slotForm:'CgSelectInput',
           valueVirtual: function ({fieldValue}) {
             let tags = []
             for (const item of fieldValue) {
@@ -160,31 +171,31 @@ export default {
           type: 'switch',
           sortable: true,
           align: 'center',
-          slotForm:'FormCheckbox',
+          slotForm:'CgCheckbox',
         },
         {
           field: 'Datetime',
           name: 'Datetime',
-          slotForm:'FormDatePicker',
+          slotForm:'CgDatePicker',
         },
         {
           field: 'DatetimeRange',
           name: 'Datetime',
-          slotForm:'FormDateRangePicker',
+          slotForm:'CgDateRangePicker',
         },
         {
           field: 'Color',
           name: 'Color',
           slot:'RowSlotColor',
-          slotForm:'FormColorPicker',
+          slotForm:'CgColorPicker',
         },
       ],
       proxyConfig: {
         query() {
           return {
             Data: [
-              {id: 4, name: '1111', Online: true, Tag: ["Server", "HPA", "定时收缩"],Color:'red'},
-              {id: 5, name: '2222', Online: false, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
+              {id: 4, name: '1111',Icon:'el-icon-user-solid', Online: true, Tag: ["Server", "HPA", "定时收缩"],Color:'red'},
+              {id: 5, name: '2222',Icon:'', Online: false, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
             ],
             Total: 100,
           }

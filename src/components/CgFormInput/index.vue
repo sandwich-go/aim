@@ -1,9 +1,9 @@
 <template>
   <div>
-    <slot-alert v-if="alertInfo"
+    <cg-alert v-if="alertInfo"
                 :center="true"
                 style="position: sticky;font-weight: bold;top:0;margin-bottom: 9px;z-index: 1000000;"
-                :scope="alertInfo"></slot-alert>
+                :scope-config="isString(alertInfo)?{title:alertInfo}:alertInfo"></cg-alert>
     <el-form
         v-if="data"
         :model="data"
@@ -14,17 +14,19 @@
         label-position="right"
         size="mini"
     >
-      <template v-for="(si) in schema">
-        <el-form-item :key="si.field" :label="siName(si)" :prop="si.field" :ref="si.field">
-          <component
-              v-if="siSlot(si) && registeredComponentMap[siSlot(si)]"
-              :is="registeredComponentMap[siSlot(si)]"
-              :top-row="getRow()"
-              :data="data"
-              :field-schema="si"
-              :disabled="privateShouldFieldDisable(si)"
-              :key="`fom_component_field_${si.field}`"
-          ></component>
+      <template v-for="(fs) in schema">
+        <el-form-item :key="fs.field" :label="siName(fs)" :prop="fs.field" :ref="fs.field">
+          <div class="cg-component-flex-start" v-if="siSlot(fs) && registeredComponentMap[siSlot(fs)]">
+            <component
+                :is="registeredComponentMap[siSlot(fs)]"
+                :data="data"
+                :field-name="fs.field"
+                :style-base="{width:'100%'}"
+                :scope-config="formInputConfig(fs)"
+                :disabled="privateShouldFieldDisable(fs)"
+                :key="`fom_component_field_${fs.field}`"
+            ></component>
+          </div>
         </el-form-item>
       </template>
     </el-form>
@@ -33,14 +35,20 @@
 
 <script>
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
-import {calcLabelWidth, CgFormInputModeInsert, CgFormInputModeView} from "@/components/CgFormInput/index";
-import SlotAlert from "@/components/CgTable/components/SlotAlert.vue";
+import {
+  calcLabelWidth,
+  CgFormInputModeInsert,
+  CgFormInputModeView,
+  formInputConfig
+} from "@/components/CgFormInput/index";
+import CgAlert from "@/components/types/CgAlert.vue";
+import {isString} from "xe-utils";
 
 const jsb = require("@sandwich-go/jsb")
 
 export default {
   name: "CgFormInput",
-  components: {SlotAlert},
+  components: {CgAlert},
   mixins:[mixinComponentMap],
   props: {
     schema: Array, // 行schema信息
@@ -62,6 +70,8 @@ export default {
     }
   },
   methods: {
+    isString,
+    formInputConfig,
     getRow() {
       if (!this.rowTop) {
         return this.data
@@ -95,3 +105,17 @@ export default {
   }
 }
 </script>
+
+<style>
+.cg-component-flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  z-index: 10;
+}
+.cg-component-flex-end {
+  @extend .cg-component-flex-start;
+  justify-content: flex-end;
+}
+</style>
