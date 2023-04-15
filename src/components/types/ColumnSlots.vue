@@ -7,11 +7,14 @@
           :scope-config="item"
           :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
           :data="item.dataWrapper || item"
-          :target="target"
           :key="`toolbar_component_${index}`"
-          @code-button-click="({code,scope}) => $emit('code-button-click',{code,scope})"
+          @code-button-click="({code,jsEvent}) => $emit('code-button-click',{code,jsEvent})"
       ></component>
-      <slot v-else-if="item.slot" :name="getProxySlotName(item.slot)" :item="item"></slot>
+      <slot v-else-if="item.slot"
+            :name="getProxySlotName(item.slot)"
+            @code-button-click="({code,jsEvent}) => $emit('code-button-click',{code,jsEvent})"
+            :data="item.dataWrapper || item"
+            :scope-config="item"></slot>
       <el-divider v-if="isDivider(item)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
     </template>
   </el-col>

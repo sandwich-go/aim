@@ -47,17 +47,7 @@ function autoOption(fieldSchema,fieldVal){
     }
 }
 
-export function fieldValueVirtual(row,fieldSchema,defaultVal){
-    defaultVal = defaultVal || null
-    const fieldValue = jsb.pathGet(row,fieldSchema.field,defaultVal)
-    if(fieldSchema.valueVirtual){
-        if (jsb.isFunction(fieldSchema.valueVirtual)){
-            return fieldSchema.valueVirtual({row,fieldSchema,fieldValue})
-        }
-        return fieldSchema.valueVirtual
-    }
-    return fieldValue
-}
+
 
 
 export function cleanData (data,schema,item2Row) {
@@ -100,6 +90,8 @@ export const ToolbarShortcutCodeCustom = "custom"
 export const ToolbarShortcutCodePrint = "print"
 export const ToolbarShortcutCodeAdd = "add"
 
+export const ToolbarShortcutCodeCopyField = "copyField"
+
 // 快捷方式按钮属性映射
 export const code2OptionsMapping = {}
 code2OptionsMapping[ToolbarShortcutCodeAdd] = {icon:'el-icon-plus',type:'primary',code:ToolbarShortcutCodeAdd,circle:true}
@@ -118,4 +110,25 @@ export function fixToolbarItems(toolbarConfigData) {
         })
     })
     return toolbarConfigData
+}
+
+export function fieldValueVirtual(row,fieldSchema,defaultVal){
+    defaultVal = defaultVal || null
+    const fieldValue = jsb.pathGet(row,fieldSchema.field,defaultVal)
+    if(fieldSchema.valueVirtual){
+        if (jsb.isFunction(fieldSchema.valueVirtual)){
+            return fieldSchema.valueVirtual({row,fieldSchema,fieldValue})
+        }
+        return fieldSchema.valueVirtual
+    }
+    return fieldValue
+}
+export function filedViewConfig({row,fieldSchema,fieldValue}) {
+    let fieldViewConfig = jsb.pathGet(fieldSchema, 'valueVirtual',{})
+    if(jsb.isFunction(fieldViewConfig)){
+        fieldViewConfig = fieldViewConfig({row,fieldSchema,fieldValue})
+    }
+    // 拷贝options字段
+    fieldViewConfig.options = fieldViewConfig.options || fieldSchema.options
+    return fieldViewConfig
 }

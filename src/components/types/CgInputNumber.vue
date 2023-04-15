@@ -7,7 +7,7 @@
       :disabled="disabled"
       :style="cc.style"
       @change="change"
-      :size="cc.size"
+      size="mini"
   ></el-input-number>
 </template>
 

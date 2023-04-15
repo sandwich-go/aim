@@ -6,7 +6,7 @@
       :style="cc.style"
       :placeholder="cc.placeholder"
       @change="change"
-      :size="cc.size"
+      size="mini"
   >
   </el-input>
 </template>

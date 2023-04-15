@@ -4,7 +4,7 @@ import jsb from "@sandwich-go/jsb";
 export default {
   name: 'MixinComponentConfig',
   props: {
-    scopeConfig:Object,   // 组件配置
+    scopeConfig:null,   // 组件配置
     data: null,           // 父对象数据，组件的model为data[fieldName]
     fieldName:{
       type:String,
@@ -19,7 +19,6 @@ export default {
     return {
       dataRef: {},
       cc: {
-        size:'mini',
         style: {},
         change: _this.emitChange
       }
@@ -35,6 +34,10 @@ export default {
       this.$emit("input", valNew)
     },
     initComponentConfig(initVal={}) {
+      if(!jsb.isPlainObject(this.scopeConfig)){
+        this.cc = this.scopeConfig
+        return
+      }
       const _this = this
       // styleDefault => styleBase => styleUser => styleOverride
       const mergeFiled = ['style']

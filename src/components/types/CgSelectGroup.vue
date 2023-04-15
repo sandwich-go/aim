@@ -4,7 +4,7 @@
       v-model="dataRef[fieldName]"
       :disabled="disabled"
       clearable
-      :size="cc.size"
+      size="mini"
       @change="change">
     <el-option-group
         v-for="group in options()"

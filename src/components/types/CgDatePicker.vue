@@ -6,7 +6,7 @@
       :default-time="cc.defaultTime"
       :placeholder="cc.placeholder"
       @change="change"
-      :size="cc.size"
+      size="mini"
       :style="cc.style"
   >
   </el-date-picker>

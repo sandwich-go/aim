@@ -4,7 +4,7 @@
       :border="cc.border"
       :style="cc.style"
       :disabled="disabled"
-      :size="cc.size"
+      size="mini"
       @change="change">
   </el-checkbox>
 </template>

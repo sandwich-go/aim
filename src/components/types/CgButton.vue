@@ -7,7 +7,7 @@
       :plain="cc.plain"
       :circle="cc.circle"
       size="mini"
-      @click="emitClick"
+      @click="emitClick($event)"
   >
     <template v-if="!cc.circle">{{cc.label ? cc.label : ""}}</template>
   </el-button>
@@ -25,8 +25,8 @@ export default {
     this.initComponentConfig(makeButton())
   },
   methods:{
-    emitClick(){
-      this.$emit('code-button-click',{code:this.cc.code,scope:this.cc})
+    emitClick(jsEvent){
+      this.$emit('code-button-click',{code:this.cc.code,jsEvent:jsEvent})
     }
   }
 }

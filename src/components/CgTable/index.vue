@@ -19,7 +19,7 @@
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-          @code-button-click="privateCodeItemClick"
+          @code-button-click="privateCodeItemClickForToolbar"
       >
         <template v-for="item in toolbarConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
@@ -70,15 +70,15 @@
                   :target="thisTarget()"
                   :should-toolbar-item-hide="privateShouldToolbarItemHide"
                   :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-                  @code-button-click="privateCodeItemClick"
+                  @code-button-click="privateCodeItemClickForRow"
               ></column-slots>
               <template v-if="registeredComponentMap[fieldSchema.slot]">
                 <component
                     :is="registeredComponentMap[fieldSchema.slot]"
-                    :row="scope.row"
-                    :fieldSchema="fieldSchema"
-                    :fieldValue="scope.row[fieldSchema.field]"
-                    :fieldValueVirtual="fieldValueVirtual(scope.row,fieldSchema)"
+                    :data="scope.row"
+                    :field-name="fieldSchema.field"
+                    :scope-config="filedViewConfig({row:scope.row,fieldSchema:fieldSchema,fieldValue:scope.row[fieldSchema.field]})"
+                    @code-button-click="privateCodeItemClickForRow"
                 ></component>
               </template>
               <template v-else>
@@ -87,6 +87,7 @@
                       :fieldSchema="fieldSchema"
                       :fieldValue="scope.row[fieldSchema.field]"
                       :fieldValueVirtual="fieldValueVirtual(scope.row,fieldSchema)"
+                      @code-button-click="privateCodeItemClickForRow"
                 ></slot>
               </template>
             </template>
@@ -107,7 +108,7 @@
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-          @code-button-click="privateCodeItemClick"
+          @code-button-click="privateCodeItemClickForToolbar"
       >
         <template v-for="item in footerConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
@@ -138,17 +139,17 @@ import {
   EditTriggerDBLClickOrSwitchButton,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
-  fieldValueVirtual,
+  fieldValueVirtual, filedViewConfig,
   fixToolbarItems,
   getProxySlotName,
   RowEditorInplace,
-  ToolbarShortcutCodeAdd,
+  ToolbarShortcutCodeAdd, ToolbarShortcutCodeCopyField,
   ToolbarShortcutCodeRefresh, xidRow
 } from "@/components/CgTable/table";
-import MixinCgPager from "@/components/CgTable/components/mixin/MixinCgPager.vue";
+import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
 import {NewDefaultProxyConfigData, NewDefaultTableProperty, NewEitConfigData,} from "@/components/CgTable/default";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
-import ColumnSlots from "@/components/CgTable/components/ColumnSlots.vue";
+import ColumnSlots from "@/components/types/ColumnSlots.vue";
 
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -207,7 +208,7 @@ export default {
     codeItemClick: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
-      default: function ({code, scope}) {
+      default: function ({code, scope,row,fieldSchema,fieldValue,fieldValueVirtual}) {
       },
     }
   },
@@ -274,6 +275,7 @@ export default {
     this.getProxySlotName()
   },
   methods: {
+    filedViewConfig,
     xidRow,
     fieldValueVirtual,
     getProxySlotName,
@@ -342,7 +344,7 @@ export default {
     },
     // current-change 回调
     currentChange(row) {
-      this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
+      // this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
     },
@@ -390,19 +392,29 @@ export default {
       }
       this.setEditRow(row)
     },
+    // eslint-disable-next-line no-unused-vars
+    privateCodeItemClickForRow({code,row,fieldSchema,fieldValue,jsEvent}) {
+      this.privateCodeItemClick({code,row,fieldSchema,fieldValue,jsEvent})
+    },
     // header或者footer的item点击时间事件
-    privateCodeItemClick({code, scope}) {
+    privateCodeItemClickForToolbar({code}) {
+      this.privateCodeItemClick({code})
+    },
+    privateCodeItemClick({code,row,fieldSchema,fieldValue,jsEvent}){
       this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
-      if (this.codeItemClick({code, scope})) {
+      if (this.codeItemClick({code,row,fieldSchema,fieldValue})) {
         return
       }
-      this.defaultCodeItemClick({code})
+      this.defaultCodeItemClick({code,fieldValue,jsEvent})
     },
     // 默认的code处理逻辑
-    defaultCodeItemClick({code}) {
+    defaultCodeItemClick({code,fieldValue,jsEvent}) {
       switch (code) {
         case ToolbarShortcutCodeRefresh:
           this.tryProxyQueryData()
+          break
+        case ToolbarShortcutCodeCopyField:
+          jsb.clipCopy(fieldValue,jsEvent)
           break
         case ToolbarShortcutCodeAdd:
           break

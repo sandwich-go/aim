@@ -6,7 +6,7 @@
       @show="$refs['iconSelect'].reset()">
     <cg-icon-selector ref="iconSelect" :style="cc.style" :element="cc.element"
                       @selected="selectedIcon"/>
-    <el-input slot="reference" v-model="dataRef[fieldName]" readonly v-bind="$attrs">
+    <el-input slot="reference" size="mini" v-model="dataRef[fieldName]" readonly v-bind="$attrs">
       <i v-if="dataRef[fieldName]" slot="prefix" :class="dataRef[fieldName]" class="el-input__icon"
          style="height: 32px;width: 16px;"/>
     </el-input>
@@ -25,7 +25,6 @@ export default {
   mixins: [MixinComponentConfig],
   created() {
     this.initComponentConfig({
-      style: {width: '100%'},
       showLabel: true,
       element: true,
     })

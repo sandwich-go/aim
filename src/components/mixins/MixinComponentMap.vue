@@ -8,7 +8,6 @@ export default {
     }
   },
   created() {
-    this.registerFiles(require.context('@/components/CgTable/components', true, /^((?!\.\/_).)*\.vue$/))
     this.registerFiles(require.context('@/components/types', true, /^((?!\.\/_).)*\.vue$/))
   },
   methods: {

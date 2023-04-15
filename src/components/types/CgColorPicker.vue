@@ -3,7 +3,7 @@
       v-model="dataRef[fieldName]"
       show-alpha
       :style="cc.style"
-      :size="cc.size"
+      size="mini"
       :predefine="cc.predefineColors"
       :disabled="disabled">
   </el-color-picker>

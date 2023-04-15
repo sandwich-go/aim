@@ -1,11 +1,10 @@
 <template>
   <el-switch
-      :size="cc.size"
       v-model="data[fieldName]"
       :active-color="cc.activeColor"
       :inactive-color="cc.inactiveColor"
       @change="change"
-      :style="cc.style"
+      size="mini"
       :disabled="disabled">
   </el-switch>
 </template>

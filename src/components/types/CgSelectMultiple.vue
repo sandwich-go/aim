@@ -2,7 +2,7 @@
   <el-select
       v-model="dataRef[fieldName]"
       multiple
-      :size="cc.size"
+      size="mini"
       :style="cc.style"
       filterable
       default-first-option

@@ -110,7 +110,21 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
+          slot:'CgInput',
           slotForm:'CgSelect'
+        },
+        {
+          field: 'Link',
+          name: 'Link',
+          showOverflowTooltip:true,
+          sortable: true,
+          width: 200,
+          align: 'center',
+          slot:'CgInput',
+          slotForm:'CgInput',
+          valueVirtual: function () {
+            return {label:'PMT地址',icon:'el-icon-heavy-rain',code:'copyField'}
+          }
         },
         {
           field: 'Number', name: 'InputNumber', type: 'input', width: 200, sortable: true,
@@ -118,6 +132,7 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
+          slot:'CgInputNumber',
           slotForm:'CgInputNumber',
           CgFormInput:{min:10,max:100,step:2}
         },
@@ -127,7 +142,7 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          slot:'RowSlotIcon',
+          slot:'CgIconSelectorInput',
           slotForm:'CgIconSelectorInput',
           valueVirtual: function ({fieldValue}) {
             return {class:fieldValue,label:fieldValue}
@@ -154,9 +169,10 @@ export default {
           type: 'switch',
           sortable: true,
           align: 'center',
-          slot: 'RowSlotTag',
+          slot: 'CgTag',
           slotForm:'CgSelectInput',
           valueVirtual: function ({fieldValue}) {
+            console.log("fieldValue",fieldValue)
             let tags = []
             for (const item of fieldValue) {
               tags.push({label: item, type: jsb.randomModIsZero(2) ? 'primary' : 'success'})
@@ -194,8 +210,8 @@ export default {
         query() {
           return {
             Data: [
-              {id: 4, name: '1111',Icon:'el-icon-user-solid', Online: true, Tag: ["Server", "HPA", "定时收缩"],Color:'red'},
-              {id: 5, name: '2222',Icon:'', Online: false, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
+              {id: 4, name: '1111',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'el-icon-user-solid', Online: true, Tag: ["Server", "HPA", "定时收缩"],Color:'red'},
+              {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
             ],
             Total: 100,
           }

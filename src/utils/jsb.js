@@ -7,3 +7,11 @@ export function pathGet(obj, path, defaultVal) {
 export function isString(s) {
     return jsb.isString(s)
 }
+
+export function wrapArray(data){
+    return jsb.wrapArray(data)
+}
+
+export function isPlainObject(s) {
+    return jsb.isPlainObject(s)
+}

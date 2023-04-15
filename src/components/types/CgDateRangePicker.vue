@@ -10,7 +10,7 @@
       :start-placeholder="cc.startPlaceholder"
       :end-placeholder="cc.endPlaceholder"
       @change="change"
-      :size="cc.size"
+      size="mini"
   >
   </el-date-picker>
 </template>

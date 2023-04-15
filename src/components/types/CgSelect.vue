@@ -3,7 +3,7 @@
       v-model="dataRef[fieldName]"
       :disabled="disabled"
       :style="cc.style"
-      :size="cc.size"
+      size="mini"
       @change="change">
     <el-option
         v-for="option in options()"
