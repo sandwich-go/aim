@@ -11,14 +11,13 @@
         :data="data"
         :row-top="rowTop"
         :disabled="disabled"/>
-    <!--    <form-select v-bind="$attrs" v-on="$listeners"/>↔️<form-input v-bind="$attrs" v-on="$listeners"/>-->
   </div>
 </template>
 
 <script>
 import MixinComponentConfig from "@/components/CgFormInput/mixins/MixinComponentConfig.vue";
-import FormSelect from "@/components/CgFormInput/components/FormSelect.vue";
-import FormInput from "@/components/CgFormInput/components/FormInput.vue";
+import FormSelect from "@/components/types/FormSelect.vue";
+import FormInput from "@/components/types/FormInput.vue";
 
 export default {
   name: 'FormSelectInput',
