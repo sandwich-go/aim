@@ -183,17 +183,19 @@ export default {
         {
           field: 'Datetime',
           name: 'Datetime',
+          cellTableName:'CgDatePicker',
           cellFormName:'CgDatePicker',
         },
         {
           field: 'DatetimeRange',
           name: 'Datetime',
+          cellTableName:'CgDateRangePicker',
           cellFormName:'CgDateRangePicker',
         },
         {
           field: 'Color',
           name: 'Color',
-          cellTableName:'RowSlotColor',
+          cellTableName:'CgViewerColor',
           cellFormName:'CgColorPicker',
         },
       ],
