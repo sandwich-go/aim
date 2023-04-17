@@ -1,15 +1,12 @@
-import {makeButton} from "@/components/cells/types";
-
 const jsb = require("@sandwich-go/jsb")
+
 
 // inplace模式下的编辑直接在table内显示编辑控件，可以设定一个按钮将某一行设定为编辑状态与否
 // inplace模式下不允许启用Form编辑表单
-export const EditTriggerInplace = "x-table-edit-trigger-inplace"
-
-export const EditTriggerSwitchButton = "x-table-edit-trigger-switch-button" // 激活编辑状态方式，按钮切换
-export const EditTriggerClick = "x-table-edit-trigger-click" // 激活编辑状态方式，单击行
-export const EditTriggerDBLClick = "x-table-edit-trigger-dblclick"// 激活编辑状态方式，双击行
-export const EditTriggerDBLClickOrSwitchButton  = "x-table-edit-trigger-dblclick-switch-button"
+export const EditTriggerSwitchButton = "EditTriggerSwitchButton" // 激活编辑状态方式，按钮切换
+export const EditTriggerClick = "EditTriggerClick" // 激活编辑状态方式，单击行
+export const EditTriggerDBLClick = "EditTriggerDBLClick"// 激活编辑状态方式，双击行
+export const EditTriggerDBLClickOrSwitcher  = "EditTriggerDBLClickOrSwitcher"
 
 export const EventCurrentRowChange = 'EventCurrentRowChange'
 
@@ -21,12 +18,22 @@ export const CtrlDataInRowData ='___x_table_ctrl_data'
 export function xidRow(row){
     return jsb.pathGet(row,`${CtrlDataInRowData}.xid`)
 }
-export function mustCtrlData(item){
-    if(!item[CtrlDataInRowData]){
-        item[CtrlDataInRowData] = {}
+export function mustCtrlData(row){
+    if(!row[CtrlDataInRowData]){
+        row[CtrlDataInRowData] = {}
     }
-    item[CtrlDataInRowData].xid = item[CtrlDataInRowData].xid || jsb.xid()
-    return item
+    row[CtrlDataInRowData].xid = row[CtrlDataInRowData].xid || jsb.xid()
+    return row
+}
+export function switchRowInEdit(row) {
+    row[CtrlDataInRowData].inplaceEdit = !row[CtrlDataInRowData].inplaceEdit
+}
+export function setRowInEdit(row,inEdit=true) {
+    row[CtrlDataInRowData].inplaceEdit = inEdit
+}
+
+export  function isRowInEdit(row) {
+    return row[CtrlDataInRowData].inplaceEdit
 }
 
 function autoOption(fieldSchema,fieldVal){
@@ -62,6 +69,7 @@ export function cleanData (data,schema,item2Row) {
     return data
 }
 
+
 export function getItemStyle(item,options){
     let style = jsb.pathGet(item,'style',{})
     jsb.each(options,function (val,key){
@@ -82,6 +90,11 @@ export const ToolbarShortcutCodeCustom = "custom"
 export const ToolbarShortcutCodePrint = "print"
 export const ToolbarShortcutCodeAdd = "add"
 
+export const ToolbarShortcutCodeRowEdit = "rowEdit"
+export const ToolbarShortcutCodeRowDelete = "rowDelete"
+export const ToolbarShortcutCodeRowCopy = "rowCopy"
+export const ToolbarShortcutCodeRowSave = "rowSave"
+export const ToolbarShortcutCodeRowHistory = "rowHistory"
 export const ToolbarShortcutCodeCopyField = "copyField"
 
 // 快捷方式按钮属性映射
@@ -91,16 +104,9 @@ code2OptionsMapping[ToolbarShortcutCodeRefresh] = {icon:'el-icon-refresh',type:'
 code2OptionsMapping[ToolbarShortcutCodePrint] = {icon:'el-icon-s-grid',type:'primary',code:ToolbarShortcutCodePrint,circle:true}
 code2OptionsMapping[ToolbarShortcutCodeCustom] = {icon:'el-icon-printer',type:'primary',code:ToolbarShortcutCodeCustom,circle:true}
 
-
-export function fixToolbarCells(toolbarConfigData) {
-    jsb.each(['leftCells','rightCells','cells'],function (val){
-        jsb.each(toolbarConfigData[val] || [], function (codeOrItem, key) {
-            // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
-            if (jsb.isString(codeOrItem)) {
-                toolbarConfigData[val][key] = makeButton(code2OptionsMapping[codeOrItem] || {code: codeOrItem})
-            }
-        })
-    })
-    return toolbarConfigData
-}
+code2OptionsMapping[ToolbarShortcutCodeRowEdit] = {icon:'el-icon-edit',type:'primary',code:ToolbarShortcutCodeRowEdit,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowDelete] = {icon:'el-icon-delete',type:'danger',code:ToolbarShortcutCodeRowDelete,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowCopy] = {icon:'el-icon-copy-document',type:'primary',code:ToolbarShortcutCodeRowCopy,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowSave] = {icon:'el-icon-s-promotion',type:'warning',code:ToolbarShortcutCodeRowSave,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowHistory] = {icon:'el-icon-date',type:'success',code:ToolbarShortcutCodeRowHistory,circle:true}
 

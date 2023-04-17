@@ -12,6 +12,7 @@ export default {
     styleOverride: Object, // 便于组件覆盖基础配置，如form中所有的元素设定为100% width，但是少数对象如checkbox不允许100%
     styleBase: Object,     // 便于父对象定义基础配置，如form中所有的元素设定为100% width
     disabled: Boolean,    // 是否只读
+    disabledState: String,    // 是否只读
   },
   data() {
     const _this = this
@@ -22,6 +23,11 @@ export default {
         change: _this.emitChange
       }
     }
+  },
+  watch:{
+    disabled:function (newVal){
+      console.log("disabled ",newVal)
+    },
   },
   created() {
     if (this.data) {

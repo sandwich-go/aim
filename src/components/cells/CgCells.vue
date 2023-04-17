@@ -1,37 +1,38 @@
 <template>
   <div>
-    <template v-for="(item,index) of cells">
+    <template v-for="(cell,index) of cellsRef">
       <div :key="index" :style="divStyle">
         <!-- 使用系统预注册的内置组件 -->
         <component
-            v-if="item.slot && registeredComponentMap[item.slot] && shouldToolbarItemHide({scope:item,code:item.code ||''})"
-            :is="registeredComponentMap[item.slot]"
+            v-if="cell.slot && registeredComponentMap[cell.slot] && shouldToolbarItemHide({scope:cell,code:cell.code ||''})"
+            :is="registeredComponentMap[cell.slot]"
             :key="`toolbar_component_${index}`"
-            :cell-config="item"
-            :data="item.dataWrapper || item"
-            :field-name="item.field || 'value'"
-            :options="item.options || []"
-            :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
+            :cell-config="cell"
+            :data="cell.data || cell"
+            :field-name="cell.field || 'value'"
+            :options="cell.options || []"
+            :disabled="shouldToolbarItemDisable({scope:cell,code:cell.code ||''})"
             @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
         />
         <!-- 使用逻辑层实现的slot组件 -->
-        <slot v-else-if="item.slot"
-              :name="getProxySlotName(item.slot)"
-              :cell-config="item"
-              :data="item.dataWrapper || item"
-              :field-name="item.field || 'value'"
-              :options="item.options || []"
-              :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
+        <slot v-else-if="cell.slot"
+              :name="getProxySlotName(cell.slot)"
+              :cell-config="cell"
+              :data="cell.dataWrapper || cell"
+              :field-name="cell.field || 'value'"
+              :options="cell.options || []"
+              :disabled="shouldToolbarItemDisable({scope:cell,code:cell.code ||''})"
               @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
         />
-        <el-divider v-if="isDivider(item)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
+        <el-divider v-if="isDivider(cell)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
       </div>
     </template>
   </div>
 </template>
 <script>
-import {getProxySlotName} from "@/components/CgTable/table";
+import {code2OptionsMapping, getProxySlotName} from "@/components/CgTable/table";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
+import {makeButton} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -44,6 +45,11 @@ export default {
     cells: Array, // 组件列表
     divStyle:Object,
   },
+  data(){
+    return {
+      cellsRef:this.cells,
+    }
+  },
   methods: {
     getProxySlotName,
     isDivider(item) {
@@ -51,9 +57,14 @@ export default {
     },
   },
   created() {
-    jsb.each(this.cells || [], function (item) {
-      if (!item.slot && item.code) {
-        item.slot = 'CgButton'
+    const _this = this
+    jsb.each(this.cells , function (codeOrItem, key) {
+      if (!codeOrItem.slot && codeOrItem.code) {
+        codeOrItem.slot = 'CgButton'
+      }
+      // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
+      if (jsb.isString(codeOrItem)) {
+        _this.cellsRef[key] = makeButton(code2OptionsMapping[codeOrItem] || {code: codeOrItem})
       }
     })
   },

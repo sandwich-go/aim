@@ -4,7 +4,7 @@
       :disabled="disabled"
       :style="cc.style"
       size="mini"
-      @change="changeNow">
+      @change="change">
     <el-option
         v-for="option in getOptions()"
         :key="option.value"
@@ -22,14 +22,8 @@ export default {
   name: 'CgSelect',
   mixins: [MixinCellEditorConfig],
   created() {
+    console.log(this.dataRef,this.fieldName)
     this.ccConfigMerge()
   },
-  methods:{
-    changeNow(val){
-      console.log("val ",this.fieldName,val)
-      console.log("data ",this.data)
-      console.log("data ",this.data)
-    }
-  }
 }
 </script>

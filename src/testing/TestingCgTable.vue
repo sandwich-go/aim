@@ -11,7 +11,7 @@
         :schema="schema"
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
-        :toolbar-config="toolbarConfig"
+        :toolbar-config="toolbarConfig()"
         :table-property="{class:'cg-table-mini-padding',heightSubVH:70}"
         :footer-config="footConfig"
         :edit-config="editConfig"
@@ -33,6 +33,12 @@
 
 <script>
 import CgTable from "@/components/CgTable";
+import {
+  EditTriggerDBLClick,
+  EditTriggerDBLClickOrSwitcher,
+  EditTriggerSwitchButton, RowEditorFormInput,
+  RowEditorInplace
+} from "@/components/CgTable/table";
 
 export default {
   name: 'TestingCgTable',
@@ -44,40 +50,15 @@ export default {
     return {
       alertTitle: '',
       toolbarOptionServer: '',
-      toolbarConfig: {
-        leftSpan:21,
-        leftCells: [
-          {slot: 'CgAlert', label: "标题内容",showIcon:false, style: {width: 'fit'}},
-          {},
-          {
-            slot: 'CgSelect',
-            options: [{label: "s1", value: "s1"}, {label: "s2", value: "s2"}],
-            style: {'padding-right': '10px',width:'120px'},
-            change: (val) => this.toolbarAlert('CgSelect', val)
-          },
-          {
-            slot: 'SlotOptionsUseDefineSlot',
-            options: [{label: "action1", value: "action1"}, {label: "action2", value: "action2"}],
-            change: (val) => this.toolbarAlert('SlotOptionsUseDefineSlot', val)
-          },
-          {},
-          {slot: 'CgCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CgCheckbox', val)},
-          {},
-          {slot: 'CgDateRangePicker', change:  (val) => this.toolbarAlert('CgDateRangePicker', val)},
-          {slot: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val),style:{width:"120px"}},
-
-          {slot: 'CgSelectGroup',options:[
-              {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}],
-            change: (val) => this.toolbarAlert('SlotSelectGroup', val)},
-
-          {label: "导入", code: 'codeImport'},
-          {label: "导出", code: 'codeExport', icon: 'el-icon-check', show: false},
-          {},
-          {label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'},
-          {label: "新建", code: 'codeNew', icon: 'el-icon-check'},
-        ],
-        rightCells:['add','refresh','custom','print'],
-        style: {'padding-bottom': '20px'}
+      editConfig:{
+        rowEditor:RowEditorFormInput,
+        trigger:EditTriggerDBLClickOrSwitcher,
+        triggerRowFunc:({row})=>{
+          if(row.Online){
+            return "用户在线，不允许调整数据"
+          }
+          return {alert:{type:'success',title:'用户不在线，改吧改吧'}}
+        }
       },
       footConfig:{
         leftSpan:12,
@@ -87,15 +68,6 @@ export default {
       rightBarConfig:{
         cells:['add','refresh','custom','print'],
       },
-      editConfig:{
-        triggerRowFunc:({row})=>{
-          if(row.Online){
-            return "用户在线，不允许调整数据"
-          }
-          return {alert:{type:'success',title:'用户不在线，改吧改吧'}}
-        }
-      },
-
       schema: [
         {
           field: 'id', name: 'ID', type: 'input', width: 200, sortable: true,
@@ -160,7 +132,7 @@ export default {
           cellTableName: 'CgCells',
           cellFormName:'CgSwitch',
           cellTable: function ({fieldValue}) {
-            return [{slot: 'CgAlert', label: fieldValue, style: {width: 'fit'}},{slot:"CgButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
+            return [{slot: 'CgAlert', label: fieldValue, style: {width: 'fit'}},'editSwitch']
           }
         },
         {
@@ -203,7 +175,16 @@ export default {
           cellTableName:'CgViewerColor',
           cellFormName:'CgColorPicker',
         },
+        {
+          virtual:true,
+          fixed:'right',
+          name: '操作',
+          width: 200,
+          cellTableName:'CgCells',
+          cellTable:['rowEdit','rowSave','rowDelete','rowCopy','rowHistory']
+        },
       ],
+
       proxyConfig: {
         query() {
           return {
@@ -226,6 +207,66 @@ export default {
     },
     shouldButtonHide({code}) {
       return code === 'codeImport';
+    },
+    toolbarConfig(){
+      const _this = this
+      return      {
+        leftSpan:21,
+            leftCells: [
+          {slot: 'CgAlert', label: "标题内容",showIcon:false, style: {width: 'fit'}},
+          {},
+          {
+            slot: 'CgSelect',
+            options: [
+              {label:EditTriggerSwitchButton, value:EditTriggerSwitchButton},
+              {label: EditTriggerDBLClick, value: EditTriggerDBLClick},
+              {label: EditTriggerDBLClickOrSwitcher, value: EditTriggerDBLClickOrSwitcher},
+            ],
+            field:'trigger',
+            data:_this.editConfig,
+            style: {'padding-right': '10px',width:'160px'},
+            change: function (val){
+              _this.toolbarAlert('CgSelect trigger', val)
+            }
+          },
+          {
+            slot: 'CgSelect',
+            options: [
+              {label:RowEditorInplace, value:RowEditorInplace},
+              {label: RowEditorFormInput, value: RowEditorFormInput},
+            ],
+            field:'rowEditor',
+            data:_this.editConfig,
+            change: function (val){
+              _this.editConfig.rowEditor = val
+              _this.toolbarAlert('CgSelect rowEditor', val)
+            },
+            style: {'padding-right': '10px',width:'160px'},
+          },
+          {
+            slot: 'SlotOptionsUseDefineSlot',
+            options: [{label: "action1", value: "action1"}, {label: "action2", value: "action2"}],
+            change: (val) => this.toolbarAlert('SlotOptionsUseDefineSlot', val)
+          },
+          {},
+          {slot: 'CgCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CgCheckbox', val)},
+          {},
+          {slot: 'CgDateRangePicker', change:  (val) => this.toolbarAlert('CgDateRangePicker', val)},
+          {slot: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val),style:{width:"120px"}},
+
+          {slot: 'CgSelectGroup',options:[
+              {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}],
+            change: (val) => this.toolbarAlert('SlotSelectGroup', val)},
+
+          {label: "导入", code: 'codeImport'},
+          {label: "导出", code: 'codeExport', icon: 'el-icon-check', show: false},
+          {},
+          {label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'},
+          {label: "新建", code: 'codeNew', icon: 'el-icon-check'},
+        ],
+            rightCells:['add','refresh','custom','print'],
+            style: {'padding-bottom': '20px'}
+      }
     }
   }
 }
