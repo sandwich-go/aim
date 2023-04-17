@@ -83,7 +83,10 @@ export function NewEitConfigData() {
         // 拷贝一行数据,逻辑层替换关键数据
         // eslint-disable-next-line no-unused-vars
         copyRow({row}){},
-        formEditorCells:[ToolbarShortcutCodeRowSaveRemote,ToolbarShortcutCodeRowDelete,ToolbarShortcutCodeRowHistory]
+        // eslint-disable-next-line no-unused-vars
+        formEditorCells:function ({row}){
+            return [ToolbarShortcutCodeRowSaveRemote,ToolbarShortcutCodeRowDelete,ToolbarShortcutCodeRowHistory]
+        }
     })
 }
 

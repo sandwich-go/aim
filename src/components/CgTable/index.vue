@@ -163,7 +163,7 @@
         <cg-cells
             :style="flexEndStyle"
             :shortcut-button-options="{circle:false}"
-            :cells="editConfigData.formEditorCells"
+            :cells="editConfigData.formEditorCells(currentRow)"
             :should-toolbar-item-hide="privateShouldToolbarItemHide"
             :should-toolbar-item-disable="privateShouldToolbarItemDisable"
             @code-cell-click="privateCodeItemClickForToolbar"
