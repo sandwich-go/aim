@@ -12,6 +12,7 @@
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
         :toolbar-config="toolbarConfig()"
+        :selection="true"
         :table-property="{class:'cg-table-mini-padding',heightSubVH:70}"
         :footer-config="footConfig"
         :edit-config="editConfig"
