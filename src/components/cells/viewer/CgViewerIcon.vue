@@ -1,0 +1,30 @@
+<template>
+  <div>
+    <template v-if="fieldValue">
+      <template style="align-items: center">
+        <i v-if="isString(fieldValue)" :class="fieldValue"></i>
+        <i v-else :class="fieldValue.class || fieldValue.icon" :style="fieldValue.style || {}"></i>
+        <span v-if="fieldValue.label" style="padding-left: 9px">{{ fieldValue.label }}</span>
+      </template>
+    </template>
+    <template v-else>
+      <i :class="fieldValue"></i>
+    </template>
+  </div>
+</template>
+
+<script>
+import {isString} from "xe-utils";
+import MixinCellViewerConfig from "@/components/cells/mixins/MixinCellViewerConfig.vue";
+
+export default {
+  name: "CgViewerIcon",
+  mixins: [MixinCellViewerConfig],
+  methods: {
+    isString,
+  },
+  created() {
+    this.ccConfigMerge()
+  }
+}
+</script>

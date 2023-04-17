@@ -23,13 +23,13 @@
 
 <script>
 
-import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgSelectGroup',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.initComponentConfig()
+    this.ccConfigMerge()
   },
 }
 </script>

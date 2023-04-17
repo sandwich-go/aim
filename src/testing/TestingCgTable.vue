@@ -120,7 +120,7 @@ export default {
           align: 'center',
           slot:'CgInput',
           slotForm:'CgInput',
-          valueVirtual: function () {
+          cellTable: function () {
             return {label:'PMT地址',icon:'el-icon-heavy-rain',code:'copyField'}
           }
         },
@@ -142,7 +142,7 @@ export default {
           required: true,
           slot:'CgIconSelectorInput',
           slotForm:'CgIconSelectorInput',
-          valueVirtual: function ({fieldValue}) {
+          cellTable: function ({fieldValue}) {
             return {class:fieldValue,label:fieldValue}
           }
         },
@@ -155,9 +155,9 @@ export default {
           readOnly: true,
           default: false,
           width: 280,
-          slot: 'ColumnSlots',
+          slot: 'CgCells',
           slotForm:'CgSwitch',
-          valueVirtual: function ({fieldValue}) {
+          cellTable: function ({fieldValue}) {
             return [{slot: 'CgAlert', label: fieldValue, style: {width: 'fit'}},{slot:"CgButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
           }
         },
@@ -169,8 +169,8 @@ export default {
           align: 'center',
           summary:true,
           slot: 'CgViewerTag',
-          slotForm:'CgSelectInput'
-          ,options:[
+          slotForm:'CgSelectInput',
+          options:[
             {label:"g1",value:"g1"},{label:"g2",value:"g2"}
           ]
         },

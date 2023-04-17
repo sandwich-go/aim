@@ -17,13 +17,13 @@
 
 <script>
 
-import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgSelect',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.initComponentConfig({
+    this.ccConfigMerge({
       startPlaceholder:'开始时间',
       endPlaceholder:'开始时间',
       rangeSeparator:'~',

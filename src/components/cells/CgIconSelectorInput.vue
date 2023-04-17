@@ -15,7 +15,7 @@
 
 <script>
 import CgIconSelector from "@/components/CgIconSelector/index.vue";
-import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgIconSelectorInput',
@@ -24,7 +24,7 @@ export default {
   },
   mixins: [MixinCellEditorConfig],
   created() {
-    this.initComponentConfig({
+    this.ccConfigMerge({
       showLabel: true,
       element: true,
     })

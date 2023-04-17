@@ -14,7 +14,7 @@
 
 import {getItemStyle} from "@/components/CgTable/table";
 import {parseWidthToPixelString} from "@/utils/ui";
-import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
 const jsb = require("@sandwich-go/jsb")
 export default {
@@ -27,7 +27,7 @@ export default {
     },
   },
   created() {
-    this.initComponentConfig({
+    this.ccConfigMerge({
       label: '',
       title: '',
       center: false,

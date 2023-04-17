@@ -21,8 +21,8 @@
                 :is="registeredComponentMap[siSlot(fs)]"
                 :data="data"
                 :field-name="fs.field"
-                :style-base="{width:'100%'}"
                 :options="fs.options || []"
+                :style-base="{width:'100%'}"
                 :cell-config="formInputConfig(fs)"
                 :disabled="privateShouldFieldDisable(fs)"
                 :key="`fom_component_field_${fs.field}`"
@@ -42,7 +42,7 @@ import {
   CgFormInputModeView,
   formInputConfig
 } from "@/components/CgFormInput/index";
-import CgAlert from "@/components/types/CgAlert.vue";
+import CgAlert from "@/components/cells/CgAlert.vue";
 import {isString} from "xe-utils";
 
 const jsb = require("@sandwich-go/jsb")

@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import {ReservedColorList} from "@/utils/ui";
 const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'CgInput',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.initComponentConfig({
+    this.ccConfigMerge({
       style: {width:null},
       predefineColors:jsb.cc('predefineColors',ReservedColorList)
     })

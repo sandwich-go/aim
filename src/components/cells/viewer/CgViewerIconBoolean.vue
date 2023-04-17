@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import MixinCellViewerConfig from "@/components/types/mixins/MixinCellViewerConfig.vue";
-import CgViewerIcon from "@/components/types/viewer/CgViewerIcon.vue";
+import MixinCellViewerConfig from "@/components/cells/mixins/MixinCellViewerConfig.vue";
+import CgViewerIcon from "@/components/cells/viewer/CgViewerIcon.vue";
 
 export default {
   name: "CgViewerIconBoolean",
@@ -14,7 +14,7 @@ export default {
   mixins: [MixinCellViewerConfig],
   methods:{
     cellConfigTrans(){
-      if(this.cellConfig){
+      if(this.fieldValue){
         return {class: 'el-icon-check', style: 'color:green;'}
       }else{
         return {class: 'el-icon-close', style: 'color:red;'}
@@ -22,7 +22,7 @@ export default {
     }
   },
   created() {
-    this.initComponentConfig()
+    this.ccConfigMerge()
   }
 }
 </script>

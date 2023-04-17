@@ -13,13 +13,13 @@
 
 <script>
 
-import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgInputNumber',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.initComponentConfig({
+    this.ccConfigMerge({
       min: -Infinity,
       max: Infinity,
       step: 1,

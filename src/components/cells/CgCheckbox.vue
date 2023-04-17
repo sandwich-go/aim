@@ -11,13 +11,13 @@
 
 <script>
 
-import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgCheckbox',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.initComponentConfig({
+    this.ccConfigMerge({
           border: false,
           style: {
             width:null,// checkbox不应该设定宽度

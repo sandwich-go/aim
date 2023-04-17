@@ -10,21 +10,23 @@
               type="info">
     </el-alert>
     <el-row :style="toolbarConfigData.style">
-      <column-slots
+      <!-- header toolbar -->
+      <cg-cells
           v-for="direction of ['left','right']"
           :key="direction"
           :span="toolbarSpan(toolbarConfigData,direction)"
           :style="toolbarConfigData[direction+'ColumnStyle']"
-          :items="toolbarConfigData[direction+'Items']"
+          :cells="toolbarConfigData[direction+'Items']"
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-          @code-button-click="privateCodeItemClickForToolbar"
+          @code-cell-click="privateCodeItemClickForToolbar"
       >
+        <!-- 透传使用逻辑层定义的slot组件 -->
         <template v-for="item in toolbarConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
         </template>
-      </column-slots>
+      </cg-cells>
     </el-row>
 
     <el-table
@@ -63,22 +65,23 @@
             :align="fieldSchema.align || 'left'">
           <template slot-scope="scope">
             <template v-if="fieldSchema.slot">
-              <column-slots
-                  v-if="fieldSchema.slot==='ColumnSlots'"
+              <!-- CgCells列表组件单独处理 -->
+              <cg-cells
+                  v-if="fieldSchema.slot==='CgCells'"
                   :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
-                  :items="fieldValueVirtual(scope.row,fieldSchema)"
+                  :cells="fieldTableCellConfig(scope.row,fieldSchema)"
                   :should-toolbar-item-hide="privateShouldToolbarItemHide"
                   :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-                  @code-button-click="privateCodeItemClickForRow"
-              ></column-slots>
+                  @code-cell-click="privateCodeItemClickForRow"
+              ></cg-cells>
               <template v-if="registeredComponentMap[fieldSchema.slot]">
                 <component
                     :is="registeredComponentMap[fieldSchema.slot]"
                     :data="scope.row"
                     :options="fieldSchema.options || []"
                     :field-name="fieldSchema.field"
-                    :cell-config="filedViewConfig({row:scope.row,fieldSchema:fieldSchema,fieldValue:scope.row[fieldSchema.field]})"
-                    @code-button-click="privateCodeItemClickForRow"
+                    :cell-config="fieldTableCellConfig(scope.row,fieldSchema)"
+                    @code-cell-click="privateCodeItemClickForRow"
                 ></component>
               </template>
               <template v-else>
@@ -86,34 +89,34 @@
                       :row="scope.row"
                       :fieldSchema="fieldSchema"
                       :fieldValue="scope.row[fieldSchema.field]"
-                      :fieldValueVirtual="fieldValueVirtual(scope.row,fieldSchema)"
-                      @code-button-click="privateCodeItemClickForRow"
+                      :fieldValueVirtual="fieldTableCellConfig(scope.row,fieldSchema)"
+                      @code-cell-click="privateCodeItemClickForRow"
                 ></slot>
               </template>
             </template>
             <span v-else>
-                {{ fieldValueVirtual(scope.row, fieldSchema) }}
+                {{ fieldTableCellConfig(scope.row, fieldSchema) }}
               </span>
           </template>
         </el-table-column>
       </template>
     </el-table>
     <el-row :style="footerConfigData.style">
-      <column-slots
+      <cg-cells
           v-for="direction of ['left','right']"
           :key="direction"
           :span="toolbarSpan(footerConfigData,direction)"
           :style="footerConfigData[direction+'ColumnStyle']"
-          :items="footerConfigData[direction+'Items']"
+          :cells="footerConfigData[direction+'Items']"
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-          @code-button-click="privateCodeItemClickForToolbar"
+          @code-cell-click="privateCodeItemClickForToolbar"
       >
         <template v-for="item in footerConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
         </template>
-      </column-slots>
+      </cg-cells>
     </el-row>
 
     <el-dialog modal width="80%"
@@ -141,8 +144,7 @@ import {
   EditTriggerDBLClickOrSwitchButton,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
-  fieldValueVirtual,
-  filedViewConfig,
+  fieldTableCellConfig,
   fixToolbarItems,
   getProxySlotName,
   RowEditorInplace,
@@ -154,12 +156,12 @@ import {
 import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
 import {NewDefaultProxyConfigData, NewDefaultTableProperty, NewEitConfigData,} from "@/components/CgTable/default";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
-import ColumnSlots from "@/components/types/ColumnSlots.vue";
+import CgCells from "@/components/cells/CgCells.vue";
 
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
-import {CgFormInputModeEdit, CgFormInputModeView} from "@/components/CgFormInput/index";
+import {CgFormInputModeEdit, CgFormInputModeView} from "@/components/CgFormInput";
 import CgFormInput from "@/components/CgFormInput/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
@@ -167,7 +169,7 @@ const jsb = require("@sandwich-go/jsb")
 export default {
   name: "CgTable",
   mixins: [MixinCgPager, MixinComponentMap],
-  components: {CgFormInput, ColumnSlots, Loading},
+  components: {CgFormInput, CgCells, Loading},
   props: {
     selection: Boolean,// 是否支持选择
     radio: Boolean,// 是否支持radio选择
@@ -280,9 +282,8 @@ export default {
     this.getProxySlotName()
   },
   methods: {
-    filedViewConfig,
     xidRow,
-    fieldValueVirtual,
+    fieldTableCellConfig,
     getProxySlotName,
     setDebugMessage(msg) {
       this.debugMessage = msg

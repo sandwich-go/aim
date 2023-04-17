@@ -1,4 +1,4 @@
-import {makeButton} from "@/components/types/types";
+import {makeButton} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -23,6 +23,11 @@ export const RowEditorInplace = 'RowEditorInplace'
 export const RowEditorFormInput = 'RowEditorFormInput'
 
 export const CtrlDataInRowData ='___x_table_ctrl_data'
+
+// 当field在表内组件为只读属性，使用内置CgViewer组件时,cellTable为该组件的配置+数据内容
+// 当field在表内组件为编辑组件, cellTable为该组件的配置,组件的数据使用field本身的数据
+export const TableCellConfigFiledName = 'cellTable'
+export const TableCellConfigFiledNameValueField = '___x_cellTableValueField'
 
 export function xidRow(row){
     return jsb.pathGet(row,`${CtrlDataInRowData}.xid`)
@@ -112,25 +117,13 @@ export function fixToolbarItems(toolbarConfigData) {
     return toolbarConfigData
 }
 
-export function fieldValueVirtual(row,fieldSchema,defaultVal){
-    defaultVal = defaultVal || null
-    const fieldValue = jsb.pathGet(row,fieldSchema.field,defaultVal)
-    if(fieldSchema.valueVirtual){
-        if (jsb.isFunction(fieldSchema.valueVirtual)){
-            return fieldSchema.valueVirtual({row,fieldSchema,fieldValue})
+export function fieldTableCellConfig(row, fs){
+    const cellConfig = fs[TableCellConfigFiledName]
+    if(cellConfig){
+        if (jsb.isFunction(cellConfig)){
+            return cellConfig({row,fs,fieldValue:jsb.pathGet(row,fs.field)})
         }
-        return fieldSchema.valueVirtual
+        return cellConfig
     }
-    return fieldValue
-}
-export function filedViewConfig({row,fieldSchema,fieldValue}) {
-    let valueVirtual = jsb.pathGet(fieldSchema, 'valueVirtual')
-    if(!jsb.isUndefined(valueVirtual)){
-        if(jsb.isFunction(valueVirtual)){
-            valueVirtual = valueVirtual({row,fieldSchema,fieldValue})
-        }
-    }else{
-        valueVirtual = fieldValue
-    }
-    return valueVirtual|| {}
+    return null
 }
