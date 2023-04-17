@@ -2,6 +2,9 @@ import {makeButton} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")
 
+// inplace模式下的编辑直接在table内显示编辑控件，可以设定一个按钮将某一行设定为编辑状态与否
+// inplace模式下不允许启用Form编辑表单
+export const EditTriggerInplace = "x-table-edit-trigger-inplace"
 
 export const EditTriggerSwitchButton = "x-table-edit-trigger-switch-button" // 激活编辑状态方式，按钮切换
 export const EditTriggerClick = "x-table-edit-trigger-click" // 激活编辑状态方式，单击行
@@ -90,8 +93,8 @@ code2OptionsMapping[ToolbarShortcutCodeCustom] = {icon:'el-icon-printer',type:'p
 
 
 export function fixToolbarCells(toolbarConfigData) {
-    jsb.each(['leftCells','rightCells'],function (val){
-        jsb.each(toolbarConfigData[val], function (codeOrItem, key) {
+    jsb.each(['leftCells','rightCells','cells'],function (val){
+        jsb.each(toolbarConfigData[val] || [], function (codeOrItem, key) {
             // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
             if (jsb.isString(codeOrItem)) {
                 toolbarConfigData[val][key] = makeButton(code2OptionsMapping[codeOrItem] || {code: codeOrItem})

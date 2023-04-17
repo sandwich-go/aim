@@ -11,61 +11,63 @@
     </el-alert>
     <el-row :style="toolbarConfigData.style">
       <!-- header toolbar -->
-      <cg-cells
-          v-for="direction of ['left','right']"
-          :key="direction"
-          :span="toolbarSpan(toolbarConfigData,direction)"
-          :style="toolbarConfigData[direction+'ColumnStyle']"
-          :cells="toolbarConfigData[direction+'Cells']"
-          :target="thisTarget()"
-          :should-toolbar-item-hide="privateShouldToolbarItemHide"
-          :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-          @code-cell-click="privateCodeItemClickForToolbar"
-      >
-        <!-- 透传使用逻辑层定义的slot组件 -->
-        <template v-for="item in toolbarConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
-          <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
-        </template>
-      </cg-cells>
+      <el-col v-for="direction of ['left','right']"
+              :key="direction"
+              :span="toolbarSpan(toolbarConfigData,direction)" :style="toolbarConfigData[direction+'ColumnStyle']">
+        <cg-cells
+            :span="toolbarSpan(toolbarConfigData,direction)"
+            :style="toolbarConfigData[direction+'ColumnStyle']"
+            :cells="toolbarConfigData[direction+'Cells']"
+            :should-toolbar-item-hide="privateShouldToolbarItemHide"
+            :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+            @code-cell-click="privateCodeItemClickForToolbar"
+        >
+          <!-- 透传使用逻辑层定义的slot组件 -->
+          <template v-for="item in toolbarConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
+            <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+          </template>
+        </cg-cells>
+      </el-col>
     </el-row>
 
-    <el-table
-        ref="table"
-        :height="tableHeight()"
-        :data="tableData"
-        :border="tablePropertyData.border"
-        :stripe="tablePropertyData.stripe"
-        :class="tablePropertyData.class"
-        :show-header="tablePropertyData.showHeader"
-        :empty-text="tablePropertyData.emptyText"
-        :header-cell-style="tablePropertyData.headerCellStyle"
-        :highlight-current-row="tablePropertyData.highlightCurrentRow"
-        :cell-style="cellStyleWrapper"
-        :row-style="tablePropertyData.rowStyle"
-        @current-change="currentChange"
-        @row-dblclick="rowDblClick"
-        @row-click="rowClick"
-        :row-key="xidRow"
-    >
-      <el-table-column v-if="selection" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
-      <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
-        <template slot-scope="scope">
-          <el-checkbox :value="scope.row === currentRow" @change="(val)=>radioRowChanged(scope.row,val)"></el-checkbox>
-        </template>
-      </el-table-column>
-      <template v-for="(fs,fieldIndex) in schema">
-        <el-table-column
-            :key="fieldIndex"
-            :prop="fs.field"
-            :width="fs.width"
-            :min-width="fs.min_width"
-            :max-width="fs.max_width"
-            :show-overflow-tooltip="fs.showOverflowTooltip"
-            :label="fs.name"
-            :align="fs.align || 'left'"
-
-        >
+    <el-row class="cg-component-flex-end" style="align-items: start;gap: 3px">
+      <el-table
+          ref="table"
+          :height="tableHeight()"
+          :data="tableData"
+          :border="tablePropertyData.border"
+          :stripe="tablePropertyData.stripe"
+          :class="tablePropertyData.class"
+          :show-header="tablePropertyData.showHeader"
+          :empty-text="tablePropertyData.emptyText"
+          :header-cell-style="tablePropertyData.headerCellStyle"
+          :highlight-current-row="tablePropertyData.highlightCurrentRow"
+          :cell-style="cellStyleWrapper"
+          :row-style="tablePropertyData.rowStyle"
+          @current-change="currentChange"
+          @row-dblclick="rowDblClick"
+          @row-click="rowClick"
+          :row-key="xidRow"
+      >
+        <el-table-column v-if="selection" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
+        <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
+            <el-checkbox :value="scope.row === currentRow" @change="(val)=>radioRowChanged(scope.row,val)"></el-checkbox>
+          </template>
+        </el-table-column>
+        <template v-for="(fs,fieldIndex) in schema">
+          <el-table-column
+              :key="fieldIndex"
+              :prop="fs.field"
+              :width="fs.width"
+              :min-width="fs.min_width"
+              :max-width="fs.max_width"
+              :show-overflow-tooltip="fs.showOverflowTooltip"
+              :label="fs.name"
+              :align="fs.align || 'left'"
+
+          >
+            <template slot-scope="scope">
             <span :set="celllName = cellTableName(fs)">
               <template v-if="celllName">
                 <!-- CgCells列表组件单独处理 -->
@@ -100,26 +102,43 @@
                   {{ cellTableConfig(scope.row,fs) }}
                 </span>
             </span>
-          </template>
-        </el-table-column>
-      </template>
-    </el-table>
-    <el-row :style="footerConfigData.style">
-      <cg-cells
-          v-for="direction of ['left','right']"
-          :key="direction"
-          :span="toolbarSpan(footerConfigData,direction)"
-          :style="footerConfigData[direction+'ColumnStyle']"
-          :cells="footerConfigData[direction+'Cells']"
-          :target="thisTarget()"
-          :should-toolbar-item-hide="privateShouldToolbarItemHide"
-          :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-          @code-cell-click="privateCodeItemClickForToolbar"
-      >
-        <template v-for="item in footerConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
-          <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+            </template>
+          </el-table-column>
         </template>
-      </cg-cells>
+      </el-table>
+      <div class="cg-table-shortcuts-button">
+        <div style="float:right">
+          <cg-cells
+              :cells="rightBarConfigData.cells"
+              :div-style="{'padding-bottom':'6px'}"
+              :should-toolbar-item-hide="privateShouldToolbarItemHide"
+              :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+              @code-cell-click="privateCodeItemClickForToolbar">
+            <template v-for="item in toolbarConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
+              <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+            </template>
+          </cg-cells>
+        </div>
+      </div>
+    </el-row>
+
+    <el-row :style="footerConfigData.style">
+      <el-col v-for="direction of ['left','right']"
+              :key="direction"
+              :span="toolbarSpan(footerConfigData,direction)" :style="footerConfigData[direction+'ColumnStyle']">
+        <cg-cells
+            :style="footerConfigData[direction+'ColumnStyle']"
+            :cells="footerConfigData[direction+'Cells']"
+            :should-toolbar-item-hide="privateShouldToolbarItemHide"
+            :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+            @code-cell-click="privateCodeItemClickForToolbar"
+        >
+          <template v-for="item in footerConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
+            <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+          </template>
+        </cg-cells>
+      </el-col>
+
     </el-row>
 
     <el-dialog modal width="80%"
@@ -192,6 +211,7 @@ export default {
     pagerConfig: Object,
     toolbarConfig: Object,
     footerConfig: Object,
+    rightBarConfig:Object,
     // eslint-disable-next-line no-unused-vars
     shouldToolbarItemDisable: {
       type: Function,
@@ -267,6 +287,8 @@ export default {
         rightSpan: 0,
         rightCells: [],
         rightColumnStyle: {'justify-content': 'flex-end', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
+      },
+      rightBarConfigData: {
       }
     }
   },
@@ -278,6 +300,7 @@ export default {
     this.initPager()
     this.initHeader()
     this.initFooter()
+    this.initRighter()
 
     cleanData(this.tableData, this.schema, this.proxyConfigData.item2Row)
     this.tryProxyQueryData()
@@ -296,6 +319,9 @@ export default {
     },
     initHeader() {
       this.toolbarConfigData = fixToolbarCells(Object.assign(this.toolbarConfigData, this.toolbarConfig))
+    },
+    initRighter(){
+      this.rightBarConfigData = fixToolbarCells(Object.assign(this.rightBarConfigData, this.rightBarConfig))
     },
     initFooter() {
       const _this = this
@@ -500,6 +526,17 @@ export default {
 </script>
 
 <style>
+.cg-table-shortcuts-button {
+  position: sticky;
+  top: 0;
+}
+.cg-component-flex-end {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 10;
+  justify-content: flex-end;
+}
 .el-table.cg-table-normal-padding td, .el-table.cg-table-normal-padding th {
 }
 

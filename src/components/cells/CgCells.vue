@@ -1,32 +1,33 @@
 <template>
-  <el-col :span="span" :style="colStyle">
+  <div>
     <template v-for="(item,index) of cells">
-      <!-- 使用系统预注册的内置组件 -->
-      <component
-          v-if="item.slot && registeredComponentMap[item.slot] && shouldToolbarItemHide({scope:item,code:item.code ||''})"
-          :is="registeredComponentMap[item.slot]"
-          :key="`toolbar_component_${index}`"
-
-          :cell-config="item"
-          :data="item.dataWrapper || item"
-          :field-name="item.field || 'value'"
-          :options="item.options || []"
-          :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
-          @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
-      />
-      <!-- 使用逻辑层实现的slot组件 -->
-      <slot v-else-if="item.slot"
-            :name="getProxySlotName(item.slot)"
+      <div :key="index" :style="divStyle">
+        <!-- 使用系统预注册的内置组件 -->
+        <component
+            v-if="item.slot && registeredComponentMap[item.slot] && shouldToolbarItemHide({scope:item,code:item.code ||''})"
+            :is="registeredComponentMap[item.slot]"
+            :key="`toolbar_component_${index}`"
             :cell-config="item"
             :data="item.dataWrapper || item"
             :field-name="item.field || 'value'"
             :options="item.options || []"
             :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
             @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
-      />
-      <el-divider v-if="isDivider(item)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
+        />
+        <!-- 使用逻辑层实现的slot组件 -->
+        <slot v-else-if="item.slot"
+              :name="getProxySlotName(item.slot)"
+              :cell-config="item"
+              :data="item.dataWrapper || item"
+              :field-name="item.field || 'value'"
+              :options="item.options || []"
+              :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
+              @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+        />
+        <el-divider v-if="isDivider(item)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
+      </div>
     </template>
-  </el-col>
+  </div>
 </template>
 <script>
 import {getProxySlotName} from "@/components/CgTable/table";
@@ -40,9 +41,8 @@ export default {
   props: {
     shouldToolbarItemDisable: Function,
     shouldToolbarItemHide: Function,
-    span: Number, // 宽度span
     cells: Array, // 组件列表
-    colStyle: Object,
+    divStyle:Object,
   },
   methods: {
     getProxySlotName,

@@ -15,6 +15,7 @@
         :table-property="{class:'cg-table-mini-padding',heightSubVH:70}"
         :footer-config="footConfig"
         :edit-config="editConfig"
+        :right-bar-config="rightBarConfig"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{item}">
         <el-select v-model="toolbarOptionServer" size="mini" @change="item.change">
@@ -78,6 +79,14 @@ export default {
         rightCells:['add','refresh','custom','print'],
         style: {'padding-bottom': '20px'}
       },
+      footConfig:{
+        leftSpan:12,
+        leftCells:[{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
+        rightCells:[{slot:'CgPager'},{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
+      },
+      rightBarConfig:{
+        cells:['add','refresh','custom','print'],
+      },
       editConfig:{
         triggerRowFunc:({row})=>{
           if(row.Online){
@@ -86,11 +95,7 @@ export default {
           return {alert:{type:'success',title:'用户不在线，改吧改吧'}}
         }
       },
-      footConfig:{
-        leftSpan:12,
-        leftCells:[{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
-        rightCells:[{slot:'CgPager'},{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
-      },
+
       schema: [
         {
           field: 'id', name: 'ID', type: 'input', width: 200, sortable: true,
