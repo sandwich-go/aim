@@ -1,7 +1,7 @@
 <template>
   <span v-if="fieldValue">
     <template style="align-items: center">
-      <template v-if="isString(fieldValue)">
+      <template v-if="!isPlainObject(fieldValue)">
          <el-link type="primary" :href="fieldValue" target="_blank">{{ fieldValue }}</el-link>
       </template>
       <template v-else-if="fieldValue.code || fieldValue.href">
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {isString} from "xe-utils";
+import {isPlainObject} from "xe-utils";
 import MixinCellViewerConfig from "@/components/cells/mixins/MixinCellViewerConfig.vue";
 import CgViewerLabel from "@/components/cells/viewer/CgViewerLabel.vue";
 import CgViewerIcon from "@/components/cells/viewer/CgViewerIcon.vue";
@@ -25,7 +25,7 @@ export default {
   components: {CgViewerIcon, CgViewerLabel},
   mixins: [MixinCellViewerConfig],
   methods: {
-    isString,
+    isPlainObject,
     emitClick(jsEvent) {
       if(!this.fieldValue.code){
         return

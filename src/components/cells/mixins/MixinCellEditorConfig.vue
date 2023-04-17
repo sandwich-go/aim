@@ -4,7 +4,7 @@ import jsb from "@sandwich-go/jsb";
 export default {
   name: 'MixinCellEditorConfig',
   props: {
-    cellConfig:{},          // 组件配置
+    cellConfig:{},          // 组件配置，editor的cellConfig必须为Object,但是对viewer可以为组件需要的值
     data: Object,           // 父对象数据，必须是一个Object,组件的model为data[fieldName]
     options:[Function,Array],
     fieldName: String,

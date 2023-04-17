@@ -177,6 +177,7 @@ export default {
           type: 'switch',
           sortable: true,
           align: 'center',
+          cellTableName: 'CgCheckbox',
           cellFormName:'CgCheckbox',
         },
         {
@@ -201,7 +202,7 @@ export default {
           return {
             Data: [
               {id: 4, name: '1111',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'el-icon-user-solid', Online: true, Tag:"g1",Color:'red'},
-              {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: "g2",Color:'blue'}
+              {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: "g2",Color:'blue',Checkbox:true}
             ],
             Total: 100,
           }
