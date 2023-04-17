@@ -24,10 +24,7 @@ export const RowEditorFormInput = 'RowEditorFormInput'
 
 export const CtrlDataInRowData ='___x_table_ctrl_data'
 
-// 当field在表内组件为只读属性，使用内置CgViewer组件时,cellTable为该组件的配置+数据内容
-// 当field在表内组件为编辑组件, cellTable为该组件的配置,组件的数据使用field本身的数据
-export const TableCellConfigFiledName = 'cellTable'
-export const TableCellConfigFiledNameValueField = '___x_cellTableValueField'
+
 
 export function xidRow(row){
     return jsb.pathGet(row,`${CtrlDataInRowData}.xid`)
@@ -117,13 +114,3 @@ export function fixToolbarItems(toolbarConfigData) {
     return toolbarConfigData
 }
 
-export function fieldTableCellConfig(row, fs){
-    const cellConfig = fs[TableCellConfigFiledName]
-    if(cellConfig){
-        if (jsb.isFunction(cellConfig)){
-            return cellConfig({row,fs,fieldValue:jsb.pathGet(row,fs.field)})
-        }
-        return cellConfig
-    }
-    return null
-}

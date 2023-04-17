@@ -15,10 +15,10 @@
         size="mini"
     >
       <template v-for="(fs) in schema">
-        <el-form-item :key="fs.field" :label="siName(fs)" :prop="fs.field" :ref="fs.field">
-          <div class="cg-component-flex-start" v-if="siSlot(fs) && registeredComponentMap[siSlot(fs)]">
+        <el-form-item :key="fs.field" :label="formLabel(fs)" :prop="fs.field" :ref="fs.field">
+          <div class="cg-component-flex-start" v-if="cellFormName(fs) && registeredComponentMap[cellFormName(fs)]">
             <component
-                :is="registeredComponentMap[siSlot(fs)]"
+                :is="registeredComponentMap[cellFormName(fs)]"
                 :data="data"
                 :field-name="fs.field"
                 :options="fs.options || []"
@@ -44,6 +44,7 @@ import {
 } from "@/components/CgFormInput/index";
 import CgAlert from "@/components/cells/CgAlert.vue";
 import {isString} from "xe-utils";
+import {cellFormName} from "@/components/CgTable/cell";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -71,6 +72,7 @@ export default {
     }
   },
   methods: {
+    cellFormName,
     isString,
     formInputConfig,
     getRow() {
@@ -79,10 +81,7 @@ export default {
       }
       return this.rowTop
     },
-    siSlot(si) {
-      return jsb.pathGet(si, 'slotForm', si['slot'])
-    },
-    siName(si) {
+    formLabel(si) {
       return jsb.pathGet(si, 'nameForm', si['name'])
     },
     privateShouldFieldHide({fieldSchema}){

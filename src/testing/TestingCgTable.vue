@@ -99,7 +99,7 @@ export default {
           tips_show_icon: true,
           required: true,
           summary:true,
-          slotForm:'CgInput',
+          cellTableName:'CgInput',
           readOnly: true
         },
         {
@@ -108,8 +108,8 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          slot:'CgInput',
-          slotForm:'CgSelect'
+          cellTableName:'CgInput',
+          cellFormName:'CgSelect'
         },
         {
           field: 'Link',
@@ -118,11 +118,8 @@ export default {
           sortable: true,
           width: 200,
           align: 'center',
-          slot:'CgInput',
-          slotForm:'CgInput',
-          cellTable: function () {
-            return {label:'PMT地址',icon:'el-icon-heavy-rain',code:'copyField'}
-          }
+          cellTableName:'CgViewerLink',
+          cellTable:{label:'PMT地址',icon:'el-icon-heavy-rain',code:'copyField'}
         },
         {
           field: 'Number', name: 'InputNumber', type: 'input', width: 200, sortable: true,
@@ -130,8 +127,8 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          slot:'CgInputNumber',
-          slotForm:'CgInputNumber',
+          cellTableName:'CgInputNumber',
+          cellFormName:'CgInputNumber',
           CgFormInput:{min:10,max:100,step:2}
         },
         {
@@ -140,8 +137,8 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          slot:'CgIconSelectorInput',
-          slotForm:'CgIconSelectorInput',
+          cellTableName:'CgIconSelectorInput',
+          cellFormName:'CgIconSelectorInput',
           cellTable: function ({fieldValue}) {
             return {class:fieldValue,label:fieldValue}
           }
@@ -155,8 +152,8 @@ export default {
           readOnly: true,
           default: false,
           width: 280,
-          slot: 'CgCells',
-          slotForm:'CgSwitch',
+          cellTableName: 'CgCells',
+          cellFormName:'CgSwitch',
           cellTable: function ({fieldValue}) {
             return [{slot: 'CgAlert', label: fieldValue, style: {width: 'fit'}},{slot:"CgButton",label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'}]
           }
@@ -168,8 +165,8 @@ export default {
           sortable: true,
           align: 'center',
           summary:true,
-          slot: 'CgViewerTag',
-          slotForm:'CgSelectInput',
+          cellTableName: 'CgSelect',
+          cellFormName:'CgSelectInput',
           options:[
             {label:"g1",value:"g1"},{label:"g2",value:"g2"}
           ]
@@ -180,23 +177,23 @@ export default {
           type: 'switch',
           sortable: true,
           align: 'center',
-          slotForm:'CgCheckbox',
+          cellFormName:'CgCheckbox',
         },
         {
           field: 'Datetime',
           name: 'Datetime',
-          slotForm:'CgDatePicker',
+          cellFormName:'CgDatePicker',
         },
         {
           field: 'DatetimeRange',
           name: 'Datetime',
-          slotForm:'CgDateRangePicker',
+          cellFormName:'CgDateRangePicker',
         },
         {
           field: 'Color',
           name: 'Color',
-          slot:'RowSlotColor',
-          slotForm:'CgColorPicker',
+          cellTableName:'RowSlotColor',
+          cellFormName:'CgColorPicker',
         },
       ],
       proxyConfig: {

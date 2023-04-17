@@ -53,50 +53,53 @@
           <el-checkbox :value="scope.row === currentRow" @change="(val)=>radioRowChanged(scope.row,val)"></el-checkbox>
         </template>
       </el-table-column>
-      <template v-for="(fieldSchema,fieldIndex) in schema">
+      <template v-for="(fs,fieldIndex) in schema">
         <el-table-column
             :key="fieldIndex"
-            :prop="fieldSchema.field"
-            :width="fieldSchema.width"
-            :min-width="fieldSchema.min_width"
-            :max-width="fieldSchema.max_width"
-            :show-overflow-tooltip="fieldSchema.showOverflowTooltip"
-            :label="fieldSchema.name"
-            :align="fieldSchema.align || 'left'">
+            :prop="fs.field"
+            :width="fs.width"
+            :min-width="fs.min_width"
+            :max-width="fs.max_width"
+            :show-overflow-tooltip="fs.showOverflowTooltip"
+            :label="fs.name"
+            :align="fs.align || 'left'"
+
+        >
           <template slot-scope="scope">
-            <template v-if="fieldSchema.slot">
-              <!-- CgCells列表组件单独处理 -->
-              <cg-cells
-                  v-if="fieldSchema.slot==='CgCells'"
-                  :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
-                  :cells="fieldTableCellConfig(scope.row,fieldSchema)"
-                  :should-toolbar-item-hide="privateShouldToolbarItemHide"
-                  :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-                  @code-cell-click="privateCodeItemClickForRow"
-              ></cg-cells>
-              <template v-if="registeredComponentMap[fieldSchema.slot]">
+            <span :set="celllName = cellTableName(fs)">
+              <template v-if="celllName">
+                <!-- CgCells列表组件单独处理 -->
+                <cg-cells
+                    v-if="celllName=== CellTableCells"
+                    :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
+                    :cells="cellTableConfig(scope.row,fs)"
+                    :should-toolbar-item-hide="privateShouldToolbarItemHide"
+                    :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+                    @code-cell-click="privateCodeItemClickForRow"
+                ></cg-cells>
                 <component
-                    :is="registeredComponentMap[fieldSchema.slot]"
+                    v-else-if="registeredComponentMap[celllName]"
+                    :is="registeredComponentMap[celllName]"
                     :data="scope.row"
-                    :options="fieldSchema.options || []"
-                    :field-name="fieldSchema.field"
-                    :cell-config="fieldTableCellConfig(scope.row,fieldSchema)"
+                    :options="fs.options || []"
+                    :field-name="fs.field"
+                    :cell-config="cellTableConfig(scope.row,fs)"
                     @code-cell-click="privateCodeItemClickForRow"
                 ></component>
-              </template>
-              <template v-else>
-                <slot :name="fieldSchema.slot"
-                      :row="scope.row"
-                      :fieldSchema="fieldSchema"
-                      :fieldValue="scope.row[fieldSchema.field]"
-                      :fieldValueVirtual="fieldTableCellConfig(scope.row,fieldSchema)"
-                      @code-cell-click="privateCodeItemClickForRow"
+                <slot
+                    v-else
+                    :name="fs.slot"
+                    :row="scope.row"
+                    :fieldSchema="fs"
+                    :fieldValue="scope.row[fs.field]"
+                    :fieldValueVirtual="cellTableConfig(scope.row,fs)"
+                    @code-cell-click="privateCodeItemClickForRow"
                 ></slot>
               </template>
-            </template>
-            <span v-else>
-                {{ fieldTableCellConfig(scope.row, fieldSchema) }}
-              </span>
+              <span v-else>
+                  {{ cellTableConfig(scope.row,fs) }}
+                </span>
+            </span>
           </template>
         </el-table-column>
       </template>
@@ -144,7 +147,6 @@ import {
   EditTriggerDBLClickOrSwitchButton,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
-  fieldTableCellConfig,
   fixToolbarItems,
   getProxySlotName,
   RowEditorInplace,
@@ -163,6 +165,7 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 
 import {CgFormInputModeEdit, CgFormInputModeView} from "@/components/CgFormInput";
 import CgFormInput from "@/components/CgFormInput/index.vue";
+import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTable/cell";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -221,6 +224,7 @@ export default {
   },
   data() {
     return {
+      CellTableCells:CellTableCells,
       inLoading: false,
       debugMessage: '',
       tableData: [],
@@ -282,9 +286,11 @@ export default {
     this.getProxySlotName()
   },
   methods: {
+    cellTableName,
+    cellTableConfig,
     xidRow,
-    fieldTableCellConfig,
     getProxySlotName,
+
     setDebugMessage(msg) {
       this.debugMessage = msg
     },
@@ -486,7 +492,7 @@ export default {
         this.inLoading = false
       })
     },
-    rowFormEditorClose(){
+    rowFormEditorClose() {
       this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
     },
   }
