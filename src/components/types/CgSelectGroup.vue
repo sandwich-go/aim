@@ -7,7 +7,7 @@
       size="mini"
       @change="change">
     <el-option-group
-        v-for="group in options()"
+        v-for="group in getOptions()"
         :key="group.label"
         :label="group.label">
       <el-option
@@ -23,11 +23,11 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
+import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgSelectGroup',
-  mixins: [MixinComponentConfig],
+  mixins: [MixinCellEditorConfig],
   created() {
     this.initComponentConfig()
   },

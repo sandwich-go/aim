@@ -15,14 +15,14 @@
 
 <script>
 import CgIconSelector from "@/components/CgIconSelector/index.vue";
-import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
+import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgIconSelectorInput',
   components: {
     CgIconSelector,
   },
-  mixins: [MixinComponentConfig],
+  mixins: [MixinCellEditorConfig],
   created() {
     this.initComponentConfig({
       showLabel: true,

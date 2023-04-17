@@ -13,11 +13,11 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
+import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgInputNumber',
-  mixins: [MixinComponentConfig],
+  mixins: [MixinCellEditorConfig],
   created() {
     this.initComponentConfig({
       min: -Infinity,

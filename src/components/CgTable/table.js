@@ -124,11 +124,13 @@ export function fieldValueVirtual(row,fieldSchema,defaultVal){
     return fieldValue
 }
 export function filedViewConfig({row,fieldSchema,fieldValue}) {
-    let fieldViewConfig = jsb.pathGet(fieldSchema, 'valueVirtual',{})
-    if(jsb.isFunction(fieldViewConfig)){
-        fieldViewConfig = fieldViewConfig({row,fieldSchema,fieldValue})
+    let valueVirtual = jsb.pathGet(fieldSchema, 'valueVirtual')
+    if(!jsb.isUndefined(valueVirtual)){
+        if(jsb.isFunction(valueVirtual)){
+            valueVirtual = valueVirtual({row,fieldSchema,fieldValue})
+        }
+    }else{
+        valueVirtual = fieldValue
     }
-    // 拷贝options字段
-    fieldViewConfig.options = fieldViewConfig.options || fieldSchema.options
-    return fieldViewConfig
+    return valueVirtual|| {}
 }

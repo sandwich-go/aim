@@ -1,6 +1,6 @@
 <template>
-  <span v-if="cc">
-    <template v-for="(item,index) of wrapArray(cc)">
+  <span v-if="cellConfig">
+    <template v-for="(item,index) of wrapAsTagList(cellConfig,getOptions())">
     <el-tag
         v-if="item.label"
         :key="index"
@@ -16,20 +16,17 @@
 
 <script>
 import {getItemStyle} from "@/components/CgTable/table";
-import {wrapArray} from "@/utils/jsb";
-import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
+import MixinCellViewerConfig from "@/components/types/mixins/MixinCellViewerConfig.vue";
+import {wrapAsTagList} from "@/utils/jsb";
 
 export default {
-  name: "CgTag",
-  mixins: [MixinComponentConfig],
+  name: "CgViewerTag",
+  mixins: [MixinCellViewerConfig],
   methods: {
-    wrapArray,
+    wrapAsTagList,
     tagStyleBind(item) {
       return getItemStyle(item,{"margin-right":"3px"})
     }
   },
-  created() {
-    this.initComponentConfig()
-  }
 }
 </script>

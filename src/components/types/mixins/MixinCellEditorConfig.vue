@@ -2,17 +2,18 @@
 import jsb from "@sandwich-go/jsb";
 
 export default {
-  name: 'MixinComponentConfig',
+  name: 'MixinCellEditorConfig',
   props: {
-    scopeConfig:null,   // 组件配置
+    cellConfig:null,   // 组件配置
     data: null,           // 父对象数据，组件的model为data[fieldName]
     fieldName:{
       type:String,
       default:'value'
     },
-    disabled: Boolean,    // 是否只读
     styleOverride:Object,
-    styleBase:Object
+    styleBase:Object,
+    disabled: Boolean,    // 是否只读
+    options:null,
   },
   data() {
     const _this = this
@@ -34,8 +35,8 @@ export default {
       this.$emit("input", valNew)
     },
     initComponentConfig(initVal={}) {
-      if(!jsb.isPlainObject(this.scopeConfig)){
-        this.cc = this.scopeConfig
+      if(!jsb.isPlainObject(this.cellConfig)){
+        this.cc = this.cellConfig
         return
       }
       const _this = this
@@ -49,7 +50,7 @@ export default {
           _this.cc[key] = val
         }
       })
-      this.cc = Object.assign(this.cc,this.scopeConfig)
+      this.cc = Object.assign(this.cc,this.cellConfig)
       this.cc.style = jsb.assign(this.cc.style,this.styleOverride)
     },
     change(newVal) {
@@ -58,8 +59,8 @@ export default {
         this.cc.change(newVal)
       }
     },
-    options() {
-      return (jsb.isFunction(this.cc.options)?this.cc.options():this.cc.options) || []
+    getOptions() {
+      return (jsb.isFunction(this.options)?this.cc.options():this.cc.options) || []
     }
   }
 }

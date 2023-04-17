@@ -33,8 +33,6 @@
 <script>
 import CgTable from "@/components/CgTable";
 
-const jsb = require("@sandwich-go/jsb")
-
 export default {
   name: 'TestingCgTable',
   components: {CgTable},
@@ -169,17 +167,12 @@ export default {
           type: 'switch',
           sortable: true,
           align: 'center',
-          slot: 'CgTag',
-          slotForm:'CgSelectInput',
-          valueVirtual: function ({fieldValue}) {
-            console.log("fieldValue",fieldValue)
-            let tags = []
-            for (const item of fieldValue) {
-              tags.push({label: item, type: jsb.randomModIsZero(2) ? 'primary' : 'success'})
-            }
-            return tags
-          },options:[
-            {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}]
+          summary:true,
+          slot: 'CgViewerTag',
+          slotForm:'CgSelectInput'
+          ,options:[
+            {label:"g1",value:"g1"},{label:"g2",value:"g2"}
+          ]
         },
         {
           field: 'Checkbox',
@@ -210,8 +203,8 @@ export default {
         query() {
           return {
             Data: [
-              {id: 4, name: '1111',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'el-icon-user-solid', Online: true, Tag: ["Server", "HPA", "定时收缩"],Color:'red'},
-              {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: ["Server", "HPA", "60分钟"],Color:'blue'}
+              {id: 4, name: '1111',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'el-icon-user-solid', Online: true, Tag:"g1",Color:'red'},
+              {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: "g2",Color:'blue'}
             ],
             Total: 100,
           }

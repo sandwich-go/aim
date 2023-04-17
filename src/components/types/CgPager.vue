@@ -12,11 +12,11 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
+import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'TablePager',
-  mixins: [MixinComponentConfig],
+  mixins: [MixinCellEditorConfig],
   created() {
     this.initComponentConfig()
   },

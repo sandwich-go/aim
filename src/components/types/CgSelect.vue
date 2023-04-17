@@ -4,9 +4,9 @@
       :disabled="disabled"
       :style="cc.style"
       size="mini"
-      @change="change">
+      @change="changeNow">
     <el-option
-        v-for="option in options()"
+        v-for="option in getOptions()"
         :key="option.value"
         :label="option.label"
         :value="option.value">
@@ -16,13 +16,20 @@
 
 <script>
 
-import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
+import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
 
 export default {
   name: 'CgSelect',
-  mixins: [MixinComponentConfig],
+  mixins: [MixinCellEditorConfig],
   created() {
     this.initComponentConfig()
   },
+  methods:{
+    changeNow(val){
+      console.log("val ",this.fieldName,val)
+      console.log("data ",this.data)
+      console.log("data ",this.data)
+    }
+  }
 }
 </script>

@@ -67,7 +67,6 @@
                   v-if="fieldSchema.slot==='ColumnSlots'"
                   :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
                   :items="fieldValueVirtual(scope.row,fieldSchema)"
-                  :target="thisTarget()"
                   :should-toolbar-item-hide="privateShouldToolbarItemHide"
                   :should-toolbar-item-disable="privateShouldToolbarItemDisable"
                   @code-button-click="privateCodeItemClickForRow"
@@ -76,8 +75,9 @@
                 <component
                     :is="registeredComponentMap[fieldSchema.slot]"
                     :data="scope.row"
+                    :options="fieldSchema.options || []"
                     :field-name="fieldSchema.field"
-                    :scope-config="filedViewConfig({row:scope.row,fieldSchema:fieldSchema,fieldValue:scope.row[fieldSchema.field]})"
+                    :cell-config="filedViewConfig({row:scope.row,fieldSchema:fieldSchema,fieldValue:scope.row[fieldSchema.field]})"
                     @code-button-click="privateCodeItemClickForRow"
                 ></component>
               </template>
@@ -116,7 +116,9 @@
       </column-slots>
     </el-row>
 
-    <el-dialog modal width="80%" :visible.sync="rowFormEditorVisible">
+    <el-dialog modal width="80%"
+               @close="rowFormEditorClose"
+               :visible.sync="rowFormEditorVisible">
       <cg-form-input
           v-if="currentRow && rowFormEditorVisible"
           :key="xidRow(currentRow)"
@@ -139,12 +141,15 @@ import {
   EditTriggerDBLClickOrSwitchButton,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
-  fieldValueVirtual, filedViewConfig,
+  fieldValueVirtual,
+  filedViewConfig,
   fixToolbarItems,
   getProxySlotName,
   RowEditorInplace,
-  ToolbarShortcutCodeAdd, ToolbarShortcutCodeCopyField,
-  ToolbarShortcutCodeRefresh, xidRow
+  ToolbarShortcutCodeAdd,
+  ToolbarShortcutCodeCopyField,
+  ToolbarShortcutCodeRefresh,
+  xidRow
 } from "@/components/CgTable/table";
 import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
 import {NewDefaultProxyConfigData, NewDefaultTableProperty, NewEitConfigData,} from "@/components/CgTable/default";
@@ -164,9 +169,9 @@ export default {
   mixins: [MixinCgPager, MixinComponentMap],
   components: {CgFormInput, ColumnSlots, Loading},
   props: {
-    selection:Boolean,// 是否支持选择
-    radio:Boolean,// 是否支持radio选择
-    debug:Boolean,
+    selection: Boolean,// 是否支持选择
+    radio: Boolean,// 是否支持radio选择
+    debug: Boolean,
     tableDivStyle: Object,
     tableProperty: Object,
     cellStyle: Function,
@@ -198,24 +203,24 @@ export default {
         return false
       },
     },
-    shouldFieldDisable:{
+    shouldFieldDisable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
-      default: function ({row,fieldSchema}) {
+      default: function ({row, fieldSchema}) {
         return false
       },
     },
     codeItemClick: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
-      default: function ({code, scope,row,fieldSchema,fieldValue,fieldValueVirtual}) {
+      default: function ({code, scope, row, fieldSchema, fieldValue, fieldValueVirtual}) {
       },
     }
   },
   data() {
     return {
       inLoading: false,
-      debugMessage:'',
+      debugMessage: '',
       tableData: [],
       radioRow: null,
       // 当前选中的行
@@ -239,7 +244,7 @@ export default {
         }
       },
       toolbarConfigData: {
-        enable:true,
+        enable: true,
         style: {'padding-bottom': '9px'},
         leftSpan: 19,
         leftItems: [],
@@ -279,7 +284,7 @@ export default {
     xidRow,
     fieldValueVirtual,
     getProxySlotName,
-    setDebugMessage(msg){
+    setDebugMessage(msg) {
       this.debugMessage = msg
     },
     initHeader() {
@@ -299,7 +304,7 @@ export default {
           })
         })
         if (!pagerFound) {
-          this.footerConfigData.rightItems.push({slot: 'CgPager',dataWrapper:_this.thisTarget()})
+          this.footerConfigData.rightItems.push({slot: 'CgPager', dataWrapper: _this.thisTarget()})
         }
       }
     },
@@ -312,8 +317,8 @@ export default {
     thisTarget() {
       return this
     },
-    radioRowChanged(row,selected){
-      this.radioRow = selected?row:null
+    radioRowChanged(row, selected) {
+      this.radioRow = selected ? row : null
       this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`)
     },
     toolbarSpan(configData, direction) {
@@ -322,29 +327,29 @@ export default {
       }
       return configData.leftItems.length === 0 ? 24 : (configData.rightSpan || 24 - configData.leftSpan)
     },
-    tableHeight(){
-      if(!this.tablePropertyData.heightSubVH) {
+    tableHeight() {
+      if (!this.tablePropertyData.heightSubVH) {
         // null或者0根据内容自适应高度
-        if(jsb.isNull(this.tablePropertyData.height) || parseInt(this.tablePropertyData.height) === 0){
+        if (jsb.isNull(this.tablePropertyData.height) || parseInt(this.tablePropertyData.height) === 0) {
           return null
         }
-        if(!jsb.isEmpty(this.tablePropertyData.height)){
+        if (!jsb.isEmpty(this.tablePropertyData.height)) {
           return this.tablePropertyData.height
         }
       }
-      let sub = 70+this.tablePropertyData.heightSubVH
-      sub += this.toolbarConfigData.enable?40:0
-      sub += this.pagerConfigData.enable?40:0
-      sub += this.debug?37:0
+      let sub = 70 + this.tablePropertyData.heightSubVH
+      sub += this.toolbarConfigData.enable ? 40 : 0
+      sub += this.pagerConfigData.enable ? 40 : 0
+      sub += this.debug ? 37 : 0
       return `${jsb.clientHeight(sub)}px`
     },
     // 每一个cell的属性
     cellStyleWrapper({row, column}) {
-      return this.cellStyle ? this.cellStyle({row, column}) :null;
+      return this.cellStyle ? this.cellStyle({row, column}) : null;
     },
     // current-change 回调
     currentChange(row) {
-      // this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
+      this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
     },
@@ -378,14 +383,14 @@ export default {
         // 如果只是返回字符串则：view状态，显示alert信息
         this.rowFormEditorMode = CgFormInputModeView
         this.rowFormEditorAlert = triggerRet
-      }else if (jsb.isObjectOrMap(triggerRet)){
+      } else if (jsb.isObjectOrMap(triggerRet)) {
         // 如果返回的是一个object，索引其中的:active与alert字段
         // active默认为true, 如为true则进入edit状态
         // 可根据需求定制返回alert的样式
-        if(jsb.pathGet(triggerRet,'active',true)){
+        if (jsb.pathGet(triggerRet, 'active', true)) {
           this.rowFormEditorMode = CgFormInputModeEdit
         }
-        this.rowFormEditorAlert = jsb.pathGet(triggerRet,'alert')
+        this.rowFormEditorAlert = jsb.pathGet(triggerRet, 'alert')
       } else if (!triggerRet) {
         // 不允许编辑
         return;
@@ -393,28 +398,28 @@ export default {
       this.setEditRow(row)
     },
     // eslint-disable-next-line no-unused-vars
-    privateCodeItemClickForRow({code,row,fieldSchema,fieldValue,jsEvent}) {
-      this.privateCodeItemClick({code,row,fieldSchema,fieldValue,jsEvent})
+    privateCodeItemClickForRow({code, row, fieldSchema, fieldValue, jsEvent}) {
+      this.privateCodeItemClick({code, row, fieldSchema, fieldValue, jsEvent})
     },
     // header或者footer的item点击时间事件
     privateCodeItemClickForToolbar({code}) {
       this.privateCodeItemClick({code})
     },
-    privateCodeItemClick({code,row,fieldSchema,fieldValue,jsEvent}){
+    privateCodeItemClick({code, row, fieldSchema, fieldValue, jsEvent}) {
       this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
-      if (this.codeItemClick({code,row,fieldSchema,fieldValue})) {
+      if (this.codeItemClick({code, row, fieldSchema, fieldValue})) {
         return
       }
-      this.defaultCodeItemClick({code,fieldValue,jsEvent})
+      this.defaultCodeItemClick({code, fieldValue, jsEvent})
     },
     // 默认的code处理逻辑
-    defaultCodeItemClick({code,fieldValue,jsEvent}) {
+    defaultCodeItemClick({code, fieldValue, jsEvent}) {
       switch (code) {
         case ToolbarShortcutCodeRefresh:
           this.tryProxyQueryData()
           break
         case ToolbarShortcutCodeCopyField:
-          jsb.clipCopy(fieldValue,jsEvent)
+          jsb.clipCopy(fieldValue, jsEvent)
           break
         case ToolbarShortcutCodeAdd:
           break
@@ -448,16 +453,16 @@ export default {
       }
       this.rowFormEditorVisible = true
     },
-    addRow(){
+    addRow() {
       if (jsb.eqNull(this.tableData)) {
         this.tableData = []
       }
       this.editConfigData.addRow()
     },
-     summaryRow(row){
+    summaryRow(row) {
       let info = [`xid(${xidRow(row)})`]
-      jsb.each(this.schema,function (fieldSchema){
-        if(fieldSchema.summary){
+      jsb.each(this.schema, function (fieldSchema) {
+        if (fieldSchema.summary) {
           info.push(`${fieldSchema.name}(${row[fieldSchema.field]})`)
         }
       })
@@ -479,7 +484,10 @@ export default {
       }).finally(() => {
         this.inLoading = false
       })
-    }
+    },
+    rowFormEditorClose(){
+      this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
+    },
   }
 }
 </script>
@@ -489,14 +497,14 @@ export default {
 }
 
 .el-table.cg-table-medium-padding td, .el-table.cg-table-medium-padding th {
-  padding:6px
+  padding: 6px
 }
 
 .el-table.cg-table-small-padding td, .el-table.cg-table-small-padding th {
-  padding:3px
+  padding: 3px
 }
 
 .el-table.cg-table-mini-padding td, .el-table.cg-table-mini-padding th {
-  padding:1px
+  padding: 1px
 }
 </style>

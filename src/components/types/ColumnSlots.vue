@@ -4,7 +4,7 @@
       <component
           v-if="item.slot && registeredComponentMap[item.slot] && shouldToolbarItemHide({scope:item,code:item.code ||''})"
           :is="registeredComponentMap[item.slot]"
-          :scope-config="item"
+          :cell-config="item"
           :disabled="shouldToolbarItemDisable({scope:item,code:item.code ||''})"
           :data="item.dataWrapper || item"
           :key="`toolbar_component_${index}`"
@@ -14,7 +14,7 @@
             :name="getProxySlotName(item.slot)"
             @code-button-click="({code,jsEvent}) => $emit('code-button-click',{code,jsEvent})"
             :data="item.dataWrapper || item"
-            :scope-config="item"></slot>
+            :cell-config="item"></slot>
       <el-divider v-if="isDivider(item)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
     </template>
   </el-col>

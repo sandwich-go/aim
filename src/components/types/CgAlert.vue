@@ -14,12 +14,12 @@
 
 import {getItemStyle} from "@/components/CgTable/table";
 import {parseWidthToPixelString} from "@/utils/ui";
-import MixinComponentConfig from "@/components/types/mixins/MixinComponentConfig.vue";
+import MixinCellEditorConfig from "@/components/types/mixins/MixinCellEditorConfig.vue";
 
 const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'CgAlert',
-  mixins: [MixinComponentConfig],
+  mixins: [MixinCellEditorConfig],
   props: {
     center: {
       type: Boolean,

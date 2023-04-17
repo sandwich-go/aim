@@ -3,7 +3,7 @@
     <cg-alert v-if="alertInfo"
                 :center="true"
                 style="position: sticky;font-weight: bold;top:0;margin-bottom: 9px;z-index: 1000000;"
-                :scope-config="isString(alertInfo)?{title:alertInfo}:alertInfo"></cg-alert>
+                :cell-config="isString(alertInfo)?{title:alertInfo}:alertInfo"></cg-alert>
     <el-form
         v-if="data"
         :model="data"
@@ -22,7 +22,8 @@
                 :data="data"
                 :field-name="fs.field"
                 :style-base="{width:'100%'}"
-                :scope-config="formInputConfig(fs)"
+                :options="fs.options || []"
+                :cell-config="formInputConfig(fs)"
                 :disabled="privateShouldFieldDisable(fs)"
                 :key="`fom_component_field_${fs.field}`"
             ></component>
