@@ -23,7 +23,7 @@
                 :field-name="fs.field"
                 :options="fs.options || []"
                 :style-base="{width:'100%'}"
-                :cell-config="formInputConfig(fs)"
+                :cell-config="cellFormConfig(fs)"
                 :disabled="privateShouldFieldDisable(fs)"
                 :key="`fom_component_field_${fs.field}`"
             ></component>
@@ -40,11 +40,10 @@ import {
   calcLabelWidth,
   CgFormInputModeInsert,
   CgFormInputModeView,
-  formInputConfig
 } from "@/components/CgFormInput/index";
 import CgAlert from "@/components/cells/CgAlert.vue";
 import {isString} from "xe-utils";
-import {cellFormName} from "@/components/CgTable/cell";
+import {cellFormConfig, cellFormName} from "@/components/CgTable/cell";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -72,9 +71,9 @@ export default {
     }
   },
   methods: {
+    cellFormConfig,
     cellFormName,
     isString,
-    formInputConfig,
     getRow() {
       if (!this.rowTop) {
         return this.data

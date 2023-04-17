@@ -16,14 +16,14 @@
           :key="direction"
           :span="toolbarSpan(toolbarConfigData,direction)"
           :style="toolbarConfigData[direction+'ColumnStyle']"
-          :cells="toolbarConfigData[direction+'Items']"
+          :cells="toolbarConfigData[direction+'Cells']"
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
           @code-cell-click="privateCodeItemClickForToolbar"
       >
         <!-- 透传使用逻辑层定义的slot组件 -->
-        <template v-for="item in toolbarConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
+        <template v-for="item in toolbarConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
         </template>
       </cg-cells>
@@ -110,13 +110,13 @@
           :key="direction"
           :span="toolbarSpan(footerConfigData,direction)"
           :style="footerConfigData[direction+'ColumnStyle']"
-          :cells="footerConfigData[direction+'Items']"
+          :cells="footerConfigData[direction+'Cells']"
           :target="thisTarget()"
           :should-toolbar-item-hide="privateShouldToolbarItemHide"
           :should-toolbar-item-disable="privateShouldToolbarItemDisable"
           @code-cell-click="privateCodeItemClickForToolbar"
       >
-        <template v-for="item in footerConfigData[direction+'Items']" v-slot:[getProxySlotName(item.slot)]="{}">
+        <template v-for="item in footerConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
           <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
         </template>
       </cg-cells>
@@ -147,7 +147,7 @@ import {
   EditTriggerDBLClickOrSwitchButton,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
-  fixToolbarItems,
+  fixToolbarCells,
   getProxySlotName,
   RowEditorInplace,
   ToolbarShortcutCodeAdd,
@@ -253,19 +253,19 @@ export default {
         enable: true,
         style: {'padding-bottom': '9px'},
         leftSpan: 19,
-        leftItems: [],
+        leftCells: [],
         leftColumnStyle: {'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
         rightSpan: 0,
-        rightItems: [],
+        rightCells: [],
         rightColumnStyle: {'justify-content': 'flex-end', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
       },
       footerConfigData: {
         style: {'padding-top': '9px'},
         leftSpan: 19,
-        leftItems: [],
+        leftCells: [],
         leftColumnStyle: {'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
         rightSpan: 0,
-        rightItems: [],
+        rightCells: [],
         rightColumnStyle: {'justify-content': 'flex-end', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
       }
     }
@@ -295,14 +295,14 @@ export default {
       this.debugMessage = msg
     },
     initHeader() {
-      this.toolbarConfigData = fixToolbarItems(Object.assign(this.toolbarConfigData, this.toolbarConfig))
+      this.toolbarConfigData = fixToolbarCells(Object.assign(this.toolbarConfigData, this.toolbarConfig))
     },
     initFooter() {
       const _this = this
-      this.footerConfigData = fixToolbarItems(Object.assign(this.footerConfigData, this.footerConfig))
+      this.footerConfigData = fixToolbarCells(Object.assign(this.footerConfigData, this.footerConfig))
       let pagerFound = false
       if (this.pagerConfigData.enable) {
-        jsb.each(['leftItems', 'rightItems'], function (val) {
+        jsb.each(['leftCells', 'rightCells'], function (val) {
           jsb.each(_this.footerConfigData[val], function (codeOrItem) {
             if (codeOrItem.slot === 'CgPager') {
               pagerFound = true
@@ -311,7 +311,7 @@ export default {
           })
         })
         if (!pagerFound) {
-          this.footerConfigData.rightItems.push({slot: 'CgPager', dataWrapper: _this.thisTarget()})
+          this.footerConfigData.rightCells.push({slot: 'CgPager', dataWrapper: _this.thisTarget()})
         }
       }
     },
@@ -330,9 +330,9 @@ export default {
     },
     toolbarSpan(configData, direction) {
       if (direction === 'left') {
-        return configData.leftItems.length === 0 ? 0 : configData.leftSpan
+        return configData.leftCells.length === 0 ? 0 : configData.leftSpan
       }
-      return configData.leftItems.length === 0 ? 24 : (configData.rightSpan || 24 - configData.leftSpan)
+      return configData.leftCells.length === 0 ? 24 : (configData.rightSpan || 24 - configData.leftSpan)
     },
     tableHeight() {
       if (!this.tablePropertyData.heightSubVH) {

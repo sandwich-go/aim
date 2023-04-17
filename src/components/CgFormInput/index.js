@@ -20,10 +20,3 @@ export function calcLabelWidth(schema) {
     }
     return `${longestTextWidth + extraWidth.size * 20}px`
 }
-
-export function formInputConfig(fieldSchema) {
-    let formInputConfig = jsb.pathGet(fieldSchema, 'CgFormInput',{})
-    // 拷贝options字段
-    formInputConfig.options = formInputConfig.options || fieldSchema.options
-    return formInputConfig
-}

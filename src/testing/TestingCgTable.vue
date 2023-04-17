@@ -45,7 +45,7 @@ export default {
       toolbarOptionServer: '',
       toolbarConfig: {
         leftSpan:21,
-        leftItems: [
+        leftCells: [
           {slot: 'CgAlert', label: "标题内容",showIcon:false, style: {width: 'fit'}},
           {},
           {
@@ -75,7 +75,7 @@ export default {
           {label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'},
           {label: "新建", code: 'codeNew', icon: 'el-icon-check'},
         ],
-        rightItems:['add','refresh','custom','print'],
+        rightCells:['add','refresh','custom','print'],
         style: {'padding-bottom': '20px'}
       },
       editConfig:{
@@ -88,8 +88,8 @@ export default {
       },
       footConfig:{
         leftSpan:12,
-        leftItems:[{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
-        rightItems:[{slot:'CgPager'},{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
+        leftCells:[{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
+        rightCells:[{slot:'CgPager'},{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
       },
       schema: [
         {

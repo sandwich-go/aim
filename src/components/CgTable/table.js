@@ -8,23 +8,12 @@ export const EditTriggerClick = "x-table-edit-trigger-click" // 激活编辑状�
 export const EditTriggerDBLClick = "x-table-edit-trigger-dblclick"// 激活编辑状态方式，双击行
 export const EditTriggerDBLClickOrSwitchButton  = "x-table-edit-trigger-dblclick-switch-button"
 
-
-export const RowEditorForNew = "RowEditForNew"    // 增加新行
-export const RowEditorForCopyPaste = "RowEditorForCopyPaste"    // 复制
-export const RowEditorForUpdate = "RowEditorForUpdate"  // 更新需求
-export const RowEditorForView = "RowEditorForView"   // 查看需求
-export const RowEditorForRollback = "RowEditorForRollback"
-
 export const EventCurrentRowChange = 'EventCurrentRowChange'
-
-export const StaticStringDivider = 'divider'
 
 export const RowEditorInplace = 'RowEditorInplace'
 export const RowEditorFormInput = 'RowEditorFormInput'
 
 export const CtrlDataInRowData ='___x_table_ctrl_data'
-
-
 
 export function xidRow(row){
     return jsb.pathGet(row,`${CtrlDataInRowData}.xid`)
@@ -48,8 +37,6 @@ function autoOption(fieldSchema,fieldVal){
         fieldSchema.filter.options.push({label: fieldVal, value: fieldVal})
     }
 }
-
-
 
 
 export function cleanData (data,schema,item2Row) {
@@ -102,8 +89,8 @@ code2OptionsMapping[ToolbarShortcutCodePrint] = {icon:'el-icon-s-grid',type:'pri
 code2OptionsMapping[ToolbarShortcutCodeCustom] = {icon:'el-icon-printer',type:'primary',code:ToolbarShortcutCodeCustom,circle:true}
 
 
-export function fixToolbarItems(toolbarConfigData) {
-    jsb.each(['leftItems','rightItems'],function (val){
+export function fixToolbarCells(toolbarConfigData) {
+    jsb.each(['leftCells','rightCells'],function (val){
         jsb.each(toolbarConfigData[val], function (codeOrItem, key) {
             // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
             if (jsb.isString(codeOrItem)) {
