@@ -208,6 +208,10 @@ export default {
     rowStyle: Function,
     localData: Array,
     schema: Array,
+    toastError:{
+      type:Function,
+      default:jsb.cc().toastError
+    },
     editConfig: Object,
     readOnly: Boolean,
     proxyConfig: Object,
@@ -314,7 +318,6 @@ export default {
     cellTableConfig,
     xidRow,
     getProxySlotName,
-
     setDebugMessage(msg) {
       this.debugMessage = msg
     },
@@ -436,7 +439,7 @@ export default {
         return;
       }
       if(this.isInplaceEditor() && this.rowEditorMode === CgFormInputModeView && this.rowEditorAlert) {
-        jsb.cc().toastError(this.rowEditorAlert,{timeout:3000})
+        this.toastError(this.rowEditorAlert,{timeout:3000})
         return
       }
       this.setEditRow(row)
@@ -517,9 +520,12 @@ export default {
       if (jsb.eqNull(this.tableData)) {
         this.tableData = []
       }
-      let newRow = mustCtrlData(this.editConfigData.newRow(this.schema))
-      this.updateRowInEdit(newRow)
+      this.rowEditorAlert = ''
       this.rowEditorMode = CgFormInputModeInsert
+      let newRow = mustCtrlData(this.editConfigData.newRow(this.schema))
+      this.currentRow = newRow
+      this.updateRowInEdit(newRow)
+
       if (this.isInplaceEditor()) {
         // inplace编辑模式
         this.tableData.push(newRow)
