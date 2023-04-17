@@ -67,7 +67,7 @@
               :align="fs.align || 'left'"
           >
             <template slot-scope="scope">
-            <span :set="celllName = cellTableName(fs)">
+            <span :set="celllName = cellTableName(fs,scope.row)">
               <template v-if="celllName">
                 <!-- CgCells列表组件单独处理 -->
                 <cg-cells

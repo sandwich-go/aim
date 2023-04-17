@@ -86,8 +86,12 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          cellTableName:'CgInput',
-          cellFormName:'CgSelect'
+          cellTableName:function ({row}){
+            return row.id <5?'CgInput':'CgSelect'
+          },
+          cellFormName:function ({row}){
+            return !row.id || row.id <5?'CgInput':'CgSelect'
+          },
         },
         {
           field: 'Link',

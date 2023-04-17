@@ -14,8 +14,12 @@ export const CellFormDefault = 'CgInput'
 export const ConstCellFormName = 'cellFormName'
 export const ConstCellForm = 'cellForm'
 
-export function cellTableName(fs) {
-    return pathGet(fs, ConstCellTableName, CellTableDefault)
+export function cellTableName(fs,row) {
+    const cellTable  = pathGet(fs, ConstCellTableName, CellTableDefault)
+    if(jsb.isFunction(cellTable)){
+        return cellTable({row})
+    }
+    return cellTable
 }
 
 export function cellTableConfig(row, fieldSchema) {
@@ -26,8 +30,12 @@ export function cellTableConfig(row, fieldSchema) {
     return cellTable
 }
 
-export function cellFormName(fs) {
-    return pathGet(fs, ConstCellFormName, CellFormDefault)
+export function cellFormName(fs,row) {
+    const cellForm  = pathGet(fs, ConstCellFormName, CellFormDefault)
+    if(jsb.isFunction(cellForm)){
+        return cellForm({row})
+    }
+    return cellForm
 }
 
 export function cellFormConfig(row, fieldSchema) {

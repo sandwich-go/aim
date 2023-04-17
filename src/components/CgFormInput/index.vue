@@ -16,18 +16,20 @@
     >
       <template v-for="(fs) in schema">
         <el-form-item :key="fs.field" :label="formLabel(fs)" :prop="fs.field" :ref="fs.field">
-          <div class="cg-component-flex-start" v-if="cellFormName(fs) && registeredComponentMap[cellFormName(fs)]">
-            <component
-                :is="registeredComponentMap[cellFormName(fs)]"
-                :data="data"
-                :field-name="fs.field"
-                :options="fs.options || []"
-                :style-base="{width:'100%'}"
-                :cell-config="cellFormConfig(fs)"
-                :disabled="privateShouldFieldDisable(fs)"
-                :key="`fom_component_field_${fs.field}`"
-            ></component>
-          </div>
+          <span :set="celllName = cellFormName(fs,getRow())">
+            <div class="cg-component-flex-start" v-if="celllName && registeredComponentMap[celllName]">
+              <component
+                  :is="registeredComponentMap[celllName]"
+                  :data="data"
+                  :field-name="fs.field"
+                  :options="fs.options || []"
+                  :style-base="{width:'100%'}"
+                  :cell-config="cellFormConfig(fs)"
+                  :disabled="privateShouldFieldDisable(fs)"
+                  :key="`fom_component_field_${fs.field}`"
+              ></component>
+            </div>
+          </span>
         </el-form-item>
       </template>
     </el-form>
