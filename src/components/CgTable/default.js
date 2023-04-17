@@ -1,4 +1,8 @@
-import {EditTriggerDBLClickOrSwitcher, RowEditorFormInput} from "@/components/CgTable/table";
+import {
+    EditTriggerDBLClickOrSwitcher,
+    RowEditorFormInput, ToolbarShortcutCodeRowDelete, ToolbarShortcutCodeRowHistory,
+    ToolbarShortcutCodeRowSaveRemote
+} from "@/components/CgTable/table";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -78,9 +82,13 @@ export function NewEitConfigData() {
         },
         // 拷贝一行数据,逻辑层替换关键数据
         // eslint-disable-next-line no-unused-vars
-        copyRow({row}){}
+        copyRow({row}){},
+        formEditorCells:[ToolbarShortcutCodeRowSaveRemote,ToolbarShortcutCodeRowDelete,ToolbarShortcutCodeRowHistory]
     })
 }
+
+export const flexStartStyle = {'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}
+export const flexEndStyle = {'justify-content': 'flex-end', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}
 
 export function isVirtualField(fs) {
     return !fs.field || fs.virtual

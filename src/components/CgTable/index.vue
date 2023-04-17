@@ -129,7 +129,6 @@
               :key="direction"
               :span="toolbarSpan(footerConfigData,direction)" :style="footerConfigData[direction+'ColumnStyle']">
         <cg-cells
-            :style="footerConfigData[direction+'ColumnStyle']"
             :cells="footerConfigData[direction+'Cells']"
             :should-toolbar-item-hide="privateShouldToolbarItemHide"
             :should-toolbar-item-disable="privateShouldToolbarItemDisable"
@@ -156,6 +155,25 @@
           :mode="rowEditorMode"
           :row-top="currentRow"
       ></cg-form-input>
+      <span slot="footer" class="dialog-footer">
+        <template v-if="rowEditorMode=== CgFormInputModeView">
+        <el-button  size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
+        </template>
+        <template v-else>
+        <cg-cells
+            :style="flexEndStyle"
+            :shortcut-button-options="{circle:false}"
+            :cells="editConfigData.formEditorCells"
+            :should-toolbar-item-hide="privateShouldToolbarItemHide"
+            :should-toolbar-item-disable="privateShouldToolbarItemDisable"
+            @code-cell-click="privateCodeItemClickForToolbar"
+        >
+          <template v-for="item in editConfigData.formEditorCells" v-slot:[getProxySlotName(item.slot)]="{}">
+            <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+          </template>
+        </cg-cells>
+        </template>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -177,6 +195,8 @@ import {
 } from "@/components/CgTable/table";
 import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
 import {
+  flexEndStyle,
+  flexStartStyle,
   NewDefaultProxyConfigData,
   NewDefaultTableProperty,
   NewEitConfigData, NewPagerConfig,
@@ -196,6 +216,11 @@ const jsb = require("@sandwich-go/jsb")
 
 export default {
   name: "CgTable",
+  computed: {
+    flexEndStyle() {
+      return flexEndStyle
+    }
+  },
   mixins: [MixinCgPager, MixinComponentMap],
   components: {CgFormInput, CgCells, Loading},
   props: {
@@ -251,6 +276,7 @@ export default {
   },
   data() {
     return {
+      CgFormInputModeView:CgFormInputModeView,
       CellTableCells:CellTableCells,
       inLoading: false,
       debugMessage: '',
@@ -274,19 +300,19 @@ export default {
         style: {'padding-bottom': '9px'},
         leftSpan: 19,
         leftCells: [],
-        leftColumnStyle: {'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
+        leftColumnStyle: flexStartStyle,
         rightSpan: 0,
         rightCells: [],
-        rightColumnStyle: {'justify-content': 'flex-end', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
+        rightColumnStyle: flexEndStyle,
       },
       footerConfigData: {
         style: {'padding-top': '9px'},
         leftSpan: 19,
         leftCells: [],
-        leftColumnStyle: {'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
+        leftColumnStyle: flexStartStyle,
         rightSpan: 0,
         rightCells: [],
-        rightColumnStyle: {'justify-content': 'flex-end', 'display': 'flex', 'align-items': 'center', 'gap': '3px'},
+        rightColumnStyle: flexEndStyle,
       },
       rightBarConfigData: {
         cells:[],

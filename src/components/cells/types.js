@@ -2,7 +2,7 @@ import jsb from "@sandwich-go/jsb";
 
 
 
-export function makeButton(options){
+export function makeButton(options1=null,options2=null){
     let btn =  {
         code: '',
         icon: '',
@@ -15,8 +15,11 @@ export function makeButton(options){
         style: {},
         slot:'CgButton',
     }
-    if(!jsb.isEmpty(options)) {
-        btn = Object.assign(btn,options)
+    if(!jsb.isEmpty(options1)) {
+        btn = Object.assign(btn,options1)
+    }
+    if(!jsb.isEmpty(options2)) {
+        btn = Object.assign(btn,options2)
     }
     if(!btn.code){
         btn.code = "CODE_INVALID"

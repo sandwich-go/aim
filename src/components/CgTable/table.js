@@ -93,7 +93,8 @@ export const ToolbarShortcutCodeAdd = "add"
 export const ToolbarShortcutCodeRowEdit = "rowEdit"
 export const ToolbarShortcutCodeRowDelete = "rowDelete"
 export const ToolbarShortcutCodeRowCopy = "rowCopy"
-export const ToolbarShortcutCodeRowSave = "rowSave"
+export const ToolbarShortcutCodeRowSaveLocal = "rowSaveLocal"
+export const ToolbarShortcutCodeRowSaveRemote = "rowSaveRemote"
 export const ToolbarShortcutCodeRowHistory = "rowHistory"
 export const ToolbarShortcutCodeCopyField = "copyField"
 
@@ -104,9 +105,10 @@ code2OptionsMapping[ToolbarShortcutCodeRefresh] = {icon:'el-icon-refresh',type:'
 code2OptionsMapping[ToolbarShortcutCodePrint] = {icon:'el-icon-s-grid',type:'primary',code:ToolbarShortcutCodePrint,circle:true}
 code2OptionsMapping[ToolbarShortcutCodeCustom] = {icon:'el-icon-printer',type:'primary',code:ToolbarShortcutCodeCustom,circle:true}
 
-code2OptionsMapping[ToolbarShortcutCodeRowEdit] = {icon:'el-icon-edit',type:'primary',code:ToolbarShortcutCodeRowEdit,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowDelete] = {icon:'el-icon-delete',type:'danger',code:ToolbarShortcutCodeRowDelete,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowCopy] = {icon:'el-icon-copy-document',type:'primary',code:ToolbarShortcutCodeRowCopy,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowSave] = {icon:'el-icon-s-promotion',type:'warning',code:ToolbarShortcutCodeRowSave,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowHistory] = {icon:'el-icon-date',type:'success',code:ToolbarShortcutCodeRowHistory,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowEdit] = {icon:'el-icon-edit',label:'编辑',type:'warning',code:ToolbarShortcutCodeRowEdit,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowDelete] = {icon:'el-icon-delete',label:'删除',type:'danger',code:ToolbarShortcutCodeRowDelete,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowCopy] = {icon:'el-icon-copy-document',label:'拷贝',type:'primary',code:ToolbarShortcutCodeRowCopy,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowSaveLocal] = {icon:'el-icon-s-promotion',label:'保存到本地',type:'primary',code:ToolbarShortcutCodeRowSaveLocal,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowSaveRemote] = {icon:'el-icon-s-promotion',label:'保存', type:'primary',code:ToolbarShortcutCodeRowSaveRemote,circle:true}
+code2OptionsMapping[ToolbarShortcutCodeRowHistory] = {icon:'el-icon-date',label:'历史',type:'success',code:ToolbarShortcutCodeRowHistory,circle:true}
 

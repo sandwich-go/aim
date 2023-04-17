@@ -44,6 +44,7 @@ export default {
     shouldToolbarItemHide: Function,
     cells: Array, // 组件列表
     divStyle:Object,
+    shortcutButtonOptions:Object
   },
   data(){
     return {
@@ -64,7 +65,10 @@ export default {
       }
       // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
       if (jsb.isString(codeOrItem)) {
-        _this.cellsRef[key] = makeButton(code2OptionsMapping[codeOrItem] || {code: codeOrItem})
+        _this.cellsRef[key] = makeButton(
+            code2OptionsMapping[codeOrItem] || {code: codeOrItem},
+            _this.shortcutButtonOptions
+        )
       }
     })
   },
