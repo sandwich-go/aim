@@ -17,12 +17,14 @@
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import {makeButton} from "@/components/cells/types";
+import {code2OptionsMapping} from "@/components/CgTable/table";
 
 export default {
   name: 'CgButton',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.ccConfigMerge(makeButton())
+    this.ccConfigMerge()
+    this.cc = Object.assign(this.cc,makeButton(code2OptionsMapping[this.cc.code],this.cc))
   },
   methods:{
     emitClick(jsEvent){

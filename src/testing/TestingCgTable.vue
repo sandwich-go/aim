@@ -182,7 +182,7 @@ export default {
           name: '操作',
           width: 200,
           cellTableName:'CgCells',
-          cellTable:['rowEdit','rowSaveRemote','rowDelete','rowCopy','rowHistory']
+          cellTable:['rowEdit',{code:'rowSaveRemote',disable:true},'rowDelete','rowCopy','rowHistory']
         },
       ],
 
