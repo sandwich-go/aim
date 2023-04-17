@@ -2,7 +2,6 @@
   <div>
     <template v-for="(cell,index) of cellsRef">
       <div :key="index" :style="divStyle">
-        <!-- 使用系统预注册的内置组件 -->
         <component
             v-if="cell.slot && registeredComponentMap[cell.slot] && shouldToolbarItemHide({scope:cell,code:cell.code ||''})"
             :is="registeredComponentMap[cell.slot]"

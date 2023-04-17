@@ -13,9 +13,8 @@
       <!-- header toolbar -->
       <el-col v-for="direction of ['left','right']"
               :key="direction"
-              :span="toolbarSpan(toolbarConfigData,direction)" :style="toolbarConfigData[direction+'ColumnStyle']">
+              :span="toolbarSpan(toolbarConfigData,direction)">
         <cg-cells
-            :span="toolbarSpan(toolbarConfigData,direction)"
             :style="toolbarConfigData[direction+'ColumnStyle']"
             :cells="toolbarConfigData[direction+'Cells']"
             :should-toolbar-item-hide="privateShouldToolbarItemHide"
@@ -130,6 +129,7 @@
               :span="toolbarSpan(footerConfigData,direction)" :style="footerConfigData[direction+'ColumnStyle']">
         <cg-cells
             :cells="footerConfigData[direction+'Cells']"
+            :style="footerConfigData[direction+'ColumnStyle']"
             :should-toolbar-item-hide="privateShouldToolbarItemHide"
             :should-toolbar-item-disable="privateShouldToolbarItemDisable"
             @code-cell-click="privateCodeItemClickForToolbar"
