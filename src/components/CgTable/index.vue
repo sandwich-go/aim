@@ -31,7 +31,7 @@
 
     <el-row class="cg-component-flex-end" style="align-items: start;gap: 3px">
       <el-table
-          v-fit-columns="{ enabled:tablePropertyData.autoWidth }"
+          v-fit-columns="{ enabled:tablePropertyData.autoWidth,setLoading:(v)=>inLoading=v}"
           ref="table"
           :height="tableHeight()"
           :data="tableData"
@@ -60,8 +60,8 @@
           <el-table-column
               :key="fieldIndex"
               :prop="fs.field"
+              :class-name="columnClass(fs)"
               :width="fs.width"
-              :class-name="fs.width?'leave-alone':''"
               :min-width="fs.min_width"
               :max-width="fs.max_width"
               :show-overflow-tooltip="fs.showOverflowTooltip"
@@ -378,6 +378,12 @@ export default {
     getProxySlotName,
     setDebugMessage(msg) {
       this.debugMessage = msg
+    },
+    columnClass(fs) {
+      if(fs.width || fs.min_width ||fs.max_midth){
+        return 'cg-column-fixed-width'
+      }
+      return ''
     },
     initHeader() {
       this.toolbarConfigData = Object.assign(this.toolbarConfigData, this.toolbarConfig)

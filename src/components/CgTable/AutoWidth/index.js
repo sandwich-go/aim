@@ -3,6 +3,7 @@ function adjustColumnWidth(table, bindingValue) {
     if(!bindingValue.enabled) {
         return
     }
+    bindingValue.setLoading(true)
     const colgroup = table.querySelector("colgroup");
     const colDefs = [...colgroup.querySelectorAll("col")];
     colDefs.forEach((col) => {
@@ -11,7 +12,7 @@ function adjustColumnWidth(table, bindingValue) {
             ...table.querySelectorAll(`td.${clsName}`),
             ...table.querySelectorAll(`th.${clsName}`),
         ];
-        if (cells[0]?.classList?.contains?.("leave-alone")) {
+        if (cells[0]?.classList?.contains?.("cg-column-fixed-width")) {
             return;
         }
         const widthList = cells.map((el) => {
@@ -22,6 +23,7 @@ function adjustColumnWidth(table, bindingValue) {
             el.setAttribute("width", max + padding);
         });
     });
+    bindingValue.setLoading(false)
 }
 
 export default {
@@ -35,8 +37,8 @@ export default {
                 }, 300);
             },
             componentUpdated(el, binding) {
-                el.classList.add("cg-table-auto-width");
                 setTimeout(() => {
+                    el.classList.add("cg-table-auto-width");
                     adjustColumnWidth(el, binding.value);
                 }, 300);
             },
