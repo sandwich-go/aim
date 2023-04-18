@@ -17,9 +17,9 @@
         <cg-cells
             :style="toolbarConfigData[direction+'ColumnStyle']"
             :cells="toolbarConfigData[direction+'Cells']"
-            :should-toolbar-item-hide="privateShouldToolbarItemHide"
-            :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-            @code-cell-click="privateCodeItemClickForToolbar"
+            :should-cell-hide="privateShouldCellHide"
+            :should-cell-disable="privateShouldCellDisable"
+            @code-cell-click="privateCellClickForToolbar"
         >
           <!-- 透传使用逻辑层定义的slot组件 -->
           <template v-for="item in toolbarConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.cell)]="{}">
@@ -51,7 +51,8 @@
         <el-table-column v-if="selection" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
         <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
-            <el-checkbox :value="scope.row === currentRow" @change="(val)=>radioRowChanged(scope.row,val)"></el-checkbox>
+            <el-checkbox :value="scope.row === currentRow"
+                         @change="(val)=>radioRowChanged(scope.row,val)"></el-checkbox>
           </template>
         </el-table-column>
         <template v-for="(fs,fieldIndex) in schema">
@@ -74,9 +75,9 @@
                     v-if="celllName=== CellTableCells"
                     :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
                     :cells="cellTableConfig(scope.row,fs)"
-                    :should-toolbar-item-hide="privateShouldToolbarItemHide"
-                    :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-                    @code-cell-click="({code,jsEvent})=>privateCodeItemClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    :should-cell-hide="privateShouldCellHide"
+                    :should-cell-disable="privateShouldCellDisable"
+                    @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                 ></cg-cells>
                 <component
                     v-else-if="registeredComponentMap[celllName]"
@@ -86,7 +87,7 @@
                     :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
                     :field-name="fs.field"
                     :cell-config="cellTableConfig(scope.row,fs)"
-                    @code-cell-click="({code,jsEvent})=>privateCodeItemClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                 ></component>
                 <slot
                     v-else
@@ -96,11 +97,11 @@
                     :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
                     :fieldValue="scope.row[fs.field]"
                     :fieldValueVirtual="cellTableConfig(scope.row,fs)"
-                    @code-cell-click="({code,jsEvent})=>privateCodeItemClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                 ></slot>
               </template>
               <span v-else>
-                  {{ cellTableConfig(scope.row,fs) }}
+                  {{ cellTableConfig(scope.row, fs) }}
                 </span>
             </span>
             </template>
@@ -112,9 +113,9 @@
           <cg-cells
               :cells="rightBarConfigData.cells"
               :div-style="{'padding-bottom':'6px'}"
-              :should-toolbar-item-hide="privateShouldToolbarItemHide"
-              :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-              @code-cell-click="privateCodeItemClickForToolbar">
+              :should-cell-hide="privateShouldCellHide"
+              :should-cell-disable="privateShouldCellDisable"
+              @code-cell-click="privateCellClickForToolbar">
             <template v-for="item in rightBarConfigData.cells" v-slot:[getProxySlotName(item.cell)]="{}">
               <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
             </template>
@@ -130,9 +131,9 @@
         <cg-cells
             :cells="footerConfigData[direction+'Cells']"
             :style="footerConfigData[direction+'ColumnStyle']"
-            :should-toolbar-item-hide="privateShouldToolbarItemHide"
-            :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-            @code-cell-click="privateCodeItemClickForToolbar"
+            :should-cell-hide="privateShouldCellHide"
+            :should-cell-disable="privateShouldCellDisable"
+            @code-cell-click="privateCellClickForToolbar"
         >
           <template v-for="item in footerConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.cell)]="{}">
             <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
@@ -146,27 +147,28 @@
                @close="rowFormEditorClose"
                :visible.sync="rowFormEditorVisible">
       <cg-form-input
-          v-if="currentRow && rowFormEditorVisible"
-          :key="xidRow(currentRow)"
+          v-if="rowInEdit && rowFormEditorVisible"
+          :key="xidRow(rowInEdit)"
           :schema="validSchema(schema)"
-          :data="currentRow"
+          :data="rowInEdit"
           :should-field-disable="privateShouldFieldDisable"
           :alert-info="rowEditorAlert"
           :mode="rowEditorMode"
-          :row-top="currentRow"
+          :rules="formRulesFromSchema(schema,{row:rowInEdit,data:tableData})"
+          :row-top="rowInEdit"
       ></cg-form-input>
       <span slot="footer" class="dialog-footer">
         <template v-if="rowEditorMode=== CgFormInputModeView">
-        <el-button  size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
+        <el-button size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
         </template>
         <template v-else>
         <cg-cells
             :style="flexEndStyle"
             :shortcut-button-options="{circle:false}"
-            :cells="editConfigData.formEditorCells(currentRow)"
-            :should-toolbar-item-hide="privateShouldToolbarItemHide"
-            :should-toolbar-item-disable="privateShouldToolbarItemDisable"
-            @code-cell-click="privateCodeItemClickForToolbar"
+            :cells="editConfigData.formEditorCells(rowInEdit)"
+            :should-cell-hide="privateShouldCellHide"
+            :should-cell-disable="privateShouldCellDisable"
+            @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEdit,code,jsEvent})"
         >
           <template v-for="item in editConfigData.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
             <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
@@ -186,8 +188,12 @@ import {
   EditTriggerDBLClickOrSwitcher,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
-  getProxySlotName, isRowInEdit, mustCtrlData,
-  RowEditorInplace, setRowInEdit,
+  getProxySlotName,
+  isRowInEdit,
+  mustCtrlData,
+  removeCtrlData,
+  RowEditorInplace,
+  setRowInEdit,
   xidRow
 } from "@/components/CgTable/table";
 import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
@@ -196,7 +202,8 @@ import {
   flexStartStyle,
   NewDefaultProxyConfigData,
   NewDefaultTableProperty,
-  NewEitConfigData, NewPagerConfig,
+  NewEitConfigData,
+  NewPagerConfig,
   validSchema,
 } from "@/components/CgTable/default";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -212,8 +219,10 @@ import {
   CodeButtonAdd,
   CodeButtonRefresh,
   CodeButtonRowEdit,
+  CodeButtonRowSaveRemote,
   CodeLinkFieldCopy
 } from "@/components/cells/const";
+import {formRulesFromSchema} from "@/components/CgTable/validate";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -236,9 +245,23 @@ export default {
     rowStyle: Function,
     localData: Array,
     schema: Array,
-    toastError:{
-      type:Function,
-      default:jsb.cc().toastError
+    toastError: {
+      type: Function,
+      default: function (title, {body, id, timeout, config} = {}){
+        jsb.cc().toastError(title,{timeout:timeout||5000,body,id,config})
+      }
+    },
+    toastWarning: {
+      type: Function,
+      default: function (title, {body, id, timeout, config} = {}){
+        jsb.cc().toastWarning(title,{timeout:timeout||3000,body,id,config})
+      }
+    },
+    toastSuccess: {
+      type: Function,
+      default: function (title, {body, id, timeout, config} = {}){
+        jsb.cc().toastSuccess(title,{timeout:timeout||3000,body,id,config})
+      }
     },
     editConfig: Object,
     readOnly: Boolean,
@@ -246,9 +269,9 @@ export default {
     pagerConfig: Object,
     toolbarConfig: Object,
     footerConfig: Object,
-    rightBarConfig:Object,
+    rightBarConfig: Object,
     // eslint-disable-next-line no-unused-vars
-    shouldToolbarItemDisable: {
+    shouldCellDisable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
       default: function ({code, scope}) {
@@ -256,7 +279,7 @@ export default {
       },
     },
     // eslint-disable-next-line no-unused-vars
-    shouldToolbarItemHide: {
+    shouldCellHide: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
       default: function ({code, scope}) {
@@ -279,8 +302,8 @@ export default {
   },
   data() {
     return {
-      CgFormInputModeView:CgFormInputModeView,
-      CellTableCells:CellTableCells,
+      CgFormInputModeView: CgFormInputModeView,
+      CellTableCells: CellTableCells,
       inLoading: false,
       debugMessage: '',
       tableData: [],
@@ -295,8 +318,8 @@ export default {
 
       proxyConfigData: this.proxyConfig,
       tablePropertyData: this.tableProperty,
-      editConfigData:this.editConfig,
-      pagerConfigData:this.pagerConfig,
+      editConfigData: this.editConfig,
+      pagerConfigData: this.pagerConfig,
 
       toolbarConfigData: {
         enable: true,
@@ -318,14 +341,14 @@ export default {
         rightColumnStyle: flexEndStyle,
       },
       rightBarConfigData: {
-        cells:[],
+        cells: [],
       }
     }
   },
   created() {
-    jsb.objectAssignNX(this.editConfigData,NewEitConfigData())
-    jsb.objectAssignNX(this.tablePropertyData,NewDefaultTableProperty())
-    jsb.objectAssignNX(this.proxyConfigData,NewDefaultProxyConfigData())
+    jsb.objectAssignNX(this.editConfigData, NewEitConfigData())
+    jsb.objectAssignNX(this.tablePropertyData, NewDefaultTableProperty())
+    jsb.objectAssignNX(this.proxyConfigData, NewDefaultProxyConfigData())
 
     this.initPager()
     this.initHeader()
@@ -339,6 +362,7 @@ export default {
     this.getProxySlotName()
   },
   methods: {
+    formRulesFromSchema,
     validSchema,
     cellTableName,
     cellTableConfig,
@@ -350,7 +374,7 @@ export default {
     initHeader() {
       this.toolbarConfigData = Object.assign(this.toolbarConfigData, this.toolbarConfig)
     },
-    initRighter(){
+    initRighter() {
       this.rightBarConfigData = Object.assign(this.rightBarConfigData, this.rightBarConfig)
     },
     initFooter() {
@@ -372,7 +396,7 @@ export default {
       }
     },
     initPager() {
-      this.pagerConfigData = jsb.objectAssignNX(this.pagerConfigData,NewPagerConfig())
+      this.pagerConfigData = jsb.objectAssignNX(this.pagerConfigData, NewPagerConfig())
       if (this.pagerConfigData.enable) {
         this.PagerInit(this.tryProxyQueryData)
       }
@@ -432,8 +456,8 @@ export default {
       }
       return this.editConfigData.trigger === EditTriggerDBLClickOrSwitcher && (triggerName === EditTriggerSwitchButton || triggerName === EditTriggerDBLClick);
     },
-    privateShouldFieldDisable({row, fieldSchema}){
-      if(this.editConfigData.rowEditor === RowEditorInplace) {
+    privateShouldFieldDisable({row, fieldSchema}) {
+      if (this.editConfigData.rowEditor === RowEditorInplace) {
         return !isRowInEdit(row)
       }
       return this.shouldFieldDisable({row, fieldSchema})
@@ -464,29 +488,32 @@ export default {
         // 不允许编辑
         return;
       }
-      if(this.isInplaceEditor() && this.rowEditorMode === CgFormInputModeView && this.rowEditorAlert) {
-        this.toastError(this.rowEditorAlert,{timeout:3000})
+      if (this.isInplaceEditor() && this.rowEditorMode === CgFormInputModeView && this.rowEditorAlert) {
+        this.toastError(this.rowEditorAlert, {timeout: 3000})
         return
       }
       this.setEditRow(row)
     },
     // eslint-disable-next-line no-unused-vars
-    privateCodeItemClickForRow({code, row, fieldSchema, jsEvent}) {
-      this.privateCodeItemClick({code, row, fieldSchema, jsEvent,fieldValue:row[fieldSchema.field]})
+    privateCellClickForRow({code, row, jsEvent}) {
+      this.privateCellClick({code, row, jsEvent})
+    },
+    privateCellClickForField({code, row, fieldSchema, jsEvent}) {
+      this.privateCellClick({code, row, fieldSchema, jsEvent, fieldValue: row[fieldSchema.field]})
     },
     // header或者footer的item点击时间事件
-    privateCodeItemClickForToolbar({code}) {
-      this.privateCodeItemClick({code})
+    privateCellClickForToolbar({code}) {
+      this.privateCellClick({code})
     },
-    privateCodeItemClick({code, row, fieldSchema, fieldValue, jsEvent}) {
+    privateCellClick({code, row, fieldSchema, fieldValue, jsEvent}) {
       this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
       if (this.codeItemClick({code, row, fieldSchema, fieldValue})) {
         return
       }
-      this.defaultCodeItemClick({code,row, fieldValue, jsEvent})
+      this.defaultCodeItemClick({code, row, fieldValue, jsEvent})
     },
     // 默认的code处理逻辑
-    defaultCodeItemClick({code,row, fieldValue, jsEvent}) {
+    defaultCodeItemClick({code, row, fieldValue, jsEvent}) {
       switch (code) {
         case CodeButtonRefresh:
           this.tryProxyQueryData()
@@ -498,38 +525,41 @@ export default {
           this.addRow()
           break
         case CodeButtonRowEdit:
-          this.rowClickWithTriggerName(row,EditTriggerSwitchButton)
+          this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
+          break
+        case CodeButtonRowSaveRemote:
+          this.tryProxySaveRow({row})
           break
       }
     },
-    privateShouldToolbarItemDisable({code, scope}) {
+    privateShouldCellDisable({code, scope}) {
       if (scope.disable || scope.disabled) {
         return true
       }
-      if (!this.shouldToolbarItemDisable) {
+      if (!this.shouldCellDisable) {
         return false
       }
-      return this.shouldToolbarItemDisable({code, scope})
+      return this.shouldCellDisable({code, scope})
     },
-    privateShouldToolbarItemHide({code, scope}) {
+    privateShouldCellHide({code, scope}) {
       if (scope.hide || jsb.pathGet(scope, 'show', true)) {
         return true
       }
-      if (!this.shouldToolbarItemHide) {
+      if (!this.shouldCellHide) {
         return false
       }
-      return this.shouldToolbarItemHide({code, scope})
+      return this.shouldCellHide({code, scope})
     },
-    isInplaceEditor(){
+    isInplaceEditor() {
       return this.editConfigData.rowEditor === RowEditorInplace
     },
-    updateRowInEdit(row){
-      if(this.rowInEdit) {
-        setRowInEdit(this.rowInEdit,false)
+    updateRowInEdit(row) {
+      if (this.rowInEdit) {
+        setRowInEdit(this.rowInEdit, false)
       }
       this.rowInEdit = row
-      if(this.rowInEdit) {
-        setRowInEdit(this.rowInEdit,true)
+      if (this.rowInEdit) {
+        setRowInEdit(this.rowInEdit, true)
       }
     },
     // 设定当前编辑的行
@@ -555,7 +585,7 @@ export default {
       if (this.isInplaceEditor()) {
         // inplace编辑模式
         this.tableData.push(newRow)
-      }else{
+      } else {
         // form 表单编辑逻辑
         this.rowFormEditorVisible = true
       }
@@ -569,6 +599,24 @@ export default {
       })
       return info.join(" , ")
     },
+    tryProxySaveRow({row}) {
+      this.debug && (this.debugMessage = `tryProxySaveData called ${this.summaryRow(row)}`)
+      const saveFunc = this.proxyConfigData.save
+      if (!saveFunc) {
+        this.toastWarning("proxy中未指定save方法")
+        return
+      }
+      this.inLoading = true
+      const rowClean = removeCtrlData(jsb.clone(row))
+      Promise.resolve(saveFunc({row: rowClean})).then(() => {
+        this.toastSuccess("提交成功")
+        this.tryProxyQueryData()
+      }).catch(e => {
+        console.error("CgTable tryProxySaveData got err:", e)
+      }).finally(() => {
+        this.inLoading = false
+      })
+    },
     tryProxyQueryData() {
       this.debug && (this.debugMessage = `tryProxyQueryData called`)
       const queryFunc = this.proxyConfigData.query
@@ -577,17 +625,17 @@ export default {
       }
       let params = {}
       this.inLoading = true
-      Promise.resolve(queryFunc({params: params})).catch(e => {
-        console.error("CgTable tryProxyQueryData got err:", e)
-      }).then((ret) => {
+      Promise.resolve(queryFunc({params: params})).then((ret) => {
         this.tableData = cleanData(jsb.pathGet(ret, 'Data'))
         this.PagerTotal = jsb.pathGet(ret, 'Total', this.tableData.length)
+      }).catch(e => {
+        console.error("CgTable tryProxyQueryData got err:", e)
       }).finally(() => {
         this.inLoading = false
       })
     },
     rowFormEditorClose() {
-      this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
+      // this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
     },
   }
 }
@@ -598,6 +646,7 @@ export default {
   position: sticky;
   top: 0;
 }
+
 .cg-component-flex-end {
   display: flex;
   align-items: center;
@@ -605,6 +654,7 @@ export default {
   z-index: 10;
   justify-content: flex-end;
 }
+
 .el-table.cg-table-normal-padding td, .el-table.cg-table-normal-padding th {
 }
 

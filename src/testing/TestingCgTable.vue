@@ -47,7 +47,7 @@ import {
   CodeButtonRefresh, CodeButtonRowCopy, CodeButtonRowDelete,
   CodeButtonRowEdit, CodeButtonRowHistory, CodeButtonRowSaveRemote, CodeLinkFieldCopy
 } from "@/components/cells/const";
-
+const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'TestingCgTable',
   components: {CgTable},
@@ -55,6 +55,7 @@ export default {
     msg: String
   },
   data() {
+    const _this = this
     return {
       alertTitle: '',
       toolbarOptionServer: '',
@@ -195,21 +196,38 @@ export default {
           name: '操作',
           width: 200,
           cellTableName:'CgCells',
-          cellTable:[CodeButtonRowEdit,{code:CodeButtonRowSaveRemote,disable:true},CodeButtonRowDelete,CodeButtonRowCopy,CodeButtonRowHistory]
+          cellTable:[CodeButtonRowEdit,CodeButtonRowSaveRemote,CodeButtonRowDelete,CodeButtonRowCopy,CodeButtonRowHistory]
         },
       ],
 
       proxyConfig: {
         query() {
           return {
-            Data: [
-              {id: 4, name: '1111',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'el-icon-user-solid', Online: true, Tag:"g1",Color:'red'},
-              {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: "g2",Color:'blue',Checkbox:true}
-            ],
-            Total: 100,
+            Data: jsb.clone(_this.tableData), //模拟数据返回
+            Total: _this.tableData.length,
           }
         },
-      }
+        save({row}){
+          if(!row.id){
+            row.id =  _this.nextID
+            _this.nextID += 1
+            //新建数据
+            _this.tableData.push(row)
+          }else{
+            jsb.each(_this.tableData,function (item,index){
+              if(item.id === row.id){
+                _this.tableData[index] = row
+              }
+            })
+          }
+          return true
+        },
+      },
+      tableData:[
+        {id: 4, name: '1111',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'el-icon-user-solid', Online: true, Tag:"g1",Color:'red'},
+        {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: "g2",Color:'blue',Checkbox:true}
+      ],
+      nextID:1000,
     }
   },
   methods: {
@@ -263,7 +281,6 @@ export default {
           {},
           {cell: 'CgCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CgCheckbox', val)},
           {},
-          {cell: 'CgDateRangePicker', change:  (val) => this.toolbarAlert('CgDateRangePicker', val)},
           {cell: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val),style:{width:"120px"}},
 
           {cell: 'CgSelectGroup',options:[

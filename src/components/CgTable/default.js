@@ -22,7 +22,7 @@ export function NewDefaultProxyConfigData() {
             })
         },
         // eslint-disable-next-line no-unused-vars
-        save: function ({params}) {
+        save: function ({row}) {
             return new Promise((resolve, reject) => {
                 reject("save not implemented")
             })
@@ -32,6 +32,14 @@ export function NewDefaultProxyConfigData() {
             return new Promise((resolve, reject) => {
                 reject("delete not implemented")
             })
+        },
+        // chain of function
+        // eslint-disable-next-line no-unused-vars
+        midSave:function ({row}){
+        },
+        // chain of function
+        // eslint-disable-next-line no-unused-vars
+        midDelete:function ({row}){
         },
     })
 }

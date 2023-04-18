@@ -8,7 +8,7 @@
         v-if="data"
         :model="data"
         :label-width="labelWidthPixel"
-        :rules="rules"
+        :rules="rulesRef"
         ref="form"
         show-message
         label-position="right"
@@ -61,6 +61,7 @@ export default {
       type:[Object,String],
       default:null,
     },
+    rules:Object,
     shouldFieldDisable:Function,
     // 最外层调用不要设定rowTop,递归时传递到最底层便于统一回调外层
     rowTop:Object,
@@ -69,8 +70,11 @@ export default {
   data() {
     return {
       labelWidthPixel: this.labelWidth || calcLabelWidth(this.schema),
-      rules: {},
+      //fixme 需要table打入rules,独立使用CgForm的时候需要根据schema更新rules
+      rulesRef:this.rules,
     }
+  },
+  created() {
   },
   methods: {
     cellFormConfig,
@@ -85,9 +89,12 @@ export default {
     formLabel(si) {
       return jsb.pathGet(si, 'nameForm', si['name'])
     },
-    privateShouldFieldHide({fieldSchema}){
-      // 是否在form中隐藏
-      return jsb.pathGet(fieldSchema,'formHide',false)
+    validate(validCallback){
+      this.$refs['form'].validate((valid) => {
+        if(valid){
+          validCallback()
+        }
+      })
     },
     privateShouldFieldDisable(fieldSchema){
       if(this.mode === CgFormInputModeView){

@@ -3,14 +3,14 @@
     <template v-for="(cell,index) of cellsRef">
       <div :key="index" :style="divStyle">
         <component
-            v-if="cell.cell && registeredComponentMap[cell.cell] && shouldToolbarItemHide({scope:cell,code:cell.code ||''})"
+            v-if="cell.cell && registeredComponentMap[cell.cell] && shouldCellHide({scope:cell,code:cell.code ||''})"
             :is="registeredComponentMap[cell.cell]"
             :key="`toolbar_component_${index}`"
             :cell-config="cell"
             :data="cell.data || cell"
             :field-name="cell.field || 'value'"
             :options="cell.options || []"
-            :disabled="shouldToolbarItemDisable({scope:cell,code:cell.code ||''})"
+            :disabled="shouldCellDisable({scope:cell,code:cell.code ||''})"
             @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
         />
         <!-- 使用逻辑层实现的slot组件 -->
@@ -20,7 +20,7 @@
               :data="cell.dataWrapper || cell"
               :field-name="cell.field || 'value'"
               :options="cell.options || []"
-              :disabled="shouldToolbarItemDisable({scope:cell,code:cell.code ||''})"
+              :disabled="shouldCellDisable({scope:cell,code:cell.code ||''})"
               @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
         />
         <el-divider v-if="isDivider(cell)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
@@ -40,8 +40,8 @@ export default {
   name: "CgCells",
   mixins: [mixinComponentMap],
   props: {
-    shouldToolbarItemDisable: Function,
-    shouldToolbarItemHide: Function,
+    shouldCellDisable: Function,
+    shouldCellHide: Function,
     cells: Array, // 组件列表
     divStyle:Object,
     shortcutButtonOptions:Object

@@ -25,9 +25,11 @@ export function mustCtrlData(row){
     row[CtrlDataInRowData].xid = row[CtrlDataInRowData].xid || jsb.xid()
     return row
 }
-export function switchRowInEdit(row) {
-    row[CtrlDataInRowData].inplaceEdit = !row[CtrlDataInRowData].inplaceEdit
+export function removeCtrlData(row){
+    delete row[CtrlDataInRowData]
+    return row
 }
+
 export function setRowInEdit(row,inEdit=true) {
     row[CtrlDataInRowData].inplaceEdit = inEdit
 }
