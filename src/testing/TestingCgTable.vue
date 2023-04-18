@@ -144,7 +144,7 @@ export default {
           cellTableName: 'CgCells',
           cellFormName:'CgSwitch',
           cellTable: function ({fieldValue}) {
-            return [{cell: 'CgAlert', label: fieldValue, style: {width: 'fit'}},'editSwitch']
+            return [{cell: 'CgAlert', label: fieldValue, style: {width: 'fit'}},CodeButtonRowEdit]
           }
         },
         {

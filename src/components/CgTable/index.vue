@@ -188,9 +188,6 @@ import {
   EventCurrentRowChange,
   getProxySlotName, isRowInEdit, mustCtrlData,
   RowEditorInplace, setRowInEdit,
-  ToolbarShortcutCodeAdd,
-  ToolbarShortcutCodeCopyField,
-  ToolbarShortcutCodeRefresh, ToolbarShortcutCodeRowEdit,
   xidRow
 } from "@/components/CgTable/table";
 import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
@@ -211,6 +208,12 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import {CgFormInputModeEdit, CgFormInputModeInsert, CgFormInputModeView} from "@/components/CgFormInput";
 import CgFormInput from "@/components/CgFormInput/index.vue";
 import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTable/cell";
+import {
+  CodeButtonAdd,
+  CodeButtonRefresh,
+  CodeButtonRowEdit,
+  CodeLinkFieldCopy
+} from "@/components/cells/const";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -485,16 +488,16 @@ export default {
     // 默认的code处理逻辑
     defaultCodeItemClick({code,row, fieldValue, jsEvent}) {
       switch (code) {
-        case ToolbarShortcutCodeRefresh:
+        case CodeButtonRefresh:
           this.tryProxyQueryData()
           break
-        case ToolbarShortcutCodeCopyField:
+        case CodeLinkFieldCopy:
           jsb.clipCopy(fieldValue, jsEvent)
           break
-        case ToolbarShortcutCodeAdd:
+        case CodeButtonAdd:
           this.addRow()
           break
-        case ToolbarShortcutCodeRowEdit:
+        case CodeButtonRowEdit:
           this.rowClickWithTriggerName(row,EditTriggerSwitchButton)
           break
       }

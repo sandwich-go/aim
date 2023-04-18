@@ -17,8 +17,8 @@ export const CodeButtonRowSaveRemote = "btnRowSaveRemote"
 export const CodeButtonRowHistory = "btnRowHistory"
 
 
-export const CodeIconCopy = "iconCopy"
-export const CodeIconJump = "iconJump"
+export const CodeLinkFieldCopy = "linkFieldCopy"
+export const CodeLinkFieldJump = "linkFieldJump"
 
 
 // 快捷方式按钮属性映射
@@ -45,8 +45,8 @@ code2OptionsMapping[CodeButtonRowSaveRemote] = {
 }
 code2OptionsMapping[CodeButtonRowHistory] = {icon: 'el-icon-date', label: '历史', type: 'success', circle: true}
 
-code2OptionsMapping[CodeIconCopy] = {icon: 'el-icon-document-copy', type: 'primary'}
-code2OptionsMapping[CodeIconJump ] = {icon: 'el-icon-link', type: 'primary'}
+code2OptionsMapping[CodeLinkFieldCopy] = {icon: 'el-icon-document-copy', type: 'primary'}
+code2OptionsMapping[CodeLinkFieldJump ] = {icon: 'el-icon-link', type: 'primary'}
 
 jsb.each(code2OptionsMapping, function (ss, code) {
     ss.code = code
