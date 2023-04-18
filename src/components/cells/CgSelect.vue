@@ -22,7 +22,6 @@ export default {
   name: 'CgSelect',
   mixins: [MixinCellEditorConfig],
   created() {
-    console.log(this.dataRef,this.fieldName)
     this.ccConfigMerge()
   },
 }

@@ -9,26 +9,25 @@
       size="mini"
       @click="emitClick($event)"
   >
-    <template v-if="!cc.circle">{{cc.label ? cc.label : ""}}</template>
+    <template v-if="!cc.circle">{{ cc.label ? cc.label : "" }}</template>
   </el-button>
 </template>
 
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
-import {makeButton} from "@/components/cells/types";
-import {code2OptionsMapping} from "@/components/CgTable/table";
+import {CellNameButton} from "@/components/cells/const";
 
 export default {
-  name: 'CgButton',
+  name: CellNameButton,
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
-    this.cc = Object.assign(this.cc,makeButton(code2OptionsMapping[this.cc.code],this.cc))
+    // this.cc = Object.assign(this.cc, makeCellButton(code2OptionsMapping[this.cc.code], this.cc))
   },
-  methods:{
-    emitClick(jsEvent){
-      this.$emit('code-cell-click',{code:this.cc.code,jsEvent:jsEvent})
+  methods: {
+    emitClick(jsEvent) {
+      this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})
     }
   }
 }

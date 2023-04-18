@@ -22,8 +22,8 @@
             @code-cell-click="privateCodeItemClickForToolbar"
         >
           <!-- 透传使用逻辑层定义的slot组件 -->
-          <template v-for="item in toolbarConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
-            <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+          <template v-for="item in toolbarConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.cell)]="{}">
+            <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
           </template>
         </cg-cells>
       </el-col>
@@ -90,7 +90,7 @@
                 ></component>
                 <slot
                     v-else
-                    :name="fs.slot"
+                    :name="celllName"
                     :row="scope.row"
                     :field-schema="fs"
                     :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
@@ -115,8 +115,8 @@
               :should-toolbar-item-hide="privateShouldToolbarItemHide"
               :should-toolbar-item-disable="privateShouldToolbarItemDisable"
               @code-cell-click="privateCodeItemClickForToolbar">
-            <template v-for="item in rightBarConfigData.cells" v-slot:[getProxySlotName(item.slot)]="{}">
-              <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+            <template v-for="item in rightBarConfigData.cells" v-slot:[getProxySlotName(item.cell)]="{}">
+              <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
             </template>
           </cg-cells>
         </div>
@@ -134,8 +134,8 @@
             :should-toolbar-item-disable="privateShouldToolbarItemDisable"
             @code-cell-click="privateCodeItemClickForToolbar"
         >
-          <template v-for="item in footerConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.slot)]="{}">
-            <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+          <template v-for="item in footerConfigData[direction+'Cells']" v-slot:[getProxySlotName(item.cell)]="{}">
+            <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
           </template>
         </cg-cells>
       </el-col>
@@ -168,8 +168,8 @@
             :should-toolbar-item-disable="privateShouldToolbarItemDisable"
             @code-cell-click="privateCodeItemClickForToolbar"
         >
-          <template v-for="item in editConfigData.formEditorCells" v-slot:[getProxySlotName(item.slot)]="{}">
-            <slot v-if="item.slot" :name="item.slot" :item="item"></slot>
+          <template v-for="item in editConfigData.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
+            <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
           </template>
         </cg-cells>
         </template>
@@ -320,11 +320,8 @@ export default {
     }
   },
   created() {
-    console.log(1)
     jsb.objectAssignNX(this.editConfigData,NewEitConfigData())
-    console.log(2)
     jsb.objectAssignNX(this.tablePropertyData,NewDefaultTableProperty())
-    console.log(3)
     jsb.objectAssignNX(this.proxyConfigData,NewDefaultProxyConfigData())
 
     this.initPager()
@@ -360,14 +357,14 @@ export default {
       if (this.pagerConfigData.enable) {
         jsb.each(['leftCells', 'rightCells'], function (val) {
           jsb.each(_this.footerConfigData[val], function (codeOrItem) {
-            if (codeOrItem.slot === 'CgPager') {
+            if (codeOrItem.cell === 'CgPager') {
               pagerFound = true
               codeOrItem.data = _this.thisTarget()
             }
           })
         })
         if (!pagerFound) {
-          this.footerConfigData.rightCells.push({slot: 'CgPager', data: _this.thisTarget()})
+          this.footerConfigData.rightCells.push({cell: 'CgPager', data: _this.thisTarget()})
         }
       }
     },

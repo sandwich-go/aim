@@ -3,8 +3,8 @@
     <template v-for="(cell,index) of cellsRef">
       <div :key="index" :style="divStyle">
         <component
-            v-if="cell.slot && registeredComponentMap[cell.slot] && shouldToolbarItemHide({scope:cell,code:cell.code ||''})"
-            :is="registeredComponentMap[cell.slot]"
+            v-if="cell.cell && registeredComponentMap[cell.cell] && shouldToolbarItemHide({scope:cell,code:cell.code ||''})"
+            :is="registeredComponentMap[cell.cell]"
             :key="`toolbar_component_${index}`"
             :cell-config="cell"
             :data="cell.data || cell"
@@ -14,8 +14,8 @@
             @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
         />
         <!-- 使用逻辑层实现的slot组件 -->
-        <slot v-else-if="cell.slot"
-              :name="getProxySlotName(cell.slot)"
+        <slot v-else-if="cell.cell"
+              :name="getProxySlotName(cell.cell)"
               :cell-config="cell"
               :data="cell.dataWrapper || cell"
               :field-name="cell.field || 'value'"
@@ -29,9 +29,9 @@
   </div>
 </template>
 <script>
-import {code2OptionsMapping, getProxySlotName} from "@/components/CgTable/table";
+import {getProxySlotName} from "@/components/CgTable/table";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
-import {makeButton} from "@/components/cells/types";
+import {makeCellFromString} from "@/components/cells/make";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -58,16 +58,13 @@ export default {
   },
   created() {
     const _this = this
-    jsb.each(this.cells , function (codeOrItem, key) {
-      if (!codeOrItem.slot && codeOrItem.code) {
-        codeOrItem.slot = 'CgButton'
+    jsb.each(this.cellsRef , function (codeOrItem, key) {
+      if (!codeOrItem.cell && codeOrItem.code) {
+        _this.cellsRef[key]= makeCellFromString(codeOrItem.code,codeOrItem)
       }
       // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
       if (jsb.isString(codeOrItem)) {
-        _this.cellsRef[key] = makeButton(
-            code2OptionsMapping[codeOrItem] || {code: codeOrItem},
-            _this.shortcutButtonOptions
-        )
+        _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
       }
     })
   },

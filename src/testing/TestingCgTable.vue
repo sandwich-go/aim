@@ -40,6 +40,13 @@ import {
   EditTriggerSwitchButton, RowEditorFormInput,
   RowEditorInplace
 } from "@/components/CgTable/table";
+import {
+  CodeButtonAdd,
+  CodeButtonCustom,
+  CodeButtonPrint,
+  CodeButtonRefresh, CodeButtonRowCopy, CodeButtonRowDelete,
+  CodeButtonRowEdit, CodeButtonRowHistory, CodeButtonRowSaveRemote
+} from "@/components/cells/const";
 
 export default {
   name: 'TestingCgTable',
@@ -63,11 +70,11 @@ export default {
       },
       footConfig:{
         leftSpan:12,
-        leftCells:[{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'add','custom','print'],
-        rightCells:[{slot:'CgPager'},{slot: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
+        leftCells:[{cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}},CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
+        rightCells:[{cell:'CgPager'},{cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
       },
       rightBarConfig:{
-        cells:['add','refresh','custom','print'],
+        cells:[CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
       },
       schema: [
         {
@@ -137,7 +144,7 @@ export default {
           cellTableName: 'CgCells',
           cellFormName:'CgSwitch',
           cellTable: function ({fieldValue}) {
-            return [{slot: 'CgAlert', label: fieldValue, style: {width: 'fit'}},'editSwitch']
+            return [{cell: 'CgAlert', label: fieldValue, style: {width: 'fit'}},'editSwitch']
           }
         },
         {
@@ -186,7 +193,7 @@ export default {
           name: '操作',
           width: 200,
           cellTableName:'CgCells',
-          cellTable:['rowEdit',{code:'rowSaveRemote',disable:true},'rowDelete','rowCopy','rowHistory']
+          cellTable:[CodeButtonRowEdit,{code:CodeButtonRowSaveRemote,disable:true},CodeButtonRowDelete,CodeButtonRowCopy,CodeButtonRowHistory]
         },
       ],
 
@@ -218,10 +225,10 @@ export default {
       return      {
         leftSpan:21,
             leftCells: [
-          {slot: 'CgAlert', label: "标题内容",showIcon:false, style: {width: 'fit'}},
+          {cell: 'CgAlert', label: "标题内容",showIcon:false, style: {width: 'fit'}},
           {},
           {
-            slot: 'CgSelect',
+            cell: 'CgSelect',
             options: [
               {label:EditTriggerSwitchButton, value:EditTriggerSwitchButton},
               {label: EditTriggerDBLClick, value: EditTriggerDBLClick},
@@ -235,7 +242,7 @@ export default {
             }
           },
           {
-            slot: 'CgSelect',
+            cell: 'CgSelect',
             options: [
               {label:RowEditorInplace, value:RowEditorInplace},
               {label: RowEditorFormInput, value: RowEditorFormInput},
@@ -249,17 +256,17 @@ export default {
             style: {'padding-right': '10px',width:'160px'},
           },
           {
-            slot: 'SlotOptionsUseDefineSlot',
+            cell: 'SlotOptionsUseDefineSlot',
             options: [{label: "action1", value: "action1"}, {label: "action2", value: "action2"}],
             change: (val) => this.toolbarAlert('SlotOptionsUseDefineSlot', val)
           },
           {},
-          {slot: 'CgCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CgCheckbox', val)},
+          {cell: 'CgCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CgCheckbox', val)},
           {},
-          {slot: 'CgDateRangePicker', change:  (val) => this.toolbarAlert('CgDateRangePicker', val)},
-          {slot: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val),style:{width:"120px"}},
+          {cell: 'CgDateRangePicker', change:  (val) => this.toolbarAlert('CgDateRangePicker', val)},
+          {cell: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val),style:{width:"120px"}},
 
-          {slot: 'CgSelectGroup',options:[
+          {cell: 'CgSelectGroup',options:[
               {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}],
             change: (val) => this.toolbarAlert('SlotSelectGroup', val)},
 
@@ -269,7 +276,7 @@ export default {
           {label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'},
           {label: "新建", code: 'codeNew', icon: 'el-icon-check'},
         ],
-            rightCells:['add','refresh','custom','print'],
+            rightCells:[CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
             style: {'padding-bottom': '20px'}
       }
     }

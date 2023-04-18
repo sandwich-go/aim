@@ -83,32 +83,3 @@ export function getItemStyle(item,options){
 export function getProxySlotName(slotName){
     return `cg-table-proxy-slot-${slotName}`
 }
-
-// 快捷方式 只展现图标，code也就是shortcut的名称
-export const ToolbarShortcutCodeRefresh = "refresh"
-export const ToolbarShortcutCodeCustom = "custom"
-export const ToolbarShortcutCodePrint = "print"
-export const ToolbarShortcutCodeAdd = "add"
-
-export const ToolbarShortcutCodeRowEdit = "rowEdit"
-export const ToolbarShortcutCodeRowDelete = "rowDelete"
-export const ToolbarShortcutCodeRowCopy = "rowCopy"
-export const ToolbarShortcutCodeRowSaveLocal = "rowSaveLocal"
-export const ToolbarShortcutCodeRowSaveRemote = "rowSaveRemote"
-export const ToolbarShortcutCodeRowHistory = "rowHistory"
-export const ToolbarShortcutCodeCopyField = "copyField"
-
-// 快捷方式按钮属性映射
-export const code2OptionsMapping = {}
-code2OptionsMapping[ToolbarShortcutCodeAdd] = {icon:'el-icon-plus',type:'primary',code:ToolbarShortcutCodeAdd,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRefresh] = {icon:'el-icon-refresh',type:'primary',code:ToolbarShortcutCodeRefresh,circle:true}
-code2OptionsMapping[ToolbarShortcutCodePrint] = {icon:'el-icon-s-grid',type:'primary',code:ToolbarShortcutCodePrint,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeCustom] = {icon:'el-icon-printer',type:'primary',code:ToolbarShortcutCodeCustom,circle:true}
-
-code2OptionsMapping[ToolbarShortcutCodeRowEdit] = {icon:'el-icon-edit',label:'编辑',type:'warning',code:ToolbarShortcutCodeRowEdit,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowDelete] = {icon:'el-icon-delete',label:'删除',type:'danger',code:ToolbarShortcutCodeRowDelete,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowCopy] = {icon:'el-icon-copy-document',label:'拷贝',type:'primary',code:ToolbarShortcutCodeRowCopy,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowSaveLocal] = {icon:'el-icon-s-promotion',label:'保存到本地',type:'primary',code:ToolbarShortcutCodeRowSaveLocal,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowSaveRemote] = {icon:'el-icon-s-promotion',label:'保存', type:'primary',code:ToolbarShortcutCodeRowSaveRemote,circle:true}
-code2OptionsMapping[ToolbarShortcutCodeRowHistory] = {icon:'el-icon-date',label:'历史',type:'success',code:ToolbarShortcutCodeRowHistory,circle:true}
-

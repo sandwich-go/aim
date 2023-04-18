@@ -1,8 +1,8 @@
 import {
     EditTriggerDBLClickOrSwitcher,
-    RowEditorFormInput, ToolbarShortcutCodeRowDelete, ToolbarShortcutCodeRowHistory,
-    ToolbarShortcutCodeRowSaveRemote
+    RowEditorFormInput,
 } from "@/components/CgTable/table";
+import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSaveRemote} from "@/components/cells/const";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -85,7 +85,7 @@ export function NewEitConfigData() {
         copyRow({row}){},
         // eslint-disable-next-line no-unused-vars
         formEditorCells:function ({row}){
-            return [ToolbarShortcutCodeRowSaveRemote,ToolbarShortcutCodeRowDelete,ToolbarShortcutCodeRowHistory]
+            return [CodeButtonRowSaveRemote,CodeButtonRowDelete,CodeButtonRowHistory]
         }
     })
 }
