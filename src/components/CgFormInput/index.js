@@ -1,9 +1,9 @@
+import jsb from "@sandwich-go/jsb";
+
 export const CgFormInputModeInsert = "CgFormInputModeInsert"
 export const CgFormInputModeEdit = "CgFormInputModeEdit"
 export const CgFormInputModeCopy = "CgFormInputModeCopy"
 export const CgFormInputModeView = "CgFormInputModeView"
-
-import jsb from "@sandwich-go/jsb";
 
 export function calcLabelWidth(schema) {
     let longestTextWidth = jsb.longestTextWidth(schema.map(function (element) {
@@ -19,4 +19,13 @@ export function calcLabelWidth(schema) {
         }
     }
     return `${longestTextWidth + extraWidth.size * 20}px`
+}
+
+
+export function comment(row,fieldSchema, commentField = 'comment') {
+    const commentVal = fieldSchema[commentField]
+    return jsb.isFunction(commentVal)?commentVal({row, fieldSchema, fieldValue: row[fieldSchema.field]}):commentVal
+}
+export function commentHTML(row,fs) {
+    return comment(fs,row,'commentHTML')
 }

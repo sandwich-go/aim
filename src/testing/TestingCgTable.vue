@@ -83,15 +83,14 @@ export default {
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
-          required: true,
           summary:true,
           cellTableName:'CgInput',
           readOnly: true
         },
         {
-          field: 'name', name: 'Name', type: 'input', width: 200, sortable: true,
+          field: 'name', name: 'Name', type: 'input', width: 200, sortable: true,uniq:true,
           placeholder: "xxx.xx",
-          tips: "用户名不要携带@centurygame.com后缀",
+          comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
           cellTableName:function ({row}){

@@ -1,41 +1,48 @@
+const jsb = require("@sandwich-go/jsb")
+
 import {xidRow} from "@/components/CgTable/table";
 
-const jsb = require("@sandwich-go/jsb")
-const uniqueFieldNameValidator = (fieldSchema) => {
-    return (rule, value, callback, params) => {
-        const rowData = params.row || {}
-        const tableData = params.data || []
+const uniqueFieldNameValidator = (fieldSchema,params) => {
+    // eslint-disable-next-line no-unused-vars
+    return (rule, value, callback) => {
+        const rowData = jsb.pathGet(params,'row',{})
+        const tableData =  jsb.pathGet(params,'data',{})
         const xidCurrent = xidRow(rowData)
-        let error = null
         jsb.every(tableData, function (row) {
-            const rowId = xidRow(row)
-            if (rowId === xidCurrent) {
+            if (xidRow(row) === xidCurrent) {
                 return true
             }
             if (value === row[fieldSchema.field]) {
-                error = new Error(`${fieldSchema.name} 当前赋值: ${value} 不满足唯一性要求`)
+                callback(new Error(`${fieldSchema.name} 当前赋值不满足唯一性要求`));
                 return false
             }
             return true
         })
-        callback(error);
+        callback();
     }
 }
 
 
-export function formRulesFromSchema(schema, paramsVisitor=undefined, nameField = 'name') {
+export function formRulesFromSchema(schema, paramsVisitor = undefined, nameField = 'name') {
     let rules = {}
     jsb.each(schema, function (fs) {
-        rules[fs.field] = fs.rules || []
+        if (fs.rules) {
+            rules[fs.field] = fs.rules
+        }
         if (fs.required) {
-            rules[fs.field].push([{required: true, message: `${fs[nameField]}不能为空`, trigger: 'blur'}])
+            if (!rules[fs.field]) {
+                rules[fs.field] = []
+            }
+            rules[fs.field].push({required: true, message: `${fs[nameField]}不能为空`, trigger: 'blur'})
         }
         if (fs.uniq) {
-            rules[fs.field].push([{
-                validator: uniqueFieldNameValidator(fs),
+            if (!rules[fs.field]) {
+                rules[fs.field] = []
+            }
+            rules[fs.field].push({
+                validator: uniqueFieldNameValidator(fs,paramsVisitor),
                 trigger: 'blur',
-                params: paramsVisitor,
-            }])
+            })
         }
     })
     return rules

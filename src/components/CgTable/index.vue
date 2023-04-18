@@ -147,6 +147,7 @@
                @close="rowFormEditorClose"
                :visible.sync="rowFormEditorVisible">
       <cg-form-input
+          ref="cgFrom"
           v-if="rowInEdit && rowFormEditorVisible"
           :key="xidRow(rowInEdit)"
           :schema="validSchema(schema)"
@@ -168,7 +169,7 @@
             :cells="editConfigData.formEditorCells(rowInEdit)"
             :should-cell-hide="privateShouldCellHide"
             :should-cell-disable="privateShouldCellDisable"
-            @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEdit,code,jsEvent})"
+            @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEdit,code,jsEvent,fromForm:true})"
         >
           <template v-for="item in editConfigData.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
             <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
@@ -495,8 +496,8 @@ export default {
       this.setEditRow(row)
     },
     // eslint-disable-next-line no-unused-vars
-    privateCellClickForRow({code, row, jsEvent}) {
-      this.privateCellClick({code, row, jsEvent})
+    privateCellClickForRow({code, row, jsEvent,fromForm}) {
+      this.privateCellClick({code, row, jsEvent,fromForm})
     },
     privateCellClickForField({code, row, fieldSchema, jsEvent}) {
       this.privateCellClick({code, row, fieldSchema, jsEvent, fieldValue: row[fieldSchema.field]})
@@ -505,15 +506,15 @@ export default {
     privateCellClickForToolbar({code}) {
       this.privateCellClick({code})
     },
-    privateCellClick({code, row, fieldSchema, fieldValue, jsEvent}) {
+    privateCellClick({code, row, fieldSchema, fieldValue, jsEvent,fromForm}) {
       this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
       if (this.codeItemClick({code, row, fieldSchema, fieldValue})) {
         return
       }
-      this.defaultCellClick({code, row, fieldValue, jsEvent})
+      this.defaultCellClick({code, row, fieldValue, jsEvent,fromForm})
     },
     // 默认的code处理逻辑
-    defaultCellClick({code, row, fieldValue, jsEvent}) {
+    defaultCellClick({code, row, fieldValue, jsEvent,fromForm}) {
       switch (code) {
         case CodeButtonRefresh:
           this.tryProxyQueryData()
@@ -528,7 +529,13 @@ export default {
           this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
           break
         case CodeButtonRowSaveRemote:
-          this.tryProxySaveRow({row})
+          if(fromForm){
+            this.$refs.cgFrom.validate(()=>{
+              this.tryProxySaveRow({row})
+            })
+          }else{
+            this.tryProxySaveRow({row})
+          }
           break
       }
     },
