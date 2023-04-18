@@ -71,7 +71,7 @@ export default {
       footConfig:{
         leftSpan:12,
         leftCells:[{cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}},CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
-        rightCells:[{cell:'CgPager'},{cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}},'refresh'],
+        rightCells:[{cell:'CgPager'},{cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}},CodeButtonRefresh],
       },
       rightBarConfig:{
         cells:[CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
