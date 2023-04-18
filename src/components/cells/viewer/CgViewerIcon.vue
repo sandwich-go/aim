@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <span>
     <template v-if="fieldValue">
       <template style="align-items: center">
         <i v-if="!isPlainObject(fieldValue)" :class="fieldValue"></i>
@@ -10,7 +10,7 @@
     <template v-else>
       <i :class="fieldValue"></i>
     </template>
-  </div>
+  </span>
 </template>
 
 <script>

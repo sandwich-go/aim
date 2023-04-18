@@ -45,7 +45,7 @@ import {
   CodeButtonCustom,
   CodeButtonPrint,
   CodeButtonRefresh, CodeButtonRowCopy, CodeButtonRowDelete,
-  CodeButtonRowEdit, CodeButtonRowHistory, CodeButtonRowSaveRemote
+  CodeButtonRowEdit, CodeButtonRowHistory, CodeButtonRowSaveRemote, CodeLinkFieldCopy, CodeLinkFieldJump
 } from "@/components/cells/const";
 
 export default {
@@ -105,10 +105,12 @@ export default {
           name: 'Link',
           showOverflowTooltip:true,
           sortable: true,
-          width: 200,
+          width: 300,
           align: 'center',
-          cellTableName:'CgViewerLink',
-          cellTable:{label:'PMT地址',icon:'el-icon-heavy-rain',code:'copyField'}
+          cellTableName:'CgCells',
+          cellTable:function ({fieldValue}){
+            return [CodeLinkFieldJump, {code:CodeLinkFieldCopy,href:fieldValue}]
+          }
         },
         {
           field: 'Number', name: 'InputNumber', type: 'input', width: 200, sortable: true,
@@ -225,8 +227,6 @@ export default {
       return      {
         leftSpan:21,
             leftCells: [
-          {cell: 'CgAlert', label: "标题内容",showIcon:false, style: {width: 'fit'}},
-          {},
           {
             cell: 'CgSelect',
             options: [
@@ -270,11 +270,12 @@ export default {
               {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}],
             change: (val) => this.toolbarAlert('SlotSelectGroup', val)},
 
-          {label: "导入", code: 'codeImport'},
-          {label: "导出", code: 'codeExport', icon: 'el-icon-check', show: false},
+          {label: "导入", code: 'myBtnImport',icon: 'el-icon-check'},
+          {label: "导出", code: 'myBtnExport', icon: 'el-icon-check', show: false},
+              {label: "新建", code: 'myBtnNew', icon: 'el-icon-check'},
           {},
-          {label: "查找", code: 'codeSearch', icon: 'el-icon-search', type: 'warning'},
-          {label: "新建", code: 'codeNew', icon: 'el-icon-check'},
+          {label: "查找", code: 'myLinkSearch', icon: 'el-icon-search', type: 'warning'},
+
         ],
             rightCells:[CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
             style: {'padding-bottom': '20px'}

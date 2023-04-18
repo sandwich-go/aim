@@ -32,6 +32,7 @@
 import {getProxySlotName} from "@/components/CgTable/table";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import {makeCellFromString} from "@/components/cells/make";
+import {CellNameButton} from "@/components/cells/const";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -61,6 +62,7 @@ export default {
     jsb.each(this.cellsRef , function (codeOrItem, key) {
       if (!codeOrItem.cell && codeOrItem.code) {
         _this.cellsRef[key]= makeCellFromString(codeOrItem.code,codeOrItem)
+        codeOrItem.cell = CellNameButton
       }
       // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
       if (jsb.isString(codeOrItem)) {
