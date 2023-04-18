@@ -510,10 +510,10 @@ export default {
       if (this.codeItemClick({code, row, fieldSchema, fieldValue})) {
         return
       }
-      this.defaultCodeItemClick({code, row, fieldValue, jsEvent})
+      this.defaultCellClick({code, row, fieldValue, jsEvent})
     },
     // 默认的code处理逻辑
-    defaultCodeItemClick({code, row, fieldValue, jsEvent}) {
+    defaultCellClick({code, row, fieldValue, jsEvent}) {
       switch (code) {
         case CodeButtonRefresh:
           this.tryProxyQueryData()
