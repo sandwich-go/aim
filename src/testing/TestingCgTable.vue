@@ -45,7 +45,7 @@ import {
   CodeButtonCustom,
   CodeButtonPrint,
   CodeButtonRefresh, CodeButtonRowCopy, CodeButtonRowDelete,
-  CodeButtonRowEdit, CodeButtonRowHistory, CodeButtonRowSaveRemote, CodeLinkFieldCopy, CodeLinkFieldJump
+  CodeButtonRowEdit, CodeButtonRowHistory, CodeButtonRowSaveRemote, CodeLinkFieldCopy
 } from "@/components/cells/const";
 
 export default {
@@ -109,7 +109,7 @@ export default {
           align: 'center',
           cellTableName:'CgCells',
           cellTable:function ({fieldValue}){
-            return [CodeLinkFieldJump, {code:CodeLinkFieldCopy,href:fieldValue}]
+            return [CodeLinkFieldCopy, {href:fieldValue,label:'PMT地址',cell:'CgViewerLink'}]
           }
         },
         {
