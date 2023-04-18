@@ -207,7 +207,7 @@ export default {
           }
         },
         delete({row}){
-          jsb.remove(this.tableData,item => item.id === row.id)
+          jsb.remove(_this.tableData,item => item.id === row.id)
         },
         save({row}){
           if(!row.id){
