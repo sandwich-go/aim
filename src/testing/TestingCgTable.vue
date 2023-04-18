@@ -206,6 +206,9 @@ export default {
             Total: _this.tableData.length,
           }
         },
+        delete({row}){
+          jsb.remove(this.tableData,item => item.id === row.id)
+        },
         save({row}){
           if(!row.id){
             row.id =  _this.nextID

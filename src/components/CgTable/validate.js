@@ -22,7 +22,6 @@ const uniqueFieldNameValidator = (fieldSchema,params) => {
     }
 }
 
-
 export function formRulesFromSchema(schema, paramsVisitor = undefined, nameField = 'name') {
     let rules = {}
     jsb.each(schema, function (fs) {

@@ -1,7 +1,4 @@
-import {
-    EditTriggerDBLClickOrSwitcher,
-    RowEditorFormInput,
-} from "@/components/CgTable/table";
+import {EditTriggerDBLClickOrSwitcher, RowEditorFormInput,} from "@/components/CgTable/table";
 import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSaveRemote} from "@/components/cells/const";
 
 const jsb = require("@sandwich-go/jsb")
@@ -33,14 +30,10 @@ export function NewDefaultProxyConfigData() {
                 reject("delete not implemented")
             })
         },
-        // chain of function
         // eslint-disable-next-line no-unused-vars
-        midSave:function ({row}){
-        },
-        // chain of function
-        // eslint-disable-next-line no-unused-vars
-        midDelete:function ({row}){
-        },
+        deleteConfirmConfig: ({row}) => {
+            return {}
+        }
     })
 }
 
@@ -51,16 +44,16 @@ export function NewDefaultTableProperty() {
         class: 'cg-table-small-padding',
         showHeader: true,
         highlightCurrentRow: true,
-        headerCellStyle: {textAlign: 'center', padding: '0', color: '#606266',background:'#eceff1'},
+        headerCellStyle: {textAlign: 'center', padding: '0', color: '#606266', background: '#eceff1'},
         emptyText: '',
-        rowStyle:{height:"20px",'padding':0},// object of function
-        height:null,
-        heightSubVH:0,
+        rowStyle: {height: "20px", 'padding': 0},// object of function
+        height: null,
+        heightSubVH: 0,
     })
 }
 
 export function NewPagerConfig() {
-    return  {
+    return {
         enable: true,
         pagerConfig: {
             layout: `->,total, prev, pager, next, sizes`,
@@ -85,30 +78,36 @@ export function NewEitConfigData() {
             return true
         },
         // 新建一行数据
-        newRow(schema,row){
-            return defaultRow(schema,row)
+        newRow(schema, row) {
+            return defaultRow(schema, row)
         },
         // 拷贝一行数据,逻辑层替换关键数据
         // eslint-disable-next-line no-unused-vars
-        copyRow({row}){},
+        copyRow({row}) {
+        },
         // eslint-disable-next-line no-unused-vars
-        formEditorCells:function ({row}){
-            return [CodeButtonRowSaveRemote,CodeButtonRowDelete,CodeButtonRowHistory]
+        formEditorCells: function ({row}) {
+            return [CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowHistory]
         }
     })
 }
 
-export const flexStartStyle = {'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}
+export const flexStartStyle = {
+    'justify-content': 'flex-start',
+    'display': 'flex',
+    'align-items': 'center',
+    'gap': '3px'
+}
 export const flexEndStyle = {'justify-content': 'flex-end', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}
 
 export function isVirtualField(fs) {
     return !fs.field || fs.virtual
 }
 
-export function  validSchema(schema){
+export function validSchema(schema) {
     let schemaValid = []
-    jsb.each(schema,function (fieldSchema){
-        if(isVirtualField(fieldSchema)){
+    jsb.each(schema, function (fieldSchema) {
+        if (isVirtualField(fieldSchema)) {
             return;
         }
         schemaValid.push(fieldSchema)
@@ -116,19 +115,19 @@ export function  validSchema(schema){
     return schemaValid
 }
 
-export function defaultRow(schema,row){
+export function defaultRow(schema, row) {
     row = row || {}
-    jsb.each(schema,function (fieldSchema){
-        if(isVirtualField(fieldSchema)){
+    jsb.each(schema, function (fieldSchema) {
+        if (isVirtualField(fieldSchema)) {
             return;
         }
         const fieldName = fieldSchema.field
-        if(!jsb.isUndefined(row[fieldName])) {
+        if (!jsb.isUndefined(row[fieldName])) {
             return
         }
-        const defaultVal = jsb.pathGet(fieldSchema,'default',undefined)
-        if(!jsb.isUndefined(defaultVal)){
-            row[fieldName] = jsb.isFunction(defaultVal)?defaultVal():defaultVal
+        const defaultVal = jsb.pathGet(fieldSchema, 'default', undefined)
+        if (!jsb.isUndefined(defaultVal)) {
+            row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal() : defaultVal
             return
         }
         // fixme 抽象类型以辅助默认的default逻辑

@@ -218,12 +218,13 @@ import CgFormInput from "@/components/CgFormInput/index.vue";
 import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTable/cell";
 import {
   CodeButtonAdd,
-  CodeButtonRefresh,
+  CodeButtonRefresh, CodeButtonRowDelete,
   CodeButtonRowEdit,
   CodeButtonRowSaveRemote,
   CodeLinkFieldCopy
 } from "@/components/cells/const";
 import {formRulesFromSchema} from "@/components/CgTable/validate";
+import {deleteConfirmConfig} from "@/components/CgTable/confirm";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -528,12 +529,16 @@ export default {
         case CodeButtonRowEdit:
           this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
           break
+        case CodeButtonRowDelete:
+          this.tryProxyDeleteRow({row})
+          break
         case CodeButtonRowSaveRemote:
           if(fromForm){
             this.$refs.cgFrom.validate(()=>{
               this.tryProxySaveRow({row})
             })
           }else{
+            //fixme inplace下无法使用form的validate
             this.tryProxySaveRow({row})
           }
           break
@@ -605,6 +610,28 @@ export default {
         }
       })
       return info.join(" , ")
+    },
+    tryProxyDeleteRow({row}) {
+      this.debug && (this.debugMessage = `tryProxyDeleteRow called ${this.summaryRow(row)}`)
+      const deleteFunc = this.proxyConfigData.delete
+      if (!deleteFunc) {
+        this.toastWarning("proxy中未指定delete方法")
+        return
+      }
+      const confirmConfig = deleteConfirmConfig(this.proxyConfigData,row)
+      const _this = this
+      confirmConfig.doneFunc = ()=>{
+        _this.inLoading = true
+        Promise.resolve(deleteFunc({row})).then(() => {
+          this.toastSuccess("删除成功")
+          this.tryProxyQueryData()
+        }).catch(e => {
+          console.error("CgTable tryProxyDeleteRow got err:", e)
+        }).finally(() => {
+          this.inLoading = false
+        })
+      }
+      jsb.cc().confirm(_this,confirmConfig)
     },
     tryProxySaveRow({row}) {
       this.debug && (this.debugMessage = `tryProxySaveData called ${this.summaryRow(row)}`)
