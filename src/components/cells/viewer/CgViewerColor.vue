@@ -1,9 +1,10 @@
 <template>
   <span v-if="fieldValue">
-    <div
-        class="cgc-color-bg-sub-item"
-        v-bind:style="{background:fieldValue}"
-    ></div>
+    <el-alert
+        disabled
+        :closable="false"
+        v-bind:style="{background:fieldValue,'border-radius':0}"
+    ></el-alert>
   </span>
 </template>
 
@@ -15,14 +16,3 @@ export default {
   mixins:[MixinCellViewerConfig],
 }
 </script>
-
-<style scoped>
-.cgc-color-bg-sub-item {
-  border: 1px solid lightgray;
-  width: 100%;
-  height: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

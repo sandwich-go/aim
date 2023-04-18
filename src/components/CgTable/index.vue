@@ -31,6 +31,7 @@
 
     <el-row class="cg-component-flex-end" style="align-items: start;gap: 3px">
       <el-table
+          v-fit-columns="{ enabled:tablePropertyData.autoWidth }"
           ref="table"
           :height="tableHeight()"
           :data="tableData"
@@ -60,6 +61,7 @@
               :key="fieldIndex"
               :prop="fs.field"
               :width="fs.width"
+              :class-name="fs.width?'leave-alone':''"
               :min-width="fs.min_width"
               :max-width="fs.max_width"
               :show-overflow-tooltip="fs.showOverflowTooltip"
@@ -182,6 +184,10 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import AutoWidth from './AutoWidth';
+Vue.use(AutoWidth);
+
 import {
   cleanData,
   EditTriggerClick,
@@ -702,5 +708,16 @@ export default {
 
 .el-table.cg-table-mini-padding td, .el-table.cg-table-mini-padding th {
   padding: 1px
+}
+
+.el-table.cg-table-auto-width .cell {
+  display: inline-block;
+  white-space: nowrap;
+  width: auto;
+  overflow-x: auto;
+}
+
+.el-table.cg-table-auto-width .el-table__body-wrapper {
+  overflow-x: auto;
 }
 </style>

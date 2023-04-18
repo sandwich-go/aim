@@ -39,6 +39,7 @@ export function NewDefaultProxyConfigData() {
 
 export function NewDefaultTableProperty() {
     return jsb.clone({
+        autoWidth:true,
         border: true,
         stripe: true,
         class: 'cg-table-small-padding',

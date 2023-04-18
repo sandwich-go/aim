@@ -79,7 +79,7 @@ export default {
       },
       schema: [
         {
-          field: 'id', name: 'ID', type: 'input', width: 200, sortable: true,
+          field: 'id', name: 'ID', type: 'input', sortable: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
@@ -88,7 +88,7 @@ export default {
           readOnly: true
         },
         {
-          field: 'name', name: 'Name', type: 'input', width: 200, sortable: true,uniq:true,
+          field: 'name', name: 'Name', type: 'input',  sortable: true,uniq:true,
           placeholder: "xxx.xx",
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
@@ -105,7 +105,6 @@ export default {
           name: 'Link',
           showOverflowTooltip:true,
           sortable: true,
-          width: 300,
           align: 'center',
           cellTableName:'CgCells',
           cellTable:function ({fieldValue}){
@@ -113,7 +112,7 @@ export default {
           }
         },
         {
-          field: 'Number', name: 'InputNumber', type: 'input', width: 200, sortable: true,
+          field: 'Number', name: 'InputNumber', type: 'input',  sortable: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
@@ -123,7 +122,7 @@ export default {
           CgFormInput:{min:10,max:100,step:2}
         },
         {
-          field: 'Icon', name: 'Icon', type: 'input', width: 200, sortable: true,
+          field: 'Icon', name: 'Icon', type: 'input',  sortable: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
@@ -142,7 +141,6 @@ export default {
           align: 'center',
           readOnly: true,
           default: false,
-          width: 280,
           cellTableName: 'CgCells',
           cellFormName:'CgSwitch',
           cellTable: function ({fieldValue}) {
@@ -186,6 +184,7 @@ export default {
         {
           field: 'Color',
           name: 'Color',
+          width:80,
           cellTableName:'CgViewerColor',
           cellFormName:'CgColorPicker',
         },
