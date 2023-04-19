@@ -207,7 +207,7 @@ export default {
           virtual: true,
           fixed: 'right',
           name: '操作',
-          width: 200,
+          width: '200px',
           cellTableName: 'CgCells',
           cellTable: [CodeButtonRowEdit, CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },

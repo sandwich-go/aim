@@ -26,6 +26,7 @@ function forceAdjustColumnWidth(table, bindingValue) {
             el.setAttribute("width", max + padding);
         });
     });
+    bindingValue.doLayout && bindingValue.doLayout()
     bindingValue.setLoading(false)
 }
 
@@ -37,13 +38,13 @@ export default {
             inserted(el, binding) {
                 setTimeout(() => {
                     adjustColumnWidth(el, binding.value);
-                }, 100);
+                }, 300);
             },
             componentUpdated(el, binding) {
                 setTimeout(() => {
                     el.classList.add("cg-table-auto-width");
                     adjustColumnWidth(el, binding.value);
-                }, 100);
+                }, 300);
             },
             unbind() {},
         });

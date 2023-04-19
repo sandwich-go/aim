@@ -31,7 +31,10 @@
 
     <el-row class="cg-component-flex-end" style="align-items: start;gap: 3px">
       <el-table
-          v-fit-columns="{ enabled:tablePropertyData.autoWidth,target:thisTarget(),setLoading:(v)=>inLoading=v}"
+          v-fit-columns="{
+            enabled:tablePropertyData.autoWidth,
+            doLayout:()=> {$nextTick(()=>$refs.table.doLayout())},
+            setLoading:(v)=>inLoading=v}"
           ref="table"
           :height="tableHeight()"
           :data="tableData"
@@ -49,9 +52,11 @@
           @row-click="rowClick"
           :row-key="xidRow"
       >
-        <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand" width="30" class-name="cg-column-fixed-width">
+        <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand" width="30"
+                         class-name="cg-column-fixed-width">
           <template slot-scope="scope">
-            <column-expand :expand-config-data="expandConfigData" :key="xidRow(scope.row)" :row="scope.row"></column-expand>
+            <column-expand :expand-config-data="expandConfigData" :key="xidRow(scope.row)"
+                           :row="scope.row"></column-expand>
           </template>
         </el-table-column>
         <el-table-column v-if="dragConfigData.enable" align="center" width="50" class-name="cg-column-fixed-width">
@@ -62,7 +67,8 @@
           </template>
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
-        <el-table-column v-if="selection" class-name="cg-column-fixed-width" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
+        <el-table-column v-if="selection" class-name="cg-column-fixed-width" key="cgt_auto_column_selection" width="50"
+                         type="selection" align="center"/>
         <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
             <el-checkbox :value="scope.row === currentRow"
@@ -466,7 +472,7 @@ export default {
       })
     },
     escKey() {
-      if(this.isInplaceEditor()){
+      if (this.isInplaceEditor()) {
         this.rowInEdit = null
       }
     },
@@ -817,4 +823,5 @@ export default {
   color: #fff !important;
   background: #42b983 !important;
 }
+
 </style>
