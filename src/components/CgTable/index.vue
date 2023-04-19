@@ -151,12 +151,15 @@
           </template>
         </cg-cells>
       </el-col>
-
     </el-row>
 
-    <el-dialog modal width="80%"
-               @close="rowFormEditorClose"
-               :visible.sync="rowFormEditorVisible">
+    <el-dialog
+        modal
+        width="80%"
+        :title="rowFormEditorTitle(rowEditorMode)"
+        :close-on-press-escape="true"
+        @close="rowFormEditorClose"
+        :visible.sync="rowFormEditorVisible">
       <cg-form-input
           ref="cgFrom"
           v-if="rowInEdit && rowFormEditorVisible"
@@ -207,6 +210,7 @@ import {
   mustCtrlData,
   removeCtrlData,
   RowEditorInplace,
+  rowFormEditorTitle,
   setRowInEdit,
   xidRow
 } from "@/components/CgTable/table";
@@ -226,12 +230,18 @@ import CgCells from "@/components/cells/CgCells.vue";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
-import {CgFormInputModeEdit, CgFormInputModeInsert, CgFormInputModeView} from "@/components/CgFormInput";
+import {
+  CgFormInputModeCopy,
+  CgFormInputModeEdit,
+  CgFormInputModeInsert,
+  CgFormInputModeView
+} from "@/components/CgFormInput";
 import CgFormInput from "@/components/CgFormInput/index.vue";
 import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTable/cell";
 import {
   CodeButtonAdd,
-  CodeButtonRefresh, CodeButtonRowCopy,
+  CodeButtonRefresh,
+  CodeButtonRowCopy,
   CodeButtonRowDelete,
   CodeButtonRowEdit,
   CodeButtonRowSaveRemote,
@@ -386,6 +396,7 @@ export default {
     this.getProxySlotName()
   },
   methods: {
+    rowFormEditorTitle,
     formRulesFromSchema,
     validSchema,
     cellTableName,
@@ -556,6 +567,9 @@ export default {
     },
     // 默认的code处理逻辑
     defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
+      const done = (error)=>{
+        !error && (this.rowFormEditorVisible = false)
+      }
       switch (code) {
         case CodeButtonRefresh:
           this.tryProxyQueryData()
@@ -567,22 +581,25 @@ export default {
           this.addRow()
           break
         case CodeButtonRowCopy:
-          this.addRow(this.editConfigData.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))))
+          this.addRow({
+            initRow:this.editConfigData.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))),
+            isCopy:true
+          })
           break
         case CodeButtonRowEdit:
           this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
           break
         case CodeButtonRowDelete:
-          this.tryProxyDeleteRow({row})
+          this.tryProxyDeleteRow(row,{done})
           break
         case CodeButtonRowSaveRemote:
           if (fromForm) {
             this.$refs.cgFrom.validate(() => {
-              this.tryProxySaveRow({row})
+              this.tryProxySaveRow(row,{done})
             })
           } else {
             //fixme inplace下无法使用form的validate
-            this.tryProxySaveRow({row})
+            this.tryProxySaveRow({row,done})
           }
           break
       }
@@ -627,13 +644,16 @@ export default {
         this.rowFormEditorVisible = true
       }
     },
-    addRow(initRow) {
+    addRow({initRow,isCopy}={initRow:{},isCopy:false}) {
       if (jsb.eqNull(this.tableData)) {
         this.tableData = []
       }
       this.rowEditorAlert = ''
       this.rowEditorMode = CgFormInputModeInsert
-      let newRow = mustCtrlData(this.editConfigData.newRow(this.schema,initRow))
+      if(isCopy) {
+        this.rowEditorMode = CgFormInputModeCopy
+      }
+      let newRow = mustCtrlData(this.editConfigData.newRow(this.schema, initRow))
       this.currentRow = newRow
       this.updateRowInEdit(newRow)
 
@@ -654,7 +674,8 @@ export default {
       })
       return info.join(" , ")
     },
-    tryProxyDeleteRow({row}) {
+    // eslint-disable-next-line no-unused-vars
+    tryProxyDeleteRow(row,{done}={}) {
       this.debug && (this.debugMessage = `tryProxyDeleteRow called ${this.summaryRow(row)}`)
       const deleteFunc = this.proxyConfigData.delete
       if (!deleteFunc) {
@@ -668,15 +689,18 @@ export default {
         Promise.resolve(deleteFunc({row})).then(() => {
           this.toastSuccess("删除成功")
           this.tryProxyQueryData()
+          done && done()
         }).catch(e => {
           this.toastError(e)
+          done && done(e)
         }).finally(() => {
           this.inLoading = false
         })
       }
       jsb.cc().confirm(_this, confirmConfig)
     },
-    tryProxySaveRow({row}) {
+    // eslint-disable-next-line no-unused-vars
+    tryProxySaveRow(row,{done}={}) {
       this.debug && (this.debugMessage = `tryProxySaveData called ${this.summaryRow(row)}`)
       const saveFunc = this.proxyConfigData.save
       if (!saveFunc) {
@@ -687,14 +711,17 @@ export default {
       const rowClean = removeCtrlData(jsb.clone(row))
       Promise.resolve(saveFunc({row: rowClean})).then(() => {
         this.toastSuccess("提交成功")
+        done && done()
         this.tryProxyQueryData()
       }).catch(e => {
+        done && done(e)
         this.toastError(e)
       }).finally(() => {
         this.inLoading = false
       })
     },
-    tryProxyQueryData() {
+    // eslint-disable-next-line no-unused-vars
+    tryProxyQueryData({done}={}) {
       this.debug && (this.debugMessage = `tryProxyQueryData called`)
       const queryFunc = this.proxyConfigData.query
       if (!queryFunc) {
@@ -705,7 +732,9 @@ export default {
       Promise.resolve(queryFunc({params: params})).then((ret) => {
         this.tableData = cleanData(jsb.pathGet(ret, 'Data'))
         this.PagerTotal = jsb.pathGet(ret, 'Total', this.tableData.length)
+        done && done()
       }).catch(e => {
+        done && done(e)
         this.toastError(e)
       }).finally(() => {
         this.inLoading = false

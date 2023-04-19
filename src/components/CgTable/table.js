@@ -1,3 +1,5 @@
+import {CgFormInputMode2Title} from "@/components/CgFormInput";
+
 const jsb = require("@sandwich-go/jsb")
 
 
@@ -28,6 +30,10 @@ export function mustCtrlData(row){
 export function removeCtrlData(row){
     delete row[CtrlDataInRowData]
     return row
+}
+
+export function rowFormEditorTitle(mode){
+    return CgFormInputMode2Title[mode]
 }
 
 export function setRowInEdit(row,inEdit=true) {

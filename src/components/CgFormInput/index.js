@@ -5,6 +5,13 @@ export const CgFormInputModeEdit = "CgFormInputModeEdit"
 export const CgFormInputModeCopy = "CgFormInputModeCopy"
 export const CgFormInputModeView = "CgFormInputModeView"
 
+export const CgFormInputMode2Title = {}
+
+CgFormInputMode2Title[CgFormInputModeInsert] = '新建'
+CgFormInputMode2Title[CgFormInputModeEdit] = '编辑'
+CgFormInputMode2Title[CgFormInputModeCopy] = '复制'
+CgFormInputMode2Title[CgFormInputModeView] = '查看'
+
 export function calcLabelWidth(schema) {
     let longestTextWidth = jsb.longestTextWidth(schema.map(function (element) {
         return `${element.name}`;
