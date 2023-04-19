@@ -49,6 +49,14 @@
           @row-click="rowClick"
           :row-key="xidRow"
       >
+        <el-table-column v-if="dragConfigData.enable" align="center" width="50">
+          <template slot-scope="{}" slot="header">
+            <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
+              <span>{{ dragConfigData.label }}<i></i></span>
+            </el-tooltip>
+          </template>
+          <template slot-scope="{}"><i class="el-icon-menu"></i></template>
+        </el-table-column>
         <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand">
           <template slot-scope="scope">
             <column-expand :expand-config-data="expandConfigData" :row="scope.row"></column-expand>
@@ -252,6 +260,7 @@ import {deleteConfirmConfig} from "@/components/CgTable/confirm";
 import CgViewerLabelTooltip from "@/components/cells/viewer/CgViewerTooltip.vue";
 import ColumnHeader from "@/components/CgTable/ColumnHeader.vue";
 import ColumnExpand from "@/components/CgTable/ColumnExpand.vue";
+import {setRowDrag} from "@/components/CgTable/drag";
 
 Vue.use(AutoWidth);
 
@@ -267,6 +276,7 @@ export default {
   mixins: [MixinCgPager, MixinComponentMap],
   components: {ColumnExpand, ColumnHeader, CgViewerLabelTooltip, CgFormInput, CgCells, Loading},
   props: {
+    dragConfig: Object,
     selection: Boolean,// 是否支持选择
     radio: Boolean,// 是否支持radio选择
     debug: Boolean,
@@ -352,6 +362,7 @@ export default {
       tablePropertyData: this.tableProperty,
       editConfigData: this.editConfig,
       pagerConfigData: this.pagerConfig,
+      dragConfigData: this.dragConfig,
       expandConfigData: this.expandConfig,
       forceUpdateWidthFunc: null,
       toolbarConfigData: {
@@ -375,7 +386,8 @@ export default {
       },
       rightBarConfigData: {
         cells: [],
-      }
+      },
+      sortableObj: null,
     }
   },
   created() {
@@ -383,6 +395,7 @@ export default {
     jsb.objectAssignNX(this.tablePropertyData, NewDefaultTableProperty())
     jsb.objectAssignNX(this.proxyConfigData, NewDefaultProxyConfigData())
 
+    this.initDrag()
     this.initPager()
     this.initHeader()
     this.initFooter()
@@ -394,6 +407,12 @@ export default {
 
     // fixme ide问题，错误标注getProxySlotName未被使用
     this.getProxySlotName()
+
+    if (this.dragConfigData.enable) {
+      this.$nextTick(() => {
+        this.sortableObj = setRowDrag(this.$refs.table, this.tableData)
+      })
+    }
   },
   methods: {
     rowFormEditorTitle,
@@ -446,6 +465,13 @@ export default {
         expandContent: function ({row}) {
           return JSON.stringify(row)
         }
+      })
+    },
+    initDrag() {
+      this.dragConfigData = jsb.objectAssignNX(this.dragConfigData, {
+        enable: true,
+        icon: true,
+        label: '顺序',
       })
     },
     initPager() {
@@ -567,7 +593,7 @@ export default {
     },
     // 默认的code处理逻辑
     defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
-      const done = (error)=>{
+      const done = (error) => {
         !error && (this.rowFormEditorVisible = false)
       }
       switch (code) {
@@ -582,24 +608,24 @@ export default {
           break
         case CodeButtonRowCopy:
           this.addRow({
-            initRow:this.editConfigData.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))),
-            isCopy:true
+            initRow: this.editConfigData.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))),
+            isCopy: true
           })
           break
         case CodeButtonRowEdit:
           this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
           break
         case CodeButtonRowDelete:
-          this.tryProxyDeleteRow(row,{done})
+          this.tryProxyDeleteRow(row, {done})
           break
         case CodeButtonRowSaveRemote:
           if (fromForm) {
             this.$refs.cgFrom.validate(() => {
-              this.tryProxySaveRow(row,{done})
+              this.tryProxySaveRow(row, {done})
             })
           } else {
             //fixme inplace下无法使用form的validate
-            this.tryProxySaveRow({row,done})
+            this.tryProxySaveRow(row, {done})
           }
           break
         default:
@@ -646,13 +672,13 @@ export default {
         this.rowFormEditorVisible = true
       }
     },
-    addRow({initRow,isCopy}={initRow:{},isCopy:false}) {
+    addRow({initRow, isCopy} = {initRow: {}, isCopy: false}) {
       if (jsb.eqNull(this.tableData)) {
         this.tableData = []
       }
       this.rowEditorAlert = ''
       this.rowEditorMode = CgFormInputModeInsert
-      if(isCopy) {
+      if (isCopy) {
         this.rowEditorMode = CgFormInputModeCopy
       }
       let newRow = mustCtrlData(this.editConfigData.newRow(this.schema, initRow))
@@ -677,7 +703,7 @@ export default {
       return info.join(" , ")
     },
     // eslint-disable-next-line no-unused-vars
-    tryProxyDeleteRow(row,{done}={}) {
+    tryProxyDeleteRow(row, {done} = {}) {
       this.debug && (this.debugMessage = `tryProxyDeleteRow called ${this.summaryRow(row)}`)
       const deleteFunc = this.proxyConfigData.delete
       if (!deleteFunc) {
@@ -702,7 +728,7 @@ export default {
       jsb.cc().confirm(_this, confirmConfig)
     },
     // eslint-disable-next-line no-unused-vars
-    tryProxySaveRow(row,{done}={}) {
+    tryProxySaveRow(row, {done} = {}) {
       this.debug && (this.debugMessage = `tryProxySaveData called ${this.summaryRow(row)}`)
       const saveFunc = this.proxyConfigData.save
       if (!saveFunc) {
@@ -723,7 +749,7 @@ export default {
       })
     },
     // eslint-disable-next-line no-unused-vars
-    tryProxyQueryData({done}={}) {
+    tryProxyQueryData({done} = {}) {
       this.debug && (this.debugMessage = `tryProxyQueryData called`)
       const queryFunc = this.proxyConfigData.query
       if (!queryFunc) {
@@ -789,4 +815,9 @@ export default {
   overflow-x: auto;
 }
 
+.sortable-ghost {
+  opacity: .8 !important;
+  color: #fff !important;
+  background: #42b983 !important;
+}
 </style>
