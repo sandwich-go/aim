@@ -45,7 +45,7 @@ import {
 } from "@/components/CgTable/table";
 import {
   CodeButtonAdd,
-  CodeButtonCustom,
+  CodeButtonCustom, CodeButtonExpandAll,
   CodeButtonPrint,
   CodeButtonRefresh,
   CodeButtonRowCopy,
@@ -260,6 +260,16 @@ export default {
           Tag: "g2",
           Color: 'blue',
           Checkbox: true
+        },
+        {
+          id: 6,
+          name: 'name6',
+          Link: "http://sample.pmt.centurygame.io/pmt#/dashboard",
+          Icon: '',
+          Online: false,
+          Tag: "g2",
+          Color: 'blue',
+          Checkbox: true
         }
       ],
       nextID: 1000,
@@ -342,7 +352,7 @@ export default {
           {label: "查找", code: 'myLinkSearch', icon: 'el-icon-search', type: 'warning'},
 
         ],
-        rightCells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
+        rightCells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll],
         style: {'padding-bottom': '20px'}
       }
     }

@@ -8,6 +8,7 @@ export const CodeButtonRefresh = "btnRefresh"
 export const CodeButtonCustom = "btnCustom"
 export const CodeButtonPrint = "btnPrint"
 export const CodeButtonAdd = "btnAdd"
+export const CodeButtonExpandAll = "btnExpandAll"
 
 export const CodeButtonRowEdit = "btnRowEdit"
 export const CodeButtonRowDelete = "btnRowDelete"
@@ -27,6 +28,7 @@ code2OptionsMapping[CodeButtonAdd] = {icon: 'el-icon-plus', type: 'primary', cir
 code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primary', circle: true, label: '刷新'}
 code2OptionsMapping[CodeButtonPrint] = {icon: 'el-icon-s-grid', type: 'primary', circle: true, label: '导出'}
 code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-printer', type: 'primary', circle: true, label: '配置'}
+code2OptionsMapping[CodeButtonExpandAll] = {icon: 'el-icon-more', type: 'primary', circle: true, label: '展开所有'}
 
 code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true}
 code2OptionsMapping[CodeButtonRowDelete] = {icon: 'el-icon-delete', label: '删除', type: 'danger', circle: true}

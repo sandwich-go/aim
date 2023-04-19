@@ -51,7 +51,7 @@
       >
         <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand" width="30" class-name="cg-column-fixed-width">
           <template slot-scope="scope">
-            <column-expand :expand-config-data="expandConfigData" :row="scope.row"></column-expand>
+            <column-expand :expand-config-data="expandConfigData" :key="xidRow(scope.row)" :row="scope.row"></column-expand>
           </template>
         </el-table-column>
         <el-table-column v-if="dragConfigData.enable" align="center" width="50" class-name="cg-column-fixed-width">

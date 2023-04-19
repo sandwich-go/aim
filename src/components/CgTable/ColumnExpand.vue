@@ -25,15 +25,18 @@ export default {
     }
   },
   created() {
+    // fixme created调用了两次
     this.freshExpandContent()
   },
   methods:{
     freshExpandContent(){
-      Promise.resolve(this.expandConfigData.expandContent({row:this.row})).then((rsp) => {
-        this.expandContentData = jsb.pathGet(rsp, 'Data', '') || rsp
-      }).catch(e => e).finally(() => {
-        this.expandDetailLoading = false
-      })
+      if(!this.expandContentData) {
+        Promise.resolve(this.expandConfigData.expandContent({row:this.row})).then((rsp) => {
+          this.expandContentData = jsb.pathGet(rsp, 'Data', '') || rsp
+        }).catch(e => e).finally(() => {
+          this.expandDetailLoading = false
+        })
+      }
     }
   }
 }
