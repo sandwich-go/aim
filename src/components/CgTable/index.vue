@@ -33,7 +33,7 @@
       <el-table
           v-fit-columns="{
             enabled:tablePropertyData.autoWidth,
-            doLayout:()=> {$nextTick(()=>$refs.table.doLayout())},
+            doLayout:(done)=> {$nextTick(()=>{$refs.table.doLayout();done && done()})},
             setLoading:(v)=>inLoading=v}"
           ref="table"
           :height="tableHeight()"

@@ -5,29 +5,30 @@ function adjustColumnWidth(table, bindingValue) {
     forceAdjustColumnWidth(table, bindingValue)
 }
 function forceAdjustColumnWidth(table, bindingValue) {
-    const padding = bindingValue.padding || 32
-    bindingValue.setLoading(true)
-    const colgroup = table.querySelector("colgroup");
-    const colDefs = [...colgroup.querySelectorAll("col")];
-    colDefs.forEach((col) => {
-        const clsName = col.getAttribute("name");
-        const cells = [
-            ...table.querySelectorAll(`td.${clsName}`),
-            ...table.querySelectorAll(`th.${clsName}`),
-        ];
-        if (cells[0]?.classList?.contains?.("cg-column-fixed-width")) {
-            return;
-        }
-        const widthList = cells.map((el) => {
-            return el.querySelector(".cell")?.scrollWidth || 0;
+    // doLayout后刷新一次宽度，解决fixed right导致的错乱问题
+    // 注意这里不要主动更新table的组件属性，属性更新会导致componentUpdated，继而更新属性，循环调用
+    bindingValue.doLayout(()=>{
+        const padding = bindingValue.padding || 32
+        const colgroup = table.querySelector("colgroup");
+        const colDefs = [...colgroup.querySelectorAll("col")];
+        colDefs.forEach((col) => {
+            const clsName = col.getAttribute("name");
+            const cells = [
+                ...table.querySelectorAll(`td.${clsName}`),
+                ...table.querySelectorAll(`th.${clsName}`),
+            ];
+            if (cells[0]?.classList?.contains?.("cg-column-fixed-width")) {
+                return;
+            }
+            const widthList = cells.map((el) => {
+                return el.querySelector(".cell")?.scrollWidth || 0;
+            });
+            const max = Math.max(...widthList);
+            table.querySelectorAll(`col[name=${clsName}]`).forEach((el) => {
+                el.setAttribute("width", max + padding);
+            });
         });
-        const max = Math.max(...widthList);
-        table.querySelectorAll(`col[name=${clsName}]`).forEach((el) => {
-            el.setAttribute("width", max + padding);
-        });
-    });
-    bindingValue.doLayout && bindingValue.doLayout()
-    bindingValue.setLoading(false)
+    })
 }
 
 export default {
