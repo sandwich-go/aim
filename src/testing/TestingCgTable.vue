@@ -1,19 +1,21 @@
 <template>
   <div>
     <el-alert
-              style="height: 28px;margin-bottom: 9px;font-weight: bold"
-              :title="alertTitle"
-              show-icon
-              :closable="false"
-              type="info"></el-alert>
+        style="height: 28px;margin-bottom: 9px;font-weight: bold"
+        :title="alertTitle"
+        show-icon
+        :closable="false"
+        type="info"></el-alert>
     <cg-table
+        ref="table"
         :debug="true"
         :schema="schema"
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
         :toolbar-config="toolbarConfig()"
         :selection="true"
-        :table-property="{class:'cg-table-mini-padding',heightSubVH:70}"
+        :expand-config="{}"
+        :table-property="tableProperty"
         :footer-config="footConfig"
         :edit-config="editConfig"
         :right-bar-config="rightBarConfig"
@@ -37,16 +39,23 @@ import CgTable from "@/components/CgTable";
 import {
   EditTriggerDBLClick,
   EditTriggerDBLClickOrSwitcher,
-  EditTriggerSwitchButton, RowEditorFormInput,
+  EditTriggerSwitchButton,
+  RowEditorFormInput,
   RowEditorInplace
 } from "@/components/CgTable/table";
 import {
   CodeButtonAdd,
   CodeButtonCustom,
   CodeButtonPrint,
-  CodeButtonRefresh, CodeButtonRowCopy, CodeButtonRowDelete,
-  CodeButtonRowEdit, CodeButtonRowHistory, CodeButtonRowSaveRemote, CodeLinkFieldCopy
+  CodeButtonRefresh,
+  CodeButtonRowCopy,
+  CodeButtonRowDelete,
+  CodeButtonRowEdit,
+  CodeButtonRowHistory,
+  CodeButtonRowSaveRemote,
+  CodeLinkFieldCopy, CodeLinkFieldJump
 } from "@/components/cells/const";
+
 const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'TestingCgTable',
@@ -59,78 +68,87 @@ export default {
     return {
       alertTitle: '',
       toolbarOptionServer: '',
-      editConfig:{
-        rowEditor:RowEditorFormInput,
-        trigger:EditTriggerDBLClickOrSwitcher,
-        triggerRowFunc:({row})=>{
-          if(row.Online){
+      tableProperty: {class: 'cg-table-mini-padding', heightSubVH: 70, autoWidth: true},
+      editConfig: {
+        rowEditor: RowEditorFormInput,
+        trigger: EditTriggerDBLClickOrSwitcher,
+        triggerRowFunc: ({row}) => {
+          if (row.Online) {
             return "用户在线，不允许调整数据"
           }
-          return {alert:{type:'success',title:'用户不在线，改吧改吧'}}
+          return {alert: {type: 'success', title: '用户不在线，改吧改吧'}}
         }
       },
-      footConfig:{
-        leftSpan:12,
-        leftCells:[{cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}},CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
-        rightCells:[{cell:'CgPager'},{cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}},CodeButtonRefresh],
+      footConfig: {
+        leftSpan: 12,
+        leftCells: [{
+          cell: 'CgAlert',
+          label: "标题内容",
+          style: {width: 'fit'}
+        }, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
+        rightCells: [{cell: 'CgPager'}, {cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}}, CodeButtonRefresh],
       },
-      rightBarConfig:{
-        cells:[CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
+      rightBarConfig: {
+        cells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
       },
       schema: [
         {
-          field: 'id', name: 'ID', type: 'input', sortable: true,
+          field: 'id', name: 'ID', type: 'input', sortable: true,locked:true,
+          cellHeader:[CodeLinkFieldJump],
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
-          summary:true,
-          cellTableName:'CgInput',
+          summary: true,
+          cellTableName: 'CgInput',
           readOnly: true
         },
         {
-          field: 'name', name: 'Name', type: 'input',  sortable: true,uniq:true,
+          field: 'name', name: 'Name', type: 'input', sortable: true, uniq: true,
           placeholder: "xxx.xx",
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          cellTableName:function ({row}){
-            return row.id <5?'CgInput':'CgSelect'
+          cellTableName: function ({row}) {
+            return row.id < 5 ? 'CgInput' : 'CgSelect'
           },
-          cellFormName:function ({row}){
-            return !row.id || row.id <5?'CgInput':'CgSelect'
+          cellFormName: function ({row}) {
+            return !row.id || row.id < 5 ? 'CgInput' : 'CgSelect'
           },
         },
         {
           field: 'Link',
           name: 'Link',
-          showOverflowTooltip:true,
+          showOverflowTooltip: true,
           sortable: true,
           align: 'center',
-          cellTableName:'CgCells',
-          cellTable:function ({fieldValue}){
-            return [CodeLinkFieldCopy, {href:fieldValue,label:'PMT地址',cell:'CgViewerLink'}]
+          cellTableName: 'CgCells',
+          cellTable: function ({fieldValue}) {
+            if(!fieldValue){
+              return []
+            }
+            return [CodeLinkFieldCopy, {href: fieldValue, label: 'PMT地址', cell: 'CgViewerLink'},CodeButtonRowEdit]
           }
         },
         {
-          field: 'Number', name: 'InputNumber', type: 'input',  sortable: true,
+          field: 'Number', name: 'InputNumber', type: 'input', sortable: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          cellTableName:'CgInputNumber',
-          cellFormName:'CgInputNumber',
-          CgFormInput:{min:10,max:100,step:2}
+          cellTableName: 'CgInputNumber',
+          cellFormName: 'CgInputNumber',
+          CgFormInput: {min: 10, max: 100, step: 2}
         },
         {
-          field: 'Icon', name: 'Icon', type: 'input',  sortable: true,
+          field: 'Icon', name: 'Icon', type: 'input', sortable: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          cellTableName:'CgIconSelectorInput',
-          cellFormName:'CgIconSelectorInput',
+          cellTableName: 'CgIconSelectorInput',
+          cellFormName: 'CgIconSelectorInput',
           cellTable: function ({fieldValue}) {
-            return {class:fieldValue,label:fieldValue}
+            return {class: fieldValue, label: fieldValue}
           }
         },
         {
@@ -141,11 +159,8 @@ export default {
           align: 'center',
           readOnly: true,
           default: false,
-          cellTableName: 'CgCells',
-          cellFormName:'CgSwitch',
-          cellTable: function ({fieldValue}) {
-            return [{cell: 'CgAlert', label: fieldValue, style: {width: 'fit'}},CodeButtonRowEdit]
-          }
+          cellTableName: 'CgViewerIconBoolean',
+          cellFormName: 'CgSwitch',
         },
         {
           field: 'Tag',
@@ -153,11 +168,11 @@ export default {
           type: 'switch',
           sortable: true,
           align: 'center',
-          summary:true,
+          summary: true,
           cellTableName: 'CgSelect',
-          cellFormName:'CgSelectInput',
-          options:[
-            {label:"g1",value:"g1"},{label:"g2",value:"g2"}
+          cellFormName: 'CgSelectInput',
+          options: [
+            {label: "g1", value: "g1"}, {label: "g2", value: "g2"}
           ]
         },
         {
@@ -167,34 +182,34 @@ export default {
           sortable: true,
           align: 'center',
           cellTableName: 'CgCheckbox',
-          cellFormName:'CgCheckbox',
+          cellFormName: 'CgCheckbox',
         },
         {
           field: 'Datetime',
           name: 'Datetime',
-          cellTableName:'CgDatePicker',
-          cellFormName:'CgDatePicker',
+          cellTableName: 'CgDatePicker',
+          cellFormName: 'CgDatePicker',
         },
         {
           field: 'DatetimeRange',
           name: 'Datetime',
-          cellTableName:'CgDateRangePicker',
-          cellFormName:'CgDateRangePicker',
+          cellTableName: 'CgDateRangePicker',
+          cellFormName: 'CgDateRangePicker',
         },
         {
           field: 'Color',
           name: 'Color',
-          width:80,
-          cellTableName:'CgViewerColor',
-          cellFormName:'CgColorPicker',
+          width: 80,
+          cellTableName: 'CgViewerColor',
+          cellFormName: 'CgColorPicker',
         },
         {
-          virtual:true,
-          fixed:'right',
+          virtual: true,
+          fixed: 'right',
           name: '操作',
           width: 200,
-          cellTableName:'CgCells',
-          cellTable:[CodeButtonRowEdit,CodeButtonRowSaveRemote,CodeButtonRowDelete,CodeButtonRowCopy,CodeButtonRowHistory]
+          cellTableName: 'CgCells',
+          cellTable: [CodeButtonRowEdit, CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },
       ],
 
@@ -205,30 +220,49 @@ export default {
             Total: _this.tableData.length,
           }
         },
-        delete({row}){
-          jsb.remove(_this.tableData,item => item.id === row.id)
+        delete({row}) {
+          jsb.remove(_this.tableData, item => item.id === row.id)
         },
-        save({row}){
-          if(!row.id){
-            row.id =  _this.nextID
-            _this.nextID += 1
-            //新建数据
-            _this.tableData.push(row)
-          }else{
-            jsb.each(_this.tableData,function (item,index){
-              if(item.id === row.id){
-                _this.tableData[index] = row
-              }
-            })
-          }
-          return true
+        save: ({row}) => {
+          return new Promise((resolve) => {
+            if (!row.id) {
+              row.id = _this.nextID
+              _this.nextID += 1
+              //新建数据
+              _this.tableData.push(row)
+            } else {
+              jsb.each(_this.tableData, function (item, index) {
+                if (item.id === row.id) {
+                  _this.tableData[index] = row
+                }
+              })
+            }
+            resolve(true)
+          })
         },
       },
-      tableData:[
-        {id: 4, name: '1111',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'el-icon-user-solid', Online: true, Tag:"g1",Color:'red'},
-        {id: 5, name: '2222',Link:"http://sample.pmt.centurygame.io/pmt#/dashboard",Icon:'', Online: false, Tag: "g2",Color:'blue',Checkbox:true}
+      tableData: [
+        {
+          id: 4,
+          name: '1111',
+          Link: "http://sample.pmt.centurygame.io/pmt#/dashboard",
+          Icon: 'el-icon-user-solid',
+          Online: true,
+          Tag: "g1",
+          Color: 'red'
+        },
+        {
+          id: 5,
+          name: '2222',
+          Link: "http://sample.pmt.centurygame.io/pmt#/dashboard",
+          Icon: '',
+          Online: false,
+          Tag: "g2",
+          Color: 'blue',
+          Checkbox: true
+        }
       ],
-      nextID:1000,
+      nextID: 1000,
     }
   },
   methods: {
@@ -241,38 +275,46 @@ export default {
     shouldButtonHide({code}) {
       return code === 'codeImport';
     },
-    toolbarConfig(){
+    toolbarConfig() {
       const _this = this
-      return      {
-        leftSpan:21,
-            leftCells: [
+      return {
+        leftSpan: 21,
+        leftCells: [
           {
             cell: 'CgSelect',
             options: [
-              {label:EditTriggerSwitchButton, value:EditTriggerSwitchButton},
+              {label: EditTriggerSwitchButton, value: EditTriggerSwitchButton},
               {label: EditTriggerDBLClick, value: EditTriggerDBLClick},
               {label: EditTriggerDBLClickOrSwitcher, value: EditTriggerDBLClickOrSwitcher},
             ],
-            field:'trigger',
-            data:_this.editConfig,
-            style: {'padding-right': '10px',width:'160px'},
-            change: function (val){
+            field: 'trigger',
+            data: _this.editConfig,
+            style: {'padding-right': '10px', width: '160px'},
+            change: function (val) {
               _this.toolbarAlert('CgSelect trigger', val)
             }
           },
           {
             cell: 'CgSelect',
             options: [
-              {label:RowEditorInplace, value:RowEditorInplace},
+              {label: RowEditorInplace, value: RowEditorInplace},
               {label: RowEditorFormInput, value: RowEditorFormInput},
             ],
-            field:'rowEditor',
-            data:_this.editConfig,
-            change: function (val){
+            field: 'rowEditor',
+            data: _this.editConfig,
+            change: function (val) {
               _this.editConfig.rowEditor = val
               _this.toolbarAlert('CgSelect rowEditor', val)
             },
-            style: {'padding-right': '10px',width:'160px'},
+            style: {'padding-right': '10px', width: '160px'},
+          },
+          {
+            cell: 'CgCheckbox',
+            field: 'autoWidth',
+            data: _this.tableProperty,
+            label: "自适应列宽", change: (val) => {
+              this.toolbarAlert('CgCheckbox', val)
+            }
           },
           {
             cell: 'SlotOptionsUseDefineSlot',
@@ -282,21 +324,26 @@ export default {
           {},
           {cell: 'CgCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CgCheckbox', val)},
           {},
-          {cell: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val),style:{width:"120px"}},
+          {cell: 'CgInput', change: (val) => this.toolbarAlert('CgInput', val), style: {width: "120px"}},
 
-          {cell: 'CgSelectGroup',options:[
-              {label:"g1",options:[{label:"s1",value:"s1"}]},{label:"g2",options:[{label:"s2",value:"s2"}]}],
-            change: (val) => this.toolbarAlert('SlotSelectGroup', val)},
+          {
+            cell: 'CgSelectGroup', options: [
+              {label: "g1", options: [{label: "s1", value: "s1"}]}, {
+                label: "g2",
+                options: [{label: "s2", value: "s2"}]
+              }],
+            change: (val) => this.toolbarAlert('SlotSelectGroup', val)
+          },
 
-          {label: "导入", code: 'myBtnImport',icon: 'el-icon-check'},
+          {label: "导入", code: 'myBtnImport', icon: 'el-icon-check'},
           {label: "导出", code: 'myBtnExport', icon: 'el-icon-check', show: false},
-              {label: "新建", code: 'myBtnNew', icon: 'el-icon-check'},
+          {label: "新建", code: 'myBtnNew', icon: 'el-icon-check'},
           {},
           {label: "查找", code: 'myLinkSearch', icon: 'el-icon-search', type: 'warning'},
 
         ],
-            rightCells:[CodeButtonAdd,CodeButtonRefresh,CodeButtonCustom,CodeButtonPrint],
-            style: {'padding-bottom': '20px'}
+        rightCells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
+        style: {'padding-bottom': '20px'}
       }
     }
   }

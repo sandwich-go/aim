@@ -1,8 +1,11 @@
 function adjustColumnWidth(table, bindingValue) {
-    const padding = bindingValue.padding || 32
     if(!bindingValue.enabled) {
         return
     }
+    forceAdjustColumnWidth(table, bindingValue)
+}
+function forceAdjustColumnWidth(table, bindingValue) {
+    const padding = bindingValue.padding || 32
     bindingValue.setLoading(true)
     const colgroup = table.querySelector("colgroup");
     const colDefs = [...colgroup.querySelectorAll("col")];
@@ -34,13 +37,13 @@ export default {
             inserted(el, binding) {
                 setTimeout(() => {
                     adjustColumnWidth(el, binding.value);
-                }, 300);
+                }, 100);
             },
             componentUpdated(el, binding) {
                 setTimeout(() => {
                     el.classList.add("cg-table-auto-width");
                     adjustColumnWidth(el, binding.value);
-                }, 300);
+                }, 100);
             },
             unbind() {},
         });

@@ -31,7 +31,7 @@
 
     <el-row class="cg-component-flex-end" style="align-items: start;gap: 3px">
       <el-table
-          v-fit-columns="{ enabled:tablePropertyData.autoWidth,setLoading:(v)=>inLoading=v}"
+          v-fit-columns="{ enabled:tablePropertyData.autoWidth,target:thisTarget(),setLoading:(v)=>inLoading=v}"
           ref="table"
           :height="tableHeight()"
           :data="tableData"
@@ -49,6 +49,11 @@
           @row-click="rowClick"
           :row-key="xidRow"
       >
+        <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand">
+          <template slot-scope="scope">
+            <column-expand :expand-config-data="expandConfigData" :row="scope.row"></column-expand>
+          </template>
+        </el-table-column>
         <el-table-column v-if="selection" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
         <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
@@ -67,8 +72,12 @@
               :show-overflow-tooltip="fs.showOverflowTooltip"
               :label="fs.name"
               :fixed="fs.fixed"
+              :sortable="fs.sortable||fs.sortable===undefined"
               :align="fs.align || 'left'"
           >
+            <template slot="header">
+              <column-header :field-schema="fs"/>
+            </template>
             <template slot-scope="scope">
             <span :set="celllName = cellTableName(fs,scope.row)">
               <template v-if="celllName">
@@ -186,8 +195,6 @@
 <script>
 import Vue from 'vue';
 import AutoWidth from './AutoWidth';
-Vue.use(AutoWidth);
-
 import {
   cleanData,
   EditTriggerClick,
@@ -224,13 +231,19 @@ import CgFormInput from "@/components/CgFormInput/index.vue";
 import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTable/cell";
 import {
   CodeButtonAdd,
-  CodeButtonRefresh, CodeButtonRowDelete,
+  CodeButtonRefresh, CodeButtonRowCopy,
+  CodeButtonRowDelete,
   CodeButtonRowEdit,
   CodeButtonRowSaveRemote,
   CodeLinkFieldCopy
 } from "@/components/cells/const";
 import {formRulesFromSchema} from "@/components/CgTable/validate";
 import {deleteConfirmConfig} from "@/components/CgTable/confirm";
+import CgViewerLabelTooltip from "@/components/cells/viewer/CgViewerTooltip.vue";
+import ColumnHeader from "@/components/CgTable/ColumnHeader.vue";
+import ColumnExpand from "@/components/CgTable/ColumnExpand.vue";
+
+Vue.use(AutoWidth);
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -242,7 +255,7 @@ export default {
     }
   },
   mixins: [MixinCgPager, MixinComponentMap],
-  components: {CgFormInput, CgCells, Loading},
+  components: {ColumnExpand, ColumnHeader, CgViewerLabelTooltip, CgFormInput, CgCells, Loading},
   props: {
     selection: Boolean,// 是否支持选择
     radio: Boolean,// 是否支持radio选择
@@ -255,26 +268,27 @@ export default {
     schema: Array,
     toastError: {
       type: Function,
-      default: function (title, {body, id, timeout, config} = {}){
-        jsb.cc().toastError(title,{timeout:timeout||5000,body,id,config})
+      default: function (title, {body, id, timeout, config} = {}) {
+        jsb.cc().toastError(title, {timeout: timeout || 5000, body, id, config})
       }
     },
     toastWarning: {
       type: Function,
-      default: function (title, {body, id, timeout, config} = {}){
-        jsb.cc().toastWarning(title,{timeout:timeout||3000,body,id,config})
+      default: function (title, {body, id, timeout, config} = {}) {
+        jsb.cc().toastWarning(title, {timeout: timeout || 3000, body, id, config})
       }
     },
     toastSuccess: {
       type: Function,
-      default: function (title, {body, id, timeout, config} = {}){
-        jsb.cc().toastSuccess(title,{timeout:timeout||3000,body,id,config})
+      default: function (title, {body, id, timeout, config} = {}) {
+        jsb.cc().toastSuccess(title, {timeout: timeout || 3000, body, id, config})
       }
     },
     editConfig: Object,
     readOnly: Boolean,
     proxyConfig: Object,
     pagerConfig: Object,
+    expandConfig: Object,
     toolbarConfig: Object,
     footerConfig: Object,
     rightBarConfig: Object,
@@ -328,7 +342,8 @@ export default {
       tablePropertyData: this.tableProperty,
       editConfigData: this.editConfig,
       pagerConfigData: this.pagerConfig,
-
+      expandConfigData: this.expandConfig,
+      forceUpdateWidthFunc: null,
       toolbarConfigData: {
         enable: true,
         style: {'padding-bottom': '9px'},
@@ -362,6 +377,7 @@ export default {
     this.initHeader()
     this.initFooter()
     this.initRighter()
+    this.initExpandConfig()
 
     cleanData(this.tableData, this.schema, this.proxyConfigData.item2Row)
     this.tryProxyQueryData()
@@ -376,11 +392,14 @@ export default {
     cellTableConfig,
     xidRow,
     getProxySlotName,
+    forceUpdateWidth() {
+      this.forceUpdateWidthFunc()
+    },
     setDebugMessage(msg) {
       this.debugMessage = msg
     },
     columnClass(fs) {
-      if(fs.width || fs.min_width ||fs.max_midth){
+      if (fs.width || fs.min_width || fs.max_midth) {
         return 'cg-column-fixed-width'
       }
       return ''
@@ -408,6 +427,15 @@ export default {
           this.footerConfigData.rightCells.push({cell: 'CgPager', data: _this.thisTarget()})
         }
       }
+    },
+    initExpandConfig() {
+      this.expandConfigData = jsb.objectAssignNX(this.pagerConfigData, {
+        isHTML: false,
+        // eslint-disable-next-line no-unused-vars
+        expandContent: function ({row}) {
+          return JSON.stringify(row)
+        }
+      })
     },
     initPager() {
       this.pagerConfigData = jsb.objectAssignNX(this.pagerConfigData, NewPagerConfig())
@@ -509,8 +537,8 @@ export default {
       this.setEditRow(row)
     },
     // eslint-disable-next-line no-unused-vars
-    privateCellClickForRow({code, row, jsEvent,fromForm}) {
-      this.privateCellClick({code, row, jsEvent,fromForm})
+    privateCellClickForRow({code, row, jsEvent, fromForm}) {
+      this.privateCellClick({code, row, jsEvent, fromForm})
     },
     privateCellClickForField({code, row, fieldSchema, jsEvent}) {
       this.privateCellClick({code, row, fieldSchema, jsEvent, fieldValue: row[fieldSchema.field]})
@@ -519,15 +547,15 @@ export default {
     privateCellClickForToolbar({code}) {
       this.privateCellClick({code})
     },
-    privateCellClick({code, row, fieldSchema, fieldValue, jsEvent,fromForm}) {
+    privateCellClick({code, row, fieldSchema, fieldValue, jsEvent, fromForm}) {
       this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
       if (this.codeItemClick({code, row, fieldSchema, fieldValue})) {
         return
       }
-      this.defaultCellClick({code, row, fieldValue, jsEvent,fromForm})
+      this.defaultCellClick({code, row, fieldValue, jsEvent, fromForm})
     },
     // 默认的code处理逻辑
-    defaultCellClick({code, row, fieldValue, jsEvent,fromForm}) {
+    defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
       switch (code) {
         case CodeButtonRefresh:
           this.tryProxyQueryData()
@@ -538,6 +566,9 @@ export default {
         case CodeButtonAdd:
           this.addRow()
           break
+        case CodeButtonRowCopy:
+          this.addRow(this.editConfigData.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))))
+          break
         case CodeButtonRowEdit:
           this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
           break
@@ -545,11 +576,11 @@ export default {
           this.tryProxyDeleteRow({row})
           break
         case CodeButtonRowSaveRemote:
-          if(fromForm){
-            this.$refs.cgFrom.validate(()=>{
+          if (fromForm) {
+            this.$refs.cgFrom.validate(() => {
               this.tryProxySaveRow({row})
             })
-          }else{
+          } else {
             //fixme inplace下无法使用form的validate
             this.tryProxySaveRow({row})
           }
@@ -596,13 +627,13 @@ export default {
         this.rowFormEditorVisible = true
       }
     },
-    addRow() {
+    addRow(initRow) {
       if (jsb.eqNull(this.tableData)) {
         this.tableData = []
       }
       this.rowEditorAlert = ''
       this.rowEditorMode = CgFormInputModeInsert
-      let newRow = mustCtrlData(this.editConfigData.newRow(this.schema))
+      let newRow = mustCtrlData(this.editConfigData.newRow(this.schema,initRow))
       this.currentRow = newRow
       this.updateRowInEdit(newRow)
 
@@ -630,20 +661,20 @@ export default {
         this.toastWarning("proxy中未指定delete方法")
         return
       }
-      const confirmConfig = deleteConfirmConfig(this.proxyConfigData,row)
+      const confirmConfig = deleteConfirmConfig(this.proxyConfigData, row)
       const _this = this
-      confirmConfig.doneFunc = ()=>{
+      confirmConfig.doneFunc = () => {
         _this.inLoading = true
         Promise.resolve(deleteFunc({row})).then(() => {
           this.toastSuccess("删除成功")
           this.tryProxyQueryData()
         }).catch(e => {
-          console.error("CgTable tryProxyDeleteRow got err:", e)
+          this.toastError(e)
         }).finally(() => {
           this.inLoading = false
         })
       }
-      jsb.cc().confirm(_this,confirmConfig)
+      jsb.cc().confirm(_this, confirmConfig)
     },
     tryProxySaveRow({row}) {
       this.debug && (this.debugMessage = `tryProxySaveData called ${this.summaryRow(row)}`)
@@ -658,7 +689,7 @@ export default {
         this.toastSuccess("提交成功")
         this.tryProxyQueryData()
       }).catch(e => {
-        console.error("CgTable tryProxySaveData got err:", e)
+        this.toastError(e)
       }).finally(() => {
         this.inLoading = false
       })
@@ -675,7 +706,7 @@ export default {
         this.tableData = cleanData(jsb.pathGet(ret, 'Data'))
         this.PagerTotal = jsb.pathGet(ret, 'Total', this.tableData.length)
       }).catch(e => {
-        console.error("CgTable tryProxyQueryData got err:", e)
+        this.toastError(e)
       }).finally(() => {
         this.inLoading = false
       })
@@ -726,4 +757,5 @@ export default {
 .el-table.cg-table-auto-width .el-table__body-wrapper {
   overflow-x: auto;
 }
+
 </style>

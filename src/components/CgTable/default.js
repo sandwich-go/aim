@@ -9,9 +9,6 @@ export function NewDefaultProxyConfigData() {
         item2Row(item) {
             return item
         },
-        row2Item(row) {
-            return row
-        },
         // eslint-disable-next-line no-unused-vars
         query: function ({params}) {
             return new Promise((resolve, reject) => {
@@ -33,13 +30,13 @@ export function NewDefaultProxyConfigData() {
         // eslint-disable-next-line no-unused-vars
         deleteConfirmConfig: ({row}) => {
             return {}
-        }
+        },
     })
 }
 
 export function NewDefaultTableProperty() {
     return jsb.clone({
-        autoWidth:true,
+        autoWidth: true,
         border: true,
         stripe: true,
         class: 'cg-table-small-padding',
@@ -84,7 +81,11 @@ export function NewEitConfigData() {
         },
         // 拷贝一行数据,逻辑层替换关键数据
         // eslint-disable-next-line no-unused-vars
-        copyRow({row}) {
+        copyRow(row) {
+            jsb.each(['Id', 'ID', 'id'], function (key) {
+                delete row[key]
+            })
+            return row
         },
         // eslint-disable-next-line no-unused-vars
         formEditorCells: function ({row}) {

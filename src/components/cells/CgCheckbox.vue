@@ -6,6 +6,7 @@
       :disabled="disabled"
       size="mini"
       @change="change">
+    {{cc.label}}
   </el-checkbox>
 </template>
 
