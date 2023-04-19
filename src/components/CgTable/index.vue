@@ -254,7 +254,7 @@ import {
 import CgFormInput from "@/components/CgFormInput/index.vue";
 import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTable/cell";
 import {
-  CodeButtonAdd,
+  CodeButtonAdd, CodeButtonExpandAll,
   CodeButtonRefresh,
   CodeButtonRowCopy,
   CodeButtonRowDelete,
@@ -360,6 +360,7 @@ export default {
       // 当前选中的行
       currentRow: null,
       rowInEdit: null,
+      expandAll:false,
       rowFormEditorReadonly: false,
       rowFormEditorVisible: false,
       rowEditorAlert: null,
@@ -473,6 +474,9 @@ export default {
           return JSON.stringify(row)
         }
       })
+    },
+    doLayout(){
+      this.$refs.table.doLayout()
     },
     escKey() {
       if (this.isInplaceEditor()) {
@@ -636,6 +640,14 @@ export default {
           break
         case CodeButtonRowDelete:
           this.tryProxyDeleteRow(row, {done})
+          break
+        case CodeButtonExpandAll:
+          this.expandAll = !this.expandAll
+          if (this.tableData) {
+            this.tableData.forEach(row => {
+              this.$refs.table.toggleRowExpansion(row, this.expandAll)
+            })
+          }
           break
         case CodeButtonRowSaveRemote:
           if (fromForm) {

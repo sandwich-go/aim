@@ -332,6 +332,9 @@ export default {
             data: _this.tableProperty,
             label: "自适应列宽", change: (val) => {
               this.toolbarAlert('CgCheckbox', val)
+              this.$nextTick(()=>{
+                this.$refs.table.doLayout()
+              })
             }
           },
           {
