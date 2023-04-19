@@ -34,7 +34,7 @@
           v-fit-columns="{
             enabled:tablePropertyData.autoWidth,
             doLayout:(done)=> {$nextTick(()=>{$refs.table.doLayout();done && done()})},
-            setLoading:(v)=>inLoading=v}"
+          }"
           ref="table"
           :height="tableHeight()"
           :data="tableData"
@@ -53,13 +53,13 @@
           :row-key="xidRow"
       >
         <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand" width="30"
-                         class-name="cg-column-fixed-width">
+                         class-name="cg-column-fixed-width" fixed="left">
           <template slot-scope="scope">
             <column-expand :expand-config-data="expandConfigData" :key="xidRow(scope.row)"
                            :row="scope.row"></column-expand>
           </template>
         </el-table-column>
-        <el-table-column v-if="dragConfigData.enable" align="center" width="50" class-name="cg-column-fixed-width">
+        <el-table-column v-if="dragConfigData.enable" fixed="left" align="center" width="50" class-name="cg-column-fixed-width">
           <template slot-scope="{}" slot="header">
             <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
               <span>{{ dragConfigData.label }}<i></i></span>
@@ -67,7 +67,7 @@
           </template>
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
-        <el-table-column v-if="selection" class-name="cg-column-fixed-width" key="cgt_auto_column_selection" width="50"
+        <el-table-column v-if="selection" fixed="left" class-name="cg-column-fixed-width" key="cgt_auto_column_selection" width="50"
                          type="selection" align="center"/>
         <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
@@ -88,43 +88,46 @@
               :fixed="fs.fixed"
               :sortable="fs.sortable||fs.sortable===undefined"
               :align="fs.align || 'left'"
+              :fied-schema="fs"
           >
             <template slot="header">
               <column-header :field-schema="fs"/>
             </template>
             <template slot-scope="scope">
-            <span :set="celllName = cellTableName(fs,scope.row)">
-              <template v-if="celllName">
-                <!-- CgCells列表组件单独处理 -->
-                <cg-cells
-                    v-if="celllName=== CellTableCells"
-                    :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
-                    :cells="cellTableConfig(scope.row,fs)"
-                    :should-cell-hide="privateShouldCellHide"
-                    :should-cell-disable="privateShouldCellDisable"
-                    @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
-                ></cg-cells>
-                <component
-                    v-else-if="registeredComponentMap[celllName]"
-                    :is="registeredComponentMap[celllName]"
-                    :data="scope.row"
-                    :options="fs.options || []"
-                    :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
-                    :field-name="fs.field"
-                    :cell-config="cellTableConfig(scope.row,fs)"
-                    @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
-                ></component>
-                <slot
-                    v-else
-                    :name="celllName"
-                    :row="scope.row"
-                    :field-schema="fs"
-                    :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
-                    :fieldValue="scope.row[fs.field]"
-                    :fieldValueVirtual="cellTableConfig(scope.row,fs)"
-                    @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
-                ></slot>
-              </template>
+              <span :set="celllName = cellTableName(fs,scope.row)">
+                <template v-if="celllName">
+                  <!-- CgCells列表组件单独处理 -->
+                  <div style="padding-top: 6px">
+                    <cg-cells
+                        v-if="celllName=== CellTableCells"
+                        :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
+                        :cells="cellTableConfig(scope.row,fs)"
+                        :should-cell-hide="privateShouldCellHide"
+                        :should-cell-disable="privateShouldCellDisable"
+                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    ></cg-cells>
+                      <component
+                          v-else-if="registeredComponentMap[celllName]"
+                          :is="registeredComponentMap[celllName]"
+                          :data="scope.row"
+                          :options="fs.options || []"
+                          :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
+                          :field-name="fs.field"
+                          :cell-config="cellTableConfig(scope.row,fs)"
+                          @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                      ></component>
+                    <slot
+                        v-else
+                        :name="celllName"
+                        :row="scope.row"
+                        :field-schema="fs"
+                        :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
+                        :fieldValue="scope.row[fs.field]"
+                        :fieldValueVirtual="cellTableConfig(scope.row,fs)"
+                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    ></slot>
+                  </div>
+                </template>
               <span v-else>
                   {{ cellTableConfig(scope.row, fs) }}
                 </span>
@@ -229,7 +232,7 @@ import {
 import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
 import {
   flexEndStyle,
-  flexStartStyle,
+  flexStartStyle, headerBackgroundColor,
   NewDefaultProxyConfigData,
   NewDefaultTableProperty,
   NewEitConfigData,
@@ -520,7 +523,14 @@ export default {
     },
     // 每一个cell的属性
     cellStyleWrapper({row, column}) {
-      return this.cellStyle ? this.cellStyle({row, column}) : null;
+      const fs = jsb.find(this.schema,fs => fs.field === column.property)
+      if(fs && fs['columnStyle']){
+        return fs['columnStyle']
+      }
+      if(fs && fs['backgroundAsHeader']) {
+        return {background:headerBackgroundColor}
+      }
+      return this.cellStyle ? this.cellStyle({row, column,fieldSchema:fs}) : null;
     },
     // current-change 回调
     currentChange(row) {

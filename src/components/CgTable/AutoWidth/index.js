@@ -5,7 +5,7 @@ function adjustColumnWidth(table, bindingValue) {
     forceAdjustColumnWidth(table, bindingValue)
 }
 function forceAdjustColumnWidth(table, bindingValue) {
-    // doLayout后刷新一次宽度，解决fixed right导致的错乱问题
+    // doLayout后刷新一次宽度，解决fixed right导致的错乱问题,但是导致了当inplace编辑时填写数据后组件刷新，正在编辑的数据跳出视野
     // 注意这里不要主动更新table的组件属性，属性更新会导致componentUpdated，继而更新属性，循环调用
     bindingValue.doLayout(()=>{
         const padding = bindingValue.padding || 32

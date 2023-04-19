@@ -68,7 +68,10 @@ export default {
     return {
       alertTitle: '',
       toolbarOptionServer: '',
-      tableProperty: {class: 'cg-table-mini-padding', heightSubVH: 70, autoWidth: true},
+      tableProperty: {
+        heightSubVH: 70,
+        autoWidth: true
+      },
       editConfig: {
         rowEditor: RowEditorFormInput,
         trigger: EditTriggerDBLClickOrSwitcher,
@@ -99,8 +102,10 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           summary: true,
-          cellTableName: 'CgInput',
-          readOnly: true
+          cellTableName: 'CgViewerLabel',
+          readOnly: true,
+          fixed:"left",
+          backgroundAsHeader: true,
         },
         {
           field: 'name', name: 'Name', type: 'input', sortable: true, uniq: true,
@@ -204,10 +209,13 @@ export default {
           cellFormName: 'CgColorPicker',
         },
         {
+          field:'virtualAcitons',
           virtual: true,
+          backgroundAsHeader:true,
           fixed: 'right',
           name: '操作',
           width: '200px',
+          isAction:true,
           cellTableName: 'CgCells',
           cellTable: [CodeButtonRowEdit, CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },

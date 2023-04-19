@@ -4,6 +4,9 @@ import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSaveRemote} from
 const jsb = require("@sandwich-go/jsb")
 
 
+export const  headerBackgroundColor = '#dcdee2'
+export const headerColor = '#606266'
+
 export function NewDefaultProxyConfigData() {
     return jsb.clone({
         item2Row(item) {
@@ -42,9 +45,9 @@ export function NewDefaultTableProperty() {
         class: 'cg-table-small-padding',
         showHeader: true,
         highlightCurrentRow: true,
-        headerCellStyle: {textAlign: 'center', padding: '0', color: '#606266', background: '#eceff1'},
+        headerCellStyle: {textAlign: 'center', padding: '0', color: headerColor, background: headerBackgroundColor},
         emptyText: '',
-        rowStyle: {height: "20px", 'padding': 0},// object of function
+        // rowStyle: {height: "30px", 'padding':0},// object of function
         height: null,
         heightSubVH: 0,
     })

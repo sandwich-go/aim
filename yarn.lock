@@ -1109,9 +1109,9 @@
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
 "@sandwich-go/jsb@^0.1.58":
-  version "0.1.79"
-  resolved "https://registry.yarnpkg.com/@sandwich-go/jsb/-/jsb-0.1.79.tgz#9a9af8f1bdc824c495aaedf200c54fa058763400"
-  integrity sha512-KhtKVNse2KlkFvJPBXqEtv1QZquYOwLwzJrrVRI8txH8awi81qlJF+ReLjk2Iw/c6wIs/6tKb9ph0Ldixy3TuQ==
+  version "0.1.80"
+  resolved "https://registry.yarnpkg.com/@sandwich-go/jsb/-/jsb-0.1.80.tgz#e913af67f03291e77b6ad91a33cf0317e03835f3"
+  integrity sha512-v7soeTaoWc3qWJklUXer7MYiQT4xiBGqaOJvtJ1pvdcWGdTQBZFHPRI51EfCCNBhW19zx466vIa89C+TeL3/ew==
   dependencies:
     buffer "^6.0.3"
     clipboard "^2.0.11"
