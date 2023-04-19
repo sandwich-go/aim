@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @keyup.esc="escKey">
     <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
     <el-alert v-if="debug"
               style="height: 28px;margin-bottom: 9px;font-weight: bold"
@@ -49,7 +49,12 @@
           @row-click="rowClick"
           :row-key="xidRow"
       >
-        <el-table-column v-if="dragConfigData.enable" align="center" width="50">
+        <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand" width="30" class-name="cg-column-fixed-width">
+          <template slot-scope="scope">
+            <column-expand :expand-config-data="expandConfigData" :row="scope.row"></column-expand>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="dragConfigData.enable" align="center" width="50" class-name="cg-column-fixed-width">
           <template slot-scope="{}" slot="header">
             <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
               <span>{{ dragConfigData.label }}<i></i></span>
@@ -57,12 +62,7 @@
           </template>
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
-        <el-table-column v-if="expandConfig" type="expand" key="cg-table-column-expand">
-          <template slot-scope="scope">
-            <column-expand :expand-config-data="expandConfigData" :row="scope.row"></column-expand>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="selection" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
+        <el-table-column v-if="selection" class-name="cg-column-fixed-width" key="cgt_auto_column_selection" width="50" type="selection" align="center"/>
         <el-table-column v-if="radio" key="cgt_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
             <el-checkbox :value="scope.row === currentRow"
@@ -188,7 +188,7 @@
         <cg-cells
             :style="flexEndStyle"
             :shortcut-button-options="{circle:false}"
-            :cells="editConfigData.formEditorCells(rowInEdit)"
+            :cells="editConfigData.formEditorCells({row:rowInEdit})"
             :should-cell-hide="privateShouldCellHide"
             :should-cell-disable="privateShouldCellDisable"
             @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEdit,code,jsEvent,fromForm:true})"
@@ -214,12 +214,10 @@ import {
   EditTriggerSwitchButton,
   EventCurrentRowChange,
   getProxySlotName,
-  isRowInEdit,
   mustCtrlData,
   removeCtrlData,
   RowEditorInplace,
   rowFormEditorTitle,
-  setRowInEdit,
   xidRow
 } from "@/components/CgTable/table";
 import MixinCgPager from "@/components/mixins/MixinCgPager.vue";
@@ -467,11 +465,16 @@ export default {
         }
       })
     },
+    escKey() {
+      if(this.isInplaceEditor()){
+        this.rowInEdit = null
+      }
+    },
     initDrag() {
       this.dragConfigData = jsb.objectAssignNX(this.dragConfigData, {
         enable: true,
         icon: true,
-        label: '顺序',
+        label: '',
       })
     },
     initPager() {
@@ -537,7 +540,7 @@ export default {
     },
     privateShouldFieldDisable({row, fieldSchema}) {
       if (this.editConfigData.rowEditor === RowEditorInplace) {
-        return !isRowInEdit(row)
+        return this.rowInEdit !== row
       }
       return this.shouldFieldDisable({row, fieldSchema})
     },
@@ -654,13 +657,7 @@ export default {
       return this.editConfigData.rowEditor === RowEditorInplace
     },
     updateRowInEdit(row) {
-      if (this.rowInEdit) {
-        setRowInEdit(this.rowInEdit, false)
-      }
       this.rowInEdit = row
-      if (this.rowInEdit) {
-        setRowInEdit(this.rowInEdit, true)
-      }
     },
     // 设定当前编辑的行
     setEditRow(row) {

@@ -36,14 +36,6 @@ export function rowFormEditorTitle(mode){
     return CgFormInputMode2Title[mode]
 }
 
-export function setRowInEdit(row,inEdit=true) {
-    row[CtrlDataInRowData].inplaceEdit = inEdit
-}
-
-export  function isRowInEdit(row) {
-    return row[CtrlDataInRowData].inplaceEdit
-}
-
 function autoOption(fieldSchema,fieldVal){
     if(!fieldSchema.filter.options){
         fieldSchema.filter.options = []
