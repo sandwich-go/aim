@@ -602,6 +602,8 @@ export default {
             this.tryProxySaveRow({row,done})
           }
           break
+        default:
+          this.toastWarning(`code ${code} no handler`)
       }
     },
     privateShouldCellDisable({code, scope}) {
