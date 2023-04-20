@@ -5,6 +5,7 @@
       :max="cc.max"
       :step="cc.step"
       :disabled="disabled"
+      :controls-position="cc.controlsPosition"
       :style="cc.style"
       @change="change"
       size="mini"
@@ -23,6 +24,7 @@ export default {
       min: -Infinity,
       max: Infinity,
       step: 1,
+      controlsPosition:'right'
     })
   },
 }

@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     bindAlertStyle() {
-      let style = getItemStyle(this.cc, {height: "28px"})
+      let style = getItemStyle(this.cc, {})
       if (style['width']) {
         style['width'] = parseWidthToPixelString(style['width'], this.cc.label || this.cc.title,
             this.cc.showIcon ? 30 : 0)

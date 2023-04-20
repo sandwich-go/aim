@@ -15,10 +15,12 @@
         :header-config="toolbarConfig()"
         :selection="true"
         :expand-config="{}"
+        :editor-proxy-config="editorProxyConfig"
         :edit-config="editConfig"
         :table-property="tableProperty"
         :footer-config="footConfig"
         :righter-config="rightBarConfig"
+        :visitor-config="tableVisitorData"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{item}">
         <el-select v-model="toolbarOptionServer" size="mini" @change="item.change">
@@ -52,7 +54,7 @@ import {
   CodeButtonRowDelete,
   CodeButtonRowEdit,
   CodeButtonRowHistory,
-  CodeButtonRowSaveRemote, CodeButtonTableSetting,
+  CodeButtonRowSaveRemote, CodeButtonSaveTableData, CodeButtonTableSetting,
   CodeLinkFieldCopy, CodeLinkFieldJump
 } from "@/components/cells/const";
 
@@ -209,24 +211,38 @@ export default {
           cellFormName: 'CgColorPicker',
         },
         {
-          field:'virtualAcitons',
+          field:'virtualActions',
           virtual: true,
           backgroundAsHeader:true,
           fixed: 'right',
           name: '操作',
-          width: '200px',
+          width: 200,
           isAction:true,
           cellTableName: 'CgCells',
           cellTable: [CodeButtonRowEdit, CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },
       ],
 
+      editorProxyConfig:{
+        query() {
+          return new Promise((resolve) => {
+            resolve( {
+              Data: jsb.clone(_this.tableVisitorData), //模拟数据返回
+            })
+          })
+        },
+        saveTableData({tableData}) {
+          _this.tableVisitorData= tableData
+        }
+      },
       proxyConfig: {
         query() {
-          return {
-            Data: jsb.clone(_this.tableData), //模拟数据返回
-            Total: _this.tableData.length,
-          }
+          return new Promise((resolve) => {
+            resolve( {
+              Data: jsb.clone(_this.tableData), //模拟数据返回
+              Total: _this.tableData.length,
+            })
+          })
         },
         delete({row}) {
           jsb.remove(_this.tableData, item => item.id === row.id)
@@ -248,6 +264,11 @@ export default {
             resolve(true)
           })
         },
+      },
+      tableVisitorData:{
+        id:{show:false,groupCouldView:['*'],groupCouldEdit:['server']},
+        name:{show:false,userCouldView:['*'],groupCouldEdit:['server']},
+        Link:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
       },
       tableData: [
         {
@@ -363,7 +384,7 @@ export default {
           {label: "查找", code: 'myLinkSearch', icon: 'el-icon-search', type: 'warning'},
 
         ],
-        rightCells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting],
+        rightCells: [CodeButtonSaveTableData,CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting],
         style: {'padding-bottom': '9px'}
       }
     }

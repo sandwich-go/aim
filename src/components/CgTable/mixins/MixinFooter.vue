@@ -29,7 +29,7 @@ export default {
         }
       })
     })
-    if (!pagerFound) {
+    if (this.pagerConfigRef.enable && !pagerFound) {
       this.footerConfigRef.rightCells.push({cell: 'CgPager', data: this.thisTarget()})
     }
   }

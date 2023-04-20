@@ -59,7 +59,7 @@
                            :row="scope.row"></column-expand>
           </template>
         </el-table-column>
-        <el-table-column v-if="dragConfigRef.enable" fixed="left" align="center" width="50"
+        <el-table-column v-if="dragConfigRef.row" fixed="left" align="center" width="50"
                          class-name="cg-column-fixed-width">
           <template slot-scope="{}" slot="header">
             <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
@@ -79,6 +79,7 @@
         </el-table-column>
         <template v-for="(fs,fieldIndex) in schema">
           <el-table-column
+              v-if="fieldShow(fs)"
               :key="fieldIndex"
               :prop="fs.field"
               :class-name="columnClass(fs)"
@@ -220,7 +221,11 @@
     <cg-drawer :is-show.sync="visitSettingDrawerVisible" :config="{appendToBody:popupAppendToBody}">
       <template v-slot:cg-drawer-body>
         <cg-table-editor
-            :field-schema="schema">
+            editor-table-key="TestTable"
+            :editor-group-options="editorGroupOptions"
+            :editor-user-options="editorUserOptions"
+            :editor-proxy-config="editorProxyConfig"
+            :schema="schema">
         </cg-table-editor>
       </template>
     </cg-drawer>
@@ -261,7 +266,7 @@ import {
   CodeButtonRowCopy,
   CodeButtonRowDelete,
   CodeButtonRowEdit,
-  CodeButtonRowSaveRemote,
+  CodeButtonRowSaveRemote, CodeButtonSaveTableData,
   CodeButtonTableSetting,
   CodeLinkFieldCopy
 } from "@/components/cells/const";
@@ -281,6 +286,8 @@ import MixinFooter from "@/components/CgTable/mixins/MixinFooter.vue";
 import MixinRighter from "@/components/CgTable/mixins/MixinRighter.vue";
 import MixinState from "@/components/CgTable/mixins/MixinState.vue";
 import {directionToolbarSpan} from "@/components/CgTable/mixins/toolbar";
+import MixinTableEditorConfig from "@/components/CgTable/mixins/MixinTableEditorConfig.vue";
+import MixinVisitor from "@/components/CgTable/mixins/MixinVisitor.vue";
 
 Vue.use(AutoWidth);
 
@@ -303,7 +310,9 @@ export default {
     MixinEdit,
     MixinHeader,
     MixinFooter,
-    MixinRighter
+    MixinRighter,
+    MixinTableEditorConfig,
+    MixinVisitor,
   ],
   components: {
     CgTableEditor, CgDrawer, ColumnExpand, ColumnHeader, CgViewerLabelTooltip, CgFormInput, CgCells, Loading
@@ -337,6 +346,7 @@ export default {
   created() {
     cleanData(this.tableData, this.schema, this.proxyConfigRef.item2Row)
     this.tryProxyQueryData()
+    this.schemaApplyVisitorData()
   },
   methods: {
     directionToolbarSpan,
@@ -349,6 +359,9 @@ export default {
     getProxySlotName,
     setDebugMessage(msg) {
       this.debugMessage = msg
+    },
+    fieldShow(fs){
+      return jsb.pathGet(fs,'show',true)
     },
     columnClass(fs) {
       if (fs.width || fs.min_width || fs.max_midth) {
@@ -414,12 +427,15 @@ export default {
     },
     // 默认的code处理逻辑
     defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
-      const done = (error) => {
-        !error && (this.rowFormEditorVisible = false)
+      const done = ({error}) => {
+        !error && (this.rowFormEditorVisible && (this.rowFormEditorVisible = false))
       }
       switch (code) {
         case CodeButtonRefresh:
           this.tryProxyQueryData()
+          break
+        case CodeButtonSaveTableData:
+          this.trySaveTableData()
           break
         case CodeLinkFieldCopy:
           jsb.clipCopy(fieldValue, jsEvent)

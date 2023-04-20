@@ -34,6 +34,12 @@ export default {
         })
       },
       // eslint-disable-next-line no-unused-vars
+      saveTableData: function ({tableData}) {
+        return new Promise((resolve, reject) => {
+          reject("saveTableData not implemented")
+        })
+      },
+      // eslint-disable-next-line no-unused-vars
       delete: function ({params}) {
         return new Promise((resolve, reject) => {
           reject("delete not implemented")
@@ -48,69 +54,52 @@ export default {
   },
   methods:{
     // eslint-disable-next-line no-unused-vars
-    tryProxyDeleteRow(row, {done} = {}) {
-      this.debug && (this.debugMessage = `tryProxyDeleteRow called ${this.summaryRow(row)}`)
-      const deleteFunc = this.proxyConfigRef.delete
-      if (!deleteFunc) {
-        this.toastWarning("proxy中未指定delete方法")
+    tryPromise(funcName,params,done=null,okToast='') {
+      const funcToCall = jsb.pathGet(this.proxyConfigRef,funcName)
+      if (!funcToCall) {
+        const error = `proxy中未指定 ${funcName} 方法`
+        done && done({error})
+        this.toastWarning(error)
         return
       }
+      this.inLoading = true
+      Promise.resolve(funcToCall(params)).then((resp) => {
+        okToast && this.toastSuccess(okToast)
+        done && done({resp})
+      }).catch(error => {
+        done && done({error})
+        this.toastError(error)
+      }).finally(() => {
+        this.inLoading = false
+      })
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    trySaveTableData({done} = {}) {
+      this.tryPromise('saveTableData',this.tableData,done,'数据已保存')
+    },
+    // eslint-disable-next-line no-unused-vars
+    tryProxyDeleteRow(row, {done} = {}) {
+      this.debug && (this.debugMessage = `tryProxyDeleteRow called ${this.summaryRow(row)}`)
       const confirmConfig = deleteConfirmConfig(this.proxyConfigRef, row)
       const _this = this
       confirmConfig.doneFunc = () => {
-        _this.inLoading = true
-        Promise.resolve(deleteFunc({row})).then(() => {
-          this.toastSuccess("删除成功")
-          this.tryProxyQueryData()
-          done && done()
-        }).catch(e => {
-          this.toastError(e)
-          done && done(e)
-        }).finally(() => {
-          this.inLoading = false
-        })
+        _this.tryPromise('delete',{row:row},done,'数据已删除')
       }
       jsb.cc().confirm(_this, confirmConfig)
     },
     // eslint-disable-next-line no-unused-vars
     tryProxySaveRow(row, {done} = {}) {
-      this.debug && (this.debugMessage = `tryProxySaveData called ${this.summaryRow(row)}`)
-      const saveFunc = this.proxyConfigRef.save
-      if (!saveFunc) {
-        this.toastWarning("proxy中未指定save方法")
-        return
-      }
-      this.inLoading = true
-      const rowClean = removeCtrlData(jsb.clone(row))
-      Promise.resolve(saveFunc({row: rowClean})).then(() => {
-        this.toastSuccess("提交成功")
-        done && done()
-        this.tryProxyQueryData()
-      }).catch(e => {
-        done && done(e)
-        this.toastError(e)
-      }).finally(() => {
-        this.inLoading = false
-      })
+      this.tryPromise('save',{row: removeCtrlData(jsb.clone(row))},done,'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
     tryProxyQueryData({done} = {}) {
-      this.debug && (this.debugMessage = `tryProxyQueryData called`)
-      const queryFunc = this.proxyConfigRef.query
-      if (!queryFunc) {
-        return
-      }
-      let params = {}
-      this.inLoading = true
-      Promise.resolve(queryFunc({params: params})).then((ret) => {
-        this.tableData = cleanData(jsb.pathGet(ret, 'Data'))
-        this.PagerTotal = jsb.pathGet(ret, 'Total', this.tableData.length)
-        done && done()
-      }).catch(e => {
-        done && done(e)
-        this.toastError(e)
-      }).finally(() => {
-        this.inLoading = false
+      this.tryPromise('query',{},({resp,error})=>{
+        if(resp){
+          this.tableData = cleanData(jsb.pathGet(resp, 'Data'),this.schema,this.proxyConfigRef.item2Row)
+          this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
+        }
+        done && done({error})
       })
     },
   }
