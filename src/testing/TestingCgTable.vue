@@ -12,13 +12,13 @@
         :schema="schema"
         :should-button-disable="shouldButtonDisable"
         :should-button-hide="shouldButtonHide"
-        :toolbar-config="toolbarConfig()"
+        :header-config="toolbarConfig()"
         :selection="true"
         :expand-config="{}"
+        :edit-config="editConfig"
         :table-property="tableProperty"
         :footer-config="footConfig"
-        :edit-config="editConfig"
-        :right-bar-config="rightBarConfig"
+        :righter-config="rightBarConfig"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{item}">
         <el-select v-model="toolbarOptionServer" size="mini" @change="item.change">
@@ -52,7 +52,7 @@ import {
   CodeButtonRowDelete,
   CodeButtonRowEdit,
   CodeButtonRowHistory,
-  CodeButtonRowSaveRemote,
+  CodeButtonRowSaveRemote, CodeButtonTableSetting,
   CodeLinkFieldCopy, CodeLinkFieldJump
 } from "@/components/cells/const";
 
@@ -69,7 +69,7 @@ export default {
       alertTitle: '',
       toolbarOptionServer: '',
       tableProperty: {
-        heightSubVH: 70,
+        heightSubVH: 80,
         autoWidth: true
       },
       editConfig: {
@@ -363,8 +363,8 @@ export default {
           {label: "查找", code: 'myLinkSearch', icon: 'el-icon-search', type: 'warning'},
 
         ],
-        rightCells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll],
-        style: {'padding-bottom': '20px'}
+        rightCells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting],
+        style: {'padding-bottom': '9px'}
       }
     }
   }

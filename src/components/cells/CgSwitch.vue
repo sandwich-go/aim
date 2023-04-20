@@ -12,9 +12,10 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import {CellNameSwitch} from "@/components/cells/const";
 
 export default {
-  name: 'CgSwitch',
+  name: CellNameSwitch,
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge({

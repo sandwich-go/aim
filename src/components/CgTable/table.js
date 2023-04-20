@@ -9,6 +9,7 @@ export const EditTriggerSwitchButton = "EditTriggerSwitchButton" // 激活编辑
 export const EditTriggerClick = "EditTriggerClick" // 激活编辑状态方式，单击行
 export const EditTriggerDBLClick = "EditTriggerDBLClick"// 激活编辑状态方式，双击行
 export const EditTriggerDBLClickOrSwitcher  = "EditTriggerDBLClickOrSwitcher"
+export const EditTriggerInplaceNone = 'EditTriggerInplaceNone' //inplace模式下开放编辑
 
 export const EventCurrentRowChange = 'EventCurrentRowChange'
 

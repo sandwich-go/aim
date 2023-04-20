@@ -1,4 +1,4 @@
 module.exports = {
   transpileDependencies: true,
-  runtimeCompiler: true
+  runtimeCompiler: true,
 }

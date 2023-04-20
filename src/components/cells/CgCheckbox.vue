@@ -13,9 +13,10 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import {CellNameCheckBox} from "@/components/cells/const";
 
 export default {
-  name: 'CgCheckbox',
+  name: CellNameCheckBox,
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge({

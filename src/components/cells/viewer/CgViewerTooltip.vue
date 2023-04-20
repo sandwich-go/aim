@@ -17,13 +17,11 @@
 
 <script>
 import MixinCellViewerConfig from "@/components/cells/mixins/MixinCellViewerConfig.vue";
-import {isString} from "xe-utils";
+import isString from "@sandwich-go/jsb/isString";
 
 export default {
   name: "CgViewerLabelTooltip",
+  methods: {isString},
   mixins: [MixinCellViewerConfig],
-  methods: {
-    isString,
-  },
 }
 </script>

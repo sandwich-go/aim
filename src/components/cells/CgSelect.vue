@@ -17,9 +17,10 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import {CellNameSelect} from "@/components/cells/const";
 
 export default {
-  name: 'CgSelect',
+  name: CellNameSelect,
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()

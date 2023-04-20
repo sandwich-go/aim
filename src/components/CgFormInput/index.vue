@@ -51,11 +51,10 @@ import {
   commentHTML,
 } from "@/components/CgFormInput/index";
 import CgAlert from "@/components/cells/CgAlert.vue";
-import {isString} from "xe-utils";
 import {cellFormConfig, cellFormName} from "@/components/CgTable/cell";
 import CgViewerLabelTooltip from "@/components/cells/viewer/CgViewerTooltip.vue";
-
-const jsb = require("@sandwich-go/jsb")
+import isString from "@sandwich-go/jsb/isString";
+import jsb from "@sandwich-go/jsb";
 
 export default {
   name: "CgFormInput",
@@ -74,6 +73,7 @@ export default {
     // 最外层调用不要设定rowTop,递归时传递到最底层便于统一回调外层
     rowTop: Object,
     labelWidth: String,
+    popupAppendToBody: Boolean,
   },
   data() {
     return {
@@ -83,11 +83,11 @@ export default {
     }
   },
   methods: {
+    isString,
     commentHTML,
     comment,
     cellFormConfig,
     cellFormName,
-    isString,
     getRow() {
       if (!this.rowTop) {
         return this.data

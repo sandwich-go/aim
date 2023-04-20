@@ -1,14 +1,22 @@
 const jsb = require("@sandwich-go/jsb")
 
+export const CellNameSwitch= 'CgSwitch'
+export const CellNameCheckBox= 'CgCheckbox'
 export const CellNameButton = 'CgButton'
 export const CellNameLink = 'CgViewerLink'
 export const CellNameLabel = 'CgViewerLabel'
+export const CellNameTag = 'CgViewerTag'
+export const CellNameInput = 'CgInput'
+export const CellNameInputTextArea= 'CgInputTextArea'
+export const CellNameSelect = 'CgSelect'
+
 
 export const CodeButtonRefresh = "btnRefresh"
 export const CodeButtonCustom = "btnCustom"
 export const CodeButtonPrint = "btnPrint"
 export const CodeButtonAdd = "btnAdd"
 export const CodeButtonExpandAll = "btnExpandAll"
+export const CodeButtonTableSetting = "btnTableSetting"
 
 export const CodeButtonRowEdit = "btnRowEdit"
 export const CodeButtonRowDelete = "btnRowDelete"
@@ -26,13 +34,17 @@ export const CodeLinkFieldJump = "linkFieldJump"
 export const code2OptionsMapping = {}
 code2OptionsMapping[CodeButtonAdd] = {icon: 'el-icon-plus', type: 'primary', circle: true, label: '新建'}
 code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primary', circle: true, label: '刷新'}
-code2OptionsMapping[CodeButtonPrint] = {icon: 'el-icon-s-grid', type: 'primary', circle: true, label: '导出'}
-code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-printer', type: 'primary', circle: true, label: '配置'}
+code2OptionsMapping[CodeButtonPrint] = {icon: 'el-icon-printer', type: 'primary', circle: true, label: '导出'}
+code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-s-grid', type: 'primary', circle: true, label: '配置'}
 code2OptionsMapping[CodeButtonExpandAll] = {icon: 'el-icon-more', type: 'primary', circle: true, label: '展开所有'}
+code2OptionsMapping[CodeButtonTableSetting] = {icon: 'el-icon-setting',type: 'primary', circle: true, label: '表格设定'}
 
 code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true}
 code2OptionsMapping[CodeButtonRowDelete] = {icon: 'el-icon-delete', label: '删除', type: 'danger', circle: true}
 code2OptionsMapping[CodeButtonRowCopy] = {icon: 'el-icon-copy-document', label: '拷贝', type: 'primary', circle: true}
+
+
+
 code2OptionsMapping[CodeButtonRowSaveLocal] = {
     icon: 'el-icon-s-promotion',
     label: '保存到本地',

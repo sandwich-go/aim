@@ -20,9 +20,10 @@
 import {getItemStyle} from "@/components/CgTable/table";
 import MixinCellViewerConfig from "@/components/cells/mixins/MixinCellViewerConfig.vue";
 import {wrapAsTagList} from "@/utils/jsb";
+import {CellNameTag} from "@/components/cells/const";
 
 export default {
-  name: "CgViewerTag",
+  name: CellNameTag,
   mixins: [MixinCellViewerConfig],
   methods: {
     wrapAsTagList,

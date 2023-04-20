@@ -42,6 +42,5 @@ export function wrapAsTagList(val, options) {
             }))
         }
     }
-    console.log("tagList ",val,tagList)
     return tagList
 }

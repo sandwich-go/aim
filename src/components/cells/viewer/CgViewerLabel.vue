@@ -11,9 +11,10 @@
 <script>
 import MixinCellViewerConfig from "@/components/cells/mixins/MixinCellViewerConfig.vue";
 import {isPlainObject} from "@/utils/jsb";
+import {CellNameLabel} from "@/components/cells/const";
 
 export default {
-  name: "CgViewerLabel",
+  name: CellNameLabel,
   methods: {isPlainObject},
   mixins: [MixinCellViewerConfig],
 }
