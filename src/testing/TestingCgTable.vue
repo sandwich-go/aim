@@ -49,11 +49,11 @@ import {
   CodeButtonAdd,
   CodeButtonCustom, CodeButtonExpandAll,
   CodeButtonPrint,
-  CodeButtonRefresh,
+  CodeButtonRefresh, CodeButtonRowClose,
   CodeButtonRowCopy,
   CodeButtonRowDelete,
   CodeButtonRowEdit,
-  CodeButtonRowHistory,
+  CodeButtonRowHistory, CodeButtonRowMinus,
   CodeButtonRowSaveRemote, CodeButtonSaveTableData, CodeButtonTableSetting,
   CodeLinkFieldCopy, CodeLinkFieldJump
 } from "@/components/cells/const";
@@ -94,7 +94,7 @@ export default {
         rightCells: [{cell: 'CgPager'}, {cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}}, CodeButtonRefresh],
       },
       rightBarConfig: {
-        cells: [CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
+        cells: [CodeButtonAdd,CodeButtonRowMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
       },
       schema: [
         {
@@ -211,15 +211,28 @@ export default {
           cellFormName: 'CgColorPicker',
         },
         {
-          field:'virtualActions',
+          field:'virtualLinks',
+          virtual: true,
+          name: '操作',
+          width: 50,
+          align:'center',
+          fixed: 'right',
+          sortable:false,
+          isAction:true,
+          cellTableName: 'CgCells',
+          cellTable: ['link@'+CodeButtonRowClose]
+        },
+        {
+          field:'virtualButtons',
           virtual: true,
           backgroundAsHeader:true,
           fixed: 'right',
           name: '操作',
           width: 200,
+          sortable:false,
           isAction:true,
           cellTableName: 'CgCells',
-          cellTable: [CodeButtonRowEdit, CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
+          cellTable: [`link@${CodeButtonRowEdit}`, 'link@'+CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },
       ],
 

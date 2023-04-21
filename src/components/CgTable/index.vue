@@ -262,10 +262,10 @@ import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTab
 import {
   CodeButtonAdd,
   CodeButtonExpandAll,
-  CodeButtonRefresh,
+  CodeButtonRefresh, CodeButtonRowClose,
   CodeButtonRowCopy,
   CodeButtonRowDelete,
-  CodeButtonRowEdit,
+  CodeButtonRowEdit, CodeButtonRowMinus,
   CodeButtonRowSaveRemote, CodeButtonSaveTableData,
   CodeButtonTableSetting,
   CodeLinkFieldCopy
@@ -453,6 +453,8 @@ export default {
           this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
           break
         case CodeButtonRowDelete:
+        case CodeButtonRowMinus:
+        case CodeButtonRowClose:
           this.tryProxyDeleteRow(row, {done})
           break
         case CodeButtonTableSetting:

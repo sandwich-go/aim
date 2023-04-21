@@ -45,6 +45,13 @@ export function makeCellFromString(codeOrDescription,...options){
         return makeCell(shortcut,...options)
     }
     const strList = codeOrDescription.split('@')
+    if(strList.length===2 && strList[0]==='link'){
+        const shortcut = code2OptionsMapping[strList[1]]
+        if(shortcut){
+            options.push({cell:CellNameLink,label:''})
+            return makeCell(shortcut,...options)
+        }
+    }
     const cellCode = strList[0]
     let initOption = {code:cellCode}
     jsb.each(strList,function (v,index){

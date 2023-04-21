@@ -84,7 +84,12 @@ export default {
       const confirmConfig = deleteConfirmConfig(this.proxyConfigRef, row)
       const _this = this
       confirmConfig.doneFunc = () => {
-        _this.tryPromise('delete',{row:row},done,'数据已删除')
+        _this.tryPromise('delete',{row:row},function ({error}){
+          if(!error){
+            _this.tryProxyQueryData()
+          }
+          done && done({error})
+        },'数据已删除')
       }
       jsb.cc().confirm(_this, confirmConfig)
     },
