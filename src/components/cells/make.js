@@ -1,7 +1,7 @@
 import jsb from "@sandwich-go/jsb";
 import {CellNameButton, CellNameLabel, CellNameLink, code2OptionsMapping} from "@/components/cells/const";
 
-export function makeCell(initVal,...options) {
+export function makeCell(initVal, ...options) {
     let cc = {
         code: '',
         icon: '',
@@ -9,9 +9,9 @@ export function makeCell(initVal,...options) {
         disabled: false,
         show: true,
         style: {},
-        cell:CellNameLabel,
+        cell: CellNameLabel,
     }
-    cc = Object.assign(cc,initVal)
+    cc = Object.assign(cc, initVal)
     jsb.each(options, function (opt) {
         cc = Object.assign(cc, opt)
     })
@@ -22,15 +22,33 @@ export function makeCell(initVal,...options) {
 }
 
 export function makeCellButton(...options) {
-    return makeCell({type: 'primary',plain: false,cell:CellNameButton},...options)
+    options.push({cell: CellNameButton})
+    return makeCell({type: 'primary', plain: false}, ...options)
 }
 
 export function makeCellLink(...options) {
-    return makeCell({type: 'primary',cell:CellNameLink},...options)
+    options.push({cell: CellNameLink})
+    return makeCell({type: 'primary'}, ...options)
 }
 
-const userCdeBtnPrefix = 'myBtn'
-const userCodeLinkPrefix = 'myLink'
+function parseOptions(options,strList) {
+    jsb.each(strList, function (v, index) {
+        if (index === 0) {
+            return
+        }
+        if (v.startsWith("i_") || v.startsWith("icon_")) {
+            options.icon = v.substr([v.indexOf('_')])
+        }
+        if (v.startsWith("l_") || v.startsWith("label_")) {
+            options.label = v.substr([v.indexOf('_')])
+        }
+        if (v.startsWith("t_") || v.startsWith("type_")) {
+            options.type = v.substr([v.indexOf('_')])
+        }
+    })
+    return options
+}
+
 // myBtnXXXXX@icon_@label_@type_
 // myBtnXXXXX@i_@l_@t_
 
@@ -38,42 +56,28 @@ const userCodeLinkPrefix = 'myLink'
 // myLinkXXXXX@i_@l_@t_
 
 // makeCellFromString 由字符串构造Cell
-export function makeCellFromString(codeOrDescription,...options){
+export function makeCellFromString(codeOrDescription, ...options) {
     // 内置快捷方式
     const shortcut = code2OptionsMapping[codeOrDescription]
-    if(shortcut){
-        return makeCell(shortcut,...options)
+    if (shortcut) {
+        return makeCell(shortcut, ...options)
     }
     const strList = codeOrDescription.split('@')
-    if(strList.length===2 && strList[0]==='link'){
-        const shortcut = code2OptionsMapping[strList[1]]
-        if(shortcut){
-            options.push({cell:CellNameLink,label:''})
-            return makeCell(shortcut,...options)
+    if (strList.length > 1) {
+        const cellCode =  strList[1]
+        const shortcutOption = code2OptionsMapping[cellCode]
+        if(shortcutOption){
+            // 快捷方式禁用文字
+            options.unshift({label:''},parseOptions(strList))
+            options.unshift(shortcutOption)
+        }else{
+            options.unshift(parseOptions({},strList))
+        }
+        if (strList[0] === 'link') {
+            return makeCellLink(...options)
+        } else if (strList[0] === 'btn' || strList[0] === 'button') {
+            return makeCellButton(...options)
         }
     }
-    const cellCode = strList[0]
-    let initOption = {code:cellCode}
-    jsb.each(strList,function (v,index){
-        if(index === 0){
-            return
-        }
-        if(v.startsWith("i_") || v.startsWith("icon_")){
-            initOption.icon = v.substr([v.indexOf('_')])
-        }
-        if(v.startsWith("l_") || v.startsWith("label_")){
-            initOption.label = v.substr([v.indexOf('_')])
-        }
-        if(v.startsWith("t_") || v.startsWith("type_")){
-            initOption.type = v.substr([v.indexOf('_')])
-        }
-    })
-    options.unshift(initOption)
-    if(cellCode.startsWith(userCdeBtnPrefix)){
-        return makeCellButton(...options)
-    }
-    if(cellCode.startsWith(userCodeLinkPrefix)){
-        return makeCellLink(...options)
-    }
-    return makeCell({label:codeOrDescription},...options)
+    return makeCell({label: codeOrDescription}, ...options)
 }
