@@ -1,30 +1,26 @@
 <script>
+
+import {
+  CodeButtonRowSelectedClose,
+  CodeButtonRowSelectedDelete,
+  CodeButtonRowSelectedMinus
+} from "@/components/cells/const";
+
 const jsb = require("@sandwich-go/jsb")
 import {headerBackgroundColor, headerColor} from "@/components/CgTable/default";
+import {removeCtrlData} from "@/components/CgTable/table";
+import {CreateMixinState} from "@/components/CgTable/mixins/CreateMixinState";
 
 export default {
   name: 'MixinBasicProperty',
+  mixins:[CreateMixinState()],
   props: {
     tableDivStyle: Object,
     cellStyle: Function,
     rowStyle: Function,
     tableProperty: Object,
-    // eslint-disable-next-line no-unused-vars
-    shouldCellDisable: {
-      type: Function,
-      // eslint-disable-next-line no-unused-vars
-      default: function ({code, scope}) {
-        return false
-      },
-    },
-    // eslint-disable-next-line no-unused-vars
-    shouldCellHide: {
-      type: Function,
-      // eslint-disable-next-line no-unused-vars
-      default: function ({code, scope}) {
-        return false
-      },
-    },
+    shouldCellDisable: [Array, Function],
+    shouldCellHide: [Array, Function],
     toastError: {
       type: Function,
       default: function (title, {body, id, timeout, config} = {}) {
@@ -64,24 +60,46 @@ export default {
       heightSubVH: 0,
     })
   },
-  methods:{
-    privateShouldCellDisable({code, scope}) {
-      if (scope.disable || scope.disabled) {
+  methods: {
+    // getSelectionRowList 获取选中行，包含__xx_tmp数据
+    getSelectionRows(clean=false) {
+      return clean?removeCtrlData(jsb.clone(this.getTableRef().selection)):this.getTableRef().selection
+    },
+    privateShouldCellDisable({code, cell, row, fieldSchema}) {
+      if(code === CodeButtonRowSelectedMinus ||
+          code === CodeButtonRowSelectedClose ||
+          code === CodeButtonRowSelectedDelete) {
+        return this.getSelectionRows().length === 0
+      }
+      if (cell.disable || cell.disabled) {
         return true
       }
       if (!this.shouldCellDisable) {
         return false
       }
-      return this.shouldCellDisable({code, scope})
+      if (jsb.isArray(this.shouldCellDisable)) {
+        jsb.each(this.shouldCellDisable, item => () => {
+          item({code, cell, row, fieldSchema})
+        })
+      }
+      return this.shouldCellDisable({code, cell, row, fieldSchema})
     },
-    privateShouldCellHide({code, scope}) {
-      if (scope.hide || jsb.pathGet(scope, 'show', true)) {
+    privateShouldCellHide({code, cell, row, fieldSchema}) {
+      if (!cell) {
+        return false
+      }
+      if (cell.hide || !jsb.pathGet(cell, 'show', true)) {
         return true
       }
       if (!this.shouldCellHide) {
         return false
       }
-      return this.shouldCellHide({code, scope})
+      if (jsb.isArray(this.shouldCellHide)) {
+        jsb.each(this.shouldCellHide, item => () => {
+          item({code, cell, row, fieldSchema})
+        })
+      }
+      return this.shouldCellHide({code, cell, row, fieldSchema})
     },
     // 每一个cell的属性
     cellStyleWrapper({row, column}) {

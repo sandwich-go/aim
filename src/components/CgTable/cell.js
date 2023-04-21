@@ -23,7 +23,7 @@ export function cellTableName(fs,row) {
 }
 
 export function cellTableConfig(row, fieldSchema) {
-    let cellTable = jsb.pathGet(fieldSchema, ConstCellTable)
+    let cellTable = jsb.pathGet(fieldSchema, ConstCellTable,{})
     if (jsb.isFunction(cellTable)) {
         cellTable = cellTable({row, fieldSchema, fieldValue: jsb.pathGet(row, fieldSchema.field)})
     }

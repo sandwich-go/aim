@@ -21,6 +21,9 @@ export default {
       item2Row(item) {
         return item
       },
+      row2Item(row){
+        return row
+      },
       // eslint-disable-next-line no-unused-vars
       query: function ({params}) {
         return new Promise((resolve, reject) => {
@@ -34,15 +37,21 @@ export default {
         })
       },
       // eslint-disable-next-line no-unused-vars
-      saveTableData: function ({tableData}) {
+      delete: function ({row}) {
         return new Promise((resolve, reject) => {
-          reject("saveTableData not implemented")
+          reject("delete not implemented")
         })
       },
       // eslint-disable-next-line no-unused-vars
-      delete: function ({params}) {
+      deleteRows: function ({rows}) {
         return new Promise((resolve, reject) => {
-          reject("delete not implemented")
+          reject("deleteRows not implemented")
+        })
+      },
+      // eslint-disable-next-line no-unused-vars
+      saveTableData: function ({tableData}) {
+        return new Promise((resolve, reject) => {
+          reject("saveTableData not implemented")
         })
       },
       // 删除时的asking回调
@@ -79,20 +88,38 @@ export default {
       this.tryPromise('saveTableData',this.tableData,done,'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
-    tryProxyDeleteRow(row, {done} = {}) {
-      this.debug && (this.debugMessage = `tryProxyDeleteRow called ${this.summaryRow(row)}`)
-      const confirmConfig = deleteConfirmConfig(this.proxyConfigRef, row)
+    tryProxyDelete(row, {done} = {}) {
+      this.deleteAsking('delete',{row},{done})
+    },
+    // eslint-disable-next-line no-unused-vars
+    tryProxyDeleteRows(rows, {done} = {}) {
+      if(rows.length === 0){
+        done && done()
+        return
+      }
+      this.deleteAsking('deleteRows',{rows},{done})
+    },
+    // eslint-disable-next-line no-unused-vars
+    deleteAsking(funcName,{row,rows}, {done} = {}) {
+      this.debug && (this.debugMessage = `${funcName} called`)
       const _this = this
-      confirmConfig.doneFunc = () => {
-        _this.tryPromise('delete',{row:row},function ({error}){
+      const confirmDoneFunc = ()=>{
+        _this.tryPromise(funcName,{row,rows},function ({error}){
           if(!error){
             _this.tryProxyQueryData()
           }
           done && done({error})
         },'数据已删除')
       }
-      jsb.cc().confirm(_this, confirmConfig)
+      const confirmConfig = deleteConfirmConfig(this.proxyConfigRef, {row,rows})
+      if(confirmConfig.enable){
+        confirmConfig.doneFunc = confirmDoneFunc
+        jsb.cc().confirm(_this, confirmConfig)
+      }else{
+        confirmDoneFunc()
+      }
     },
+
     // eslint-disable-next-line no-unused-vars
     tryProxySaveRow(row, {done} = {}) {
       this.tryPromise('save',{row: removeCtrlData(jsb.clone(row))},done,'数据已保存')

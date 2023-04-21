@@ -8,7 +8,7 @@ export default {
   mixins: [MixinCellEditorConfig],
   computed: {
     fieldValue() {
-      return this.cellConfig || jsb.pathGet(this.data,this.fieldName)
+      return (jsb.isEmpty(this.cellConfig) && jsb.isPlainObject(this.cellConfig))? jsb.pathGet(this.data,this.fieldName):this.cellConfig
     },
   },
 }

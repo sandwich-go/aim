@@ -37,13 +37,13 @@ function parseOptions(options,strList) {
             return
         }
         if (v.startsWith("i_") || v.startsWith("icon_")) {
-            options.icon = v.substr([v.indexOf('_')])
+            options.icon = v.substr([v.indexOf('_')+1])
         }
         if (v.startsWith("l_") || v.startsWith("label_")) {
-            options.label = v.substr([v.indexOf('_')])
+            options.label = v.substr([v.indexOf('_')+1])
         }
         if (v.startsWith("t_") || v.startsWith("type_")) {
-            options.type = v.substr([v.indexOf('_')])
+            options.type = v.substr([v.indexOf('_')+1])
         }
     })
     return options

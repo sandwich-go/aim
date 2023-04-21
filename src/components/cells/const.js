@@ -32,7 +32,9 @@ export const CodeButtonRowClose = "btnRowClose"
 export const CodeButtonRowDelete = "btnRowDelete"
 export const CodeButtonRowMinus = "btnRowMinus"
 
-export const CodeButtonRowMinusSelected = "btnRowMinusSelected"
+export const CodeButtonRowSelectedMinus = "btnRowSelectedMinus"
+export const CodeButtonRowSelectedDelete = "btnRowSelectedDelete"
+export const CodeButtonRowSelectedClose = "btnRowSelectedClose"
 
 
 export const CodeLinkFieldCopy = "linkFieldCopy"
@@ -53,10 +55,13 @@ code2OptionsMapping[CodeButtonSaveTableData] = {icon: 'el-icon-check', type: 'pr
 code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true}
 code2OptionsMapping[CodeButtonRowCopy] = {icon: 'el-icon-copy-document', label: '拷贝', type: 'primary', circle: true}
 
-code2OptionsMapping[CodeButtonRowDelete] = {icon: 'el-icon-delete', label: '删除', type: 'danger', circle: true}
 code2OptionsMapping[CodeButtonRowMinus] = {icon: 'el-icon-minus', label: '删除', type: 'danger', circle: true}
+code2OptionsMapping[CodeButtonRowDelete] = {icon: 'el-icon-delete', label: '删除', type: 'danger', circle: true}
 code2OptionsMapping[CodeButtonRowClose] = {icon: 'el-icon-close', label: '删除', type: 'danger', circle: true}
 
+code2OptionsMapping[CodeButtonRowSelectedMinus] = {icon: 'el-icon-minus', label: '删除选中行', type: 'danger', circle: true}
+code2OptionsMapping[CodeButtonRowSelectedDelete] = {icon: 'el-icon-delete', label: '删除选中行', type: 'danger', circle: true}
+code2OptionsMapping[CodeButtonRowSelectedClose] = {icon: 'el-icon-close', label: '删除选中行', type: 'danger', circle: true}
 
 
 code2OptionsMapping[CodeButtonRowSaveLocal] = {

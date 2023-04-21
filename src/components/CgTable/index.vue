@@ -98,44 +98,48 @@
             </template>
             <template slot-scope="scope">
               <span :set="celllName = cellTableName(fs,scope.row)">
-                <template v-if="celllName">
+                <span :set="celllConfig = cellTableConfig(scope.row,fs)">
+                  <template v-if="celllName">
                   <!-- CgCells列表组件单独处理 -->
                   <div style="padding-top: 6px">
                     <cg-cells
                         v-if="celllName=== CellTableCells"
                         :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
-                        :cells="cellTableConfig(scope.row,fs)"
+                        :cells="celllConfig"
                         :column-width="fs.width"
-                        :should-cell-hide="privateShouldCellHide"
-                        :should-cell-disable="privateShouldCellDisable"
+                        :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
+                        :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
                         @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                     ></cg-cells>
+                    <template v-else-if="registeredComponentMap[celllName]">
                       <component
-                          v-else-if="registeredComponentMap[celllName]"
+                          v-if="!privateShouldCellHide({cell:celllConfig,code:celllConfig.code||'',row:scope.row,fieldSchema:fs})"
                           :is="registeredComponentMap[celllName]"
                           :data="scope.row"
                           :options="fs.options || []"
-                          :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
+                          :disabled="privateShouldCellDisable({cell:celllConfig,code:celllConfig.code||'',row:scope.row,fieldSchema:fs})"
                           :field-name="fs.field"
                           :column-width="fs.width"
-                          :cell-config="cellTableConfig(scope.row,fs)"
+                          :cell-config="celllConfig"
                           @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                       ></component>
+                    </template>
                     <slot
-                        v-else
+                        v-else-if="!privateShouldCellHide({cell:celllConfig,code:celllConfig.code||'',row:scope.row,fieldSchema:fs})"
                         :name="celllName"
                         :row="scope.row"
                         :field-schema="fs"
                         :column-width="fs.width"
-                        :disabled="privateShouldFieldDisable({row:scope.row,fieldSchema:fs})"
+                        :disabled="privateShouldCellDisable({row:scope.row,fieldSchema:fs})"
                         :fieldValue="scope.row[fs.field]"
                         :fieldValueVirtual="cellTableConfig(scope.row,fs)"
                         @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                     ></slot>
                   </div>
                 </template>
-              <span v-else>
-                  {{ cellTableConfig(scope.row, fs) }}
+                  <span v-else>
+                    {{ cellTableConfig(scope.row, fs) }}
+                  </span>
                 </span>
             </span>
             </template>
@@ -262,11 +266,17 @@ import {CellTableCells, cellTableConfig, cellTableName} from "@/components/CgTab
 import {
   CodeButtonAdd,
   CodeButtonExpandAll,
-  CodeButtonRefresh, CodeButtonRowClose,
+  CodeButtonRefresh,
+  CodeButtonRowClose,
   CodeButtonRowCopy,
   CodeButtonRowDelete,
-  CodeButtonRowEdit, CodeButtonRowMinus,
-  CodeButtonRowSaveRemote, CodeButtonSaveTableData,
+  CodeButtonRowEdit,
+  CodeButtonRowMinus,
+  CodeButtonRowSaveRemote,
+  CodeButtonRowSelectedClose,
+  CodeButtonRowSelectedDelete,
+  CodeButtonRowSelectedMinus,
+  CodeButtonSaveTableData,
   CodeButtonTableSetting,
   CodeLinkFieldCopy
 } from "@/components/cells/const";
@@ -455,7 +465,12 @@ export default {
         case CodeButtonRowDelete:
         case CodeButtonRowMinus:
         case CodeButtonRowClose:
-          this.tryProxyDeleteRow(row, {done})
+          this.tryProxyDelete(row, {done})
+          break
+        case CodeButtonRowSelectedMinus:
+        case CodeButtonRowSelectedDelete:
+        case CodeButtonRowSelectedClose:
+          this.tryProxyDeleteRows(this.getSelectionRows(true))
           break
         case CodeButtonTableSetting:
           this.visitSettingDrawerVisible = true

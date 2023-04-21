@@ -10,8 +10,8 @@
         ref="table"
         :debug="true"
         :schema="schema"
-        :should-button-disable="shouldButtonDisable"
-        :should-button-hide="shouldButtonHide"
+        :should-cell-disable="shouldCellDisable"
+        :should-cell-hide="shouldCellHide"
         :header-config="toolbarConfig()"
         :selection="true"
         :expand-config="{}"
@@ -53,8 +53,8 @@ import {
   CodeButtonRowCopy,
   CodeButtonRowDelete,
   CodeButtonRowEdit,
-  CodeButtonRowHistory, CodeButtonRowMinus,
-  CodeButtonRowSaveRemote, CodeButtonSaveTableData, CodeButtonTableSetting,
+  CodeButtonRowHistory,
+  CodeButtonRowSaveRemote, CodeButtonRowSelectedMinus, CodeButtonSaveTableData, CodeButtonTableSetting,
   CodeLinkFieldCopy, CodeLinkFieldJump
 } from "@/components/cells/const";
 
@@ -94,7 +94,7 @@ export default {
         rightCells: [{cell: 'CgPager'}, {cell: 'CgAlert', label: "标题内容", style: {width: 'fit'}}, CodeButtonRefresh],
       },
       rightBarConfig: {
-        cells: [CodeButtonAdd,CodeButtonRowMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
+        cells: [CodeButtonAdd,CodeButtonRowSelectedMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
       },
       schema: [
         {
@@ -260,6 +260,9 @@ export default {
         delete({row}) {
           jsb.remove(_this.tableData, item => item.id === row.id)
         },
+        deleteRows({rows}) {
+          jsb.remove(_this.tableData, item => jsb.find(rows,v=>v.id === item.id))
+        },
         save: ({row}) => {
           return new Promise((resolve) => {
             if (!row.id) {
@@ -321,11 +324,20 @@ export default {
     toolbarAlert(name, val) {
       this.alertTitle = `toolbar ${name} change to ${val}`
     },
-    shouldButtonDisable({code}) {
-      return code === 'codeImport';
+    shouldCellDisable({code,row,fieldSchema}) {
+      if(row && code===CodeButtonRowDelete){
+        return row.Online
+      }
+      if(row && fieldSchema){
+        return fieldSchema.field ==='name' && row[fieldSchema.field]<2000
+      }
+      return false
     },
-    shouldButtonHide({code}) {
-      return code === 'codeImport';
+    shouldCellHide({code,row}) {
+      if(row && code===CodeButtonRowDelete){
+        return row.Checkbox
+      }
+      return false
     },
     toolbarConfig() {
       const _this = this
@@ -389,12 +401,11 @@ export default {
               }],
             change: (val) => this.toolbarAlert('SlotSelectGroup', val)
           },
-
-          {label: "导入", code: 'myBtnImport', icon: 'el-icon-check'},
-          {label: "导出", code: 'myBtnExport', icon: 'el-icon-check', show: false},
-          {label: "新建", code: 'myBtnNew', icon: 'el-icon-check'},
+          'btn@myImport@label_导入@icon_el-icon-check',
+          {label: "导出", code: 'btn@myExport', icon: 'el-icon-check', show: false},
+          {label: "新建", code: 'btn@myNew', icon: 'el-icon-check'},
           {},
-          {label: "查找", code: 'myLinkSearch', icon: 'el-icon-search', type: 'warning'},
+          {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
 
         ],
         rightCells: [CodeButtonSaveTableData,CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting],
