@@ -20,18 +20,20 @@
             <cg-viewer-label-tooltip :cell-config="{label:formLabel(fs),tips:fs.tips}"></cg-viewer-label-tooltip>
           </span>
           <span :set="celllName = cellFormName(fs,getRow())">
-            <div class="cg-component-flex-start" v-if="celllName && registeredComponentMap[celllName]">
-              <component
-                  :is="registeredComponentMap[celllName]"
-                  :data="data"
-                  :field-name="fs.field"
-                  :options="fs.options || []"
-                  :style-base="{width:'100%'}"
-                  :cell-config="cellFormConfig(fs)"
-                  :disabled="privateShouldFieldDisable(fs)"
-                  :key="`fom_component_field_${fs.field}`"
-              ></component>
-            </div>
+            <span :set="celllConfig = cellFormConfig(fs)">
+              <div class="cg-component-flex-start" v-if="celllName && registeredComponentMap[celllName]">
+                <component
+                    :is="registeredComponentMap[celllName]"
+                    :data="data"
+                    :field-name="fs.field"
+                    :options="fs.options || []"
+                    :style-base="{width:'100%'}"
+                    :cell-config="celllConfig"
+                    :disabled="privateShouldCellDisable({fieldSchema:fs,cell:celllConfig ||{}})"
+                    :key="`fom_component_field_${fs.field}`"
+                ></component>
+              </div>
+            </span>
           </span>
           <span v-if="fs.comment" class="cg-form-item-comment">{{ comment(getRow(), fs) }}</span>
           <span v-if="fs.commentHTML" class="cg-form-item-comment" v-html="commentHTML(getRow(),fs)"></span>
@@ -69,7 +71,7 @@ export default {
       default: null,
     },
     rules: Object,
-    shouldFieldDisable: Function,
+    shouldCellDisable: Function,
     // 最外层调用不要设定rowTop,递归时传递到最底层便于统一回调外层
     rowTop: Object,
     labelWidth: String,
@@ -104,7 +106,7 @@ export default {
         }
       })
     },
-    privateShouldFieldDisable(fieldSchema) {
+    privateShouldCellDisable({fieldSchema,cell}) {
       if (this.mode === CgFormInputModeView) {
         return true
       }
@@ -116,7 +118,7 @@ export default {
         // 只允许插入时有效，创建后不允许编辑
         return this.mode !== CgFormInputModeInsert
       }
-      return this.shouldFieldDisable({fieldSchema, row: this.getRow()})
+      return this.shouldCellDisable({fieldSchema,cell, row: this.getRow()})
     },
   }
 }

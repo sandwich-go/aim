@@ -194,7 +194,7 @@
           :key="xidRow(rowInEdit)"
           :schema="validSchema(schema)"
           :data="rowInEdit"
-          :should-field-disable="privateShouldFieldDisable"
+          :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
           :alert-info="rowEditorAlert"
           :mode="rowEditorMode"
           :rules="formRulesFromSchema(schema,{row:rowInEdit,data:tableData})"
@@ -240,14 +240,12 @@
 import Vue from 'vue';
 import AutoWidth from './AutoWidth';
 import {
-  cleanData,
-  EditTriggerInplaceNone,
+  cleanData, EditTriggerInplaceNone,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
   getProxySlotName,
   mustCtrlData,
-  removeCtrlData,
-  RowEditorInplace,
+  removeCtrlData, RowEditorInplace,
   rowFormEditorTitle,
   xidRow
 } from "@/components/CgTable/table";
@@ -414,12 +412,6 @@ export default {
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
     },
-    privateShouldFieldDisable({row, fieldSchema}) {
-      if (this.editConfigRef.rowEditor === RowEditorInplace && !this.isEditTriggerAccepted(EditTriggerInplaceNone)) {
-        return this.rowInEdit !== row
-      }
-      return this.shouldFieldDisable({row, fieldSchema})
-    },
     // eslint-disable-next-line no-unused-vars
     privateCellClickForRow({code, row, jsEvent, fromForm}) {
       this.privateCellClick({code, row, jsEvent, fromForm})
@@ -494,6 +486,45 @@ export default {
     },
     rowFormEditorClose() {
       // this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
+    },
+    privateShouldCellDisable({code, cell, row, fieldSchema}) {
+      if(code === CodeButtonRowSelectedMinus ||
+          code === CodeButtonRowSelectedClose ||
+          code === CodeButtonRowSelectedDelete) {
+        return this.getSelectionRows().length === 0
+      }
+      if (this.editConfigRef.rowEditor === RowEditorInplace && !this.isEditTriggerAccepted(EditTriggerInplaceNone)) {
+        return this.rowInEdit !== row
+      }
+      if (cell.disable || cell.disabled) {
+        return true
+      }
+      if (!this.shouldCellDisable) {
+        return false
+      }
+      if (jsb.isArray(this.shouldCellDisable)) {
+        jsb.each(this.shouldCellDisable, item => () => {
+          item({code, cell, row, fieldSchema})
+        })
+      }
+      return this.shouldCellDisable({code, cell, row, fieldSchema})
+    },
+    privateShouldCellHide({code, cell, row, fieldSchema}) {
+      if (!cell) {
+        return false
+      }
+      if (cell.hide || !jsb.pathGet(cell, 'show', true)) {
+        return true
+      }
+      if (!this.shouldCellHide) {
+        return false
+      }
+      if (jsb.isArray(this.shouldCellHide)) {
+        jsb.each(this.shouldCellHide, item => () => {
+          item({code, cell, row, fieldSchema})
+        })
+      }
+      return this.shouldCellHide({code, cell, row, fieldSchema})
     },
   }
 }
