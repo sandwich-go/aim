@@ -49,11 +49,11 @@ function parseOptions(options,strList) {
     return options
 }
 
-// myBtnXXXXX@icon_@label_@type_
-// myBtnXXXXX@i_@l_@t_
+// btn@code@icon_@label_@type_
+// btn@code@i_@l_@t_
 
-// myLinkXXXXX@icon_@label_@type_
-// myLinkXXXXX@i_@l_@t_
+// link@code@icon_@label_@type_
+// link@code@i_@l_@t_
 
 // makeCellFromString 由字符串构造Cell
 export function makeCellFromString(codeOrDescription, ...options) {
