@@ -266,8 +266,8 @@ export default {
         },
       },
       tableVisitorData:{
-        id:{show:false,groupCouldView:['*'],groupCouldEdit:['server']},
-        name:{show:false,userCouldView:['*'],groupCouldEdit:['server']},
+        id:{show:true,groupCouldView:['*'],groupCouldEdit:['server']},
+        name:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
         Link:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
       },
       tableData: [

@@ -9,13 +9,14 @@ export default {
   mixins:[CreateMixinState()],
   data(){
     return {
-      visitorConfigRef : this.visitorConfig
+      visitorConfigRef : this.visitorConfig || {}
     }
   },
   methods:{
     schemaApplyVisitorData(){
+      const _this = this
       jsb.each(this.schema,(fs)=>{
-        const vs = this.visitorConfigRef[fs.field]
+        const vs = _this.visitorConfigRef[fs.field]
         if(!vs) {
           return
         }
@@ -23,7 +24,6 @@ export default {
         fs.show  = jsb.pathGet(vs,'show',fs.show)
         fs.tips  = jsb.pathGet(vs,'tips',fs.tips)
       })
-      console.log(this.schema)
     }
   }
 }

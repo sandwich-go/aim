@@ -1,13 +1,16 @@
+const jsb = require("@sandwich-go/jsb")
+
 function adjustColumnWidth(table, bindingValue) {
-    if(!bindingValue.enabled) {
+    if (!bindingValue.enabled) {
         return
     }
     forceAdjustColumnWidth(table, bindingValue)
 }
+
 function forceAdjustColumnWidth(table, bindingValue) {
     // doLayout后刷新一次宽度，解决fixed right导致的错乱问题,但是导致了当inplace编辑时填写数据后组件刷新，正在编辑的数据跳出视野
     // 注意这里不要主动更新table的组件属性，属性更新会导致componentUpdated，继而更新属性，循环调用
-    bindingValue.doLayout(()=>{
+    bindingValue.doLayout(() => {
         const padding = bindingValue.padding || 60
         const colgroup = table.querySelector("colgroup");
         const colDefs = [...colgroup.querySelectorAll("col")];
@@ -34,20 +37,24 @@ function forceAdjustColumnWidth(table, bindingValue) {
 export default {
     install(Vue) {
         Vue.directive("fit-columns", {
-            update() {},
-            bind() {},
+            update() {
+            },
+            bind() {
+            },
             inserted(el, binding) {
-                setTimeout(() => {
+                jsb.debounce(() => {
                     adjustColumnWidth(el, binding.value);
                 }, 300);
             },
             componentUpdated(el, binding) {
-                setTimeout(() => {
+                const func = jsb.debounce(() => {
                     el.classList.add("cg-table-auto-width");
                     adjustColumnWidth(el, binding.value);
-                }, 300);
+                }, 300)
+                func()
             },
-            unbind() {},
+            unbind() {
+            },
         });
     },
 };
