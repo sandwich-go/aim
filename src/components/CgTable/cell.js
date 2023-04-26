@@ -38,6 +38,6 @@ export function cellFormName(fs,row) {
     return cellForm
 }
 
-export function cellFormConfig(row, fieldSchema) {
+export function cellFormConfig(fieldSchema) {
     return jsb.pathGet(fieldSchema, ConstCellForm,{})
 }

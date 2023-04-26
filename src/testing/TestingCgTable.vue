@@ -40,7 +40,7 @@
 import CgTable from "@/components/CgTable";
 import {
   EditTriggerDBLClick,
-  EditTriggerDBLClickOrSwitcher,
+  EditTriggerDBLClickOrSwitcher, EditTriggerInplaceNone,
   EditTriggerSwitchButton,
   RowEditorFormInput,
   RowEditorInplace
@@ -181,6 +181,19 @@ export default {
           options: [
             {label: "g1", value: "g1"}, {label: "g2", value: "g2"}
           ]
+        },
+        {
+          field: 'AuthInfo', name: '授权', width: 100,
+          cellFormName: 'CgTable',
+          cellForm:{
+            tableProperty:{autoWidth: false},
+            editConfig:{rowEditor: RowEditorInplace,trigger:EditTriggerInplaceNone},
+          },
+          fields:[
+            {field:'UseSystemSSH',name:'系统SSH秘钥',cellFormName: 'CgSwitch',cellTableName:'CgSwitch',width:160,},
+            {field:'UserName',name:'UserName',cellFormName: 'CgInput',cellTableName:'CgInput',width:300},
+            {field:'Password',name:'Password',cellFormName: 'CgInput',cellTableName:'CgInput'}
+          ],
         },
         {
           field: 'Checkbox',

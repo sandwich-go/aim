@@ -106,7 +106,6 @@
                         v-if="celllName=== CellTableCells"
                         :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
                         :cells="celllConfig"
-                        :column-width="fs.width"
                         :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
                         :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
                         @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
@@ -119,7 +118,6 @@
                           :options="fs.options || []"
                           :disabled="privateShouldCellDisable({cell:celllConfig,code:celllConfig.code||'',row:scope.row,fieldSchema:fs})"
                           :field-name="fs.field"
-                          :column-width="fs.width"
                           :cell-config="celllConfig"
                           @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                       ></component>
@@ -129,7 +127,6 @@
                         :name="celllName"
                         :row="scope.row"
                         :field-schema="fs"
-                        :column-width="fs.width"
                         :disabled="privateShouldCellDisable({row:scope.row,fieldSchema:fs})"
                         :fieldValue="scope.row[fs.field]"
                         :fieldValueVirtual="cellTableConfig(scope.row,fs)"
@@ -194,6 +191,7 @@
           :key="xidRow(rowInEdit)"
           :schema="validSchema(schema)"
           :data="rowInEdit"
+          :popup-append-to-body="true"
           :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
           :alert-info="rowEditorAlert"
           :mode="rowEditorMode"
@@ -559,11 +557,18 @@ export default {
   padding: 1px
 }
 
+.cg-table-mini-padding .el-table__header tr,
+.cg-table-mini-padding .el-table__header th {
+  padding: 0;
+  height: 12px;
+}
+
+
 .el-table.cg-table-auto-width .cell {
   display: inline-block;
   white-space: nowrap;
-  width: auto;
-  overflow-x: auto;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .el-table.cg-table-auto-width .el-table__body-wrapper {

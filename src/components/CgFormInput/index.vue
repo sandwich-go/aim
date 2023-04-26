@@ -33,6 +33,19 @@
                     :key="`fom_component_field_${fs.field}`"
                 ></component>
               </div>
+              <div v-else-if="cellName='CgTable'">
+                <el-card class="box-card" shadow="always">
+                  <cg-table
+                      :selection="true"
+                      :proxy-config="newLocalDataProxyWithFieldName(data,fs.field)"
+                      :schema="fs.fields"
+                      :table-property="{autoWidth:false}"
+                      :popup-append-to-body="popupAppendToBody"
+                      :righter-config="{cells:[CodeButtonAdd,CodeButtonRowSelectedMinus]}"
+                      :edit-config="celllConfig.editConfig">
+                  </cg-table>
+                </el-card>
+              </div>
             </span>
           </span>
           <span v-if="fs.comment" class="cg-form-item-comment">{{ comment(getRow(), fs) }}</span>
@@ -57,10 +70,17 @@ import {cellFormConfig, cellFormName} from "@/components/CgTable/cell";
 import CgViewerLabelTooltip from "@/components/cells/viewer/CgViewerTooltip.vue";
 import isString from "@sandwich-go/jsb/isString";
 import jsb from "@sandwich-go/jsb";
+import {newLocalDataProxyWithFieldName} from "@/components/CgTable/proxy";
+import {RowEditorInplace} from "@/components/CgTable/table";
+import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
 
 export default {
   name: "CgFormInput",
-  components: {CgViewerLabelTooltip, CgAlert},
+  components: {
+    CgViewerLabelTooltip,
+    CgAlert,
+    CgTable: () => import("@/components/CgTable/index.vue"),
+  },
   mixins: [mixinComponentMap],
   props: {
     schema: Array, // 行schema信息
@@ -79,12 +99,16 @@ export default {
   },
   data() {
     return {
+      CodeButtonAdd,
+      RowEditorInplace,
+      CodeButtonRowSelectedMinus,
       labelWidthPixel: this.labelWidth || calcLabelWidth(this.schema),
       //fixme 需要table打入rules,独立使用CgForm的时候需要根据schema更新rules
       rulesRef: this.rules,
     }
   },
   methods: {
+    newLocalDataProxyWithFieldName,
     isString,
     commentHTML,
     comment,

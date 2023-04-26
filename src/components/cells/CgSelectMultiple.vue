@@ -31,6 +31,7 @@ export default {
         this.$emit("input",valNew)
       }
     })
+    this.calcWidthPxString("100%")
   },
 }
 </script>

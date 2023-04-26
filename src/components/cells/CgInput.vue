@@ -10,8 +10,7 @@
         :type="cc.type||''"
         @change="change"
         size="mini"
-    >
-    </el-input>
+    ></el-input>
   </div>
 </template>
 
@@ -28,7 +27,7 @@ export default {
     cssVars() {
       // 如果在table列中，且设定了列元素则主动撑满整个表格
       return {
-        "--input-width":this.calcWidthPxString(),
+        "--input-width": this.calcWidthPxString() || '100%',
         width:"100%"
       };
     }

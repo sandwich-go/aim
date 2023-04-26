@@ -24,6 +24,7 @@ export default {
       defaultTime: "00:00:00",
       placeholder: "选择日期时间"
     })
+    this.calcWidthPxString("100%")
   },
 }
 </script>

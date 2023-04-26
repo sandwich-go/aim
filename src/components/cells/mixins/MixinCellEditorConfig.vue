@@ -12,8 +12,6 @@ export default {
     styleOverride: Object, // 便于组件覆盖基础配置，如form中所有的元素设定为100% width，但是少数对象如checkbox不允许100%
     styleBase: Object,     // 便于父对象定义基础配置，如form中所有的元素设定为100% width
     disabled: Boolean,    // 是否只读
-
-    columnWidth:Number,
   },
   data() {
     const _this = this
@@ -34,20 +32,9 @@ export default {
     emitChange(valNew) {
       this.$emit("input", valNew)
     },
-    calcWidthPxString(diffIfInColumn=30){
-      let width = this.cc.style.width
-      if(!width){
-        if(this.columnWidth) {
-          width = Number(this.columnWidth)-diffIfInColumn
-          if(width <0){
-            width = this.columnWidth
-          }
-          width = `${width}px`
-        }
-      }else{
-        width = jsb.isString(width)?width : `${ width}px`
-      }
-      return width
+    calcWidthPxString(defaultVal){
+      this.cc.style.width = this.cc.style.width?(jsb.isString(this.cc.style.width)?this.cc.style.width : `${ this.cc.style.width}px`):defaultVal
+      return this.cc.style.width
     },
     ccConfigMerge(initVal = {}) {
       const _this = this
@@ -65,8 +52,6 @@ export default {
         this.cc = Object.assign(this.cc, this.cellConfig)
       }
       this.cc.style = jsb.assign(this.cc.style, this.styleOverride)
-      // 计算组件宽度
-      this.cc.style.width = this.calcWidthPxString()
     },
     change(newVal) {
       this.$forceUpdate()

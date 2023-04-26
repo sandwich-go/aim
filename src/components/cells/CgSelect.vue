@@ -24,6 +24,7 @@ export default {
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
+    this.calcWidthPxString("100%")
   },
 }
 </script>

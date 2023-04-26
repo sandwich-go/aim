@@ -36,10 +36,11 @@ export default {
   },
   data() {
     return {
-      tablePropertyRef: this.tableProperty,
+      tablePropertyRef: this.tableProperty||{},
     }
   },
   created() {
+    console.log(" this.tableProperty", this.tableProperty)
     jsb.objectAssignNX(this.tablePropertyRef, {
       autoWidth: true,
       border: true,

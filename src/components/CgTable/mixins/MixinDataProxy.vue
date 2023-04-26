@@ -18,6 +18,7 @@ export default {
   },
   created() {
     jsb.objectAssignNX(this.proxyConfigRef, {
+      isLocalData:false,
       item2Row(item) {
         return item
       },
@@ -122,7 +123,11 @@ export default {
 
     // eslint-disable-next-line no-unused-vars
     tryProxySaveRow(row, {done} = {}) {
-      this.tryPromise('save',{row: removeCtrlData(jsb.clone(row))},done,'数据已保存')
+      let toSave = row
+      if(!this.proxyConfig.isLocalData){
+        toSave = removeCtrlData(jsb.clone(row))
+      }
+      this.tryPromise('save',{row: toSave},done,'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
     tryProxyQueryData({done} = {}) {
