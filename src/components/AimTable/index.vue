@@ -532,7 +532,7 @@ export default {
           code === CodeButtonRowSelectedDelete) {
         return this.getSelectionRows().length === 0
       }
-      if (this.editConfigRef.rowEditor === RowEditorInplace && !this.isEditTriggerAccepted(EditTriggerInplaceNone)) {
+      if (row && this.editConfigRef.rowEditor === RowEditorInplace && !this.isEditTriggerAccepted(EditTriggerInplaceNone)) {
         return this.rowInEdit !== row
       }
       if (cell.disable || cell.disabled) {
