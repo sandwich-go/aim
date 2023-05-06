@@ -21,7 +21,7 @@ export default {
     this.ccConfigMerge({
       label: '',
       title: '',
-      center: false,
+      center: this.center,
       type: 'warning',
       effect: 'dark',
       style: {height:'28px'},
