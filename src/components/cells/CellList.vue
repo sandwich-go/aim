@@ -27,6 +27,8 @@
         />
         <template v-else-if="!cell.cell">
           <el-divider v-if="isDivider(cell)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
+          <span v-if="isPaddingLeft(cell)" :key="`toolbar_item_gap_${index}`" :style="{'padding-left':parseWidthToPixelString(cell.paddingLeft)}"/>
+          <span v-if="isPaddingRight(cell)" :key="`toolbar_item_gap_${index}`" :style="{'padding-right':parseWidthToPixelString(cell.paddingRight)}"/>
         </template>
         <template v-else>
           {{`${cell.cell} not supported.`}}
@@ -39,6 +41,7 @@
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import {makeCellFromString} from "@/components/cells/make";
 import {getProxySlotName} from "@/components/AimTable/slot";
+import {parseWidthToPixelString} from "@/utils/ui";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -58,9 +61,16 @@ export default {
     }
   },
   methods: {
+    parseWidthToPixelString,
     getProxySlotName,
     isDivider(item) {
       return jsb.isEmpty(item)
+    },
+    isPaddingLeft(item) {
+      return !item.cell && !item.slot &&  item.paddingLeft
+    },
+    isPaddingRight(item) {
+      return !item.cell && !item.slot &&  item.paddingRight
     },
   },
   created() {

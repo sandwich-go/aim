@@ -397,7 +397,7 @@ export default {
         leftSpan: 21,
         leftCells: [
             "filter",
-          {},
+          {paddingLeft:80},
           {
             cell: 'CellSelect',
             options: [
