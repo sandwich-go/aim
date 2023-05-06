@@ -1,6 +1,5 @@
 <template>
   <div>
-    <span>{{ xidRow(getRow()) }}</span>
     <cell-view-alert v-if="alertInfo"
                      :center="true"
                      style="position: sticky;font-weight: bold;top:0;margin-bottom: 9px;z-index: 1000000;"
