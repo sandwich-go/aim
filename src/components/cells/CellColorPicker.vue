@@ -17,7 +17,6 @@ export default {
   name: 'CellColorPicker',
   mixins: [MixinCellEditorConfig],
   created() {
-    console.log("dataRefdataRef ",this.dataRef,this.dataRef[this.fieldName])
     this.ccConfigMerge({
       style: {width:null},
       predefine:jsb.ccPath('predefine',ReservedColorList)

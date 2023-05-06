@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
     <cell-view-alert style="position: sticky;font-weight: bold;top:0;margin-bottom: 9px;z-index: 1000000;border-radius: 0" :cell-config="{label:'配置表格字段显示顺序、显示格式、访问属性授权.',showIcon:true}">
     </cell-view-alert>
     <aim-table
@@ -9,16 +10,16 @@
         :popup-append-to-body="true"
         :drag-config="{icon:true}"
         :header-config="{rightCells:[CodeButtonSaveTableData,CodeButtonRefresh],style:{'padding-right':'9px'}}"
-        :edit-config="{rowEditor: RowEditorInplace,trigger:EditTriggerInplaceNone}"
+        :edit-config="{rowEditor: RowEditorFormInput,trigger:EditTriggerDBLClick}"
     ></aim-table>
   </div>
 </template>
 
 <script>
-
-import {CodeButtonRefresh, CodeButtonSaveTableData
-} from "@/components/cells/const";
-import {EditTriggerInplaceNone, RowEditorInplace} from "@/components/AimTable/table";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import {CodeButtonRefresh, CodeButtonSaveTableData} from "@/components/cells/const";
+import {EditTriggerDBLClick, RowEditorFormInput} from "@/components/AimTable/table";
 import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 const jsb = require("@sandwich-go/jsb")
@@ -27,6 +28,7 @@ export default {
   mixins: [MixinTableEditorConfig],
   components: {
     CellViewAlert,
+    Loading,
     AimTable: () => import("@/components/AimTable/index.vue"),
   },
   props: {
@@ -36,10 +38,11 @@ export default {
   data() {
     const _this = this
     return {
-      RowEditorInplace,
+      RowEditorFormInput,
       CodeButtonSaveTableData,
       CodeButtonRefresh,
-      EditTriggerInplaceNone,
+      EditTriggerDBLClick,
+      inLoading:false,
       editorSchema: [
         {field: 'field', name: '字段名', width: 200},
         {field: 'name', name: '名称', width: 200},
@@ -88,12 +91,15 @@ export default {
           return item
         },
         query() {
+          _this.inLoading = true
           return new Promise((resolve, reject) => {
             Promise.resolve(_this.editorProxyConfigRef.query({key: _this.editorTableKey})).then((resp) => {
               _this.visitorData = jsb.pathGet(resp, 'Data', {})
               resolve({Data: _this.schema})
             }).catch((e) => {
               reject(e)
+            }).finally(()=>{
+              _this.inLoading = false
             })
           })
         },

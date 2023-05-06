@@ -249,7 +249,7 @@
     <aim-drawer :is-show.sync="visitSettingDrawerVisible" :config="{appendToBody:popupAppendToBody}">
       <template v-slot:aim-drawer-body>
         <aim-table-editor
-            editor-table-key="TestTable"
+            editor-table-key="aim-table-editor"
             :editor-group-options="editorGroupOptions"
             :editor-user-options="editorUserOptions"
             :editor-proxy-config="editorProxyConfig"
@@ -388,8 +388,7 @@ export default {
   created() {
     cleanData(this.tableData, this.schema, this.proxyConfigRef.item2Row)
     this.tryProxyQueryData()
-    this.schemaApplyVisitorData()
-
+     this.schemaApplyVisitorData()
     // 占位
     this.getProxySlotName()
   },

@@ -72,7 +72,6 @@ export function cleanData (data,schema,item2Row) {
                 row[fieldSchema.field] = {}
             }
         })
-        console.log("row ",row)
         data[index] = row
     })
     return data

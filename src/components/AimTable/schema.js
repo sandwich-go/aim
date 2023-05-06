@@ -44,6 +44,5 @@ export function defaultRow(schema, row) {
             row[fieldName] = vByType
         }
     })
-    console.log(row)
     return row
 }
