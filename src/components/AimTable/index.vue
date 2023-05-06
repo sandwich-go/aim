@@ -436,6 +436,7 @@ export default {
           if(!fieldSchema.filter.cell){
             fieldSchema.filter.cell = cellNameForFormByType(fieldSchema.filter.type)
           }
+          fieldSchema.filter.data = _this.filterData
           _this.filterTypeMapping[fieldSchema.filter.field] = fieldSchema.filter
           schemaFilter.push(fieldSchema.filter)
         }

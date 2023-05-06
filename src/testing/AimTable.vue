@@ -111,7 +111,7 @@ export default {
           readOnly: true,
           fixed:"left",
           backgroundAsHeader: true,
-          filter:{}
+          filter:{placeholder:'请输入ID',format:(v)=>{ return Number(v)}}
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
@@ -125,6 +125,7 @@ export default {
           cellForm: function ({row}) {
             return !row.id || row.id < 5 ? 'CellInput' : 'CellSelect'
           },
+          filter:{placeholder:'请输入名字'}
         },
         {
           field: 'AuthInfo',
@@ -293,11 +294,18 @@ export default {
         }
       },
       proxyConfig: {
-        query() {
+        query({params}) {
+          const dataRet = jsb.clone(_this.tableData)
+          if(params && params.id){
+            jsb.remove(dataRet,item => item.id !== params.id)
+          }
+          if(params && params.name){
+            jsb.remove(dataRet,item => item.name !== params.name)
+          }
           return new Promise((resolve) => {
             resolve( {
-              Data: jsb.clone(_this.tableData), //模拟数据返回
-              Total: _this.tableData.length,
+              Data: dataRet, //模拟数据返回
+              Total: dataRet.length,
             })
           })
         },

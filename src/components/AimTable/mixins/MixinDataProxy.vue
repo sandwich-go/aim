@@ -14,10 +14,6 @@ export default {
   mixins:[CreateMixinState()],
   data() {
     return {
-      // schema中抽取而来的filter cell
-      filterData:{},
-      filterTypeMapping:{},
-
       proxyConfigRef: this.proxyConfig || {},
     }
   },
@@ -141,7 +137,7 @@ export default {
       params = this.PagerAddToParams(params)
       params = this.addRemoteSortParams(params)
 
-      this.tryPromise('query',params || {},({resp,error})=>{
+      this.tryPromise('query',{params:params},({resp,error})=>{
         if(resp){
           this.tableData = this.processTableData(jsb.pathGet(resp, 'Data'))
           this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
@@ -153,15 +149,15 @@ export default {
     addFilterDataToParams(params){
       params = params || {}
       const _this = this
-      jsb.each(this.filterData,function (val,key) {
+      jsb.each(_this.filterData,function (val,key) {
         const filter = _this.filterTypeMapping[key]
-        let valFormatted = formatValue(filter.field)
+        let valFormatted = formatValue(filter.type,val)
         if(!valFormatted){
           return
         }
-        const remoteParameter = filter['remoteParameter']
-        if(remoteParameter){
-          valFormatted = remoteParameter(valFormatted)
+        const format = filter['format']
+        if(format){
+          valFormatted = format(valFormatted)
         }
         params[key] = valFormatted
       })
