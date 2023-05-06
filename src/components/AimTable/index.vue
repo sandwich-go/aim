@@ -264,7 +264,7 @@
 import Vue from 'vue';
 import AutoWidth from './AutoWidth';
 import {
-  cleanData, EditTriggerInplaceNone,
+  EditTriggerInplaceNone,
   EditTriggerSwitchButton,
   EventCurrentRowChange,
   mustCtrlData,
@@ -280,7 +280,7 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 
 import {
   CodeButtonAdd,
-  CodeButtonExpandAll,
+  CodeButtonExpandAll, CodeButtonFilterSearch,
   CodeButtonRefresh,
   CodeButtonRowClose,
   CodeButtonRowCopy,
@@ -318,6 +318,8 @@ import {cellConfigForTable, cellShowWhenLostForTable, cellNameForTable} from "@/
 import {getProxySlotName} from "@/components/AimTable/slot";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
+import {cellNameForFormByType} from "@/components/cells/types";
+import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
 
 Vue.use(AutoWidth);
 
@@ -350,6 +352,7 @@ export default {
     MixinRighter,
     MixinTableEditorConfig,
     MixinVisitor,
+    MixinSort,
   ],
   components: {
     AimFormInput,
@@ -386,9 +389,10 @@ export default {
     }
   },
   created() {
-    cleanData(this.tableData, this.schema, this.proxyConfigRef.item2Row)
+    this.tableData = this.processTableData(this.tableData)
     this.tryProxyQueryData()
-     this.schemaApplyVisitorData()
+    this.schemaApplyVisitorData()
+    this.processSchemaFilter()
     // 占位
     this.getProxySlotName()
   },
@@ -415,7 +419,37 @@ export default {
       }
       return ''
     },
-
+    processSchemaFilter(){
+      const _this = this
+      let schemaFilter = []
+      jsb.each(this.schema,function (fieldSchema){
+        if(fieldSchema.filter){
+          if(!fieldSchema.filter.type){
+            fieldSchema.filter.type = fieldSchema.type
+          }
+          if(!fieldSchema.filter.field){
+            fieldSchema.filter.field = fieldSchema.field
+          }
+          if(!fieldSchema.filter.options){
+            fieldSchema.filter.options = fieldSchema.options
+          }
+          if(!fieldSchema.filter.cell){
+            fieldSchema.filter.cell = cellNameForFormByType(fieldSchema.filter.type)
+          }
+          _this.filterTypeMapping[fieldSchema.filter.field] = fieldSchema.filter
+          schemaFilter.push(fieldSchema.filter)
+        }
+      })
+      if(schemaFilter.length) {
+        schemaFilter.push({code:CodeButtonFilterSearch})
+        let leftCells = this.headerConfigRef.leftCells
+        jsb.each(leftCells,function (cell,index) {
+          if(jsb.isString(cell) && cell.toUpperCase() ==='FILTER') {
+            leftCells.splice(index, 1, ...schemaFilter);
+          }
+        })
+      }
+    },
     escKey() {
       if (this.isInplaceEditor()) {
         this.rowInEdit = null
@@ -482,6 +516,9 @@ export default {
           break
         case CodeButtonAdd:
           this.addRow()
+          break
+        case CodeButtonFilterSearch:
+          this.tryProxyQueryData()
           break
         case CodeButtonRowCopy:
           this.addRow({

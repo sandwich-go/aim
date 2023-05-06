@@ -23,6 +23,8 @@ export default {
       debugMessage: '',
       rowEditorAlert: null,
       rowEditorMode: AimFormInputModeView,
+      funcProcessQueryParams: [],
+      sortConfigRef:{},
     }
   },
   methods: {

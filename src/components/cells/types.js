@@ -20,6 +20,16 @@ export const type2FormCellName = {
     object: 'AimFormInput',
 }
 
+export function formatValue(fieldType,fieldValue) {
+    if(fieldType === 'input_number') {
+        return Number(fieldValue)
+    }
+    if(jsb.isString(fieldValue)){
+        return fieldValue.trim()
+    }
+    return fieldValue
+}
+
 export const type2DefaultVal = {
     input: '',
     input_number: 0,

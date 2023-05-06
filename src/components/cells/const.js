@@ -7,7 +7,7 @@ export const CodeButtonAdd = "btnAdd"
 export const CodeButtonExpandAll = "btnExpandAll"
 export const CodeButtonTableSetting = "btnTableSetting"
 export const CodeButtonSaveTableData = "btnSaveTableData" // 整表数据提交
-
+export const CodeButtonFilterSearch = "btnFilterSearch"
 
 export const CodeButtonRowCopy = "btnRowCopy"
 export const CodeButtonRowSaveLocal = "btnRowSaveLocal"
@@ -37,6 +37,7 @@ code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-s-grid', type: 'primary'
 code2OptionsMapping[CodeButtonExpandAll] = {icon: 'el-icon-more', type: 'primary', circle: true, label: '展开所有'}
 code2OptionsMapping[CodeButtonTableSetting] = {icon: 'el-icon-setting',type: 'primary', circle: true, label: '表格设定'}
 code2OptionsMapping[CodeButtonSaveTableData] = {icon: 'el-icon-check', type: 'primary', circle: true, label: '保存全表'}
+code2OptionsMapping[CodeButtonFilterSearch] = {icon: 'el-icon-search', type: 'primary', circle: false,plain:true}
 
 
 code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true}
@@ -73,7 +74,6 @@ jsb.each(code2OptionsMapping, function (ss, code) {
     ss.code = code
     if (ss.code.startsWith('btn')) {
         ss.cell = 'CellViewButton'
-        ss.plain = false
     }
     if (ss.code.startsWith('link')) {
         ss.cell = 'CellViewLink'

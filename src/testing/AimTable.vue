@@ -19,6 +19,7 @@
         :edit-config="editConfig"
         :table-property="tableProperty"
         :footer-config="footConfig"
+        :sort-config="{remote:false,orders:[{field:'name',order:'desc'}]}"
         :righter-config="rightBarConfig"
         :visitor-config="tableVisitorData"
         :proxy-config="proxyConfig">
@@ -110,6 +111,7 @@ export default {
           readOnly: true,
           fixed:"left",
           backgroundAsHeader: true,
+          filter:{}
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
@@ -237,6 +239,7 @@ export default {
           name: 'Datetime',
           cell: 'CellDatePicker',
           cellForm: 'CellDatePicker',
+          filter:{},
         },
         {
           field: 'DatetimeRange',
@@ -385,6 +388,8 @@ export default {
       return {
         leftSpan: 21,
         leftCells: [
+            "filter",
+          {},
           {
             cell: 'CellSelect',
             options: [
@@ -431,23 +436,11 @@ export default {
           },
           {},
           {cell: 'CellCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CellCheckbox', val)},
-          {},
-          {cell: 'CellInput', change: (val) => this.toolbarAlert('CellInput', val), style: {width: "120px"}},
-
-          {
-            cell: 'CellSelectGroup', options: [
-              {label: "g1", options: [{label: "s1", value: "s1"}]}, {
-                label: "g2",
-                options: [{label: "s2", value: "s2"}]
-              }],
-            change: (val) => this.toolbarAlert('SlotSelectGroup', val)
-          },
           'btn@myImport@label_导入@icon_el-icon-check',
           {label: "导出", code: 'btn@myExport', icon: 'el-icon-check', show: false},
           {label: "新建", code: 'btn@myNew', icon: 'el-icon-check'},
           {},
           {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
-
         ],
         rightCells: [CodeButtonSaveTableData,CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting],
         style: {'padding-bottom': '9px'}

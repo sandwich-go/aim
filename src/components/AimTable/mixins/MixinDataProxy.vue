@@ -2,6 +2,7 @@
 import {deleteConfirmConfig} from "@/components/AimTable/confirm";
 import {cleanData, removeCtrlData} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
+import {formatValue} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -13,6 +14,10 @@ export default {
   mixins:[CreateMixinState()],
   data() {
     return {
+      // schema中抽取而来的filter cell
+      filterData:{},
+      filterTypeMapping:{},
+
       proxyConfigRef: this.proxyConfig || {},
     }
   },
@@ -130,15 +135,47 @@ export default {
       this.tryPromise('save',{row: toSave},done,'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
-    tryProxyQueryData({done} = {}) {
-      this.tryPromise('query',{},({resp,error})=>{
+    tryProxyQueryData({done,params} = {}) {
+
+      params = this.addFilterDataToParams(params)
+      params = this.PagerAddToParams(params)
+      params = this.addRemoteSortParams(params)
+
+      this.tryPromise('query',params || {},({resp,error})=>{
         if(resp){
-          this.tableData = cleanData(jsb.pathGet(resp, 'Data'),this.schema,this.proxyConfigRef.item2Row)
+          this.tableData = this.processTableData(jsb.pathGet(resp, 'Data'))
           this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
         }
         done && done({error})
         this.doLayout()
       })
+    },
+    addFilterDataToParams(params){
+      params = params || {}
+      const _this = this
+      jsb.each(this.filterData,function (val,key) {
+        const filter = _this.filterTypeMapping[key]
+        let valFormatted = formatValue(filter.field)
+        if(!valFormatted){
+          return
+        }
+        const remoteParameter = filter['remoteParameter']
+        if(remoteParameter){
+          valFormatted = remoteParameter(valFormatted)
+        }
+        params[key] = valFormatted
+      })
+      return params
+    },
+
+    processTableData(data){
+      data = cleanData(data,this.schema,this.proxyConfigRef.item2Row)
+      if(this.sortConfigRef.enable && !this.sortConfigRef.remote) {
+        if (this.sortConfigRef.orders.length > 0) {
+          data = jsb.orderBy(data,this.sortConfigRef.orders)
+        }
+      }
+      return data
     },
   }
 }

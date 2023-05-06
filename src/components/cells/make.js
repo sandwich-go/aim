@@ -9,6 +9,7 @@ export function makeCell(initVal, ...options) {
         disabled: false,
         show: true,
         style: {},
+        plain:false,
         cell:'CellViewLabel',
     }
     cc = Object.assign(cc, initVal)
