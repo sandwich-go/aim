@@ -93,9 +93,6 @@ export default {
     }
   },
   methods: {
-    cellNameTag({fieldValue}, dVal = 'CellInput') {
-      return jsb.isFunction(fieldValue) ? {label: 'Function', type: 'warning'} : (fieldValue || dVal)
-    },
     proxyConfig() {
       const _this = this
       return {
