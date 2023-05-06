@@ -335,7 +335,7 @@ export default {
           Icon: 'el-icon-user-solid',
           Online: true,
           Tag: "g1",
-          Color: 'red'
+          Color: '#ea8271'
         },
         {
           id: 5,
@@ -344,7 +344,7 @@ export default {
           Icon: '',
           Online: false,
           Tag: "g2",
-          Color: 'blue',
+          Color: '#4b4ba3',
           Checkbox: true
         },
         {
@@ -354,7 +354,7 @@ export default {
           Icon: '',
           Online: false,
           Tag: "g2",
-          Color: 'blue',
+          Color: '#c26700',
           Checkbox: true
         }
       ],

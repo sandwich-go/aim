@@ -4,7 +4,7 @@
       show-alpha
       :style="cc.style"
       size="mini"
-      :predefine="cc.predefineColors"
+      :predefine="cc.predefine"
       :disabled="disabled">
   </el-color-picker>
 </template>
@@ -17,9 +17,10 @@ export default {
   name: 'CellColorPicker',
   mixins: [MixinCellEditorConfig],
   created() {
+    console.log("dataRefdataRef ",this.dataRef,this.dataRef[this.fieldName])
     this.ccConfigMerge({
       style: {width:null},
-      predefineColors:jsb.ccPath('predefineColors',ReservedColorList)
+      predefine:jsb.ccPath('predefine',ReservedColorList)
     })
   },
 }
