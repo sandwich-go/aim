@@ -24,6 +24,7 @@ import {CodeButtonRefresh, CodeButtonSaveTableData} from "@/components/cells/con
 import {EditTriggerDBLClick, RowEditorFormInput} from "@/components/AimTable/table";
 import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
+import {cellNameForFormByType, cellNameForTableByType} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")
 export default {
@@ -47,20 +48,21 @@ export default {
       EditTriggerDBLClick,
       inLoading: false,
       editorSchema: [
-        {field: 'field', name: '字段名', width: 200},
-        {field: 'name', name: '名称', width: 200},
+        {field: 'field', name: '字段名', width: 200,type:'input'},
+        {field: 'name', name: '名称', width: 200,type:'input'},
         {
-          field: 'cellTableName',
-          name: 'Table显示/编辑组件',
-          cellTableName: 'CellViewTag',
-          cellTable: _this.cellNameTag,
+          field: 'type',type:'input',
+          name: '类型',
           width: 200
         },
         {
-          field: 'cellFormName',
+          field: 'cellForTable',
+          name: 'Table显示/编辑组件',
+          width: 200
+        },
+        {
+          field: 'cellForForm',
           name: 'Form编辑组件',
-          cellTableName: 'CellViewTag',
-          cellTable: _this.cellNameTag,
           width: 200
         },
         {field: 'width', name: '宽度', width: 130, type: 'input_number'},
@@ -99,6 +101,8 @@ export default {
       return {
         item2Row(item) {
           item.show = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.show`, true)
+          item.cellForTable = cellNameForTableByType(item.type)
+          item.cellForForm = cellNameForFormByType(item.type)
           item.groupCouldView = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.groupCouldView`, ['*'])
           item.groupCouldEdit = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.groupCouldEdit`, ['*'])
           item.userCouldView = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.userCouldView`, ['*'])
