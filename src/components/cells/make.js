@@ -1,5 +1,5 @@
 import jsb from "@sandwich-go/jsb";
-import {CellNameButton, CellNameLabel, CellNameLink, code2OptionsMapping} from "@/components/cells/const";
+import {code2OptionsMapping} from "@/components/cells/const";
 
 export function makeCell(initVal, ...options) {
     let cc = {
@@ -9,7 +9,7 @@ export function makeCell(initVal, ...options) {
         disabled: false,
         show: true,
         style: {},
-        cell: CellNameLabel,
+        cell:'CellViewLabel',
     }
     cc = Object.assign(cc, initVal)
     jsb.each(options, function (opt) {
@@ -22,12 +22,12 @@ export function makeCell(initVal, ...options) {
 }
 
 export function makeCellButton(...options) {
-    options.push({cell: CellNameButton})
+    options.push({cell:'CellViewButton'})
     return makeCell({type: 'primary', plain: false}, ...options)
 }
 
 export function makeCellLink(...options) {
-    options.push({cell: CellNameLink})
+    options.push({cell:'CellViewLink'})
     return makeCell({type: 'primary'}, ...options)
 }
 

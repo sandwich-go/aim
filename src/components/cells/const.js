@@ -1,18 +1,5 @@
 const jsb = require("@sandwich-go/jsb")
 
-export const CellNameSwitch= 'CgSwitch'
-export const CellNameCheckBox= 'CgCheckbox'
-export const CellNameButton = 'CgButton'
-export const CellNameLink = 'CgViewerLink'
-export const CellNameLabel = 'CgViewerLabel'
-export const CellNameTag = 'CgViewerTag'
-export const CellNameInput = 'CgInput'
-export const CellNameInputNumber = 'CgInputNumber'
-export const CellNameInputTextArea= 'CgInputTextArea'
-export const CellNameSelect = 'CgSelect'
-export const CellNameSelectMultiple = 'CgSelectMultiple'
-
-
 export const CodeButtonRefresh = "btnRefresh"
 export const CodeButtonCustom = "btnCustom"
 export const CodeButtonPrint = "btnPrint"
@@ -85,10 +72,10 @@ code2OptionsMapping[CodeLinkFieldJump ] = {icon: 'el-icon-link', type: 'primary'
 jsb.each(code2OptionsMapping, function (ss, code) {
     ss.code = code
     if (ss.code.startsWith('btn')) {
-        ss.cell = CellNameButton
+        ss.cell = 'CellViewButton'
         ss.plain = false
     }
     if (ss.code.startsWith('link')) {
-        ss.cell = CellNameLink
+        ss.cell = 'CellViewLink'
     }
 })

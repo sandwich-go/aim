@@ -12,6 +12,7 @@ export default {
     styleOverride: Object, // 便于组件覆盖基础配置，如form中所有的元素设定为100% width，但是少数对象如checkbox不允许100%
     styleBase: Object,     // 便于父对象定义基础配置，如form中所有的元素设定为100% width
     disabled: Boolean,    // 是否只读
+    fieldSchema:Object,
   },
   data() {
     const _this = this
@@ -61,6 +62,9 @@ export default {
     },
     getOptions() {
       return (jsb.isFunction(this.options)?this.options():this.options) || []
+    },
+    emitClick(jsEvent) {
+      this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})
     },
     emitData(options){
       return Object.assign({

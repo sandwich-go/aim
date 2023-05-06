@@ -9,7 +9,6 @@ export default {
   },
   created() {
     this.registerFiles(require.context('@/components/cells', true, /^((?!\.\/_).)*\.vue$/))
-    this.registerFiles(require.context('@/components/cells/viewer', true, /^((?!\.\/_).)*\.vue$/))
   },
   methods: {
     registerFiles(files){

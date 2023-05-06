@@ -1,4 +1,4 @@
-# cgcomponent
+# aim
 
 ## Project setup
 ```

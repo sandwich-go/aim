@@ -1,5 +1,5 @@
 {
-  "name": "cgcomponent",
+  "name": "aim",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@sandwich-go/jsb": "^0.1.58",
+    "@sandwich-go/jsb": "0.1.92",
     "core-js": "^3.8.3",
     "crypto": "^1.0.1",
     "element-ui": "2.12.0",

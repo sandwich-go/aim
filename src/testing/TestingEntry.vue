@@ -1,19 +1,19 @@
 <template>
   <el-tabs v-model="activeName">
-    <el-tab-pane label="CgTable" name="CgTable">
-      <testing-cg-table/>
+    <el-tab-pane label="AimTable" name="AimTable">
+      <aim-table/>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
-import TestingCgTable from "@/testing/TestingCgTable.vue";
+import AimTable from "@/testing/AimTable.vue";
 export default {
   name: "TestingEntry",
-  components: {TestingCgTable},
+  components: {AimTable},
   data(){
     return {
-      activeName:'CgTable',
+      activeName:'AimTable',
     }
   }
 }
