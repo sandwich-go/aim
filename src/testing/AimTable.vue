@@ -290,6 +290,7 @@ export default {
           })
         },
         saveTableData({tableData}) {
+          console.log(tableData)
           _this.tableVisitorData= tableData
         }
       },
@@ -334,9 +335,11 @@ export default {
         },
       },
       tableVisitorData:{
-        id:{show:true,groupCouldView:['*'],groupCouldEdit:['server']},
-        name:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
-        Link:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
+        fieldMap:{
+          id:{show:true,groupCouldView:['*'],groupCouldEdit:['server']},
+          name:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
+          Link:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
+        }
       },
       tableData: [
         {
@@ -451,7 +454,7 @@ export default {
           {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
         ],
         rightCells: [CodeButtonSaveTableData,CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting],
-        style: {'padding-bottom': '9px'}
+        style: {}
       }
     }
   }

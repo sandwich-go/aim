@@ -16,7 +16,7 @@ export default {
     }
   },
   created() {
-    this.footerConfigRef = initToolbarConfig(this.footerConfigRef,{style: {'padding-top': '9px'}})
+    this.footerConfigRef = initToolbarConfig(this.footerConfigRef,{'padding-top': '9px'})
 
     let pagerFound = false
     const _this = this

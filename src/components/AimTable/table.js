@@ -1,4 +1,5 @@
 import {AimFormInputMode2Title} from "@/components/AimFormInput";
+import {defaultRow} from "@/components/AimTable/schema";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -53,7 +54,8 @@ function autoOption(fieldSchema,fieldVal){
 export function cleanData (data,schema,item2Row) {
     jsb.each(data,function(item,index){
         // 检查数据的ctrl字段，填充组件需要的控制性数据
-        const row = mustCtrlData(item2Row?item2Row(item):item)
+        let row = mustCtrlData(item2Row?item2Row(item):item)
+        row = defaultRow(schema,row)
         jsb.each(schema,function (fieldSchema) {
             // 自动为filter准备option
             if(jsb.pathGet(fieldSchema,'filter.autoOption',false)){
@@ -62,14 +64,6 @@ export function cleanData (data,schema,item2Row) {
                     return
                 }
                 autoOption(fieldSchema,fieldVal)
-            }
-            // 填充默认值
-            const fieldType = fieldSchema['type']
-            if (fieldType === 'object' && jsb.isEmpty(row[fieldSchema.field])) {
-                row[fieldSchema.field] = {}
-            }
-            if (fieldType === 'table' && jsb.isEmpty(row[fieldSchema.field])) {
-                row[fieldSchema.field] = {}
             }
         })
         data[index] = row

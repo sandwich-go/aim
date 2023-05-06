@@ -2,18 +2,22 @@ import {flexEndStyle, flexStartStyle} from "@/components/AimTable/style";
 
 const jsb = require("@sandwich-go/jsb");
 
-export function initToolbarConfig(configRef,options={}) {
+export function initToolbarConfig(configRef,styleToMerge={}) {
     configRef  = jsb.objectAssignNX(configRef,{
         enable: true,
-        style: {'padding-bottom': '9px'},
+        style: {},
         leftSpan: 19,
         leftCells: [],
-        leftStyle: flexStartStyle,
         rightSpan: 0,
         rightCells: [],
-        rightStyle: flexEndStyle,
     })
-    return Object.assign(configRef,options)
+    configRef.leftStyle = jsb.objectAssignNX(configRef.leftStyle,flexStartStyle)
+    configRef.rightStyle = jsb.objectAssignNX(configRef.flexEndStyle,flexEndStyle)
+    if(!styleToMerge['padding-right']){
+        styleToMerge['padding-right'] = '3px'
+    }
+    configRef.style = jsb.objectAssignNX(configRef.style,styleToMerge)
+    return configRef
 }
 
 // toolbar 分左右时，如果左侧无数据则，则右的span返回24以便于flex end
