@@ -115,6 +115,7 @@ export default {
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
+          min_width: 180,
           placeholder: "xxx.xx",
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
@@ -130,7 +131,7 @@ export default {
         {
           field: 'AuthInfo',
           name: 'AuthInfo',
-          width: 100,
+          width: 160,
           type:'table',
           cellConfig:{
             trigger:{
@@ -155,8 +156,9 @@ export default {
         },
 
         {
-          field: 'AuthInfoObject', name: 'AuthInfoObject', width: 100,
+          field: 'AuthInfoObject', name: 'AuthInfoObject',
           type:'object',
+          min_width: 180,
           cellFormConfig:{
             tableProperty:{autoWidth: false},
             editConfig:{mode: EditModeInplace},
@@ -170,6 +172,7 @@ export default {
         {
           field: 'Link',
           name: 'Link',
+          min_width: 180,
           showOverflowTooltip: true,
           sortable: true,
           align: 'center',
@@ -184,6 +187,7 @@ export default {
         {
           field: 'Number', name: 'InputNumber', type: 'input', sortable: true,
           placeholder: "xxx.xx",
+          min_width: 180,
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
@@ -193,6 +197,7 @@ export default {
         {
           field: 'Icon', name: 'Icon', type: 'input', sortable: true,
           placeholder: "xxx.xx",
+          min_width: 180,
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
@@ -205,6 +210,7 @@ export default {
         {
           field: 'Online',
           name: '在线',
+          min_width: 180,
           type: 'switch',
           sortable: true,
           align: 'center',
@@ -214,6 +220,7 @@ export default {
         },
         {
           field: 'Tag',
+          min_width: 180,
           name: 'Tag',
           type: 'switch',
           sortable: true,
@@ -229,6 +236,7 @@ export default {
           field: 'Checkbox',
           name: 'Checkbox',
           type: 'switch',
+          min_width: 180,
           sortable: true,
           align: 'center',
           cell: 'CellCheckbox',
@@ -237,6 +245,7 @@ export default {
         {
           field: 'Datetime',
           type:'datetime',
+          min_width: 180,
           name: 'Datetime',
           cell: 'CellDatePicker',
           cellForm: 'CellDatePicker',
@@ -244,6 +253,7 @@ export default {
         },
         {
           field: 'DatetimeRange',
+          min_width: 180,
           name: 'Datetime',
           cell: 'CellDateRangePicker',
           cellForm: 'CellDateRangePicker',
@@ -251,7 +261,7 @@ export default {
         {
           field: 'Color',
           name: 'Color',
-          width: 80,
+          min_width: 180,
           cell: 'CellViewColor',
           cellForm: 'CellColorPicker',
         },
@@ -259,7 +269,7 @@ export default {
           field:'virtualLinks',
           virtual: true,
           name: '操作',
-          width: 50,
+          min_width: 50,
           align:'center',
           fixed: 'right',
           sortable:false,
