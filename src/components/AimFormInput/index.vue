@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="height?'aim-form-container':''" :style="cssVars">
     <cell-view-alert v-if="alertInfo"
                      :center="true"
                      style="position: sticky;font-weight: bold;top:0;margin-bottom: 9px;z-index: 1000000;"
@@ -97,6 +97,11 @@ export default {
     },
   },
   computed: {
+    cssVars() {
+      return {
+        "--form-container-height": `${this.height}px`
+      };
+    },
     cellName() {
       return (fs) => {
         return cellNameForForm(fs, this.getRow())
@@ -122,6 +127,7 @@ export default {
   },
   mixins: [mixinComponentMap],
   props: {
+    height:Number,
     schema: Array, // 行schema信息
     data: Object,  // 当前行数据
     mode: String,   // 编辑模式
@@ -249,4 +255,11 @@ export default {
   justify-content: flex-start;
 }
 
+</style>
+
+<style lang="scss" scoped>
+.aim-form-container {
+  height: var(--form-container-height) !important;
+  overflow: auto;
+}
 </style>
