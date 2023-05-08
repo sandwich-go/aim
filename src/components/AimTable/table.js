@@ -28,13 +28,29 @@ export function xidRow(row) {
     return jsb.pathGet(row, `${CtrlDataInRowData}.xid`)
 }
 
-export function mustCtrlData(row) {
+let EnableWatcherUnderModeInplace = false
+export function mustCtrlData(row,schema,watchFunc) {
+    // watchFunc 暂时不启用，不支持行内编辑的watch
+    if(xidRow(row)){
+        return
+    }
     if (!row[CtrlDataInRowData]) {
         row[CtrlDataInRowData] = {}
     }
     row[CtrlDataInRowData].xid = row[CtrlDataInRowData].xid || jsb.xid()
+    if(EnableWatcherUnderModeInplace && watchFunc) {
+        jsb.each(schema,function (fieldSchema){
+            if(!fieldSchema.watch){
+                return
+            }
+            watchFunc(() => row[fieldSchema.field],(newValue, oldValue) => {
+                fieldSchema.watch({fieldSchema,row,newValue, oldValue})
+            });
+        })
+    }
     return row
 }
+
 
 export function removeCtrlData(row) {
     delete row[CtrlDataInRowData]
@@ -58,10 +74,10 @@ function autoOption(fieldSchema, fieldVal) {
 }
 
 
-export function cleanData(data, schema, item2Row) {
+export function cleanData(data, schema,item2Row,watchFunc) {
     jsb.each(data, function (item, index) {
         // 检查数据的ctrl字段，填充组件需要的控制性数据
-        let row = mustCtrlData(item2Row ? item2Row(item) : item)
+        let row = mustCtrlData(item2Row ? item2Row(item) : item,schema,watchFunc)
         row = defaultRow(schema, row)
         jsb.each(schema, function (fieldSchema) {
             // 自动为filter准备option

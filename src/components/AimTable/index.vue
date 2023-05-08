@@ -522,7 +522,7 @@ export default {
           break
         case CodeButtonRowCopy:
           this.addRow({
-            initRow: this.editConfigRef.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))),
+            initRow: this.editConfigRef.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)),this.schema)),
             isCopy: true
           })
           break

@@ -122,12 +122,15 @@ export default {
           tips_show_icon: true,
           required: true,
           cell: function ({row}) {
-            return row.id < 5 ? 'CellInput' : 'CellSelect'
+            return row.id < 6 ? 'CellInput' : 'CellSelect'
           },
           cellForm: function ({row}) {
             return !row.id || row.id < 5 ? 'CellInput' : 'CellSelect'
           },
-          filter:{placeholder:'请输入名字'}
+          filter:{placeholder:'请输入名字'},
+          watch:function ({row,newValue}){
+            console.log("watch changed",row,newValue)
+          }
         },
         {
           field: 'AuthInfo',
@@ -223,7 +226,7 @@ export default {
           field: 'Tag',
           min_width: 180,
           name: 'Tag',
-          type: 'switch',
+          type: 'select',
           sortable: true,
           align: 'center',
           summary: true,

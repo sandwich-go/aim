@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       proxyConfigRef: this.proxyConfig || {},
+      rowWatcher:[],
     }
   },
   created() {
@@ -163,9 +164,17 @@ export default {
       })
       return params
     },
-
+    rowWatchFunc(expOrFn,callback,options){
+      this.rowWatcher.push(this.$watch(expOrFn,callback,options))
+    },
+    cleanRowWatcher(){
+      // 取消之前的监听器
+      this.rowWatcher.forEach((watcher) => watcher());
+      this.rowWatcher = []
+    },
     processTableData(data){
-      data = cleanData(data,this.schema,this.proxyConfigRef.item2Row)
+      this.cleanRowWatcher()
+      data = cleanData(data,this.schema,this.proxyConfigRef.item2Row,this.rowWatchFunc)
       if(this.sortConfigRef.enable && !this.sortConfigRef.remote) {
         if (this.sortConfigRef.orders.length > 0) {
           data = jsb.orderBy(data,this.sortConfigRef.orders)
