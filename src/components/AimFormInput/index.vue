@@ -186,8 +186,8 @@ export default {
         }
         const watch = jsb.pathGet(fs,'watch')
         if(_this.enableWatcher && watch){
-          _this.$watch(`dataRef.${fs.field}`,function (valNew,valOld){
-            watch({row:this.data,valOld:valOld,valNew:valNew})
+          _this.$watch(`dataRef.${fs.field}`,function (newValue, oldValue){
+            watch({row:this.data,newValue, oldValue})
           })
         }
       })

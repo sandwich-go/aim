@@ -59,7 +59,7 @@ export default {
           return
         }
         _this.rowWatchFunc(() => row[fieldSchema.field],(newValue, oldValue) => {
-          fieldSchema.watch({fieldSchema,newValue, oldValue,row})
+          fieldSchema.watch({newValue, oldValue,row})
         });
       })
     },
