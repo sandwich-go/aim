@@ -142,7 +142,12 @@ export default {
     labelWidth: String,
     popupAppendToBody: Boolean,
     parentKey: String,
-    readOnly:Boolean
+    readOnly:Boolean,
+    // 对接AimTable时,AimTable自动完成了watch
+    enableWatcher:{
+      type:Boolean,
+      default:true,
+    }
   },
   data() {
     return {
@@ -180,7 +185,7 @@ export default {
           _this.dataRef[fs.field] = []
         }
         const watch = jsb.pathGet(fs,'watch')
-        if(watch){
+        if(_this.enableWatcher && watch){
           _this.$watch(`dataRef.${fs.field}`,function (valNew,valOld){
             watch({row:this.data,valOld:valOld,valNew:valNew})
           })

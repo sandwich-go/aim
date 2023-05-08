@@ -223,6 +223,7 @@
           :mode="rowEditState"
           :rules="formRulesFromSchema(schema,{row:rowInEdit,data:tableData})"
           :row-top="rowInEdit"
+          :enable-watcher="false"
       ></aim-form-input>
       <span slot="footer" class="dialog-footer">
         <template v-if="rowEditState=== AimFormInputView">
@@ -522,7 +523,7 @@ export default {
           break
         case CodeButtonRowCopy:
           this.addRow({
-            initRow: this.editConfigRef.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)),this.schema)),
+            initRow: this.editConfigRef.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))),
             isCopy: true
           })
           break

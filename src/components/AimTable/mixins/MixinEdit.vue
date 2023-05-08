@@ -119,7 +119,7 @@ export default {
       if (isCopy) {
         this.rowEditState = AimFormInputCopy
       }
-      let newRow = mustCtrlData(this.editConfigRef.newRow(this.schema, initRow),this.schema)
+      let newRow = mustCtrlData(this.editConfigRef.newRow(this.schema, initRow))
       this.currentRow = newRow
       this.updateRowInEdit(newRow)
 

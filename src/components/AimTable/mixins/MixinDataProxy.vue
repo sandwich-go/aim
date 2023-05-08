@@ -173,8 +173,7 @@ export default {
       this.rowWatcher = []
     },
     processTableData(data){
-      this.cleanRowWatcher()
-      data = cleanData(data,this.schema,this.proxyConfigRef.item2Row,this.rowWatchFunc)
+      data = cleanData(data,this.schema,this.proxyConfigRef.item2Row)
       if(this.sortConfigRef.enable && !this.sortConfigRef.remote) {
         if (this.sortConfigRef.orders.length > 0) {
           data = jsb.orderBy(data,this.sortConfigRef.orders)

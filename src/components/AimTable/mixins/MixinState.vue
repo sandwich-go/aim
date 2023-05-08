@@ -12,6 +12,18 @@ export default {
     schema:Array,
     readOnly: Boolean,
   },
+  watch:{
+    currentRow:{
+      handler(newVal) {
+        this.updateRowWatcher(newVal)
+      }
+    },
+    rowInEdit:{
+      handler(newVal) {
+        this.updateRowWatcher(newVal)
+      }
+    },
+  },
   data() {
     return {
       stateXID: jsb.xid(),
@@ -32,6 +44,25 @@ export default {
     }
   },
   methods: {
+    updateRowWatcher(row) {
+      //移除老旧watcher
+      this.cleanRowWatcher()
+      if(!this.currentRow){
+        return
+      }
+      if(!row) {
+        return;
+      }
+      const _this = this
+      jsb.each(_this.schema,function (fieldSchema){
+        if(!fieldSchema.watch){
+          return
+        }
+        _this.rowWatchFunc(() => row[fieldSchema.field],(newValue, oldValue) => {
+          fieldSchema.watch({fieldSchema,newValue, oldValue,row})
+        });
+      })
+    },
     getTableRef() {
       return this.$refs.table
     },
