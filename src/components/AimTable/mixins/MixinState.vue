@@ -47,9 +47,6 @@ export default {
     updateRowWatcher(row) {
       //移除老旧watcher
       this.cleanRowWatcher()
-      if(!this.currentRow){
-        return
-      }
       if(!row) {
         return;
       }
