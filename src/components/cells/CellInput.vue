@@ -3,6 +3,7 @@
     <el-input
         v-model="dataRef[fieldName]"
         v-bind="cc"
+        :disabled="disabled"
         @change="change"
         size="mini"
     ></el-input>

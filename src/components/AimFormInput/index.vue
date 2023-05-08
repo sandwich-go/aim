@@ -35,6 +35,7 @@
             <el-card class="box-card" shadow="always">
               <aim-table
                   :schema="fs.fields"
+                  :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
                   v-bind="cellConfigForTable(fs)"
                   :key="fieldComponentKey(fs)"
               ></aim-table>
@@ -48,6 +49,7 @@
                   :row-top="getRow()"
                   :parent-key="fs.field"
                   :key="fieldComponentKey(fs)"
+                  :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
                   :should-cell-disable="shouldCellDisable"
                   :popup-append-to-body="true"
               ></aim-form-input>
@@ -68,10 +70,10 @@ import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 
 import isString from "@sandwich-go/jsb/isString";
 import jsb from "@sandwich-go/jsb";
-import {AimFormInputModeInsert, AimFormInputModeView, calcLabelWidth, comment, commentHTML} from "./index";
+import {AimFormInputInsert, AimFormInputView, calcLabelWidth, comment, commentHTML} from "./index";
 import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
-import {RowEditorInplace, xidRow} from "@/components/AimTable/table";
+import {xidRow} from "@/components/AimTable/table";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import {cellConfigForForm, cellNameForForm} from "@/components/AimTable/cell";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
@@ -125,11 +127,11 @@ export default {
     labelWidth: String,
     popupAppendToBody: Boolean,
     parentKey: String,
+    readOnly:Boolean
   },
   data() {
     return {
       CodeButtonAdd,
-      RowEditorInplace,
       CodeButtonRowSelectedMinus,
       labelWidthPixel: this.labelWidth || calcLabelWidth(this.schema),
       //fixme 需要table打入rules,独立使用AimFormInput的时候需要根据schema更新rules
@@ -142,7 +144,6 @@ export default {
     this.processSchema()
   },
   methods: {
-    xidRow,
     isAimFormInput,
     isAimTable,
     commentHTML,
@@ -191,7 +192,10 @@ export default {
       return `${this.parentKey}_${fs.field}_${xidRow(this.getRow())}`
     },
     privateShouldCellDisable({fieldSchema, cell}) {
-      if (this.mode === AimFormInputModeView) {
+      if(this.readOnly){
+        return true
+      }
+      if (this.mode === AimFormInputView) {
         return true
       }
       // 只读属性，如id等依赖服务器返回，只展现不允许编辑
@@ -200,7 +204,7 @@ export default {
       }
       if (jsb.pathGet(fieldSchema, 'insertOnly', false)) {
         // 只允许插入时有效，创建后不允许编辑
-        return this.mode !== AimFormInputModeInsert
+        return this.mode !== AimFormInputInsert
       }
       if (!this.shouldCellDisable) {
         return false

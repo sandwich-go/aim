@@ -1,7 +1,7 @@
 <script>
 import MixinPager from "@/components/AimTable/mixins/MixinPager.vue";
 import jsb from "@sandwich-go/jsb";
-import {AimFormInputModeView} from "@/components/AimFormInput";
+import {AimFormInputView} from "@/components/AimFormInput";
 import {xidRow} from "@/components/AimTable/table";
 
 export default {
@@ -22,7 +22,7 @@ export default {
       inLoading: false,
       debugMessage: '',
       rowEditorAlert: null,
-      rowEditorMode: AimFormInputModeView,
+      rowEditState: AimFormInputView,
       funcProcessQueryParams: [],
       sortConfigRef:{},
 

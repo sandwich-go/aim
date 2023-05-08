@@ -2,17 +2,17 @@
 import {
   EditTriggerClick,
   EditTriggerDBLClick,
-  EditTriggerDBLClickOrSwitcher,
-  EditTriggerSwitchButton, mustCtrlData,
-  RowEditorFormInput, RowEditorInplace
+  EditTriggerManualAndDBLClick,
+  EditTriggerManual, mustCtrlData,
+  EditModeFormInput, EditModeInplace
 } from "@/components/AimTable/table";
 import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSaveRemote} from "@/components/cells/const";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {
-  AimFormInputModeCopy,
-  AimFormInputModeEdit,
-  AimFormInputModeInsert,
-  AimFormInputModeView
+  AimFormInputCopy,
+  AimFormInputEdit,
+  AimFormInputInsert,
+  AimFormInputView
 } from "@/components/AimFormInput";
 import {defaultRow} from "@/components/AimTable/schema";
 
@@ -33,8 +33,8 @@ export default {
   created() {
     jsb.objectAssignNX(this.editConfigRef, {
       enable: true,
-      trigger: EditTriggerDBLClickOrSwitcher,
-      rowEditor: RowEditorFormInput,
+      trigger: EditTriggerManualAndDBLClick,
+      mode: EditModeFormInput,
       // 当尝试编辑某一行时回调该方法
       // eslint-disable-next-line no-unused-vars
       triggerRowFunc: function ({row}) {
@@ -70,26 +70,26 @@ export default {
       }
       const triggerRet = this.editConfigRef.triggerRowFunc({row: row})
 
-      this.rowEditorMode = AimFormInputModeEdit
+      this.rowEditState = AimFormInputEdit
       this.rowEditorAlert = null
 
       if (jsb.isString(triggerRet)) {
         // 如果只是返回字符串则：view状态，显示alert信息
-        this.rowEditorMode = AimFormInputModeView
+        this.rowEditState = AimFormInputView
         this.rowEditorAlert = triggerRet
       } else if (jsb.isObjectOrMap(triggerRet)) {
         // 如果返回的是一个object，索引其中的:active与alert字段
         // active默认为true, 如为true则进入edit状态
         // 可根据需求定制返回alert的样式
         if (jsb.pathGet(triggerRet, 'active', true)) {
-          this.rowEditorMode = AimFormInputModeEdit
+          this.rowEditState = AimFormInputEdit
         }
         this.rowEditorAlert = jsb.pathGet(triggerRet, 'alert')
       } else if (!triggerRet) {
         // 不允许编辑
         return;
       }
-      if (this.isInplaceEditor() && this.rowEditorMode === AimFormInputModeView && this.rowEditorAlert) {
+      if (this.isInplaceEditor() && this.rowEditState === AimFormInputView && this.rowEditorAlert) {
         this.toastError(this.rowEditorAlert, {timeout: 3000})
         return
       }
@@ -110,9 +110,9 @@ export default {
         this.tableData = []
       }
       this.rowEditorAlert = ''
-      this.rowEditorMode = AimFormInputModeInsert
+      this.rowEditState = AimFormInputInsert
       if (isCopy) {
-        this.rowEditorMode = AimFormInputModeCopy
+        this.rowEditState = AimFormInputCopy
       }
       let newRow = mustCtrlData(this.editConfigRef.newRow(this.schema, initRow))
       this.currentRow = newRow
@@ -127,7 +127,7 @@ export default {
       }
     },
     isInplaceEditor() {
-      return this.editConfigRef.rowEditor === RowEditorInplace
+      return this.editConfigRef.mode === EditModeInplace
     },
     rowDblClick(row) {
       this.rowClickWithTriggerName(row, EditTriggerDBLClick)
@@ -143,7 +143,7 @@ export default {
       if (this.editConfigRef.trigger === triggerName) {
         return true
       }
-      return this.editConfigRef.trigger === EditTriggerDBLClickOrSwitcher && (triggerName === EditTriggerSwitchButton || triggerName === EditTriggerDBLClick);
+      return this.editConfigRef.trigger === EditTriggerManualAndDBLClick && (triggerName === EditTriggerManual || triggerName === EditTriggerDBLClick);
     },
   }
 }

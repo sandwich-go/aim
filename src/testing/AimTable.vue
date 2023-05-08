@@ -41,10 +41,10 @@
 import AimTable from "@/components/AimTable/index.vue";
 import {
   EditTriggerDBLClick,
-  EditTriggerDBLClickOrSwitcher, EditTriggerInplaceNone,
-  EditTriggerSwitchButton,
-  RowEditorFormInput,
-  RowEditorInplace
+  EditTriggerManualAndDBLClick,
+  EditTriggerManual,
+  EditModeFormInput,
+  EditModeInplace
 } from "@/components/AimTable/table";
 import {
   CodeButtonAdd,
@@ -76,8 +76,8 @@ export default {
         autoWidth: false
       },
       editConfig: {
-        rowEditor: RowEditorFormInput,
-        trigger: EditTriggerDBLClickOrSwitcher,
+        mode: EditModeFormInput,
+        trigger: EditTriggerManualAndDBLClick,
         triggerRowFunc: ({row}) => {
           if (row.Online) {
             return "用户在线，不允许调整数据"
@@ -138,13 +138,13 @@ export default {
             },
             tableConfig:{
               tableProperty:{autoWidth: false},
-              editConfig:{rowEditor: RowEditorInplace,trigger:EditTriggerInplaceNone},
+              editConfig:{mode: EditModeInplace},
             }
           },
           cellFormConfig:{
             tableConfig:{
               tableProperty:{autoWidth: false},
-              editConfig:{rowEditor: RowEditorInplace,trigger:EditTriggerInplaceNone},
+              editConfig:{mode: EditModeInplace},
             },
           },
           fields:[
@@ -159,7 +159,7 @@ export default {
           type:'object',
           cellFormConfig:{
             tableProperty:{autoWidth: false},
-            editConfig:{rowEditor: RowEditorInplace,trigger:EditTriggerInplaceNone},
+            editConfig:{mode: EditModeInplace},
           },
           fields:[
             {field:'UseSystemSSH',name:'系统SSH秘钥',cellForm: 'CellSwitch',cell:'CellSwitch',width:160,},
@@ -404,9 +404,9 @@ export default {
           {
             cell: 'CellSelect',
             options: [
-              {label: EditTriggerSwitchButton, value: EditTriggerSwitchButton},
-              {label: EditTriggerDBLClick, value: EditTriggerDBLClick},
-              {label: EditTriggerDBLClickOrSwitcher, value: EditTriggerDBLClickOrSwitcher},
+              {label: "按钮切换: CodeButtonRowEdit", value: EditTriggerManual},
+              {label: "双击编辑", value: EditTriggerDBLClick},
+              {label: "双击或按钮切换", value: EditTriggerManualAndDBLClick},
             ],
             field: 'trigger',
             data: _this.editConfig,
@@ -418,14 +418,14 @@ export default {
           {
             cell: 'CellSelect',
             options: [
-              {label: RowEditorInplace, value: RowEditorInplace},
-              {label: RowEditorFormInput, value: RowEditorFormInput},
+              {label: EditModeInplace, value: EditModeInplace},
+              {label: EditModeFormInput, value: EditModeFormInput},
             ],
-            field: 'rowEditor',
+            field: 'mode',
             data: _this.editConfig,
             change: function (val) {
-              _this.editConfig.rowEditor = val
-              _this.toolbarAlert('CellSelect rowEditor', val)
+              _this.editConfig.mode = val
+              _this.toolbarAlert('CellSelect mode', val)
             },
             style: {'padding-right': '10px', width: '160px'},
           },

@@ -206,7 +206,7 @@
     <el-dialog
         modal
         width="80%"
-        :title="rowFormEditorTitle(rowEditorMode)"
+        :title="rowFormEditorTitle(rowEditState)"
         :close-on-press-escape="true"
         :append-to-body="popupAppendToBody"
         :visible.sync="rowFormEditorVisible"
@@ -220,12 +220,12 @@
           :popup-append-to-body="true"
           :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
           :alert-info="rowEditorAlert"
-          :mode="rowEditorMode"
+          :mode="rowEditState"
           :rules="formRulesFromSchema(schema,{row:rowInEdit,data:tableData})"
           :row-top="rowInEdit"
       ></aim-form-input>
       <span slot="footer" class="dialog-footer">
-        <template v-if="rowEditorMode=== AimFormInputModeView">
+        <template v-if="rowEditState=== AimFormInputView">
         <el-button size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
         </template>
         <template v-else>
@@ -264,13 +264,12 @@
 import Vue from 'vue';
 import AutoWidth from './AutoWidth';
 import {
-  EditTriggerInplaceNone,
-  EditTriggerSwitchButton,
+  EditTriggerManual,
   EventCurrentRowChange,
   mustCtrlData,
-  removeCtrlData, RowEditorInplace,
+  removeCtrlData,
   rowFormEditorTitle,
-  xidRow
+  xidRow, isInplaceEdit
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/schema";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -313,13 +312,13 @@ import MixinVisitor from "@/components/AimTable/mixins/MixinVisitor.vue";
 import CellList from "@/components/cells/CellList.vue";
 import AimDrawer from "@/components/AimDrawer/index.vue";
 import AimTableEditor from "@/components/AimTable/AimTableEditor/index.vue";
-import {AimFormInputModeView} from "@/components/AimFormInput";
 import {cellConfigForTable, cellShowWhenLostForTable, cellNameForTable} from "@/components/AimTable/cell";
 import {getProxySlotName} from "@/components/AimTable/slot";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
 import {cellNameForFormByType} from "@/components/cells/types";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
+import {AimFormInputView} from "@/components/AimFormInput";
 
 Vue.use(AutoWidth);
 
@@ -330,7 +329,7 @@ export default {
   computed: {
     cellName() {
       return (fs, row) => {
-        return cellNameForTable(fs, row,this.editConfigRef.rowEditor === RowEditorInplace )
+        return cellNameForTable(fs, row,isInplaceEdit(this.editConfigRef.mode))
       }
     },
     cellConfig() {
@@ -382,8 +381,8 @@ export default {
   },
   data() {
     return {
-      flexEndStyle: flexEndStyle,
-      AimFormInputModeView: AimFormInputModeView,
+      AimFormInputView,
+      flexEndStyle,
       radioRow: null,
       visitSettingDrawerVisible: false,
     }
@@ -528,7 +527,7 @@ export default {
           })
           break
         case CodeButtonRowEdit:
-          this.rowClickWithTriggerName(row, EditTriggerSwitchButton)
+          this.rowClickWithTriggerName(row, EditTriggerManual)
           break
         case CodeButtonRowDelete:
         case CodeButtonRowMinus:
@@ -564,13 +563,13 @@ export default {
       // this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
     },
     privateShouldCellDisable({code, cell, row, fieldSchema}) {
+      if(this.readOnly) {
+        return true
+      }
       if (code === CodeButtonRowSelectedMinus ||
           code === CodeButtonRowSelectedClose ||
           code === CodeButtonRowSelectedDelete) {
         return this.getSelectionRows().length === 0
-      }
-      if (row && this.editConfigRef.rowEditor === RowEditorInplace && !this.isEditTriggerAccepted(EditTriggerInplaceNone)) {
-        return this.rowInEdit !== row
       }
       if (cell.disable || cell.disabled) {
         return true

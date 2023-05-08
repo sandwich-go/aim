@@ -12,7 +12,7 @@
         :popup-append-to-body="true"
         :drag-config="{icon:true}"
         :header-config="headerConfig"
-        :edit-config="{rowEditor: RowEditorFormInput,trigger:EditTriggerDBLClick}"
+        :edit-config="{mode: RowEditorFormInput,trigger:EditTriggerDBLClick}"
     ></aim-table>
   </div>
 </template>
@@ -21,7 +21,12 @@
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import {CodeButtonRefresh, CodeButtonSaveTableData} from "@/components/cells/const";
-import {EditTriggerDBLClick, RowEditorFormInput} from "@/components/AimTable/table";
+import {
+  EditTriggerDBLClick, EditTriggerManualAndDBLClick,
+  EditTriggerManual,
+  EditModeFormInput,
+  EditModeInplace
+} from "@/components/AimTable/table";
 import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import {cellNameForFormByType, cellNameForTableByType} from "@/components/cells/types";
@@ -42,7 +47,7 @@ export default {
   data() {
     const _this = this
     return {
-      RowEditorFormInput,
+      RowEditorFormInput: EditModeFormInput,
       CodeButtonSaveTableData,
       CodeButtonRefresh,
       EditTriggerDBLClick,
@@ -87,6 +92,23 @@ export default {
           {cell: 'CellCheckbox', field: 'autoWidth', data: _this.visitorData, label: '自适应列宽',border:true},
           {cell: 'CellCheckbox', field: 'rowDrag', data: _this.visitorData, label: '行拖拽',border:true},
           {cell: 'CellCheckbox', field: 'columnDrag', data: _this.visitorData, label: '列拖拽',border:true},
+          {
+            field: 'mode', data: _this.visitorData,
+            cell: 'CellSelect',
+            options: [
+              {label: "行内编辑", value: EditModeInplace},
+              {label: "Form表单编辑", value: EditModeFormInput},
+            ],
+          },
+          {
+            field: 'rowTrigger', data: _this.visitorData,
+            cell: 'CellSelect',
+            options: [
+              {label: "按钮切换: CodeButtonRowEdit", value: EditTriggerManual},
+              {label: "双击编辑", value: EditTriggerDBLClick},
+              {label: "双击或按钮切换", value: EditTriggerManualAndDBLClick},
+            ],
+          },
         ],
         rightCells: [CodeButtonSaveTableData, CodeButtonRefresh],
       },

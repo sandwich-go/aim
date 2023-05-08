@@ -1,16 +1,16 @@
 import jsb from "@sandwich-go/jsb";
 
-export const AimFormInputModeInsert = "AimFormInputModeInsert"
-export const AimFormInputModeEdit = "AimFormInputModeEdit"
-export const AimFormInputModeCopy = "AimFormInputModeCopy"
-export const AimFormInputModeView = "AimFormInputModeView"
+export const AimFormInputInsert = "AimFormInputInsert"
+export const AimFormInputEdit = "AimFormInputEdit"
+export const AimFormInputCopy = "AimFormInputCopy"
+export const AimFormInputView = "AimFormInputView"
 
 export const AimFormInputMode2Title = {}
 
-AimFormInputMode2Title[AimFormInputModeInsert] = '新建'
-AimFormInputMode2Title[AimFormInputModeEdit] = '编辑'
-AimFormInputMode2Title[AimFormInputModeCopy] = '复制'
-AimFormInputMode2Title[AimFormInputModeView] = '查看'
+AimFormInputMode2Title[AimFormInputInsert] = '新建'
+AimFormInputMode2Title[AimFormInputEdit] = '编辑'
+AimFormInputMode2Title[AimFormInputCopy] = '复制'
+AimFormInputMode2Title[AimFormInputView] = '查看'
 
 export function calcLabelWidth(schema) {
     let longestTextWidth = jsb.longestTextWidth(schema.map(function (element) {

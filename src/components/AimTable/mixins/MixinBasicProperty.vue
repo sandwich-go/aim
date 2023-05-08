@@ -10,6 +10,7 @@ export default {
   name: 'MixinBasicProperty',
   mixins:[CreateMixinState()],
   props: {
+    readOnly:Boolean,
     tableDivStyle: Object,
     cellStyle: [Function,Object],
     rowStyle: [Function,Object],
