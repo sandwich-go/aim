@@ -25,7 +25,7 @@ import {
   EditTriggerDBLClick, EditTriggerManualAndDBLClick,
   EditTriggerManual,
   EditModeFormInput,
-  EditModeInplace
+  EditModeInplace, EditModeInplaceNoTrigger
 } from "@/components/AimTable/table";
 import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
@@ -96,6 +96,7 @@ export default {
             field: 'mode', data: _this.visitorData,
             cell: 'CellSelect',
             options: [
+              {label: "行内编辑(无需trigger)", value: EditModeInplaceNoTrigger},
               {label: "行内编辑", value: EditModeInplace},
               {label: "Form表单编辑", value: EditModeFormInput},
             ],

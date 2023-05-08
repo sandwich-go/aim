@@ -44,7 +44,7 @@ import {
   EditTriggerManualAndDBLClick,
   EditTriggerManual,
   EditModeFormInput,
-  EditModeInplace
+  EditModeInplace, EditModeInplaceNoTrigger
 } from "@/components/AimTable/table";
 import {
   CodeButtonAdd,
@@ -418,8 +418,9 @@ export default {
           {
             cell: 'CellSelect',
             options: [
-              {label: EditModeInplace, value: EditModeInplace},
-              {label: EditModeFormInput, value: EditModeFormInput},
+              {label: "行内编辑(无需trigger)", value: EditModeInplaceNoTrigger},
+              {label: "行内编辑", value: EditModeInplace},
+              {label: "Form表单编辑", value: EditModeFormInput},
             ],
             field: 'mode',
             data: _this.editConfig,
