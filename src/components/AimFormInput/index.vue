@@ -87,6 +87,15 @@ export default {
     CellViewLabelTooltip,
     AimTable: () => import("@/components/AimTable/index.vue"),
   },
+  watch:{
+    schema: {
+      handler: function () {
+        this.processSchema()
+      },
+      deep:true,
+      immediate: true
+    },
+  },
   computed: {
     cellName() {
       return (fs) => {
@@ -140,9 +149,6 @@ export default {
       dataRef: this.data,
     }
   },
-  created() {
-    this.processSchema()
-  },
   methods: {
     isAimFormInput,
     isAimTable,
@@ -166,6 +172,12 @@ export default {
         }
         if ((itemType === 'table' && jsb.isEmpty(_this.dataRef[fs.field]))) {
           _this.dataRef[fs.field] = []
+        }
+        const watch = jsb.pathGet(fs,'watch')
+        if(watch){
+          _this.$watch(`dataRef.${fs.field}`,function (valNew,valOld){
+            watch({row:this.data,valOld:valOld,valNew:valNew})
+          })
         }
       })
     },
