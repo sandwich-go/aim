@@ -17,7 +17,7 @@ export const EditModeInplace = 'EditModeInplace'                   // 就地编�
 export const EditModeFormInput = 'EditModeFormInput'               // 使用form input方式编辑,数据量较大时推荐该方式
 
 
-export const CtrlDataInRowData = '___x_table_ctrl_data'
+export const CtrlDataInRowData = '___aim_table_ctrl_data'
 export const EventCurrentRowChange = 'EventCurrentRowChange'
 
 export function isModeInplace(mode) {
