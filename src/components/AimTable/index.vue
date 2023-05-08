@@ -269,7 +269,7 @@ import {
   mustCtrlData,
   removeCtrlData,
   rowFormEditorTitle,
-  xidRow, isInplaceEdit
+  xidRow, isModeInplace, EditModeInplace
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/schema";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -329,7 +329,7 @@ export default {
   computed: {
     cellName() {
       return (fs, row) => {
-        return cellNameForTable(fs, row,isInplaceEdit(this.editConfigRef.mode))
+        return cellNameForTable(fs, row,isModeInplace(this.editConfigRef.mode))
       }
     },
     cellConfig() {
@@ -451,7 +451,7 @@ export default {
       }
     },
     escKey() {
-      if (this.isInplaceEditor()) {
+      if (this.isModeInplace()) {
         this.rowInEdit = null
       }
     },
@@ -571,6 +571,9 @@ export default {
           code === CodeButtonRowSelectedClose ||
           code === CodeButtonRowSelectedDelete) {
         return this.getSelectionRows().length === 0
+      }
+      if(row && this.editConfigRef.mode === EditModeInplace && row !== this.rowInEdit) {
+        return true
       }
       if (cell.disable || cell.disabled) {
         return true

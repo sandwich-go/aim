@@ -4,7 +4,7 @@ import {
   EditTriggerDBLClick,
   EditTriggerManualAndDBLClick,
   EditTriggerManual, mustCtrlData,
-  EditModeFormInput, EditModeInplace
+  EditModeFormInput, isModeInplace
 } from "@/components/AimTable/table";
 import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSaveRemote} from "@/components/cells/const";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
@@ -61,7 +61,12 @@ export default {
   },
   methods: {
     updateRowInEdit(row) {
-      this.rowInEdit = row
+      if(this.isModeInplace()){
+        // 本地编辑时切换为非编辑状态
+        this.rowInEdit = row === this.rowInEdit?null:row
+      }else{
+        this.rowInEdit = row
+      }
     },
     rowClickWithTriggerName(row, triggerName) {
       this.currentChange(row)
@@ -89,7 +94,7 @@ export default {
         // 不允许编辑
         return;
       }
-      if (this.isInplaceEditor() && this.rowEditState === AimFormInputView && this.rowEditorAlert) {
+      if (this.isModeInplace() && this.rowEditState === AimFormInputView && this.rowEditorAlert) {
         this.toastError(this.rowEditorAlert, {timeout: 3000})
         return
       }
@@ -100,7 +105,7 @@ export default {
       this.debug && this.setDebugMessage(`setEditRow row  ${this.summaryRow(row)}`)
       this.currentRow = row
       this.updateRowInEdit(row)
-      if (!this.isInplaceEditor()) {
+      if (!this.isModeInplace()) {
         // form 表单编辑逻辑
         this.rowFormEditorVisible = true
       }
@@ -118,7 +123,7 @@ export default {
       this.currentRow = newRow
       this.updateRowInEdit(newRow)
 
-      if (this.isInplaceEditor()) {
+      if (this.isModeInplace()) {
         // inplace编辑模式
         this.tableData.push(newRow)
       } else {
@@ -126,8 +131,8 @@ export default {
         this.rowFormEditorVisible = true
       }
     },
-    isInplaceEditor() {
-      return this.editConfigRef.mode === EditModeInplace
+    isModeInplace() {
+      return isModeInplace(this.editConfigRef.mode)
     },
     rowDblClick(row) {
       this.rowClickWithTriggerName(row, EditTriggerDBLClick)

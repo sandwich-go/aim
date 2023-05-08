@@ -20,7 +20,7 @@ export const EditModeFormInput = 'EditModeFormInput'               // 使用form
 export const CtrlDataInRowData = '___x_table_ctrl_data'
 export const EventCurrentRowChange = 'EventCurrentRowChange'
 
-export function isInplaceEdit(mode) {
+export function isModeInplace(mode) {
     return mode === EditModeInplaceNoTrigger || mode === EditModeInplace
 }
 
