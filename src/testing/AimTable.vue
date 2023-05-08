@@ -101,6 +101,7 @@ export default {
         {
           field: 'id', name: 'ID',
           type: 'input',
+          min_width: 180,
           sortable: true,
           locked:true,
           cellHeader:[CodeLinkFieldJump],
