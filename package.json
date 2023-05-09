@@ -1,11 +1,15 @@
 {
-  "name": "aim",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@sandwich-go/aim",
+  "version": "0.1.5",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "release": "yarn version --new-version patch && vue-cli-service build --target lib src/components/index.js"
+  },
+  "main": "dist/aim.umd.js",
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@sandwich-go/jsb": "0.1.92",
