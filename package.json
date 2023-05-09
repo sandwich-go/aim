@@ -1,6 +1,6 @@
 {
   "name": "@sandwich-go/aim",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -12,7 +12,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@sandwich-go/jsb": "0.1.92",
+    "@sandwich-go/jsb": "0.1.96",
     "core-js": "^3.8.3",
     "crypto": "^1.0.1",
     "element-ui": "2.12.0",
