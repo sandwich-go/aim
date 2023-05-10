@@ -324,7 +324,6 @@ export default {
 .aim-form-item-comment {
   color: #707070;
   font-size: 12px;
-  display: flex;
   align-items: center;
   justify-content: flex-start;
 }
