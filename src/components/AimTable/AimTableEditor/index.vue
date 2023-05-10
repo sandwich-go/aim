@@ -74,15 +74,13 @@ export default {
         {field: 'min_width', name: '最小宽度', width: 160, type: 'input_number'},
         {field: 'max_width', name: '最大宽度', width: 160, type: 'input_number'},
         {
-          field: 'show', name: '默认显示', type: 'switch', width: 120, cellTable: ({row}) => {
-            return jsb.pathGet(_this.visitorData, `${row.field}.show`, true)
-          }
+          field: 'show', name: '默认显示', type: 'switch', width: 120,
         },
         {field: 'groupCouldView', width: 300, name: '可查看(组)', type: 'select_multiple'},
         {field: 'groupCouldEdit', width: 300, name: '可编辑(组)', type: 'select_multiple'},
         {field: 'userCouldView', width: 300, name: '可查看(人)', type: 'select_multiple'},
         {field: 'userCouldEdit', width: 300, name: '可编辑(人)', type: 'select_multiple'},
-        {field: 'tips', width: 300, name: 'Table字段说明', cellTableName: 'input'},
+        {field: 'tips', width: 300, name: 'Table字段说明', type: 'input'},
       ],
       visitorData: {fieldMap: {},autoWidth:false,rowDrag:false,columnDrag:false},
       headerConfig: {

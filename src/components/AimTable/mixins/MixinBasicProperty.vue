@@ -44,6 +44,7 @@ export default {
   },
   created() {
     jsb.objectAssignNX(this.tablePropertyRef, {
+      divStyle:{'padding-top':'9px'},
       autoWidth: false,
       border: true,
       stripe: true,

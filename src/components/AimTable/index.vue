@@ -1,5 +1,5 @@
 <template>
-  <div @keyup.esc="escKey">
+  <div @keyup.esc="escKey" :style="tablePropertyRef.divStyle">
     <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
     <el-row :style="headerConfigRef.style">
       <!-- header toolbar -->
@@ -23,7 +23,6 @@
         </cell-list>
       </el-col>
     </el-row>
-
     <el-row class="aim-component-flex-end" style="align-items: start;gap: 3px">
       <el-table
           v-fit-columns="{
@@ -209,6 +208,7 @@
           v-if="rowInEdit && rowFormEditorVisible"
           :key="xidRow(rowInEdit)"
           :schema="validSchema(schema)"
+          :group-config="groupConfig"
           :data="rowInEdit"
           :popup-append-to-body="true"
           :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"

@@ -10,6 +10,7 @@
         ref="table"
         :enable-debug="true"
         :schema="schema"
+        :group-config="groupConfig"
         :should-cell-disable="shouldCellDisable"
         :should-cell-hide="shouldCellHide"
         :header-config="toolbarConfig()"
@@ -97,6 +98,10 @@ export default {
       rightBarConfig: {
         cells: [CodeButtonAdd,CodeButtonRowSelectedMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
       },
+      groupConfig:[
+        {type:'inline',fields:['id','name'],after:'@start'},
+        {type:'tab',fields:['AuthInfo','AuthInfoObject']}
+      ],
       schema: [
         {
           field: 'id', name: 'ID',
@@ -110,6 +115,7 @@ export default {
           tips_show_icon: true,
           summary: true,
           readOnly: true,
+          show:false,
           fixed:"left",
           backgroundAsHeader: true,
           filter:{placeholder:'请输入ID',format:(v)=>{ return Number(v)}}

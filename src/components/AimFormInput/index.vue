@@ -13,53 +13,53 @@
         show-message
         label-position="right"
         size="mini">
-      <template v-for="(fs) in schema">
-        <el-form-item :key="fs.field" :label="formLabel(fs)" :prop="fs.field" :ref="fs.field">
-          <span v-if="fs.tips" slot='label'>
-            <cell-view-label-tooltip :cell-config="{label:formLabel(fs),tips:fs.tips}"></cell-view-label-tooltip>
-          </span>
-          <div class="aim-component-flex-start" v-if="registeredComponentMap[cellName(fs)]">
-            <component
-                :is="registeredComponentMap[cellName(fs)]"
-                :data="dataRef"
-                :field-name="fs.field"
-                :options="fs.options || []"
-                :style-base="{width:'100%'}"
-                :cell-config="cellConfig(fs)"
-                :field-schema="fs"
-                :disabled="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
-                :key="fieldComponentKey(fs)"
-            ></component>
-          </div>
-          <div v-else-if="isAimTable(cellName(fs))">
-            <el-card class="box-card" shadow="always">
-              <aim-table
-                  :schema="fs.fields"
-                  :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
-                  v-bind="cellConfigForTable(fs)"
-                  :key="fieldComponentKey(fs)"
-              ></aim-table>
-            </el-card>
-          </div>
-          <div v-else-if="isAimFormInput(cellName(fs))">
-            <el-card class="box-card" shadow="always">
-              <aim-form-input
-                  :schema="fs.fields"
-                  :data="dataRef[fs.field]"
-                  :row-top="getRow()"
-                  :parent-key="fs.field"
-                  :key="fieldComponentKey(fs)"
-                  :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
-                  :should-cell-disable="shouldCellDisable"
-                  :popup-append-to-body="true"
-              ></aim-form-input>
-            </el-card>
-          </div>
-          <div v-else>{{ cellName(fs) }} not supported</div>
-
-          <span v-if="fs.comment" class="aim-form-item-comment">{{ comment(getRow(), fs) }}</span>
-          <span v-if="fs.commentHTML" class="aim-form-item-comment" v-html="commentHTML(getRow(),fs)"></span>
-        </el-form-item>
+      <template v-for="(fs,index) in fieldSorted">
+        <template v-if="fs.__isGroup && fs.setting.type ==='inline'">
+          <el-row :key="`group_inline_${index}`">
+            <template v-for="(fss,subIndex) in fs.fieldSchemaList">
+              <el-col :key="`group_inline_${index}_${subIndex}`" :span="span(fs,fss.field)">
+                <aim-form-item
+                    :fs="fss"
+                    :label-width="labelWidthPixel"
+                    :data-ref="dataRef"
+                    :get-row="getRow"
+                    :should-cell-disable="shouldCellDisable"
+                    :private-should-cell-disable="privateShouldCellDisable"
+                ></aim-form-item>
+              </el-col>
+            </template>
+          </el-row>
+        </template>
+        <template v-else-if="fs.__isGroup && fs.setting.type ==='tab'">
+          <el-form-item :key="`group_tab_${fs.index}`">
+            <el-tabs v-model="currTab[`group_tab_${fs.index}`]">
+              <el-tab-pane v-for="(fss,subIndex) in fs.fieldSchemaList" :key="`group_tab_${fs.index}_${subIndex}`" :label="formLabel(fss)" :name="formLabel(fss)" :lazy="true">
+                <span slot='label' v-if="fss.tips">
+                  <cell-view-label-tooltip :cell-config="{label:formLabel(fss),tips:fss.tips}"></cell-view-label-tooltip>
+                </span>
+                <aim-form-item
+                    :fs="fss"
+                    :data-ref="dataRef"
+                    :get-row="getRow"
+                    label-width="0px"
+                    :show-label="false"
+                    :should-cell-disable="shouldCellDisable"
+                    :private-should-cell-disable="privateShouldCellDisable"
+                ></aim-form-item>
+              </el-tab-pane>
+            </el-tabs>
+          </el-form-item>
+        </template>
+        <aim-form-item
+            v-else
+            :fs="fs"
+            :label-width="labelWidthPixel"
+            :key="index"
+            :data-ref="dataRef"
+            :get-row="getRow"
+            :should-cell-disable="shouldCellDisable"
+            :private-should-cell-disable="privateShouldCellDisable"
+        ></aim-form-item>
       </template>
     </el-form>
   </div>
@@ -70,22 +70,22 @@ import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 
 import isString from "@sandwich-go/jsb/isString";
 import jsb from "@sandwich-go/jsb";
-import {AimFormInputInsert, AimFormInputView, calcLabelWidth, comment, commentHTML} from "./index";
+import {AimFormInputInsert, AimFormInputView, calcLabelWidth} from "./index";
 import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
-import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 import {xidRow} from "@/components/AimTable/table";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import {cellConfigForForm, cellNameForForm} from "@/components/AimTable/cell";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
-import {isAimFormInput, isAimTable} from "@/components/cells/is";
 import {isVirtualField} from "@/components/AimTable/schema";
+import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
+import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 
 export default {
   name: "AimFormInput",
   components: {
+    AimFormItem,
     CellViewAlert,
     CellViewLabelTooltip,
-    AimTable: () => import("@/components/AimTable/index.vue"),
   },
   watch:{
     schema: {
@@ -147,7 +147,8 @@ export default {
     enableWatcher:{
       type:Boolean,
       default:true,
-    }
+    },
+    groupConfig:Array,
   },
   data() {
     return {
@@ -158,20 +159,31 @@ export default {
       rulesRef: this.rules,
       fieldsCommon: [],
       dataRef: this.data,
+
+      // inline显示的字段
+      fieldSorted:[],
+      currTab:{},
     }
   },
   methods: {
-    isAimFormInput,
-    isAimTable,
-    commentHTML,
-    comment,
     isString,
+    afterField(fieldGroupList,field){
+      let ret = []
+      jsb.each(fieldGroupList,function (group){
+        if(group.setting.after === field){
+          ret.push(group)
+        }
+      })
+      return ret
+    },
     processSchema() {
       if (!this.dataRef) {
         return
       }
-      this.fieldsCommon = []
+      const fieldsCommon = []
+      const fieldGroupList = []
       const _this = this
+
       jsb.each(this.schema, function (fs) {
         if (isVirtualField(fs)) {
           return
@@ -190,7 +202,52 @@ export default {
             watch({row:this.data,newValue, oldValue})
           })
         }
+        let asCommonField = true
+        jsb.each(_this.groupConfig,function (groupSetting,index){
+          if(!asCommonField) {
+            return
+          }
+          const fields = groupSetting.fields
+          let fieldShouldInGroup
+          if(jsb.isArray(fields)){
+            fieldShouldInGroup = fields.includes(fs.field)
+          }else{
+            fieldShouldInGroup = fields[fs.field]
+          }
+          if(fieldShouldInGroup){
+            let group = jsb.find(fieldGroupList,item=>item.index === index)
+            if(!group){
+              group = {index:index,fieldSchemaList:[],setting:groupSetting,__isGroup:true}
+              fieldGroupList.push(group)
+            }
+            asCommonField = false
+            if(!_this.currTab[`group_tab_${index}`]){
+              _this.currTab[`group_tab_${index}`] = _this.formLabel(fs)
+            }
+            group.fieldSchemaList.push(fs)
+          }
+        })
+        if(asCommonField){
+          fieldsCommon.push(fs)
+        }
       })
+      _this.fieldSorted = []
+      _this.fieldSorted.push(..._this.afterField(fieldGroupList,'@start'))
+      jsb.each(fieldsCommon,function (fs){
+        _this.fieldSorted.push(fs)
+        _this.fieldSorted.push(..._this.afterField(fieldGroupList,fs.field))
+      })
+      jsb.each(fieldGroupList,function (group){
+        if(!jsb.find(_this.fieldSorted,item=>item.index === group.index)) {
+          _this.fieldSorted.push(group)
+        }
+      })
+    },
+    span(group,field){
+      if(jsb.isArray(group.setting.fields)) {
+        return 24/group.setting.fields.length
+      }
+      return group.setting.fields[field] ||  24/group.setting.fields.length
     },
     fieldType(fs) {
       return jsb.pathGet(fs, 'typeFormInput', fs['type'])

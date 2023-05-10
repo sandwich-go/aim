@@ -11,6 +11,7 @@ export default {
     enableDebug: Boolean,
     schema:Array,
     readOnly: Boolean,
+    groupConfig:Array,
   },
   watch:{
     currentRow:{

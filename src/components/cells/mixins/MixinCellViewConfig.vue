@@ -9,7 +9,7 @@ export default {
   computed: {
     fieldValue() {
       return (jsb.isEmpty(this.cellConfig) && jsb.isPlainObject(this.cellConfig)) ?
-          (this.formatter ? this.formatter(jsb.pathGet(this.data, this.fieldName)) : jsb.pathGet(this.data, this.fieldName)) :
+          (this.formatter ? this.formatter({value:jsb.pathGet(this.data, this.fieldName),row:this.data}) : jsb.pathGet(this.data, this.fieldName)) :
           this.cellConfig
     },
   },
