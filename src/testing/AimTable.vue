@@ -164,6 +164,8 @@ export default {
             tableProperty:{autoWidth: false},
             editConfig:{mode: EditModeInplace},
           },
+          cell:'CellViewBoolean',
+          formatter:(v)=>{return v && v.UseSystemSSH},
           fields:[
             {field:'UseSystemSSH',name:'系统SSH秘钥',cellForm: 'CellSwitch',cell:'CellSwitch',width:160,},
             {field:'UserName',name:'UserName',cellForm: 'CellInput',cell:'CellInput',width:300},

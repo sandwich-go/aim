@@ -26,7 +26,6 @@ export default {
   },
   methods:{
     expandAll(tableData,tableRef){
-      console.log("xid ",this.stateXID)
       this.isExpandAll = !this.isExpandAll
       jsb.each(tableData,(row)=>{
         tableRef.toggleRowExpansion(row,this.isExpandAll )

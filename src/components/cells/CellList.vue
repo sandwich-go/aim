@@ -19,7 +19,7 @@
         <slot v-else-if="cell.slot"
               :name="getProxySlotName(cell.slot)"
               :cell-config="cell"
-              :data="cell.dataWrapper || cell"
+              :data="cell.data || cell"
               :field-name="cell.field || 'value'"
               :options="cell.options || []"
               :disabled="shouldCellDisable({cell:cell,code:cell.code ||''})"

@@ -157,7 +157,6 @@ export default {
               tips: v.tips
             }
           })
-          console.log("tableVisitorDatatableVisitorData ",tableVisitorData)
           _this.editorProxyConfigRef.saveTableData({tableData: tableVisitorData})
         }
       }

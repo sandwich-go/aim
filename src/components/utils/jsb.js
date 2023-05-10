@@ -27,8 +27,8 @@ export function wrapAsTagList(val, options) {
         for (const item of options) {
             if (item.value === v) {
                 tagList.push(Object.assign({
-                    type: 'primary',
-                    effect: 'light',
+                    type: item.type || 'info',
+                    effect: item.effect || 'light',
                     label: item.label
                 }, jsb.pathGet(item, 'asTag', {})))
                 found = true
@@ -36,7 +36,7 @@ export function wrapAsTagList(val, options) {
         }
         if (!found) {
             tagList.push(Object.assign({
-                type: 'primary',
+                type: 'info',
                 effect: 'light',
                 label: v
             }))

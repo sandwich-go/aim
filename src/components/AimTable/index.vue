@@ -120,6 +120,7 @@
                         :is="registeredComponentMap[cellName(fs,scope.row)]"
                         :data="scope.row"
                         :field-name="fs.field"
+                        :formatter="fs.formatter"
                         :cell-config="cellConfig(fs,scope.row)"
                         :options="fs.options || []"
                         :field-schema="fs"
@@ -260,7 +261,7 @@ import {
   EditTriggerManual,
   EventCurrentRowChange,
   rowFormEditorTitle,
-  xidRow, isModeInplace, EditModeInplace, copyRow
+  xidRow, isModeInplace, EditModeInplace, copyRow, aimTableWarn, aimTableLog
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/schema";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -394,7 +395,7 @@ export default {
     xidRow,
     getProxySlotName,
     setDebugMessage(title,msg='') {
-      console.log(`AimTable Debug >> | ${title} ${msg}`)
+      aimTableLog(title,msg)
     },
     fieldShow(fs) {
       return jsb.pathGet(fs, 'show', true)
@@ -497,7 +498,7 @@ export default {
       switch (code) {
         case CodeButtonDebug:
           this.debug = !this.debug
-          console.warn(`AimTable Debug >> | ${this.debug?'opened':'closed'}`)
+          aimTableWarn(`${this.debug?'opened':'closed'}`)
           break
         case CodeButtonRefresh:
           this.proxyQueryData()

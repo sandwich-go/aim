@@ -20,6 +20,16 @@ export const EditModeFormInput = 'formInput'               // 使用form input�
 export const CtrlDataInRowData = '___aim_table_ctrl_data'
 export const EventCurrentRowChange = 'EventCurrentRowChange'
 
+export function aimTableError(title,message='') {
+    console.error(`AimTable Error  >> | ${title} ${message}`)
+}
+export function aimTableWarn(title,message='') {
+    console.warn(`AimTable Warn  >> | ${title} ${message}`)
+}
+export function aimTableLog(title, message='') {
+    console.log(`AimTable Debug   >> | ${title} ${message}`)
+}
+
 export function isModeInplace(mode) {
     return mode === EditModeInplaceNoTrigger || mode === EditModeInplace
 }

@@ -1,7 +1,9 @@
 import {pathGet} from "@/components/utils/jsb";
 import {cellNameForFormByType, cellNameForTableByType, cellNameForTableInplaceByType} from "@/components/cells/types";
+import {aimTableError, aimTableWarn} from "@/components/AimTable/table";
 
 const jsb = require("@sandwich-go/jsb")
+
 
 
 // Table 内组件
@@ -22,13 +24,21 @@ export function cellNameForTable(fs,row,inplace=false) {
     return cellTable
 }
 
+function watchCellConfig(cc){
+    if(jsb.isPlainObject(cc) || jsb.isArray(cc)){
+        return cc
+    }
+    aimTableError("cell config should be object or array for CellList")
+    return cc
+}
+
 // cellConfigForTable 获取table内cell的配置
 export function cellConfigForTable(fs,row) {
     let cc = jsb.pathGet(fs, FieldPathCellConfigForTable,{})
     if (jsb.isFunction(cc)) {
-        return cc({row, fs, fieldValue: jsb.pathGet(row, fs.field)})
+        cc = cc({row, fs, fieldValue: jsb.pathGet(row, fs.field)})
     }
-    return cc
+    return watchCellConfig(cc)
 }
 
 // cellNameForForm 获取form内fs使用的组件名称
@@ -44,9 +54,9 @@ export function cellNameForForm(fs, row) {
 export function cellConfigForForm(fieldSchema,row) {
     let cc = jsb.pathGet(fieldSchema, FieldPathCellConfigForForm,{})
     if (jsb.isFunction(cc)) {
-        return cc({row, fieldSchema, fieldValue: jsb.pathGet(row, fieldSchema.field)})
+        cc = cc({row, fieldSchema, fieldValue: jsb.pathGet(row, fieldSchema.field)})
     }
-    return cc
+    return watchCellConfig(cc)
 }
 
 // 当cell的类型无法被正确识时

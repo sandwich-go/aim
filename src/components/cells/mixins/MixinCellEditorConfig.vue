@@ -5,14 +5,19 @@ export default {
   name: 'MixinCellEditorConfig',
   props: {
     cellConfig:{},          // 组件配置，editor的cellConfig必须为Object,但是对viewer可以为组件需要的值
+
     data: Object,           // 父对象数据，必须是一个Object,组件的model为data[fieldName]
-    options:[Function,Array],
     fieldName: String,
+
+    formatter:Function, // 格式化化方法
+
+    options:[Function,Array],
 
     styleOverride: Object, // 便于组件覆盖基础配置，如form中所有的元素设定为100% width，但是少数对象如checkbox不允许100%
     styleBase: Object,     // 便于父对象定义基础配置，如form中所有的元素设定为100% width
     disabled: Boolean,    // 是否只读
-    fieldSchema:Object,
+
+    fieldSchema:Object,   // trigger时需要通过fieldSchema定位fields字段数据
   },
   data() {
     const _this = this
