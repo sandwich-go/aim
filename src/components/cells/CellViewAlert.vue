@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {parseWidthToPixelString} from "@/utils/ui";
+import {parseWidthToPixelString} from "@/components/utils/ui";
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 export default {
   name: 'CellViewAlert',

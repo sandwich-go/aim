@@ -52,10 +52,10 @@ export default {
       highlightCurrentRow: true,
       headerCellStyle: {textAlign: 'center', padding: '0', color: headerColor, background: headerBackgroundColor},
       emptyText: '',
-      // rowStyle: {height: "30px", 'padding':0},// object of function
       height: null,
       heightSubVH: 0,
     })
+    this.debug && this.setDebugMessage("tableProperty",JSON.stringify(this.tablePropertyRef))
   },
   methods: {
     // getSelectionRowList 获取选中行，包含__xx_tmp数据

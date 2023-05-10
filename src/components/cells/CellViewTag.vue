@@ -7,6 +7,7 @@
               :key="index"
               size="mini"
               :style="cc.style"
+              @click.native="function(){ item.click && item.click()}"
               :type="item.type || 'info'"
               :effect="item.effect || 'light'">
               {{ item.label }}
@@ -18,7 +19,7 @@
 
 <script>
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
-import {wrapAsTagList} from "@/utils/jsb";
+import {wrapAsTagList} from "@/components/utils/jsb";
 
 export default {
   name: 'CellViewTag',

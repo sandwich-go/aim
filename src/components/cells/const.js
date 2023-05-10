@@ -1,5 +1,6 @@
 const jsb = require("@sandwich-go/jsb")
 
+export const CodeButtonDebug = "btnDebug"
 export const CodeButtonRefresh = "btnRefresh"
 export const CodeButtonCustom = "btnCustom"
 export const CodeButtonPrint = "btnPrint"
@@ -30,6 +31,7 @@ export const CodeLinkFieldJump = "linkFieldJump"
 
 // 快捷方式按钮属性映射
 export const code2OptionsMapping = {}
+code2OptionsMapping[CodeButtonDebug] = {icon: 'el-icon-magic-stick', type: 'warning', circle: true, label: 'DEBUG'}
 code2OptionsMapping[CodeButtonAdd] = {icon: 'el-icon-plus', type: 'primary', circle: true, label: '新建'}
 code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primary', circle: true, label: '刷新'}
 code2OptionsMapping[CodeButtonPrint] = {icon: 'el-icon-printer', type: 'primary', circle: true, label: '导出'}
@@ -40,16 +42,16 @@ code2OptionsMapping[CodeButtonSaveTableData] = {icon: 'el-icon-check', type: 'pr
 code2OptionsMapping[CodeButtonFilterSearch] = {icon: 'el-icon-search', type: 'primary', circle: false,plain:true}
 
 
-code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true}
-code2OptionsMapping[CodeButtonRowCopy] = {icon: 'el-icon-copy-document', label: '拷贝', type: 'primary', circle: true}
+code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true,plain:true}
+code2OptionsMapping[CodeButtonRowCopy] = {icon: 'el-icon-copy-document', label: '拷贝', type: 'primary', circle: true,plain:true}
 
-code2OptionsMapping[CodeButtonRowMinus] = {icon: 'el-icon-minus', label: '删除', type: 'danger', circle: true}
-code2OptionsMapping[CodeButtonRowDelete] = {icon: 'el-icon-delete', label: '删除', type: 'danger', circle: true}
-code2OptionsMapping[CodeButtonRowClose] = {icon: 'el-icon-close', label: '删除', type: 'danger', circle: true}
+code2OptionsMapping[CodeButtonRowMinus] = {icon: 'el-icon-minus', label: '删除', type: 'danger', circle: true,plain:true}
+code2OptionsMapping[CodeButtonRowDelete] = {icon: 'el-icon-delete', label: '删除', type: 'danger', circle: true,plain:true}
+code2OptionsMapping[CodeButtonRowClose] = {icon: 'el-icon-close', label: '删除', type: 'danger', circle: true,plain:true}
 
-code2OptionsMapping[CodeButtonRowSelectedMinus] = {icon: 'el-icon-minus', label: '删除选中行', type: 'danger', circle: true}
-code2OptionsMapping[CodeButtonRowSelectedDelete] = {icon: 'el-icon-delete', label: '删除选中行', type: 'danger', circle: true}
-code2OptionsMapping[CodeButtonRowSelectedClose] = {icon: 'el-icon-close', label: '删除选中行', type: 'danger', circle: true}
+code2OptionsMapping[CodeButtonRowSelectedMinus] = {icon: 'el-icon-minus', label: '删除选中行', type: 'danger', circle: true,plain:true}
+code2OptionsMapping[CodeButtonRowSelectedDelete] = {icon: 'el-icon-delete', label: '删除选中行', type: 'danger', circle: true,plain:true}
+code2OptionsMapping[CodeButtonRowSelectedClose] = {icon: 'el-icon-close', label: '删除选中行', type: 'danger', circle: true,plain:true}
 
 
 code2OptionsMapping[CodeButtonRowSaveLocal] = {

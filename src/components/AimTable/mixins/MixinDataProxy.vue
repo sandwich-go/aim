@@ -109,7 +109,7 @@ export default {
       const confirmDoneFunc = ()=>{
         _this.tryPromise(funcName,{row,rows},function ({error}){
           if(!error){
-            _this.tryProxyQueryData()
+            _this.proxyQueryData()
           }
           done && done({error})
         },'数据已删除')
@@ -132,7 +132,7 @@ export default {
       this.tryPromise('save',{row: toSave},done,'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
-    tryProxyQueryData({done,params} = {}) {
+    proxyQueryData({done,params} = {}) {
 
       params = this.addFilterDataToParams(params)
       params = this.PagerAddToParams(params)

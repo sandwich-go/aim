@@ -1,4 +1,4 @@
-import {pathGet} from "@/utils/jsb";
+import {pathGet} from "@/components/utils/jsb";
 import {cellNameForFormByType, cellNameForTableByType, cellNameForTableInplaceByType} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")

@@ -41,7 +41,7 @@
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import {makeCellFromString} from "@/components/cells/make";
 import {getProxySlotName} from "@/components/AimTable/slot";
-import {parseWidthToPixelString} from "@/utils/ui";
+import {parseWidthToPixelString} from "@/components/utils/ui";
 
 const jsb = require("@sandwich-go/jsb")
 

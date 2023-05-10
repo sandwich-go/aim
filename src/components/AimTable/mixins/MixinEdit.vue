@@ -58,9 +58,11 @@ export default {
         return [CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowHistory]
       }
     })
+    this.debug && this.setDebugMessage("editConfig",JSON.stringify(this.editConfigRef))
   },
   methods: {
     updateRowInEdit(row) {
+      this.debug && this.setDebugMessage(`rowInEdit  ${JSON.stringify(row)}`)
       if(this.isModeInplace()){
         // 本地编辑时切换为非编辑状态
         this.rowInEdit = row === this.rowInEdit?null:row

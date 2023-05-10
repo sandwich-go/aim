@@ -1,14 +1,6 @@
 <template>
   <div @keyup.esc="escKey">
     <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
-    <el-alert v-if="debug"
-              style="height: 28px;margin-bottom: 9px;font-weight: bold"
-              :title="`AimTable debug enabled : `+debugMessage"
-              effect="light"
-              show-icon
-              :closable="false"
-              type="info">
-    </el-alert>
     <el-row :style="headerConfigRef.style">
       <!-- header toolbar -->
       <el-col v-for="direction of ['left','right']"
@@ -267,10 +259,8 @@ import AutoWidth from './AutoWidth';
 import {
   EditTriggerManual,
   EventCurrentRowChange,
-  mustCtrlData,
-  removeCtrlData,
   rowFormEditorTitle,
-  xidRow, isModeInplace, EditModeInplace
+  xidRow, isModeInplace, EditModeInplace, copyRow
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/schema";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -279,7 +269,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
 import {
-  CodeButtonAdd,
+  CodeButtonAdd, CodeButtonDebug,
   CodeButtonExpandAll, CodeButtonFilterSearch,
   CodeButtonRefresh,
   CodeButtonRowClose,
@@ -322,7 +312,6 @@ import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
 import {AimFormInputView} from "@/components/AimFormInput";
 
 Vue.use(AutoWidth);
-
 const jsb = require("@sandwich-go/jsb")
 
 export default {
@@ -390,7 +379,7 @@ export default {
   },
   created() {
     this.tableData = this.processTableData(this.tableData)
-    this.tryProxyQueryData()
+    this.proxyQueryData()
     this.schemaApplyVisitorData()
     this.processSchemaFilter()
     // 占位
@@ -404,8 +393,8 @@ export default {
     validSchema: filterVirtualField,
     xidRow,
     getProxySlotName,
-    setDebugMessage(msg) {
-      this.debugMessage = msg
+    setDebugMessage(title,msg='') {
+      console.log(`AimTable Debug >> | ${title} ${msg}`)
     },
     fieldShow(fs) {
       return jsb.pathGet(fs, 'show', true)
@@ -506,8 +495,12 @@ export default {
         !error && (this.rowFormEditorVisible && (this.rowFormEditorVisible = false))
       }
       switch (code) {
+        case CodeButtonDebug:
+          this.debug = !this.debug
+          console.warn(`AimTable Debug >> | ${this.debug?'opened':'closed'}`)
+          break
         case CodeButtonRefresh:
-          this.tryProxyQueryData()
+          this.proxyQueryData()
           break
         case CodeButtonSaveTableData:
           this.trySaveTableData()
@@ -519,11 +512,11 @@ export default {
           this.addRow()
           break
         case CodeButtonFilterSearch:
-          this.tryProxyQueryData()
+          this.proxyQueryData()
           break
         case CodeButtonRowCopy:
           this.addRow({
-            initRow: this.editConfigRef.copyRow(mustCtrlData(removeCtrlData(jsb.clone(row)))),
+            initRow: this.editConfigRef.copyRow(copyRow(row)),
             isCopy: true
           })
           break

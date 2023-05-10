@@ -8,7 +8,7 @@ export default {
   name: 'MixinState',
   mixins: [MixinPager],
   props: {
-    debug: Boolean,
+    enableDebug: Boolean,
     schema:Array,
     readOnly: Boolean,
   },
@@ -32,7 +32,6 @@ export default {
       rowInEdit: null,
       rowFormEditorVisible: false,
       inLoading: false,
-      debugMessage: '',
       rowEditorAlert: null,
       rowEditState: AimFormInputView,
       funcProcessQueryParams: [],
@@ -41,6 +40,7 @@ export default {
       // schema中抽取而来的filter cell
       filterData:{},
       filterTypeMapping:{},
+      debug:this.enableDebug,
     }
   },
   methods: {
@@ -66,6 +66,7 @@ export default {
     thisTarget() {
       return this
     },
+    setLoading(inLoading){this.inLoading = inLoading},
     doLayout() {
       this.$refs.table && this.$refs.table.doLayout()
     },

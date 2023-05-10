@@ -1,4 +1,4 @@
-export const  headerBackgroundColor = '#dcdee2'
+export const  headerBackgroundColor = '#eceff1'
 export const headerColor = '#606266'
 
 export const flexStartStyle = {

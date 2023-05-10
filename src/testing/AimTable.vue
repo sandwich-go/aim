@@ -8,7 +8,7 @@
         type="info"></el-alert>
     <aim-table
         ref="table"
-        :debug="true"
+        :enable-debug="true"
         :schema="schema"
         :should-cell-disable="shouldCellDisable"
         :should-cell-hide="shouldCellHide"
@@ -48,7 +48,7 @@ import {
 } from "@/components/AimTable/table";
 import {
   CodeButtonAdd,
-  CodeButtonCustom, CodeButtonExpandAll,
+  CodeButtonCustom, CodeButtonDebug, CodeButtonExpandAll,
   CodeButtonPrint,
   CodeButtonRefresh, CodeButtonRowClose,
   CodeButtonRowCopy,
@@ -73,7 +73,7 @@ export default {
       toolbarOptionServer: '',
       tableProperty: {
         heightSubVH: 80,
-        autoWidth: false
+        autoWidth: true
       },
       editConfig: {
         mode: EditModeFormInput,
@@ -101,7 +101,7 @@ export default {
         {
           field: 'id', name: 'ID',
           type: 'input',
-          min_width: 180,
+          //min_width: 180,
           sortable: true,
           locked:true,
           cellHeader:[CodeLinkFieldJump],
@@ -116,14 +116,11 @@ export default {
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
-          min_width: 180,
+          //min_width: 180,
           placeholder: "xxx.xx",
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          cell: function ({row}) {
-            return row.id < 6 ? 'CellInput' : 'CellSelect'
-          },
           cellForm: function ({row}) {
             return !row.id || row.id < 5 ? 'CellInput' : 'CellSelect'
           },
@@ -162,7 +159,7 @@ export default {
         {
           field: 'AuthInfoObject', name: 'AuthInfoObject',
           type:'object',
-          min_width: 180,
+          //min_width: 180,
           cellFormConfig:{
             tableProperty:{autoWidth: false},
             editConfig:{mode: EditModeInplace},
@@ -176,7 +173,7 @@ export default {
         {
           field: 'Link',
           name: 'Link',
-          min_width: 180,
+          //min_width: 180,
           showOverflowTooltip: true,
           sortable: true,
           align: 'center',
@@ -191,7 +188,7 @@ export default {
         {
           field: 'Number', name: 'InputNumber', type: 'input', sortable: true,
           placeholder: "xxx.xx",
-          min_width: 180,
+          //min_width: 180,
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
@@ -201,7 +198,7 @@ export default {
         {
           field: 'Icon', name: 'Icon', type: 'input', sortable: true,
           placeholder: "xxx.xx",
-          min_width: 180,
+          //min_width: 180,
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
@@ -214,7 +211,7 @@ export default {
         {
           field: 'Online',
           name: '在线',
-          min_width: 180,
+          //min_width: 180,
           type: 'switch',
           sortable: true,
           align: 'center',
@@ -224,7 +221,7 @@ export default {
         },
         {
           field: 'Tag',
-          min_width: 180,
+          //min_width: 180,
           name: 'Tag',
           type: 'select',
           sortable: true,
@@ -240,7 +237,7 @@ export default {
           field: 'Checkbox',
           name: 'Checkbox',
           type: 'switch',
-          min_width: 180,
+          //min_width: 180,
           sortable: true,
           align: 'center',
           cell: 'CellCheckbox',
@@ -249,7 +246,7 @@ export default {
         {
           field: 'Datetime',
           type:'datetime',
-          min_width: 180,
+          //min_width: 180,
           name: 'Datetime',
           cell: 'CellDatePicker',
           cellForm: 'CellDatePicker',
@@ -257,7 +254,7 @@ export default {
         },
         {
           field: 'DatetimeRange',
-          min_width: 180,
+          //min_width: 180,
           name: 'Datetime',
           cell: 'CellDateRangePicker',
           cellForm: 'CellDateRangePicker',
@@ -265,7 +262,7 @@ export default {
         {
           field: 'Color',
           name: 'Color',
-          min_width: 180,
+          //min_width: 180,
           cell: 'CellViewColor',
           cellForm: 'CellColorPicker',
         },
@@ -358,7 +355,7 @@ export default {
       tableData: [
         {
           id: 4,
-          name: '1111',
+          name: '1111http://sample.pmt.centurygame.io/pmt#/dashboardhttp://sample.pmt.centurygame.io/pmt#/dashboard',
           Link: "http://sample.pmt.centurygame.io/pmt#/dashboard",
           Icon: 'el-icon-user-solid',
           Online: true,
@@ -468,7 +465,7 @@ export default {
           {},
           {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
         ],
-        rightCells: [CodeButtonSaveTableData,CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting],
+        rightCells: [CodeButtonSaveTableData,CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting,CodeButtonDebug],
         style: {}
       }
     }

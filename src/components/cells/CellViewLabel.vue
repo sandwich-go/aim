@@ -10,7 +10,7 @@
 
 <script>
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
-import {isPlainObject} from "@/utils/jsb";
+import {isPlainObject} from "@/components/utils/jsb";
 
 export default {
   name: 'CellViewLabel',

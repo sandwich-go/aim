@@ -1,10 +1,8 @@
-const jsb = require("@sandwich-go/jsb")
-
-function adjustColumnWidth(table,bindingValue,addClass=false) {
+function adjustColumnWidth(table,bindingValue) {
     if (!bindingValue.enabled) {
         return
     }
-    addClass && table.classList.add("aim-table-auto-width");
+    table.classList.add("aim-table-auto-width");
     forceAdjustColumnWidth(table, bindingValue)
 }
 
@@ -21,11 +19,15 @@ function forceAdjustColumnWidth(table, bindingValue) {
                 ...table.querySelectorAll(`td.${clsName}`),
                 ...table.querySelectorAll(`th.${clsName}`),
             ];
-            if (cells[0]?.classList?.contains?.("aim-column-fixed-width")) {
+            if (cells[0] && cells[0].classList && cells[0].classList.contains("aim-column-fixed-width")) {
                 return;
             }
             const widthList = cells.map((el) => {
-                return el.querySelector(".cell")?.scrollWidth || 0;
+                const cell = el.querySelector(".cell");
+                if(cell && cell.scrollWidth){
+                    return cell.scrollWidth
+                }
+                return 0
             });
             const max = Math.max(...widthList);
             table.querySelectorAll(`col[name=${clsName}]`).forEach((el) => {
@@ -43,15 +45,14 @@ export default {
             bind() {
             },
             inserted(el, binding) {
-                jsb.debounce(() => {
+                setTimeout(() => {
                     adjustColumnWidth(el, binding.value);
                 }, 300);
             },
             componentUpdated(el, binding) {
-                const func = jsb.debounce(() => {
+                setTimeout(() => {
                     adjustColumnWidth(el, binding.value,true);
-                }, 300)
-                func()
+                }, 300);
             },
             unbind() {
             },
