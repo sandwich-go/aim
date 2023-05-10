@@ -1,6 +1,6 @@
 import {pathGet} from "@/components/utils/jsb";
 import {cellNameForFormByType, cellNameForTableByType, cellNameForTableInplaceByType} from "@/components/cells/types";
-import {aimTableError, aimTableWarn} from "@/components/AimTable/table";
+import {aimTableError} from "@/components/AimTable/table";
 
 const jsb = require("@sandwich-go/jsb")
 
