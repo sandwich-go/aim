@@ -100,7 +100,8 @@ export default {
       },
       groupConfig:[
         {type:'inline',fields:['id','name'],after:'@start'},
-        {type:'tab',fields:['AuthInfo','AuthInfoObject']}
+        {type:'tab',fields:['AuthInfo','AuthInfoObject']},
+        {type:'divider','content-position':"left",label:'分割线',after:'Link'}
       ],
       schema: [
         {

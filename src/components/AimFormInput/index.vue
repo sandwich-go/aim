@@ -14,7 +14,10 @@
         label-position="right"
         size="mini">
       <template v-for="(fs,index) in fieldSorted">
-        <template v-if="fs.__isGroup && fs.setting.type ==='inline'">
+        <template v-if="fs.__isGroup && fs.setting.type ==='divider'">
+          <el-divider :key="`group_divider_${index}`" v-bind="fs.setting">{{fs.setting.label}}</el-divider>
+        </template>
+        <template v-else-if="fs.__isGroup && fs.setting.type ==='inline'">
           <el-row :key="`group_inline_${index}`">
             <template v-for="(fss,subIndex) in fs.fieldSchemaList">
               <el-col :key="`group_inline_${index}_${subIndex}`" :span="span(fs,fss.field)">
@@ -209,10 +212,12 @@ export default {
           }
           const fields = groupSetting.fields
           let fieldShouldInGroup
-          if(jsb.isArray(fields)){
-            fieldShouldInGroup = fields.includes(fs.field)
-          }else{
-            fieldShouldInGroup = fields[fs.field]
+          if(fields){
+            if(jsb.isArray(fields)){
+              fieldShouldInGroup = fields.includes(fs.field)
+            }else{
+              fieldShouldInGroup = fields[fs.field]
+            }
           }
           if(fieldShouldInGroup){
             let group = jsb.find(fieldGroupList,item=>item.index === index)
@@ -231,6 +236,13 @@ export default {
           fieldsCommon.push(fs)
         }
       })
+
+      jsb.each(_this.groupConfig,function (groupSetting,index){
+        if(groupSetting.type==='divider') {
+          fieldGroupList.push({index:index,setting:groupSetting,__isGroup:true})
+        }
+      })
+
       _this.fieldSorted = []
       _this.fieldSorted.push(..._this.afterField(fieldGroupList,'@start'))
       jsb.each(fieldsCommon,function (fs){
