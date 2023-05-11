@@ -26,7 +26,6 @@ export default {
     this.ccConfigMerge()
     this.cc.codeMirrorConfig = jsb.objectAssignNX(this.cc.codeMirrorConfig, {
       popupAppendToBody:true,
-      readOnly:true
     })
   },
 }

@@ -29,7 +29,6 @@ export default {
       proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, this.fieldName),
       selection:true,
       popupAppendToBody:true,
-      readOnly:true,
     },this.cc.tableConfig)
   },
 }

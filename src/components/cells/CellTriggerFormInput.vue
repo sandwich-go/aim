@@ -25,7 +25,6 @@ export default {
     this.ccConfigMerge()
     this.cc.formConfig = jsb.objectAssignNX(this.cc.formConfig, {
       popupAppendToBody:true,
-      readOnly:true,
     })
   },
 }
