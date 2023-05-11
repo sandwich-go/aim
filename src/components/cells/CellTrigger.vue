@@ -7,7 +7,7 @@
         :append-to-body="true"
         :destroy-on-close="true"
         :visible.sync="dialogVisible">
-      <slot :name="cc.slot"
+      <slot name="target"
             :cc="cc"
             :field-schema="fieldSchema"
             :data="dataRef"
@@ -48,7 +48,7 @@ export default {
     this.ccConfigMerge()
     this.cc.trigger = jsb.objectAssignNX(this.cc.trigger, {
       isButton: false,
-      icon: 'el-icon-edit',
+      icon: 'el-icon-view',
     })
   },
   data() {

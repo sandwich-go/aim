@@ -3,7 +3,7 @@
           <span v-if="fs.tips && showLabel" slot='label'>
             <cell-view-label-tooltip :cell-config="{label:formLabel(fs),tips:fs.tips}"></cell-view-label-tooltip>
           </span>
-    <div class="aim-component-flex-start" v-if="registeredComponentMap[cellName(fs)]">
+    <template v-if="registeredComponentMap[cellName(fs)]">
       <component
           :is="registeredComponentMap[cellName(fs)]"
           :data="dataRef"
@@ -15,7 +15,7 @@
           :disabled="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
           :key="fieldComponentKey(fs)"
       ></component>
-    </div>
+    </template>
     <div v-else-if="isAimTable(cellName(fs))">
       <el-card class="box-card" shadow="always">
         <aim-table

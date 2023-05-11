@@ -26,6 +26,7 @@ export default {
     this.ccConfigMerge({
       showLabel: true,
       element: true,
+      style:{width:'100%'}
     })
   },
   methods: {

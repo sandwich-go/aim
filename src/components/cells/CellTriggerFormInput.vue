@@ -1,6 +1,6 @@
 <template>
   <cell-trigger :cell-config="cc" :field-name="fieldName" :field-schema="fieldSchema" :data="dataRef">
-    <template v-slot:formInput>
+    <template v-slot:target>
       <aim-form-input
           :schema="fieldSchema['fields']"
           :data="dataRef[fieldName]"
@@ -22,9 +22,10 @@ export default {
   components: {CellTrigger, AimFormInput},
   mixins: [MixinCellEditorConfig],
   created() {
-    this.ccConfigMerge({slot:'formInput'})
+    this.ccConfigMerge()
     this.cc.formConfig = jsb.objectAssignNX(this.cc.formConfig, {
       popupAppendToBody:true,
+      readOnly:true,
     })
   },
 }

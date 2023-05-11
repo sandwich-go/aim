@@ -1,7 +1,7 @@
 <template>
   <div @keyup.esc="escKey" :style="tablePropertyRef.divStyle">
     <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
-    <el-row :style="headerConfigRef.style">
+    <el-row v-if="headerConfigRef.enable" :style="headerConfigRef.style">
       <!-- header toolbar -->
       <el-col v-for="direction of ['left','right']"
               :key="direction"

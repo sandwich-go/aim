@@ -100,7 +100,7 @@ export default {
       },
       groupConfig:[
         {type:'inline',fields:['id','name'],after:'@start'},
-        {type:'tab',fields:['AuthInfo','AuthInfoObject']},
+        {type:'tab',fields:['AuthInfo','AuthInfoObject','code']},
         {type:'divider','content-position':"left",label:'分割线',after:'Link'}
       ],
       schema: [
@@ -142,9 +142,6 @@ export default {
           width: 160,
           type:'table',
           cellConfig:{
-            trigger:{
-              label:'编辑',
-            },
             tableConfig:{
               tableProperty:{autoWidth: false},
               editConfig:{mode: EditModeInplace},
@@ -178,6 +175,24 @@ export default {
             {field:'UserName',name:'UserName',cellForm: 'CellInput',cell:'CellInput',width:300},
             {field:'Password',name:'Password',cellForm: 'CellInput',cell:'CellInput'}
           ],
+        },
+        {
+          field: 'code',
+          name: 'code',
+          type:'code',
+          watch:({row,newValue,oldValue})=>{console.log("watch code change ",row,newValue,oldValue)},
+          cellConfig:{
+            codeMirrorConfig:{
+              infoConfig:{mode:'json'},
+              headerConfig:{rightCells:['btnLint','btnCopy']}
+            }
+          },
+          cellFormConfig:{
+            codeMirrorConfig:{
+              infoConfig:{mode:'json'},
+              headerConfig:{rightCells:['btnLint','btnCopy']}
+            }
+          },
         },
         {
           field: 'Link',

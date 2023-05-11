@@ -4,7 +4,7 @@ import {
   EditTriggerDBLClick,
   EditTriggerManualAndDBLClick,
   EditTriggerManual, mustCtrlData,
-  EditModeFormInput, isModeInplace
+  EditModeFormInput, isModeInplace, xidRow
 } from "@/components/AimTable/table";
 import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSaveRemote} from "@/components/cells/const";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";

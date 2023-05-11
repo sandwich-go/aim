@@ -309,11 +309,10 @@ export default {
 
 <style>
 .aim-component-flex-start {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  z-index: 10;
+  //align-items: start;
+  //justify-content: flex-start;
+  //overflow: hidden;
+  //z-index: 10;
 }
 
 .aim-component-flex-end {
@@ -324,8 +323,8 @@ export default {
 .aim-form-item-comment {
   color: #707070;
   font-size: 12px;
-  align-items: center;
-  justify-content: flex-start;
+  //align-items: center;
+  //justify-content: flex-start;
 }
 
 </style>

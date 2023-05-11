@@ -1,6 +1,6 @@
 <template>
   <cell-trigger :cell-config="cc" :field-name="fieldName" :field-schema="fieldSchema" :data="dataRef">
-    <template v-slot:aimTable>
+    <template v-slot:target>
       <aim-table
           ref="aimTable"
           :schema="fieldSchema['fields']"
@@ -22,13 +22,14 @@ export default {
   components: {AimTable, CellTrigger},
   mixins: [MixinCellEditorConfig],
   created() {
-    this.ccConfigMerge({slot:'aimTable'})
+    this.ccConfigMerge()
     // tableConfig以cc本地数据为源，防止被多行数据共享
     this.cc.tableConfig = Object.assign({
       righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
       proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, this.fieldName),
       selection:true,
       popupAppendToBody:true,
+      readOnly:true,
     },this.cc.tableConfig)
   },
 }

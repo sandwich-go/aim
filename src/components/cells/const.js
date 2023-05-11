@@ -1,5 +1,7 @@
 const jsb = require("@sandwich-go/jsb")
 
+export const CodeButtonLint = "btnLint"
+export const CodeButtonCopy = "btnCopy"
 export const CodeButtonDebug = "btnDebug"
 export const CodeButtonRefresh = "btnRefresh"
 export const CodeButtonCustom = "btnCustom"
@@ -31,6 +33,8 @@ export const CodeLinkFieldJump = "linkFieldJump"
 
 // 快捷方式按钮属性映射
 export const code2OptionsMapping = {}
+code2OptionsMapping[CodeButtonLint] = {icon: 'el-icon-magic-stick', type: 'primary', circle: true, label: '语法检查',plain:true}
+code2OptionsMapping[CodeButtonCopy] = {icon: 'el-icon-copy-document', type: 'primary', circle: true, label: '拷贝',plain:true}
 code2OptionsMapping[CodeButtonDebug] = {icon: 'el-icon-magic-stick', type: 'warning', circle: true, label: 'DEBUG'}
 code2OptionsMapping[CodeButtonAdd] = {icon: 'el-icon-plus', type: 'primary', circle: true, label: '新建'}
 code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primary', circle: true, label: '刷新'}
