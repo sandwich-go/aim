@@ -24,8 +24,9 @@ export default {
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
-    this.cc.codeMirrorConfig = jsb.objectAssignNX(this.cc.codeMirrorConfig, {
+    this.cc.codeMirror = jsb.objectAssignNX(this.cc.codeMirror, {
       popupAppendToBody:true,
+      height:`${jsb.clientHeight(100)}px`
     })
   },
 }

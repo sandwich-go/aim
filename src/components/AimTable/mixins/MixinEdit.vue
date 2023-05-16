@@ -4,9 +4,9 @@ import {
   EditTriggerDBLClick,
   EditTriggerManualAndDBLClick,
   EditTriggerManual, mustCtrlData,
-  EditModeFormInput, isModeInplace, xidRow
+  EditModeFormInput, isModeInplace,
 } from "@/components/AimTable/table";
-import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSaveRemote} from "@/components/cells/const";
+import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSave} from "@/components/cells/const";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {
   AimFormInputCopy,
@@ -55,7 +55,7 @@ export default {
       },
       // eslint-disable-next-line no-unused-vars
       formEditorCells: function ({row}) {
-        return [CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowHistory]
+        return [CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowHistory]
       }
     })
     this.debug && this.setDebugMessage("editConfig",JSON.stringify(this.editConfigRef))
@@ -68,6 +68,9 @@ export default {
         this.rowInEdit = row === this.rowInEdit?null:row
       }else{
         this.rowInEdit = row
+      }
+      if(this.rowInEdit){
+        this.updateRowWatcher(this.rowInEdit)
       }
     },
     rowClickWithTriggerName(row, triggerName) {
@@ -109,7 +112,7 @@ export default {
       this.updateRowInEdit(row)
       if (!this.isModeInplace()) {
         // form 表单编辑逻辑
-        this.rowFormEditorVisible = true
+        this.showFormEditorForRow(this.rowInEdit)
       }
     },
     addRow({initRow, isCopy} = {initRow: {}, isCopy: false}) {
@@ -130,8 +133,14 @@ export default {
         this.tableData.push(newRow)
       } else {
         // form 表单编辑逻辑
-        this.rowFormEditorVisible = true
+        this.showFormEditorForRow(newRow)
       }
+    },
+    showFormEditorForRow(row) {
+      // form 表单编辑逻辑,拷贝当前编辑行
+      this.rowInEditForm = jsb.clone(row)
+      this.updateRowWatcher(this.rowInEditForm)
+      this.rowFormEditorVisible = true
     },
     isModeInplace() {
       return isModeInplace(this.editConfigRef.mode)

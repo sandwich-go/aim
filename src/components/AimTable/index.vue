@@ -119,7 +119,7 @@
                         :is="registeredComponentMap[cellName(fs,scope.row)]"
                         :data="scope.row"
                         :field-name="fs.field"
-                        :formatter="fs.formatter"
+                        :formatter="formatterFunction(fs)"
                         :cell-config="cellConfig(fs,scope.row)"
                         :options="fs.options || []"
                         :field-schema="fs"
@@ -205,17 +205,17 @@
         @close="rowFormEditorClose">
       <aim-form-input
           ref="aimFormInput"
-          v-if="rowInEdit && rowFormEditorVisible"
-          :key="xidRow(rowInEdit)"
+          v-if="rowInEditForm && rowFormEditorVisible"
+          :key="xidRow(rowInEditForm)"
           :schema="validSchema(schema)"
           :group-config="groupConfig"
-          :data="rowInEdit"
+          :data="rowInEditForm"
           :popup-append-to-body="true"
           :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
           :alert-info="rowEditorAlert"
           :mode="rowEditState"
-          :rules="formRulesFromSchema(schema,{row:rowInEdit,data:tableData})"
-          :row-top="rowInEdit"
+          :rules="formRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
+          :row-top="rowInEditForm"
           :enable-watcher="false"
       ></aim-form-input>
       <span slot="footer" class="dialog-footer">
@@ -226,10 +226,10 @@
         <cell-list
             :style="flexEndStyle"
             :shortcut-button-options="{circle:false}"
-            :cells="editConfigRef.formEditorCells({row:rowInEdit})"
+            :cells="editConfigRef.formEditorCells({row:rowInEditForm})"
             :should-cell-hide="privateShouldCellHide"
             :should-cell-disable="privateShouldCellDisable"
-            @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEdit,code,jsEvent,fromForm:true})"
+            @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEditForm,code,jsEvent,fromForm:true})"
         >
           <template v-for="item in editConfigRef.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
             <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
@@ -277,8 +277,7 @@ import {
   CodeButtonRowCopy,
   CodeButtonRowDelete,
   CodeButtonRowEdit,
-  CodeButtonRowMinus,
-  CodeButtonRowSaveRemote,
+  CodeButtonRowMinus, CodeButtonRowSave,
   CodeButtonRowSelectedClose,
   CodeButtonRowSelectedDelete,
   CodeButtonRowSelectedMinus,
@@ -304,7 +303,12 @@ import MixinVisitor from "@/components/AimTable/mixins/MixinVisitor.vue";
 import CellList from "@/components/cells/CellList.vue";
 import AimDrawer from "@/components/AimDrawer/index.vue";
 import AimTableEditor from "@/components/AimTable/AimTableEditor/index.vue";
-import {cellConfigForTable, cellShowWhenLostForTable, cellNameForTable} from "@/components/AimTable/cell";
+import {
+  cellConfigForTable,
+  cellShowWhenLostForTable,
+  cellNameForTable,
+  formatterFunction
+} from "@/components/AimTable/cell";
 import {getProxySlotName} from "@/components/AimTable/slot";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
@@ -387,6 +391,7 @@ export default {
     this.getProxySlotName()
   },
   methods: {
+    formatterFunction,
     cellShowWhenGetLostForTable: cellShowWhenLostForTable,
     directionToolbarSpan,
     rowFormEditorTitle,
@@ -492,8 +497,12 @@ export default {
     },
     // 默认的code处理逻辑
     defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
-      const done = ({error}) => {
-        !error && (this.rowFormEditorVisible && (this.rowFormEditorVisible = false))
+      const editDone = ({error}) => {
+        if(!error && fromForm) {
+          this.rowFormEditorVisible = false
+          // form表单编辑完后重新拉取数据
+          this.proxyQueryData()
+        }
       }
       switch (code) {
         case CodeButtonDebug:
@@ -527,7 +536,7 @@ export default {
         case CodeButtonRowDelete:
         case CodeButtonRowMinus:
         case CodeButtonRowClose:
-          this.tryProxyDelete(row, {done})
+          this.tryProxyDelete(row, {done:editDone})
           break
         case CodeButtonRowSelectedMinus:
         case CodeButtonRowSelectedDelete:
@@ -540,14 +549,14 @@ export default {
         case CodeButtonExpandAll:
           this.expandAll(this.tableData, this.$refs.table)
           break
-        case CodeButtonRowSaveRemote:
+        case CodeButtonRowSave:
           if (fromForm) {
             this.$refs.aimFormInput.validate(() => {
-              this.tryProxySaveRow(row, {done})
+              this.tryProxySaveRow(row, {done:editDone})
             })
           } else {
             //fixme inplace下无法使用form的validate
-            this.tryProxySaveRow(row, {done})
+            this.tryProxySaveRow(row, {done:editDone})
           }
           break
         default:

@@ -13,24 +13,15 @@ export default {
     readOnly: Boolean,
     groupConfig:Array,
   },
-  watch:{
-    currentRow:{
-      handler(newVal) {
-        this.updateRowWatcher(newVal)
-      }
-    },
-    rowInEdit:{
-      handler(newVal) {
-        this.updateRowWatcher(newVal)
-      }
-    },
-  },
   data() {
     return {
       stateXID: jsb.xid(),
       tableData: [],
+
       currentRow: null,
       rowInEdit: null,
+      rowInEditForm: null, // form正在编辑的行，区别于rowInEdit，form正在编辑的行需要完整拷贝rowInEdit，便于取消提交操作时的回滚操作
+
       rowFormEditorVisible: false,
       inLoading: false,
       rowEditorAlert: null,

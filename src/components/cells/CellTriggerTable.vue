@@ -4,7 +4,7 @@
       <aim-table
           ref="aimTable"
           :schema="fieldSchema['fields']"
-          v-bind="cc.tableConfig"
+          v-bind="cc.table"
       ></aim-table>
     </template>
   </cell-trigger>
@@ -24,12 +24,12 @@ export default {
   created() {
     this.ccConfigMerge()
     // tableConfig以cc本地数据为源，防止被多行数据共享
-    this.cc.tableConfig = Object.assign({
+    this.cc.table = Object.assign({
       righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
       proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, this.fieldName),
       selection:true,
       popupAppendToBody:true,
-    },this.cc.tableConfig)
+    },this.cc.table)
   },
 }
 </script>

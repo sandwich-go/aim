@@ -3,7 +3,7 @@
       :code="dataRef[fieldName]"
       :popup-append-to-body="true"
       :code-change="codeChange"
-      v-bind="cc.codeMirrorConfig"
+      v-bind="cc.codeMirror"
   ></aim-code-mirror>
 </template>
 
@@ -18,7 +18,7 @@ export default {
   components: {AimCodeMirror},
   created() {
     this.ccConfigMerge()
-    this.cc.codeMirrorConfig = jsb.objectAssignNX(this.cc.codeMirrorConfig, {
+    this.cc.config = jsb.objectAssignNX(this.cc.config, {
       popupAppendToBody:true,
     })
   },

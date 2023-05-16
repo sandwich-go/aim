@@ -45,7 +45,6 @@ export function copyRow(row){
 
 export function mustCtrlData(row) {
     if(!jsb.eqNull(xidRow(row))){
-        console.log("xidRow(row) ",xidRow(row))
         return row
     }
     if (!row[CtrlDataInRowData]) {

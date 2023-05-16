@@ -13,8 +13,7 @@ export const CodeButtonSaveTableData = "btnSaveTableData" // 整表数据提交
 export const CodeButtonFilterSearch = "btnFilterSearch"
 
 export const CodeButtonRowCopy = "btnRowCopy"
-export const CodeButtonRowSaveLocal = "btnRowSaveLocal"
-export const CodeButtonRowSaveRemote = "btnRowSaveRemote"
+export const CodeButtonRowSave = "btnRowSave"
 export const CodeButtonRowHistory = "btnRowHistory"
 export const CodeButtonRowEdit = "btnRowEdit"
 
@@ -58,13 +57,8 @@ code2OptionsMapping[CodeButtonRowSelectedDelete] = {icon: 'el-icon-delete', labe
 code2OptionsMapping[CodeButtonRowSelectedClose] = {icon: 'el-icon-close', label: '删除选中行', type: 'danger', circle: true,plain:true}
 
 
-code2OptionsMapping[CodeButtonRowSaveLocal] = {
-    icon: 'el-icon-check',
-    label: '保存到本地',
-    type: 'primary',
-    circle: true
-}
-code2OptionsMapping[CodeButtonRowSaveRemote] = {
+
+code2OptionsMapping[CodeButtonRowSave] = {
     icon: 'el-icon-check',
     label: '保存',
     type: 'primary',

@@ -1,5 +1,6 @@
 <template>
-  <el-form-item :key="fs.field" :label="showLabel?formLabel(fs):''" :prop="fs.field" :ref="fs.field" :label-width="labelWidth">
+  <el-form-item :key="fs.field" :label="showLabel?formLabel(fs):''" :prop="fs.field" :ref="fs.field"
+                :label-width="labelWidth">
           <span v-if="fs.tips && showLabel" slot='label'>
             <cell-view-label-tooltip :cell-config="{label:formLabel(fs),tips:fs.tips}"></cell-view-label-tooltip>
           </span>
@@ -50,7 +51,10 @@
 <script>
 import {cellConfigForForm, cellNameForForm} from "@/components/AimTable/cell";
 import jsb from "@sandwich-go/jsb";
-import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
+import {
+  CodeButtonAdd, CodeButtonRowSave,
+  CodeButtonRowSelectedMinus
+} from "@/components/cells/const";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import {xidRow} from "@/components/AimTable/table";
 import {isAimFormInput, isAimTable} from "@/components/cells/is";
@@ -60,16 +64,16 @@ import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 
 export default {
   name: "AimFormItem",
-  props:{
-    getRow:Function,
-    fs:Object,
-    privateShouldCellDisable:Function,
-    shouldCellDisable:Function,
-    dataRef:Object,
-    labelWidth:String,
-    showLabel:{
-      type:Boolean,
-      default:true
+  props: {
+    getRow: Function,
+    fs: Object,
+    privateShouldCellDisable: Function,
+    shouldCellDisable: Function,
+    dataRef: Object,
+    labelWidth: String,
+    showLabel: {
+      type: Boolean,
+      default: true
     },
   },
   mixins: [mixinComponentMap],
@@ -82,13 +86,18 @@ export default {
     // 如果类型为table，返回字段对应的table配置
     cellConfigForTable() {
       return (fs) => {
-        const cc = this.cellConfig(fs)
-        return Object.assign({
+        let cc = Object.assign({
           righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
           proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, fs.field),
           selection: true,
           popupAppendToBody: true,
-        }, cc.tableConfig)
+        }, this.cellConfig(fs))
+        cc.editConfig = jsb.objectAssignNX(cc.editConfig,{
+          formEditorCells: function () {
+            return [CodeButtonRowSave]
+          }
+        })
+        return cc
       }
     },
     cellConfig() {
@@ -99,10 +108,10 @@ export default {
   },
   components: {
     CellViewLabelTooltip,
-    AimFormInput:()=> import("@/components/AimFormInput/index.vue"),
+    AimFormInput: () => import("@/components/AimFormInput/index.vue"),
     AimTable: () => import("@/components/AimTable/index.vue"),
   },
-  methods:{
+  methods: {
     isAimFormInput,
     isAimTable,
     commentHTML,

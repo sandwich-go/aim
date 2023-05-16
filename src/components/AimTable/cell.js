@@ -9,6 +9,7 @@ const jsb = require("@sandwich-go/jsb")
 // Table 内组件
 export const FieldPathCellNameForTable = 'cell'
 export const FieldPathCellConfigForTable = 'cellConfig'
+export const FieldPathFormatter= 'formatter'
 
 // Form内组件名称、配置路径
 export const FieldPathCellNameForForm = 'cellForm'
@@ -32,6 +33,9 @@ function watchCellConfig(cc){
     return cc
 }
 
+export function formatterFunction(fs) {
+    return jsb.pathGet(fs, FieldPathFormatter)
+}
 // cellConfigForTable 获取table内cell的配置
 export function cellConfigForTable(fs,row) {
     let cc = jsb.pathGet(fs, FieldPathCellConfigForTable,{})

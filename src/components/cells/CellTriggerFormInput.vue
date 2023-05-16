@@ -4,7 +4,7 @@
       <aim-form-input
           :schema="fieldSchema['fields']"
           :data="dataRef[fieldName]"
-          v-bind="cc.formConfig"
+          v-bind="cc.form"
       ></aim-form-input>
     </template>
   </cell-trigger>
@@ -23,7 +23,7 @@ export default {
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
-    this.cc.formConfig = jsb.objectAssignNX(this.cc.formConfig, {
+    this.cc.form = jsb.objectAssignNX(this.cc.form, {
       popupAppendToBody:true,
     })
   },

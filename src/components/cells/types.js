@@ -106,7 +106,6 @@ const sample_field_schema = {
     align: 'center', // table-column align
     sortable: false, // table-column sortable
 
-    options: [],     // 类型为select*时的候选项，或者显示为tag列表时的候选项
     fields: [],      // 类型为object或table时的元素schema
 
     readOnly: false,   // 是否为只读
@@ -117,11 +116,14 @@ const sample_field_schema = {
 
     type: '',          // 字段类型，简化table和form的配置，同时根据type类推导默认值
 
+
     // table内使用的cell名称或者名称获取的方法, 便于根据row内的字段决定当前的组件类型
     // eslint-disable-next-line no-unused-vars
     cell: [String, function ({row}) {
         return ''
     }],
+    options:{}, // 可选数据源，当组件为select类型时
+
     // table内cell组件的配置
     // 返回配置+数据(数据为显示数据，如显示为一个label) 或组件配置(editor组件时数据为字段真实数据),具体返回的数据根据组件进行适配
     // function 根据具体的组件需求返回恰当的数据格式

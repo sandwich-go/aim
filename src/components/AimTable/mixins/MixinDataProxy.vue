@@ -140,7 +140,11 @@ export default {
 
       this.tryPromise('query',{params:params},({resp,error})=>{
         if(resp){
-          this.tableData = this.processTableData(jsb.pathGet(resp, 'Data'))
+          // 不能直接赋值，vue检测array元素变化存在一些问题
+          this.tableData = []
+          jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')),(item)=>{
+            this.tableData.push(item)
+          })
           this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
         }
         done && done({error})

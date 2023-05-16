@@ -25,7 +25,6 @@
         :id="codemirrorEditorID"
         ref="codemirror"
         @keydown.native="onKeyDown"
-        :class="borderClass()"
     />
     <aim-drawer :is-show.sync="visibleLintError" :config="{appendToBody:popupAppendToBody,direction:'btt',size:'40%'}">
       <template v-slot:aim-drawer-body>
@@ -115,7 +114,7 @@ import {
 import {directionToolbarSpan, initToolbarConfig} from "@/components/AimTable/toolbar";
 import CellList from "@/components/cells/CellList.vue";
 import {
-  CodeButtonCopy, CodeButtonLint, CodeButtonRefresh, CodeButtonRowSaveLocal, CodeButtonRowSaveRemote,
+  CodeButtonCopy, CodeButtonLint, CodeButtonRefresh, CodeButtonRowSave,
 } from "@/components/cells/const";
 import AimDrawer from "@/components/AimDrawer/index.vue";
 // eslint-disable-next-line no-undef
@@ -252,8 +251,7 @@ export default {
         case CodeButtonCopy:
           jsb.clipCopy(this.codeLatest, jsEvent)
           break;
-        case CodeButtonRowSaveRemote:
-        case CodeButtonRowSaveLocal:
+        case CodeButtonRowSave:
           this.proxySave()
           break;
         case CodeButtonRefresh:

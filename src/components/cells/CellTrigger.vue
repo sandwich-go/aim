@@ -1,6 +1,19 @@
 <template>
   <div>
+    <aim-drawer v-if="cc.wrapper.type==='drawer'"
+                :config=cc.wrapper.config
+                :is-show.sync="dialogVisible">
+      <template v-slot:aim-drawer-body>
+        <slot name="target"
+              :cc="cc"
+              :field-schema="fieldSchema"
+              :data="dataRef"
+              :field-name="fieldName"
+        />
+      </template>
+    </aim-drawer>
     <el-dialog
+        v-else
         modal
         width="80%"
         :close-on-press-escape="true"
@@ -37,18 +50,26 @@
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import CellViewIcon from "@/components/cells/CellViewIcon.vue";
 import CellViewLabel from "@/components/cells/CellViewLabel.vue";
+import AimDrawer from "@/components/AimDrawer/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
 export default {
   name: 'CellTrigger',
-  components: {CellViewLabel, CellViewIcon},
+  components: {AimDrawer, CellViewLabel, CellViewIcon},
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
     this.cc.trigger = jsb.objectAssignNX(this.cc.trigger, {
       isButton: false,
       icon: 'el-icon-view',
+    })
+    this.cc.wrapper = jsb.objectAssignNX(this.cc.wrapper, {
+      type:'drawer',
+      config:{
+        direction:'ltr',
+        size:'80%'
+      },
     })
   },
   data() {

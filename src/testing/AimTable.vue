@@ -55,9 +55,9 @@ import {
   CodeButtonRowCopy,
   CodeButtonRowDelete,
   CodeButtonRowEdit,
-  CodeButtonRowHistory,
-  CodeButtonRowSaveRemote, CodeButtonRowSelectedMinus, CodeButtonSaveTableData, CodeButtonTableSetting,
-  CodeLinkFieldCopy, CodeLinkFieldJump
+  CodeButtonRowHistory, CodeButtonRowSave,
+  CodeButtonRowSelectedMinus, CodeButtonSaveTableData, CodeButtonTableSetting,
+  CodeLinkFieldCopy,
 } from "@/components/cells/const";
 
 const jsb = require("@sandwich-go/jsb")
@@ -110,26 +110,26 @@ export default {
           //min_width: 180,
           sortable: true,
           locked:true,
-          cellHeader:[CodeLinkFieldJump],
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           summary: true,
           readOnly: true,
-          show:false,
+          show:true,
           fixed:"left",
           backgroundAsHeader: true,
           filter:{placeholder:'请输入ID',format:(v)=>{ return Number(v)}}
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
-          //min_width: 180,
           placeholder: "xxx.xx",
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          cellForm: function ({row}) {
-            return !row.id || row.id < 5 ? 'CellInput' : 'CellSelect'
+          form:{
+            cell:function ({row}) {
+              return !row.id || row.id < 5 ? 'CellInput' : 'CellSelect'
+            },
           },
           filter:{placeholder:'请输入名字'},
           watch:function ({row,newValue}){
@@ -142,34 +142,36 @@ export default {
           width: 160,
           type:'table',
           cellConfig:{
-            tableConfig:{
-              tableProperty:{autoWidth: false},
-              editConfig:{mode: EditModeInplace},
-            }
-          },
-          cellFormConfig:{
-            tableConfig:{
+            table:{
               tableProperty:{autoWidth: false},
               editConfig:{mode: EditModeInplace},
             },
+            trigger: {label:"查看"}
+          },
+          cellFormConfig:{
+            tableProperty:{autoWidth: false},
+            editConfig:{mode: EditModeFormInput,trigger:EditTriggerManualAndDBLClick,name:"testing"},
           },
           fields:[
-            {field:'UseSystemSSH',name:'系统SSH秘钥',cellForm: 'CellSwitch',cell:'CellSwitch',width:160,},
-            {field:'UserName',name:'UserName',cellForm: 'CellInput',cell:'CellInput',width:300},
-            {field:'Password',name:'Password',cellForm: 'CellInput',cell:'CellInput'}
+            {field:'UseSystemSSH',name:'系统SSH秘钥',type:'switch', cellForm: 'CellSwitch',width:160,},
+            {field:'UserName',name:'UserName',type:'input', cellForm: 'CellInput',width:300},
+            {field:'Password',name:'Password',type:'input', cellForm: 'CellInput',}
           ],
         },
-
         {
           field: 'AuthInfoObject', name: 'AuthInfoObject',
           type:'object',
           //min_width: 180,
           cellFormConfig:{
-            tableProperty:{autoWidth: false},
-            editConfig:{mode: EditModeInplace},
+            table:{
+              tableProperty:{autoWidth: false},
+              editConfig:{mode: EditModeInplace},
+            },
           },
           cell:'CellViewBoolean',
-          formatter:(v)=>{return v && v.UseSystemSSH},
+          formatter:({value})=>{
+            return value && value.UseSystemSSH
+          },
           fields:[
             {field:'UseSystemSSH',name:'系统SSH秘钥',cellForm: 'CellSwitch',cell:'CellSwitch',width:160,},
             {field:'UserName',name:'UserName',cellForm: 'CellInput',cell:'CellInput',width:300},
@@ -182,13 +184,13 @@ export default {
           type:'code',
           watch:({row,newValue,oldValue})=>{console.log("watch code change ",row,newValue,oldValue)},
           cellConfig:{
-            codeMirrorConfig:{
+            codeMirror:{
               infoConfig:{mode:'json'},
               headerConfig:{rightCells:['btnLint','btnCopy']}
             }
           },
           cellFormConfig:{
-            codeMirrorConfig:{
+            codeMirror:{
               infoConfig:{mode:'json'},
               headerConfig:{rightCells:['btnLint','btnCopy']}
             }
@@ -312,7 +314,7 @@ export default {
           sortable:false,
           isAction:true,
           cell: 'CellList',
-          cellConfig: [`link@${CodeButtonRowEdit}`, 'link@'+CodeButtonRowSaveRemote, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
+          cellConfig: [`link@${CodeButtonRowEdit}`, 'link@'+CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },
       ],
 
@@ -364,6 +366,7 @@ export default {
                   _this.tableData[index] = row
                 }
               })
+              console.log("_this.tableData_this.tableData",_this.tableData)
             }
             resolve(true)
           })
