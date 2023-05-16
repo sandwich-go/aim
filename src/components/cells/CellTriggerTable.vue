@@ -1,5 +1,10 @@
 <template>
-  <cell-trigger :cell-config="cc" :field-name="fieldName" :field-schema="fieldSchema" :data="dataRef">
+  <cell-trigger
+      :cell-config="cc"
+      :field-name="fieldName"
+      :field-schema="fieldSchema"
+      :data="dataRef"
+      @code-cell-click="({code,jsEvent})=>emitClickWithCode(jsEvent,code)">
     <template v-slot:target>
       <aim-table
           ref="aimTable"

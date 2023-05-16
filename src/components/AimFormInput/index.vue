@@ -76,8 +76,6 @@ import jsb from "@sandwich-go/jsb";
 import {AimFormInputInsert, AimFormInputView, calcLabelWidth} from "./index";
 import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
 import {xidRow} from "@/components/AimTable/table";
-import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
-import {cellConfigForForm, cellNameForForm} from "@/components/AimTable/cell";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import {isVirtualField} from "@/components/AimTable/schema";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
@@ -105,28 +103,6 @@ export default {
         "--form-container-height": `${this.height}px`
       };
     },
-    cellName() {
-      return (fs) => {
-        return cellNameForForm(fs, this.getRow())
-      }
-    },
-    // 如果类型为table，返回字段对应的table配置
-    cellConfigForTable() {
-      return (fs) => {
-        const cc = this.cellConfig(fs)
-        return Object.assign({
-          righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
-          proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, fs.field),
-          selection: true,
-          popupAppendToBody: true,
-        }, cc.tableConfig)
-      }
-    },
-    cellConfig() {
-      return (fs) => {
-        return cellConfigForForm(fs, this.getRow())
-      }
-    }
   },
   mixins: [mixinComponentMap],
   props: {

@@ -71,6 +71,9 @@ export default {
     emitClick(jsEvent) {
       this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})
     },
+    emitClickWithCode(jsEvent,code) {
+      this.$emit('code-cell-click', {code: code, jsEvent: jsEvent})
+    },
     emitData(options){
       return Object.assign({
         // 这里使用实际数据

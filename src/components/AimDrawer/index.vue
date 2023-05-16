@@ -74,7 +74,7 @@ export default {
 .aim-drawer-footer {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   overflow: hidden;
   position: sticky;
   bottom: 0;
