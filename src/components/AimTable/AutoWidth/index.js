@@ -31,7 +31,7 @@ function forceAdjustColumnWidth(table, bindingValue) {
             });
             const max = Math.max(...widthList);
             table.querySelectorAll(`col[name=${clsName}]`).forEach((el) => {
-                el.setAttribute("width", max + padding);
+                el.setAttribute("width", `${max + padding}px`);
             });
         });
     })
