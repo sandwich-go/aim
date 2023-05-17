@@ -47,9 +47,12 @@ export default {
         this.asPassword = false
         return;
       }
-      const checkPermission = this.cc['checkPermission']
+      let checkPermission = this.cc['checkPermission']
+      if(!checkPermission){
+        checkPermission = jsb.cc.aimViewPassword
+      }
       if(checkPermission) {
-        const ret = checkPermission()
+        const ret = checkPermission({passwordType:this.cc['passwordType']})
         if (jsb.isString(ret)) {
           jsb.cc.toastWarning(ret)
           return
