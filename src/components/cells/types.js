@@ -18,7 +18,8 @@ export const type2FormCellName = {
     // 复杂类型
     table: 'AimTable',
     object: 'AimFormInput',
-    code:'CellCodeMirror'
+    code:'CellCodeMirror',
+    password:'CellPassword'
 }
 
 export function formatValue(fieldType,fieldValue) {
@@ -53,7 +54,8 @@ export const type2DefaultVal = {
     // 复杂类型
     table: () => [],
     object: () => ({}),
-    code:''
+    code:'',
+    password:''
 }
 
 // 基础类型到table显示组件的映射
@@ -72,7 +74,8 @@ export const types2TableCellName = {
     checkbox: 'CellViewBoolean',
     table: 'CellTriggerTable',
     object: 'CellTriggerFormInput',
-    code:'CellTriggerCodeMirror'
+    code:'CellTriggerCodeMirror',
+    password:'CellPassword'
 }
 
 // 基础类型到table显示组件的映射

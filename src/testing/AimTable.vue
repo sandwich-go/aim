@@ -137,6 +137,17 @@ export default {
           }
         },
         {
+          field: 'password', name: 'password', sortable: true, uniq: true,
+          placeholder: "xxx.xx",
+          comment: "用户名不要携带@centurygame.com后缀",
+          tips_show_icon: true,
+          required: true,
+          cellFormConfig:{
+            checkPermission:()=>{return false}
+          },
+          type:'password',
+        },
+        {
           field: 'AuthInfo',
           name: 'AuthInfo',
           width: 160,
