@@ -77,7 +77,7 @@ export default {
   justify-content: flex-end;
   overflow: hidden;
   position: sticky;
-  bottom: 0;
+  bottom: 6px;
   z-index: 100;
 }
 </style>
