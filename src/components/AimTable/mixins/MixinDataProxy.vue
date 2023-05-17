@@ -3,6 +3,7 @@ import {deleteConfirmConfig} from "@/components/AimTable/confirm";
 import {cleanData, removeCtrlData} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
+import {trimInvisibleChar} from "@/components/AimTable/schema";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -129,6 +130,7 @@ export default {
       if(!this.proxyConfig.isLocalData){
         toSave = removeCtrlData(jsb.clone(row))
       }
+      toSave = trimInvisibleChar(this.schema,toSave)
       this.tryPromise('save',{row: toSave},done,'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
