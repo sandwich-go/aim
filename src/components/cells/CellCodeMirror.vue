@@ -21,7 +21,6 @@ export default {
     this.cc.codeMirror = jsb.objectAssignNX(this.cc.codeMirror, {
       popupAppendToBody:true,
     })
-    console.log()
   },
   methods:{
     codeChange(code){
