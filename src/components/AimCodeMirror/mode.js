@@ -42,7 +42,7 @@ export const CodeMirrorThemeMbo = "mbo";
 export const CodeMirrorThemeRubyBlue = "rubyblue";
 
 export const CodeMirrorSettingDefault = {
-    Theme:CodeMirrorThemeRubyBlue,
+    Theme:CodeMirrorThemeMbo,
     FontSize:13,
     LineHeight:150,
 }

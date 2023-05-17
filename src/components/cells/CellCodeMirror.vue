@@ -18,9 +18,10 @@ export default {
   components: {AimCodeMirror},
   created() {
     this.ccConfigMerge()
-    this.cc.config = jsb.objectAssignNX(this.cc.config, {
+    this.cc.codeMirror = jsb.objectAssignNX(this.cc.codeMirror, {
       popupAppendToBody:true,
     })
+    console.log()
   },
   methods:{
     codeChange(code){

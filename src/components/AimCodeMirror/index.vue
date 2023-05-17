@@ -199,7 +199,6 @@ export default {
   },
   created() {
     this.headerConfigRef = initToolbarConfig(this.headerConfigRef, {'padding-bottom': '9px'})
-    console.log(this.headerConfigRef)
     jsb.objectAssignNX(this.infoConfigRef, {name: '', mode: ''})
     jsb.objectAssignNX(this.proxyConfigRef, {
       enable:true,

@@ -185,15 +185,13 @@ export default {
           watch:({row,newValue,oldValue})=>{console.log("watch code change ",row,newValue,oldValue)},
           cellConfig:{
             codeMirror:{
-              infoConfig:{mode:'json'},
+              infoConfig:{mode:'go'},
               headerConfig:{rightCells:['btnLint','btnCopy']}
             }
           },
           cellFormConfig:{
-            codeMirror:{
-              infoConfig:{mode:'json'},
-              headerConfig:{rightCells:['btnLint','btnCopy']}
-            }
+            infoConfig:{mode:'json'},
+            headerConfig:{rightCells:['btnLint','btnCopy']}
           },
         },
         {
