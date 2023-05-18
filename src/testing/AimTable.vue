@@ -188,6 +188,7 @@ export default {
         {
           field: 'AuthInfo',
           name: 'AuthInfo',
+          tips:'列表支持',
           width: 160,
           type:'table',
           cellConfig:{
@@ -210,6 +211,7 @@ export default {
         {
           field: 'AuthInfoObject', name: 'AuthInfoObject',
           type:'object',
+          tips:'对象支持',
           cellFormConfig:{
             table:{
               tableProperty:{autoWidth: false},
@@ -230,6 +232,7 @@ export default {
           field: 'code',
           name: 'code',
           type:'code',
+          tips:'代码编辑支持',
           watch:({row,newValue,oldValue})=>{console.log("watch code change ",row,newValue,oldValue)},
           cellConfig:{
             codeMirror:{

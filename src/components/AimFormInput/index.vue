@@ -37,8 +37,12 @@
           <el-form-item :key="`group_tab_${fs.index}`">
             <el-tabs v-model="currTab[`group_tab_${fs.index}`]">
               <el-tab-pane v-for="(fss,subIndex) in fs.fieldSchemaList" :key="`group_tab_${fs.index}_${subIndex}`" :label="formLabel(fss)" :name="formLabel(fss)" :lazy="true">
-                <span slot='label' v-if="fss.tips">
-                  <cell-view-label-tooltip :cell-config="{label:formLabel(fss),tips:fss.tips}"></cell-view-label-tooltip>
+                <span slot='label'>
+                  <column-header :field-schema="fss" :ignore-required="true">
+                    <template v-if="tipSlotName(fss)" v-slot:[getProxyTipSlotName(fss)]="{}">
+                      <slot :name="tipSlotName(fss)" :field-schema="fss"/>
+                    </template>
+                  </column-header>
                 </span>
                 <aim-form-item
                     :fs="fss"
@@ -83,15 +87,15 @@ import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import {isVirtualField} from "@/components/AimTable/schema";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
-import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
 export default {
   name: "AimFormInput",
   components: {
+    ColumnHeader,
     AimFormItem,
     CellViewAlert,
-    CellViewLabelTooltip,
   },
   watch:{
     schema: {
