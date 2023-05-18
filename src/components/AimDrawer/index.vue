@@ -11,7 +11,7 @@
       :append-to-body="configData.appendToBody"
       :before-close="configData.beforeClose"
       :custom-class="configData.customClass"
-      @close="onClose"
+      @close="close"
       :direction="configData.direction">
     <slot name="aim-drawer-body"></slot>
     <div v-if="configData.footer" class="aim-drawer-footer" style="padding-right: 6px">
@@ -46,10 +46,10 @@ export default {
     }
   },
   methods:{
-    onClose() {
+    close() {
       this.isShowDraw = false
       this.$emit("update:isShow", false);
-      this.configData.onClose && this.configData.onClose()
+      this.configData.close && this.configData.close()
     },
   },
   created() {
@@ -64,7 +64,7 @@ export default {
       footer: true,
       beforeClose: null,
       appendToBody: false,
-      onClose:null,
+      close:null,
       customClass: ''
     })
   }

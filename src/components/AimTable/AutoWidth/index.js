@@ -44,7 +44,7 @@ export function flexColumnWidth(schema,tableData) {
         if(fieldSchema.required){
             headerExtraWidth = headerExtraWidth + 40
         }
-        if(fieldSchema.sortable){
+        if(jsb.pathGet(fieldSchema,'sortable',true)){
             headerExtraWidth = headerExtraWidth + 40
         }
         if(fieldSchema.lock){
@@ -53,7 +53,10 @@ export function flexColumnWidth(schema,tableData) {
         if(fieldSchema.tips){
             headerExtraWidth = headerExtraWidth + 40
         }
-        const headerWidth =  jsb.textWidth(fieldSchema.name) + headerExtraWidth
+        // 两侧padding
+        let headerTextWidth = jsb.textWidth(fieldSchema.name) + 20
+        const  headerWidth =  headerTextWidth + headerExtraWidth
+
         const minWidth = minWidthTableColumn(fieldSchema.type)
         const arr = tableData.map(x => x[fieldSchema.field])
         let width = jsb.longestTextWidth(arr)

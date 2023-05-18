@@ -236,14 +236,17 @@
     </el-dialog>
 
 
-    <aim-drawer :is-show.sync="visitSettingDrawerVisible" :config="{appendToBody:popupAppendToBody}">
+    <aim-drawer :is-show.sync="visitSettingDrawerVisible" :config="{
+      appendToBody:popupAppendToBody,
+      close:()=>{doLayout()}
+    }">
       <template v-slot:aim-drawer-body>
         <aim-table-editor
             editor-table-key="aim-table-editor"
             :editor-group-options="editorGroupOptions"
             :editor-user-options="editorUserOptions"
             :editor-proxy-config="editorProxyConfig"
-            :schema="schema">
+            :schema="cloneSchema()">
         </aim-table-editor>
       </template>
     </aim-drawer>
@@ -589,19 +592,10 @@ export default {
       }
       return this.shouldCellDisable({code, cell, row, fieldSchema})
     },
+    cloneSchema(){
+      return jsb.clone(this.schema)
+    },
     doLayout(freshAutoWidth=false) {
-      // if(this.tablePropertyRef.autoWidth) {
-      //   this.debug && this.setDebugMessage(`call doLayout with auto width`)
-      //   forceAdjustColumnWidth(this.$refs.table.$el,{
-      //     doLayout:(done)=> {
-      //       this.$refs.table.doLayout()
-      //       done && done()
-      //     },
-      //   },true)
-      // }else{
-      //   this.debug && this.setDebugMessage(`call doLayout`)
-      //   this.$refs.table && this.$refs.table.doLayout()
-      // }
       if(freshAutoWidth && this.tablePropertyRef.autoWidth){
         flexColumnWidth(this.schema,this.tableData)
       }

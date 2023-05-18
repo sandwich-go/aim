@@ -107,6 +107,7 @@ export default {
         {
           field: 'id', name: 'ID',
           type: 'input',
+          show:false,
           //min_width: 180,
           sortable: true,
           locked:true,
@@ -115,7 +116,6 @@ export default {
           tips_show_icon: true,
           summary: true,
           readOnly: true,
-          show:true,
           fixed:"left",
           backgroundAsHeader: true,
           filter:{placeholder:'请输入ID',format:(v)=>{ return Number(v)}}
@@ -172,7 +172,6 @@ export default {
         {
           field: 'AuthInfoObject', name: 'AuthInfoObject',
           type:'object',
-          //min_width: 180,
           cellFormConfig:{
             table:{
               tableProperty:{autoWidth: false},

@@ -118,7 +118,10 @@ export default {
       const _this = this
       return {
         item2Row(item) {
-          item.show = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.show`, true)
+          item.show = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.show`,item.show)
+          if(jsb.eqNull(item.show)){
+            item.show = true
+          }
           item.cellForTable = cellNameForTableByType(item.type)
           item.cellForForm = cellNameForFormByType(item.type)
           item.groupCouldView = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.groupCouldView`, ['*'])
