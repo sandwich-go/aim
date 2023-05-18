@@ -1,0 +1,162 @@
+<template>
+  <div class="aim-popup">
+    <el-drawer
+        v-if="drawer"
+        modal
+        ref="aimDrawer"
+        :title="configData.title"
+        :show-close="configData.showClose"
+        :with-header="configData.withHeader"
+        :destroy-on-close="configData.destroyOnClose"
+        :close-on-press-escape="configData.closeOnPressEscape"
+        :visible.sync="isShowPopup"
+        :size="configData.size"
+        :append-to-body="configData.appendToBody"
+        :before-close="configData.beforeClose"
+        :custom-class="configData.customClass"
+        @close="close"
+        :direction="configData.direction">
+      <slot name="aim-popup-body"></slot>
+      <div v-if="configData.footer" class="aim-drawer-footer" style="padding-right: 6px">
+        <slot name="aim-popup-footer"></slot>
+      </div>
+    </el-drawer>
+    <el-dialog
+        v-else
+        modal
+        :title="configData.title"
+        :before-close="configData.beforeClose"
+        :custom-class="configData.customClass"
+        :width="configData.width || configData.size"
+        :close-on-press-escape="configData.closeOnPressEscape"
+        :append-to-body="configData.appendToBody"
+        :destroy-on-close="configData.destroyOnClose"
+        :visible.sync="isShowPopup">
+      <slot name="aim-popup-body"></slot>
+      <div v-if="configData.footer" slot="footer" class="dialog-footer" style="padding-right: 6px">
+        <slot name="aim-popup-footer"></slot>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+<script>
+const jsb = require("@sandwich-go/jsb")
+
+
+export default {
+  name: 'AimPopup',
+  props: {
+    isShow: {
+      type: Boolean,
+      default: false
+    },
+    config: Object,
+    drawer: Boolean,
+  },
+  data() {
+    return {
+      isShowPopup: this.isShow,
+      configData: this.config
+    }
+  },
+  watch: {
+    isShow(value) {
+      this.isShowPopup = value
+    }
+  },
+  methods: {
+    close() {
+      this.isShowPopup = false
+      this.$emit("update:isShow", false);
+      this.configData.close && this.configData.close()
+    },
+  },
+  created() {
+    jsb.element.fixDrawerClose(this, 'aimDrawer')
+    this.configData = jsb.objectAssignNX(this.configData, {
+      showClose: true,
+      withHeader: false,
+      destroyOnClose: true,
+      closeOnPressEscape: true,
+      size: '85%',
+      direction: "ltr",
+      footer: true,
+      beforeClose: null,
+      appendToBody: false,
+      close: null,
+      customClass: '',
+      title:'',
+    })
+    if(this.configData.title) {
+      this.configData.withHeader = true
+    }
+  }
+}
+</script>
+<style scoped>
+.aim-popup >>> .aim-drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  position: sticky;
+  bottom: 6px;
+  z-index: 100;
+}
+
+.aim-popup >>> .el-drawer {
+  position: absolute;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden
+}
+
+.aim-popup >>> .el-drawer__header {
+  align-items: center;
+  display: flex;
+  margin-bottom: 9px;
+  padding: 9px 9px 0;
+  font-weight: 700;
+}
+
+.aim-popup >>> .el-drawer__header > :first-child {
+  flex: 1
+}
+
+.aim-popup >>> .el-drawer__title {
+  margin: 0;
+  flex: 1;
+  line-height: inherit;
+  font-size: 1rem;
+}
+
+.aim-popup >>> .el-drawer__close-btn {
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: inherit;
+  background-color: transparent
+}
+
+.aim-popup >>> .el-drawer__body {
+  overflow: auto;
+  padding: 3px;
+}
+
+.aim-popup >>> .el-drawer__body > * {
+  box-sizing: border-box
+}
+
+.aim-popup >>> .el-drawer__container {
+  position: relative;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%
+}
+
+</style>

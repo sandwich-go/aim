@@ -190,50 +190,52 @@
         </cell-list>
       </el-col>
     </el-row>
-
-    <el-dialog
-        modal
-        width="80%"
-        :title="rowFormEditorTitle(rowEditState)"
-        :close-on-press-escape="true"
-        :append-to-body="popupAppendToBody"
-        :visible.sync="rowFormEditorVisible"
-        @close="rowFormEditorClose">
-      <aim-form-input
-          ref="aimFormInput"
-          v-if="rowInEditForm && rowFormEditorVisible"
-          :key="xidRow(rowInEditForm)"
-          :schema="validSchema(schema)"
-          :group-config="groupConfig"
-          :data="rowInEditForm"
-          :popup-append-to-body="true"
-          :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
-          :alert-info="rowEditorAlert"
-          :mode="rowEditState"
-          :rules="formRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
-          :row-top="rowInEditForm"
-          :enable-watcher="false"
-      ></aim-form-input>
-      <span slot="footer" class="dialog-footer">
+    <aim-popup
+        :drawer="popupAppendToBody?false:editConfigRef.formWrapperDrawer"
+        :is-show.sync="rowFormEditorVisible"
+        :config="{
+          appendToBody:popupAppendToBody,
+          title:rowFormEditorTitle(rowEditState),
+          close:rowFormEditorClose,
+          footer:true,
+        }">
+      <template v-slot:aim-popup-body>
+        <aim-form-input
+            style="padding-right: 9px"
+            ref="aimFormInput"
+            v-if="rowInEditForm && rowFormEditorVisible"
+            :key="xidRow(rowInEditForm)"
+            :schema="validSchema(schema)"
+            :group-config="groupConfig"
+            :data="rowInEditForm"
+            :popup-append-to-body="true"
+            :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
+            :alert-info="rowEditorAlert"
+            :mode="rowEditState"
+            :rules="formRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
+            :row-top="rowInEditForm"
+            :enable-watcher="false"
+        ></aim-form-input>
+      </template>
+      <template v-slot:aim-popup-footer>
         <template v-if="rowEditState=== AimFormInputView">
-        <el-button size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
+          <el-button size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
         </template>
         <template v-else>
-        <cell-list
-            :style="flexEndStyle"
-            :shortcut-button-options="{circle:false}"
-            :cells="editConfigRef.formEditorCells({row:rowInEditForm})"
-            :should-cell-hide="privateShouldCellHide"
-            :should-cell-disable="privateShouldCellDisable"
-            @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEditForm,code,jsEvent,fromForm:true})"
-        >
-          <template v-for="item in editConfigRef.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
-            <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
-          </template>
-        </cell-list>
+          <cell-list
+              :style="flexEndStyle"
+              :shortcut-button-options="{circle:false}"
+              :cells="editConfigRef.formEditorCells({row:rowInEditForm})"
+              :should-cell-hide="privateShouldCellHide"
+              :should-cell-disable="privateShouldCellDisable"
+              @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEditForm,code,jsEvent,fromForm:true})">
+            <template v-for="item in editConfigRef.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
+              <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
+            </template>
+          </cell-list>
         </template>
-      </span>
-    </el-dialog>
+      </template>
+    </aim-popup>
 
 
     <aim-drawer :is-show.sync="visitSettingDrawerVisible" :config="{
@@ -313,6 +315,7 @@ import {cellNameForFormByType} from "@/components/cells/types";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
 import {AimFormInputView} from "@/components/AimFormInput";
 import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
+import AimPopup from "@/components/AimPopup/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -346,6 +349,7 @@ export default {
     MixinSort,
   ],
   components: {
+    AimPopup,
     AimFormInput,
     AimTableEditor,
     AimDrawer,
@@ -356,7 +360,7 @@ export default {
   props: {
     selection: Boolean,// 是否支持选择
     radio: Boolean,// 是否支持radio选择
-    popupAppendToBody: Boolean,
+    popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true
     shouldFieldDisable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars

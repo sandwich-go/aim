@@ -35,6 +35,7 @@ export default {
       enable: true,
       trigger: EditTriggerManualAndDBLClick,
       mode: EditModeFormInput,
+      formWrapperDrawer:true,
       // 当尝试编辑某一行时回调该方法
       // eslint-disable-next-line no-unused-vars
       triggerRowFunc: function ({row}) {
