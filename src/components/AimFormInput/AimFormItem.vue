@@ -1,9 +1,15 @@
 <template>
   <el-form-item :key="fs.field" :label="showLabel?formLabel(fs):''" :prop="fs.field" :ref="fs.field"
                 :label-width="labelWidth">
-          <span v-if="fs.tips && showLabel" slot='label'>
-            <cell-view-label-tooltip :cell-config="{label:formLabel(fs),tips:fs.tips}"></cell-view-label-tooltip>
-          </span>
+
+  <span slot='label'>
+      <column-header :field-schema="fs" :ignore-required="true">
+        <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
+          <slot :name="tipSlotName(fs)" :field-schema="fs"/>
+        </template>
+      </column-header>
+  </span>
+
     <template v-if="registeredComponentMap[cellName(fs)]">
       <component
           :is="registeredComponentMap[cellName(fs)]"
@@ -43,7 +49,7 @@
     </div>
     <div v-else>{{ cellName(fs) }} not supported</div>
 
-    <span v-if="fs.comment" class="aim-form-item-comment">{{ comment(getRow(), fs,'comment') }}</span>
+    <span v-if="fs.comment" class="aim-form-item-comment">{{ comment(getRow(), fs, 'comment') }}</span>
     <span v-if="fs.commentHTML" class="aim-form-item-comment" v-html="comment(getRow(),fs,'commentHTML')"></span>
   </el-form-item>
 </template>
@@ -61,6 +67,8 @@ import {isAimFormInput, isAimTable} from "@/components/cells/is";
 import {comment} from "@/components/AimFormInput/index";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
+import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
 export default {
   name: "AimFormItem",
@@ -92,7 +100,7 @@ export default {
           selection: true,
           popupAppendToBody: true,
         }, this.cellConfig(fs))
-        cc.editConfig = jsb.objectAssignNX(cc.editConfig,{
+        cc.editConfig = jsb.objectAssignNX(cc.editConfig, {
           formEditorCells: function () {
             return [CodeButtonRowSave]
           }
@@ -107,11 +115,18 @@ export default {
     }
   },
   components: {
+    ColumnHeader,
     CellViewLabelTooltip,
     AimFormInput: () => import("@/components/AimFormInput/index.vue"),
     AimTable: () => import("@/components/AimTable/index.vue"),
   },
+  created() {
+    // 占位
+    this.getProxyTipSlotName()
+  },
   methods: {
+    getProxyTipSlotName,
+    tipSlotName,
     isAimFormInput,
     isAimTable,
     comment,

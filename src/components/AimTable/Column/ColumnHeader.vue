@@ -1,6 +1,6 @@
 <template>
   <span>
-    <i v-if="fieldSchema.required" class="aim-required-icon"></i>
+    <i v-if="!ignoreRequired&&fieldSchema.required" class="aim-required-icon"></i>
     <i v-if="fieldSchema.locked" class="el-icon-lock"></i>
     <cell-view-label-tooltip
         v-if="fieldSchema['tips'] || fieldSchema['tipsHTML']"
@@ -9,7 +9,7 @@
           tips:fieldSchema['tips'],
           tipsHTML:fieldSchema['tipsHTML']
         }"></cell-view-label-tooltip>
-    <el-tooltip v-else-if="tipSlotName(fieldSchema)" effect="light" placement="top-start">
+    <el-tooltip v-else-if="tipSlotName(fieldSchema)" effect="light">
       <div slot="content">
         <slot :name="getProxyTipSlotName(fieldSchema)" :field-schema="fieldSchema"></slot>
       </div>
@@ -30,6 +30,7 @@ export default {
   components: {CellViewLabelTooltip},
   props: {
     fieldSchema: Object,
+    ignoreRequired:Boolean
   },
 }
 </script>

@@ -62,7 +62,11 @@
             :get-row="getRow"
             :should-cell-disable="shouldCellDisable"
             :private-should-cell-disable="privateShouldCellDisable"
-        ></aim-form-item>
+        >
+          <template :slot="tipSlotName(fs)">
+            <slot :name="getProxyTipSlotName(fs)"></slot>
+          </template>
+        </aim-form-item>
       </template>
     </el-form>
   </div>
@@ -80,6 +84,7 @@ import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import {isVirtualField} from "@/components/AimTable/schema";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
+import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 
 export default {
   name: "AimFormInput",
@@ -129,6 +134,9 @@ export default {
     },
     groupConfig:Array,
   },
+  created() {
+    this.getProxyTipSlotName()
+  },
   data() {
     return {
       CodeButtonAdd,
@@ -145,7 +153,9 @@ export default {
     }
   },
   methods: {
+    tipSlotName,
     isString,
+    getProxyTipSlotName,
     afterField(fieldGroupList,field){
       let ret = []
       jsb.each(fieldGroupList,function (group){

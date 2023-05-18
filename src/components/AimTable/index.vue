@@ -215,7 +215,11 @@
             :rules="formRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
             :row-top="rowInEditForm"
             :enable-watcher="false"
-        ></aim-form-input>
+        >
+          <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
+            <slot :name="tipSlotName(fs)" :field-schema="fs"/>
+          </template>
+        </aim-form-input>
       </template>
       <template v-slot:aim-popup-footer>
         <template v-if="rowEditState=== AimFormInputView">
