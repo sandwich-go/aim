@@ -448,9 +448,6 @@ export default {
         this.rowInEdit = null
       }
     },
-    tableClass(){
-
-    },
     thisTarget() {
       return this
     },

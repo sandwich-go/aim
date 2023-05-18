@@ -8,11 +8,11 @@
     <aim-table
         :schema="editorSchema"
         :proxy-config="proxyConfig()"
-        :table-property="{autoWidth:false}"
+        :table-property="{autoWidth:true}"
         :popup-append-to-body="true"
         :drag-config="{icon:true}"
         :header-config="headerConfig"
-        :edit-config="{mode: RowEditorFormInput,trigger:EditTriggerDBLClick}"
+        :edit-config="{mode: EditModeFormInput,trigger:EditTriggerDBLClick}"
     ></aim-table>
   </div>
 </template>
@@ -47,40 +47,37 @@ export default {
   data() {
     const _this = this
     return {
-      RowEditorFormInput: EditModeFormInput,
+      EditModeFormInput,
       CodeButtonSaveTableData,
       CodeButtonRefresh,
       EditTriggerDBLClick,
       inLoading: false,
       editorSchema: [
-        {field: 'field', name: '字段名', width: 200,type:'input'},
-        {field: 'name', name: '名称', width: 200,type:'input'},
+        {field: 'field', name: '字段名',type:'input'},
+        {field: 'name', name: '名称',type:'input'},
         {
           field: 'type',type:'input',
           name: '类型',
-          width: 200
         },
         {
           field: 'cellForTable',
           name: 'Table显示/编辑组件',
-          width: 200
         },
         {
           field: 'cellForForm',
           name: 'Form编辑组件',
-          width: 200
         },
-        {field: 'width', name: '宽度', width: 130, type: 'input_number'},
-        {field: 'min_width', name: '最小宽度', width: 160, type: 'input_number'},
-        {field: 'max_width', name: '最大宽度', width: 160, type: 'input_number'},
+        {field: 'width', name: '宽度',  type: 'input_number'},
+        {field: 'min_width', name: '最小宽度',  type: 'input_number'},
+        {field: 'max_width', name: '最大宽度', type: 'input_number'},
         {
-          field: 'show', name: '默认显示', type: 'switch', width: 120,
+          field: 'show', name: '默认显示', type: 'switch',
         },
-        {field: 'groupCouldView', width: 300, name: '可查看(组)', type: 'select_multiple'},
-        {field: 'groupCouldEdit', width: 300, name: '可编辑(组)', type: 'select_multiple'},
-        {field: 'userCouldView', width: 300, name: '可查看(人)', type: 'select_multiple'},
-        {field: 'userCouldEdit', width: 300, name: '可编辑(人)', type: 'select_multiple'},
-        {field: 'tips', width: 300, name: 'Table字段说明', type: 'input'},
+        {field: 'groupCouldView', name: '可查看(组)', type: 'select_multiple'},
+        {field: 'groupCouldEdit', name: '可编辑(组)', type: 'select_multiple'},
+        {field: 'userCouldView', name: '可查看(人)', type: 'select_multiple'},
+        {field: 'userCouldEdit', name: '可编辑(人)', type: 'select_multiple'},
+        {field: 'tips', name: 'Table字段说明', type: 'input'},
       ],
       visitorData: {fieldMap: {},autoWidth:false,rowDrag:false,columnDrag:false},
       headerConfig: {
