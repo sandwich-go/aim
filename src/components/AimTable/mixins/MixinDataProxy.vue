@@ -136,7 +136,12 @@ export default {
         toSave = removeCtrlData(jsb.clone(row))
       }
       toSave = trimInvisibleChar(this.schema,toSave)
-      this.tryPromise('save',{row: toSave},done,'数据已保存')
+      this.tryPromise('save',{row: toSave},({error})=>{
+        if(!error){
+          this.doLayout(true)
+        }
+        done && done({error})
+      },'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
     proxyQueryData({done,params} = {}) {

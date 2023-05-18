@@ -63,7 +63,6 @@ export function flexColumnWidth(schema,tableData) {
         if(width < headerWidth) {
             width = headerWidth
         }
-        fieldSchema.width = width
-        console.log("flexColumnWidth ",fieldSchema,)
+        fieldSchema.min_width = width
     })
 }
