@@ -26,13 +26,13 @@
         ref="codemirror"
         @keydown.native="onKeyDown"
     />
-    <aim-drawer :is-show.sync="visibleLintError" :config="{appendToBody:popupAppendToBody,direction:'btt',size:'40%'}">
-      <template v-slot:aim-drawer-body>
+    <aim-popup :drawer="true" :is-show.sync="visibleLintError" :config="{appendToBody:popupAppendToBody,direction:'btt',size:'40%'}">
+      <template v-slot:aim-popup-body>
         <div class="class-lint-error">
           <codemirror :value="lintError" :indent-with-tab="true" :options="{readOnly:true}"/>
         </div>
       </template>
-    </aim-drawer>
+    </aim-popup>
   </div>
 </template>
 
@@ -116,7 +116,7 @@ import CellList from "@/components/cells/CellList.vue";
 import {
   CodeButtonCopy, CodeButtonLint, CodeButtonRefresh, CodeButtonRowSave,
 } from "@/components/cells/const";
-import AimDrawer from "@/components/AimDrawer/index.vue";
+import AimPopup from "@/components/AimPopup/index.vue";
 // eslint-disable-next-line no-undef
 const yaml = require('js-yaml');
 
@@ -126,7 +126,7 @@ const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'AimCodeMirror',
   components: {
-    AimDrawer,
+    AimPopup,
     CellList,
     codemirror,
     Loading,

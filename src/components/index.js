@@ -1,11 +1,11 @@
 import AimTable from './AimTable/index.vue'
 import AimFormInput from './AimFormInput/index.vue'
-import AimDrawer from './AimDrawer/index.vue'
+import AimPopup from './AimPopup/index.vue'
 
 const components = [
     AimTable,
     AimFormInput,
-    AimDrawer,
+    AimPopup,
 ]
 
 const install = (Vue) => {

@@ -3,8 +3,8 @@
     <el-drawer
         v-if="drawer"
         modal
-        ref="aimDrawer"
-        :title="configData.title"
+        ref="aimPopupDrawer"
+        :title="title"
         :show-close="configData.showClose"
         :with-header="configData.withHeader"
         :destroy-on-close="configData.destroyOnClose"
@@ -24,13 +24,15 @@
     <el-dialog
         v-else
         modal
-        :title="configData.title"
+        ref="aimPopupDialog"
+        :title="title"
         :before-close="configData.beforeClose"
         :custom-class="configData.customClass"
         :width="configData.width || configData.size"
         :close-on-press-escape="configData.closeOnPressEscape"
         :append-to-body="configData.appendToBody"
         :destroy-on-close="configData.destroyOnClose"
+        @close="close"
         :visible.sync="isShowPopup">
       <slot name="aim-popup-body"></slot>
       <div v-if="configData.footer" slot="footer" class="dialog-footer" style="padding-right: 6px">
@@ -51,6 +53,7 @@ export default {
       default: false
     },
     config: Object,
+    title: String,
     drawer: Boolean,
   },
   data() {
@@ -62,7 +65,7 @@ export default {
   watch: {
     isShow(value) {
       this.isShowPopup = value
-    }
+    },
   },
   methods: {
     close() {
@@ -72,11 +75,13 @@ export default {
     },
   },
   created() {
-    jsb.element.fixDrawerClose(this, 'aimDrawer')
+    if(this.drawer){
+      jsb.element.fixDrawerClose(this, 'aimPopupDrawer')
+    }
     this.configData = jsb.objectAssignNX(this.configData, {
       showClose: true,
       withHeader: false,
-      destroyOnClose: true,
+      destroyOnClose: false,
       closeOnPressEscape: true,
       size: '85%',
       direction: "ltr",
@@ -85,9 +90,8 @@ export default {
       appendToBody: false,
       close: null,
       customClass: '',
-      title:'',
     })
-    if(this.configData.title) {
+    if(this.title) {
       this.configData.withHeader = true
     }
   }

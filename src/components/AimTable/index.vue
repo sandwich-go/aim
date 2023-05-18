@@ -168,7 +168,6 @@
         </div>
       </div>
     </el-row>
-
     <el-row :style="footerConfigRef.style">
       <el-col v-for="direction of ['left','right']"
               :key="direction"
@@ -191,14 +190,11 @@
       </el-col>
     </el-row>
     <aim-popup
+        v-if="rowInEditForm"
+        :title="rowFormEditorTitle(rowEditState)"
         :drawer="popupAppendToBody?false:editConfigRef.formWrapperDrawer"
         :is-show.sync="rowFormEditorVisible"
-        :config="{
-          appendToBody:popupAppendToBody,
-          title:rowFormEditorTitle(rowEditState),
-          close:rowFormEditorClose,
-          footer:true,
-        }">
+        :config="getFormPopupConfig(rowInEditForm)">
       <template v-slot:aim-popup-body>
         <aim-form-input
             style="padding-right: 9px"
@@ -236,13 +232,8 @@
         </template>
       </template>
     </aim-popup>
-
-
-    <aim-drawer :is-show.sync="visitSettingDrawerVisible" :config="{
-      appendToBody:popupAppendToBody,
-      close:()=>{doLayout()}
-    }">
-      <template v-slot:aim-drawer-body>
+    <aim-popup :drawer="true" :is-show.sync="visitSettingDrawerVisible" :config="{appendToBody:popupAppendToBody}">
+      <template v-slot:aim-popup-body>
         <aim-table-editor
             editor-table-key="aim-table-editor"
             :editor-group-options="editorGroupOptions"
@@ -251,7 +242,7 @@
             :schema="cloneSchema()">
         </aim-table-editor>
       </template>
-    </aim-drawer>
+    </aim-popup>
   </div>
 </template>
 
@@ -259,8 +250,7 @@
 import {
   EditTriggerManual,
   EventCurrentRowChange,
-  rowFormEditorTitle,
-  xidRow, isModeInplace, EditModeInplace, copyRow, aimTableWarn, aimTableLog
+  xidRow, isModeInplace, EditModeInplace, copyRow, aimTableWarn, aimTableLog, rowFormEditorTitle
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/schema";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -300,7 +290,6 @@ import MixinState from "@/components/AimTable/mixins/MixinState.vue";
 import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
 import MixinVisitor from "@/components/AimTable/mixins/MixinVisitor.vue";
 import CellList from "@/components/cells/CellList.vue";
-import AimDrawer from "@/components/AimDrawer/index.vue";
 import AimTableEditor from "@/components/AimTable/AimTableEditor/index.vue";
 import {
   cellConfigForTable,
@@ -316,7 +305,6 @@ import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
 import {AimFormInputView} from "@/components/AimFormInput";
 import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 import AimPopup from "@/components/AimPopup/index.vue";
-
 const jsb = require("@sandwich-go/jsb")
 
 export default {
@@ -352,7 +340,6 @@ export default {
     AimPopup,
     AimFormInput,
     AimTableEditor,
-    AimDrawer,
     CellList,
     ColumnExpand, ColumnHeader,
     Loading
@@ -392,10 +379,10 @@ export default {
     this.getProxySlotName()
   },
   methods: {
+    rowFormEditorTitle,
     formatterFunction,
     cellShowWhenGetLostForTable: cellShowWhenLostForTable,
     directionToolbarSpan,
-    rowFormEditorTitle,
     formRulesFromSchema,
     validSchema: filterVirtualField,
     xidRow,
@@ -450,6 +437,13 @@ export default {
     escKey() {
       if (this.isModeInplace()) {
         this.rowInEdit = null
+      }
+    },
+    getFormPopupConfig(){
+      return {
+        appendToBody:this.popupAppendToBody,
+        close:this.rowFormEditorClose,
+        footer:true,
       }
     },
     thisTarget() {

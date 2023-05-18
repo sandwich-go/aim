@@ -31,7 +31,7 @@ export default {
     this.ccConfigMerge()
     this.cc.codeMirror = jsb.objectAssignNX(this.cc.codeMirror, {
       popupAppendToBody:true,
-      height:`${jsb.clientHeight(113)}px`
+      height:`${jsb.clientHeight(120)}px`
     })
   },
 }

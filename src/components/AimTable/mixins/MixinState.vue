@@ -35,6 +35,11 @@ export default {
       debug:this.enableDebug,
     }
   },
+  watch:{
+    rowEditState(v){
+      console.log("rowEditState change ",v)
+    }
+  },
   methods: {
     updateRowWatcher(row) {
       //移除老旧watcher
