@@ -27,9 +27,6 @@ export default {
   created() {
     this.ccConfigMerge({
       style:{},
-      change:function (valNew){
-        this.$emit("input",valNew)
-      }
     })
     this.calcWidthPxString("100%")
   },

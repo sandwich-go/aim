@@ -206,6 +206,11 @@ export default {
           },
         },
         {
+          field: 'Version', name: 'Version', type: 'select', sortable: false,
+          required: true,
+          options:[{label:"v1",value:"v1"},{label:"v2",value:"v2"}],
+        },
+        {
           field: 'Link',
           name: 'Link',
           showOverflowTooltip: true,

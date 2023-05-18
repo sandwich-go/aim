@@ -21,7 +21,7 @@ export const typeDefaults = {
     },
     select: {
         table:'CellViewTag',
-        form:'CellSelectMultiple',
+        form:'CellSelect',
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
         },
