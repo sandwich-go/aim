@@ -2,7 +2,7 @@
   <el-form-item :key="fs.field" :label="showLabel?formLabel(fs):''" :prop="fs.field" :ref="fs.field"
                 :label-width="labelWidth">
 
-  <span slot='label'>
+  <span slot='label' v-if="showLabel">
       <column-header :field-schema="fs" :ignore-required="true">
         <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
           <slot :name="tipSlotName(fs)" :field-schema="fs"/>
