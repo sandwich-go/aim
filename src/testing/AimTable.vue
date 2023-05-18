@@ -480,12 +480,11 @@ export default {
           {
             cell: 'CellCheckbox',
             field: 'autoWidth',
-            data: _this.tableProperty,
             label: "自适应列宽", change: (val) => {
-              this.toolbarAlert('CellCheckbox', val)
-              this.$nextTick(()=>{
+              if(val){
+                console.log("doAutoWidthdoAutoWidth ")
                 this.$refs.table.doLayout()
-              })
+              }
             }
           },
           {

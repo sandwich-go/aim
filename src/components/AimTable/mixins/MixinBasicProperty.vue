@@ -5,6 +5,7 @@ import {headerBackgroundColor, headerColor} from "@/components/AimTable/style";
 const jsb = require("@sandwich-go/jsb")
 import {removeCtrlData} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
+import {AimTableAutoWidthClass} from "@/components/AimTable/AutoWidth";
 
 export default {
   name: 'MixinBasicProperty',
@@ -48,7 +49,7 @@ export default {
       autoWidth: false,
       border: true,
       stripe: true,
-      class: 'aim-table-mini-padding',
+      class:['aim-table-mini-padding'],
       showHeader: true,
       highlightCurrentRow: true,
       headerCellStyle: {textAlign: 'center', padding: '0', color: headerColor, background: headerBackgroundColor},
@@ -56,6 +57,9 @@ export default {
       height: null,
       heightSubVH: 0,
     })
+    if(this.tablePropertyRef.autoWidth){
+      this.tablePropertyRef.class.push(AimTableAutoWidthClass)
+    }
     this.debug && this.setDebugMessage("tableProperty",JSON.stringify(this.tablePropertyRef))
   },
   methods: {

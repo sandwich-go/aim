@@ -25,10 +25,6 @@
     </el-row>
     <el-row class="aim-component-flex-end" style="align-items: start;gap: 3px">
       <el-table
-          v-fit-columns="{
-            enabled:tablePropertyRef.autoWidth,
-            doLayout:(done)=> {$nextTick(()=>{doLayout();done && done()})},
-          }"
           ref="table"
           :height="tableHeight()"
           :data="tableData"
@@ -255,8 +251,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import AutoWidth from './AutoWidth';
 import {
   EditTriggerManual,
   EventCurrentRowChange,
@@ -315,8 +309,8 @@ import {flexEndStyle} from "@/components/AimTable/style";
 import {cellNameForFormByType} from "@/components/cells/types";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
 import {AimFormInputView} from "@/components/AimFormInput";
+import {forceAdjustColumnWidth} from "@/components/AimTable/AutoWidth";
 
-Vue.use(AutoWidth);
 const jsb = require("@sandwich-go/jsb")
 
 export default {
@@ -409,7 +403,7 @@ export default {
       return jsb.pathGet(data, defaultVal, true)
     },
     columnClass(fs) {
-      if (fs.width || fs.min_width || fs.max_midth) {
+      if (fs.width || fs.min_width || fs.max_width) {
         return 'aim-column-fixed-width'
       }
       return ''
@@ -450,6 +444,9 @@ export default {
       if (this.isModeInplace()) {
         this.rowInEdit = null
       }
+    },
+    tableClass(){
+
     },
     thisTarget() {
       return this
@@ -592,6 +589,18 @@ export default {
       }
       return this.shouldCellDisable({code, cell, row, fieldSchema})
     },
+    doLayout() {
+      if(this.tablePropertyRef.autoWidth) {
+        forceAdjustColumnWidth(this.$refs.table.$el,{
+          doLayout:(done)=> {
+            this.$refs.table.doLayout()
+            done && done()
+          },
+        },true)
+      }else{
+        this.$refs.table && this.$refs.table.doLayout()
+      }
+    },
     privateShouldCellHide({code, cell, row, fieldSchema}) {
       if (!cell) {
         return false
@@ -650,7 +659,6 @@ export default {
 
 
 .el-table.aim-table-auto-width .cell {
-  display: inline-block;
   white-space: nowrap;
   width: 100%;
   overflow-x: hidden;

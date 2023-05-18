@@ -59,9 +59,6 @@ export default {
       return this
     },
     setLoading(inLoading){this.inLoading = inLoading},
-    doLayout() {
-      this.$refs.table && this.$refs.table.doLayout()
-    },
     summaryRow(row) {
       let info = [`xid(${xidRow(row)})`]
       jsb.each(this.schema, function (fieldSchema) {

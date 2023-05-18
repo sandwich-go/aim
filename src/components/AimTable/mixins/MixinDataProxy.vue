@@ -89,7 +89,10 @@ export default {
 
     // eslint-disable-next-line no-unused-vars
     trySaveTableData({done} = {}) {
-      this.tryPromise('saveTableData',this.tableData,done,'数据已保存')
+      this.tryPromise('saveTableData',this.tableData,({error})=>{
+        done && done({error})
+        setTimeout(()=>{ this.doLayout()},1000)
+      },'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
     tryProxyDelete(row, {done} = {}) {
@@ -150,7 +153,7 @@ export default {
           this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
         }
         done && done({error})
-        this.doLayout()
+        setTimeout(()=>{ this.doLayout()},1000)
       })
     },
     addFilterDataToParams(params){
