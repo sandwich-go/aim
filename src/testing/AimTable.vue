@@ -516,16 +516,6 @@ export default {
             style: {'padding-right': '10px', width: '160px'},
           },
           {
-            cell: 'CellCheckbox',
-            field: 'autoWidth',
-            label: "自适应列宽", change: (val) => {
-              if(val){
-                console.log("doAutoWidthdoAutoWidth ")
-                this.$refs.table.doLayout()
-              }
-            }
-          },
-          {
             slot: 'SlotOptionsUseDefineSlot',
             options: [{label: "action1", value: "action1"}, {label: "action2", value: "action2"}],
             change: (val) => this.toolbarAlert('SlotOptionsUseDefineSlot', val)
