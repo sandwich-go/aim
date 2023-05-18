@@ -34,6 +34,26 @@
           ></el-option>
         </el-select>
       </template>
+      <template v-slot:password_tip>
+        <el-table
+            :data="tipTableData"
+            style="width: 100%">
+          <el-table-column
+              prop="date"
+              label="日期"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="name"
+              label="姓名"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="address"
+              label="地址">
+          </el-table-column>
+        </el-table>
+      </template>
     </aim-table>
   </div>
 </template>
@@ -70,6 +90,23 @@ export default {
   data() {
     const _this = this
     return {
+      tipTableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }],
       alertTitle: '',
       toolbarOptionServer: '',
       tableProperty: {
@@ -139,8 +176,9 @@ export default {
         {
           field: 'password', name: 'password', sortable: true, uniq: true,
           placeholder: "xxx.xx",
-          comment: "用户名不要携带@centurygame.com后缀",
+          commentHTML: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
+          tipSlot:'password_tip',
           required: true,
           cellFormConfig:{
             checkPermission:()=>{return false}

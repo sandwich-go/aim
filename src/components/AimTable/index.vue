@@ -85,7 +85,11 @@
               :fied-schema="fs"
           >
             <template slot="header">
-              <column-header :field-schema="fs"/>
+              <column-header :field-schema="fs">
+                <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
+                  <slot :name="tipSlotName(fs)" :field-schema="fs"/>
+                </template>
+              </column-header>
             </template>
             <template slot-scope="scope">
               <template v-if="cellName(fs,scope.row)">
@@ -297,7 +301,7 @@ import {
   cellNameForTable,
   formatterFunction
 } from "@/components/AimTable/cell";
-import {getProxySlotName} from "@/components/AimTable/slot";
+import {getProxySlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
 import {cellNameForFormByType} from "@/components/cells/types";
@@ -377,6 +381,8 @@ export default {
     this.processSchemaFilter()
     // 占位
     this.getProxySlotName()
+    this.getProxyTipSlotName()
+    this.tipSlotName()
   },
   methods: {
     rowFormEditorTitle,
@@ -386,7 +392,9 @@ export default {
     formRulesFromSchema,
     validSchema: filterVirtualField,
     xidRow,
+    tipSlotName,
     getProxySlotName,
+    getProxyTipSlotName,
     setDebugMessage(title,msg='') {
       aimTableLog(title,msg)
     },

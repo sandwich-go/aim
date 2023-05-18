@@ -9,7 +9,8 @@
     <template v-else>
       <span><i class="el-icon-info"></i>{{fieldValue.label}}</span>
       <template slot="content">
-        <span v-html='fieldValue.tips'></span>
+        <span v-if="fieldValue.tips" v-html='fieldValue.tips'></span>
+        <span v-if="fieldValue.tipsHTML" v-html='fieldValue.tipsHTML'></span>
       </template>
     </template>
   </el-tooltip>

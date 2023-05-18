@@ -43,8 +43,8 @@
     </div>
     <div v-else>{{ cellName(fs) }} not supported</div>
 
-    <span v-if="fs.comment" class="aim-form-item-comment">{{ comment(getRow(), fs) }}</span>
-    <span v-if="fs.commentHTML" class="aim-form-item-comment" v-html="commentHTML(getRow(),fs)"></span>
+    <span v-if="fs.comment" class="aim-form-item-comment">{{ comment(getRow(), fs,'comment') }}</span>
+    <span v-if="fs.commentHTML" class="aim-form-item-comment" v-html="comment(getRow(),fs,'commentHTML')"></span>
   </el-form-item>
 </template>
 
@@ -58,7 +58,7 @@ import {
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import {xidRow} from "@/components/AimTable/table";
 import {isAimFormInput, isAimTable} from "@/components/cells/is";
-import {comment, commentHTML} from "@/components/AimFormInput/index";
+import {comment} from "@/components/AimFormInput/index";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 
@@ -114,7 +114,6 @@ export default {
   methods: {
     isAimFormInput,
     isAimTable,
-    commentHTML,
     comment,
     formLabel(si) {
       return jsb.pathGet(si, 'nameForm', si['name'])

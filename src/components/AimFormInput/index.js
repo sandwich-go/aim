@@ -33,6 +33,3 @@ export function comment(row,fieldSchema, commentField = 'comment') {
     const commentVal = fieldSchema[commentField]
     return jsb.isFunction(commentVal)?commentVal({row, fieldSchema, fieldValue: row[fieldSchema.field]}):commentVal
 }
-export function commentHTML(row,fs) {
-    return comment(fs,row,'commentHTML')
-}
