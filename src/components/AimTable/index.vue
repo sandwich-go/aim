@@ -309,7 +309,7 @@ import {flexEndStyle} from "@/components/AimTable/style";
 import {cellNameForFormByType} from "@/components/cells/types";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
 import {AimFormInputView} from "@/components/AimFormInput";
-import {forceAdjustColumnWidth} from "@/components/AimTable/AutoWidth";
+import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -589,17 +589,24 @@ export default {
       }
       return this.shouldCellDisable({code, cell, row, fieldSchema})
     },
-    doLayout() {
-      if(this.tablePropertyRef.autoWidth) {
-        forceAdjustColumnWidth(this.$refs.table.$el,{
-          doLayout:(done)=> {
-            this.$refs.table.doLayout()
-            done && done()
-          },
-        },true)
-      }else{
-        this.$refs.table && this.$refs.table.doLayout()
+    doLayout(freshAutoWidth=false) {
+      // if(this.tablePropertyRef.autoWidth) {
+      //   this.debug && this.setDebugMessage(`call doLayout with auto width`)
+      //   forceAdjustColumnWidth(this.$refs.table.$el,{
+      //     doLayout:(done)=> {
+      //       this.$refs.table.doLayout()
+      //       done && done()
+      //     },
+      //   },true)
+      // }else{
+      //   this.debug && this.setDebugMessage(`call doLayout`)
+      //   this.$refs.table && this.$refs.table.doLayout()
+      // }
+      if(freshAutoWidth && this.tablePropertyRef.autoWidth){
+        flexColumnWidth(this.schema,this.tableData)
       }
+      this.debug && this.setDebugMessage(`call doLayout`)
+      this.$refs.table && this.$refs.table.doLayout()
     },
     privateShouldCellHide({code, cell, row, fieldSchema}) {
       if (!cell) {

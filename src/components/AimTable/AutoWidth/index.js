@@ -1,3 +1,5 @@
+import {minWidthTableColumn} from "@/components/cells/types";
+
 export const AimTableAutoWidthClass = 'aim-table-auto-width'
 
 export function forceAdjustColumnWidth(tableEL, bindingValue) {
@@ -26,30 +28,42 @@ export function forceAdjustColumnWidth(tableEL, bindingValue) {
             const max = Math.max(...widthList);
             tableEL.querySelectorAll(`col[name=${clsName}]`).forEach((el) => {
                 el.setAttribute("width", `${max + padding}px`);
+                console.log("set width ",el,max,el.getAttribute("width"))
             });
         });
     })
 }
 
-export default {
-    install(Vue) {
-        Vue.directive("fit-columns", {
-            // update() {
-            // },
-            // bind() {
-            // },
-            // inserted(el, binding) {
-            //     setTimeout(() => {
-            //         adjustColumnWidth(el, binding.value);
-            //     }, 300);
-            // },
-            // componentUpdated(el, binding) {
-            //     setTimeout(() => {
-            //         adjustColumnWidth(el, binding.value,true);
-            //     }, 300);
-            // },
-            // unbind() {
-            // },
-        });
-    },
-};
+const jsb = require("@sandwich-go/jsb")
+export function flexColumnWidth(schema,tableData) {
+    jsb.each(schema,(fieldSchema)=>{
+        if(fieldSchema.width || fieldSchema.min_width){
+            return
+        }
+        let headerExtraWidth = 0
+        if(fieldSchema.required){
+            headerExtraWidth = headerExtraWidth + 40
+        }
+        if(fieldSchema.sortable){
+            headerExtraWidth = headerExtraWidth + 40
+        }
+        if(fieldSchema.lock){
+            headerExtraWidth = headerExtraWidth + 40
+        }
+        if(fieldSchema.tips){
+            headerExtraWidth = headerExtraWidth + 40
+        }
+        const headerWidth =  jsb.textWidth(fieldSchema.name) + headerExtraWidth
+        const minWidth = minWidthTableColumn(fieldSchema.type)
+        const arr = tableData.map(x => x[fieldSchema.field])
+        let width = jsb.longestTextWidth(arr)
+        if(width < minWidth){
+            width = minWidth
+        }
+        if(width < headerWidth) {
+            width = headerWidth
+        }
+        fieldSchema.width = width
+        console.log("flexColumnWidth ",fieldSchema,)
+    })
+}

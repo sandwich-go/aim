@@ -208,7 +208,6 @@ export default {
         {
           field: 'Link',
           name: 'Link',
-          //min_width: 180,
           showOverflowTooltip: true,
           sortable: true,
           align: 'center',
@@ -231,7 +230,7 @@ export default {
           cellForm: 'CellInputNumber',
         },
         {
-          field: 'Icon', name: 'Icon', type: 'input', sortable: true,
+          field: 'Icon', name: 'Icon', type: 'element_icon', sortable: true,
           placeholder: "xxx.xx",
           //min_width: 180,
           tips: "用户名不要携带@centurygame.com后缀",
@@ -281,7 +280,6 @@ export default {
         {
           field: 'Datetime',
           type:'datetime',
-          //min_width: 180,
           name: 'Datetime',
           cell: 'CellDatePicker',
           cellForm: 'CellDatePicker',
@@ -289,7 +287,7 @@ export default {
         },
         {
           field: 'DatetimeRange',
-          //min_width: 180,
+          type:'datetime_range',
           name: 'Datetime',
           cell: 'CellDateRangePicker',
           cellForm: 'CellDateRangePicker',
@@ -305,11 +303,10 @@ export default {
           field:'virtualLinks',
           virtual: true,
           name: '操作',
-          min_width: 50,
+          // min_width: 50,
           align:'center',
           fixed: 'right',
           sortable:false,
-          isAction:true,
           cell: 'CellList',
           cellConfig: ['link@'+CodeButtonRowClose]
         },
@@ -321,7 +318,6 @@ export default {
           name: '操作',
           width: 200,
           sortable:false,
-          isAction:true,
           cell: 'CellList',
           cellConfig: [`link@${CodeButtonRowEdit}`, 'link@'+CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },

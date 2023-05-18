@@ -2,24 +2,126 @@ const jsb = require("@sandwich-go/jsb")
 
 
 // 基础类型到form编辑组件映射
-export const type2FormCellName = {
-    input: 'CellInput',
-    input_number: 'CellInputNumber',
-    textarea: 'CellInputTextArea',
-    select: 'CellSelect',
-    select_input: 'CellSelectInput',
-    select_multiple: 'CellSelectMultiple',
-    select_group: 'CellSelectGroup',
-    element_icon: 'CellIconSelectorInput',
-    color: 'CellColorPicker',
-    datetime: 'CellDatePicker',
-    switch: 'CellSwitch',
-    checkbox: 'CellCheckbox',
+export const typeDefaults = {
+    input: {
+        table:'CellViewLabel',
+        form:'CellInput',
+        default:'',
+    },
+    input_number:{
+        table:'CellViewLabel',
+        form:'CellInputNumber',
+        default:0,
+        minTableColumnWidth:90
+    },
+    textarea: {
+        table:'CellViewLabel',
+        form:'CellInputTextArea',
+        default:'',
+    },
+    select: {
+        table:'CellViewTag',
+        form:'CellSelectMultiple',
+        default: (fs) => {
+            return jsb.pathGet(fs, 'options.0.value')
+        },
+    },
+    select_input:{
+        table:'CellViewTag',
+        form:'CellSelectInput',
+        default: (fs) => {
+            return jsb.pathGet(fs, 'options.0.value')
+        },
+    },
+    select_multiple: {
+        table:'CellViewTag',
+        form:'CellSelectMultiple',
+        default: () => [],
+    },
+    select_group:  {
+        table:'CellViewTag',
+        form:'CellSelectGroup',
+        default: (fs) => {
+            return jsb.pathGet(fs, 'options.0.options.0.value')
+        },
+    },
+    element_icon: {
+        table:'CellViewIcon',
+        form:'CellIconSelectorInput',
+        default: '',
+        minTableColumnWidth:180
+    },
+    color: {
+        table:'CellViewColor',
+        form:'CellColorPicker',
+        default: '',
+    },
+    datetime:  {
+        table:'CellViewLabel',
+        form:'CellDatePicker',
+        default: () => jsb.dateTime(),
+        minTableColumnWidth:180
+    },
+    datetime_range:  {
+        table:'CellDateRangePicker',
+        form:'CellDateRangePicker',
+        default: () => jsb.dateTime(),
+        minTableColumnWidth:360
+    },
+    switch:  {
+        table:'CellViewBoolean',
+        form:'CellSwitch',
+        default:false,
+    },
+    checkbox: {
+        table:'CellViewBoolean',
+        form:'CellCheckbox',
+        default:false,
+    },
     // 复杂类型
-    table: 'AimTable',
-    object: 'AimFormInput',
-    code:'CellCodeMirror',
-    password:'CellPassword'
+    table: {
+        table:'CellTriggerTable',
+        form:'AimTable',
+        default:() => [],
+    },
+    object: {
+        table:'CellTriggerFormInput',
+        form:'AimFormInput',
+        default:() => {},
+    },
+    code:{
+        table:'CellTriggerCodeMirror',
+        form:'CellCodeMirror',
+        default:'',
+    },
+    password:{
+        table:'CellPassword',
+        form:'CellPassword',
+        default:'',
+    }
+}
+
+
+// 基础类型到table显示组件的映射
+export const types2TableCellName = {}
+jsb.each(typeDefaults,(val,key)=>{
+    types2TableCellName[key] = val.table
+})
+
+// 基础类型到form编辑组件映射
+export const type2FormCellName = {}
+jsb.each(typeDefaults,(val,key)=>{
+    type2FormCellName[key] = val.form
+})
+
+export const type2DefaultVal = {}
+jsb.each(typeDefaults,(val,key)=>{
+    type2DefaultVal[key] = val.default
+})
+
+
+export function minWidthTableColumn(fieldType) {
+    return jsb.pathGet(typeDefaults,`${fieldType}.minTableColumnWidth`,80)
 }
 
 export function formatValue(fieldType,fieldValue) {
@@ -32,51 +134,7 @@ export function formatValue(fieldType,fieldValue) {
     return fieldValue
 }
 
-export const type2DefaultVal = {
-    input: '',
-    input_number: 0,
-    textarea: '',
-    select: (fs) => {
-        return jsb.pathGet(fs, 'options.0.value')
-    },
-    select_input: (fs) => {
-        return jsb.pathGet(fs, 'options.0.value')
-    },
-    select_multiple: [],
-    select_group: (fs) => {
-        return jsb.pathGet(fs, 'options.0.options.0.value')
-    },
-    element_icon: '',
-    color: '',
-    datetime: () => jsb.dateTime(),
-    switch: false,
-    checkbox: false,
-    // 复杂类型
-    table: () => [],
-    object: () => ({}),
-    code:'',
-    password:''
-}
 
-// 基础类型到table显示组件的映射
-export const types2TableCellName = {
-    input: 'CellViewLabel',
-    input_number: 'CellViewLabel',
-    textarea: 'CellViewLabel',
-    select: 'CellViewTag',
-    select_input: 'CellViewTag',
-    select_multiple: 'CellViewTag',
-    select_group: 'CellViewTag',
-    element_icon: 'CellViewIcon',
-    color: 'CellViewColor',
-    datetime: 'CellViewLabel',
-    switch: 'CellViewBoolean',
-    checkbox: 'CellViewBoolean',
-    table: 'CellTriggerTable',
-    object: 'CellTriggerFormInput',
-    code:'CellTriggerCodeMirror',
-    password:'CellPassword'
-}
 
 // 基础类型到table显示组件的映射
 export const types2TableInplaceCellName = jsb.clone(type2FormCellName)

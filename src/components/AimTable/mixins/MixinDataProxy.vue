@@ -90,8 +90,10 @@ export default {
     // eslint-disable-next-line no-unused-vars
     trySaveTableData({done} = {}) {
       this.tryPromise('saveTableData',this.tableData,({error})=>{
+        if(!error){
+          this.doLayout(true)
+        }
         done && done({error})
-        setTimeout(()=>{ this.doLayout()},1000)
       },'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
@@ -151,9 +153,9 @@ export default {
             this.tableData.push(item)
           })
           this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
+          this.doLayout(true)
         }
         done && done({error})
-        setTimeout(()=>{ this.doLayout()},1000)
       })
     },
     addFilterDataToParams(params){

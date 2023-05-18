@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip class="item" effect="light" placement="top-start">
+  <el-tooltip effect="light" placement="top-start">
     <template v-if="isString(fieldValue)">
       <span><i class="el-icon-info"></i></span>
       <template slot="content">
