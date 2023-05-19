@@ -355,6 +355,7 @@ export default {
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
           placeholder: "xxx.xx",
+          shortcuts:{copy:true,jump:true,filter:true},
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
@@ -369,7 +370,7 @@ export default {
           filter:{cell:'CellCascader',placeholder:'CellCascader',},
           watch:function ({row,newValue}){
             console.log("watch changed",row,newValue)
-          }
+          },
         },
         {
           field: 'password', name: 'password', sortable: true, uniq: true,

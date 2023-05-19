@@ -6,7 +6,7 @@
       </template>
       <template v-else-if="fieldValue.code || fieldValue.href || fieldValue.click">
         <el-link :type="fieldValue.type || 'primary'" @click="emitClick($event)" :href="fieldValue.href" target="_blank">
-          <cell-view-icon v-if="fieldValue.icon" :cell-config="fieldValue.icon"/>
+          <cell-view-icon v-if="fieldValue.icon || 'el-icon-document-copy'" :cell-config="fieldValue.icon || 'el-icon-document-copy'"/>
           <cell-view-label v-if="fieldValue.label" :cell-config="fieldValue.label" style="padding-left: 3px"></cell-view-label>
         </el-link>
       </template>

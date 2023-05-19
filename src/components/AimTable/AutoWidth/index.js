@@ -66,6 +66,7 @@ export function flexColumnWidth(schema,tableData) {
         if(width < headerWidth) {
             width = headerWidth
         }
-        fieldSchema.min_width = width
+        // shortcut 14宽度+ 3 padding
+        fieldSchema.min_width = width + jsb.size(fieldSchema.shortcuts || {})*20
     })
 }
