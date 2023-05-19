@@ -1,6 +1,6 @@
 <template>
   <div style="display:inline; gap: 20px">
-    <template v-for="(sc,shortcut) in fieldSchema['shortcuts'] || {}">
+    <template v-for="(sc,shortcut) in shortcuts || {}">
       <span :key="shortcut">
         <el-link
             v-if="shortcut ==='copy'"
@@ -48,10 +48,15 @@ export default {
     row: Object,
     fieldSchema: Object,
   },
+  computed: {
+    shortcuts() {
+      return this.pathGet(this.fieldSchema,'shortcuts',{})
+    }
+  },
   data() {
     return {
       fieldSchemaRef:this.fieldSchema,
-      fieldValueFormatted: this.getFieldValueFormatted()
+      fieldValueFormatted: this.getFieldValueFormatted(),
     }
   },
   methods: {

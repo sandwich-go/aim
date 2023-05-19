@@ -369,9 +369,6 @@ export default {
                 jsb.cc.toastWarning(`${xidRow(row)} edit shortcut click`)
               }
             }
-          },          cell:'CellList',
-          cellConfig(){
-            return [{cell:'CellViewTag',label: "点击初始化", type: "danger"}]
           },
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
