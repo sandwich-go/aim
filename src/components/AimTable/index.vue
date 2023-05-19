@@ -259,7 +259,7 @@
 import {
   EditTriggerManual,
   EventCurrentRowChange,
-  xidRow, isModeInplace, EditModeInplace, copyRow, aimTableWarn, aimTableLog, rowFormEditorTitle
+  xidRow, isModeInplace, EditModeInplace, copyRow, aimTableWarn, aimTableLog, rowFormEditorTitle, aimTableError
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/schema";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -390,6 +390,21 @@ export default {
     this.getProxySlotName()
     this.getProxyTipSlotName()
     this.tipSlotName()
+
+    let dragCallback = null
+    if(this.sortConfigRef.sortIdxField){
+      this.dragConfigRef.row = true
+      dragCallback = ()=>{
+        jsb.each(this.tableData,(v,index)=>{
+          v[this.sortConfigRef.sortIdxField] = index +1
+        })
+      }
+      console.log("this.pagerConfigRef ",this.pagerConfigRef)
+      if(this.pagerConfigRef.enable){
+        aimTableError(`分页模式 与 ${this.sortConfigRef.sortIdxField} 配置不兼容`)
+      }
+    }
+    this.initDrag(dragCallback)
   },
   methods: {
     rowFormEditorTitle,

@@ -20,9 +20,10 @@
         :edit-config="editConfig"
         :table-property="tableProperty"
         :footer-config="footConfig"
-        :sort-config="{remote:false,orders:[{field:'name',order:'desc'}]}"
+        :sort-config="{remote:false,orders:[{field:'name',order:'desc'}],sortIdxField:'SortIdx'}"
         :righter-config="rightBarConfig"
         :visitor-config="tableVisitorData"
+        :pager-config="{}"
         :proxy-config="proxyConfig">
       <template v-slot:SlotOptionsUseDefineSlot="{cellConfig}">
         <el-select v-model="toolbarOptionServer" size="mini" @change="cellConfig.change">
@@ -325,7 +326,7 @@ export default {
           label: "标题内容",
           style: {width: 'fit'}
         }, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
-        rightCells: [{cell: 'CellPager'}, {
+        rightCells: [{
           cell: 'CellViewAlert',
           label: "标题内容",
           style: {width: 'fit'}
@@ -360,6 +361,7 @@ export default {
             }
           }
         },
+        {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable: true, align: 'center',default:0},
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
           placeholder: "xxx.xx",

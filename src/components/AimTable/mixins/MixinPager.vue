@@ -18,7 +18,7 @@ export default {
   },
   created() {
     this.pagerConfigRef = jsb.objectAssignNX(this.pagerConfigRef, {
-      enable: false,
+      enable: true,
       pagerConfig: {
         layout: `->,total, prev, pager, next, sizes`,
         background: true,

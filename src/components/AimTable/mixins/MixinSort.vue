@@ -15,6 +15,7 @@ export default {
       enable: true,
       remote:false,
       orders:[],
+      sortIdxField:''
     })
   },
   methods:{

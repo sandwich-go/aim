@@ -28,7 +28,6 @@ export default {
       rowEditState: AimFormInputView,
       funcProcessQueryParams: [],
       sortConfigRef:{},
-
       // schema中抽取而来的filter cell
       filterData:{},
       filterTypeMapping:{},

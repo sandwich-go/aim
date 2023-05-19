@@ -14,7 +14,8 @@ export default {
     return {
       // 如果未传递dragConfig则认为禁用拖拽
       dragConfigRef: this.dragConfig || {row:false,column:false},
-      rowSortableObj:null
+      rowSortableObj:null,
+      dragCallback:null
     }
   },
   created() {
@@ -24,13 +25,16 @@ export default {
       header: '',
       headerTips: '',
     })
-    if(this.dragConfigRef.row){
-      this.$nextTick(() => {
-        this.rowSortableObj = this.enableRowDrag(this.getTableRef(), this.tableData)
-      })
-    }
   },
   methods: {
+    initDrag(dragCallback){
+      this.dragCallback = dragCallback
+      if(this.dragConfigRef.row){
+        this.$nextTick(() => {
+          this.rowSortableObj = this.enableRowDrag(this.getTableRef(), this.tableData)
+        })
+      }
+    },
     enableRowDrag(tableRef,tableData){
       const el = tableRef.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
       return Sortable.create(el, {
@@ -44,6 +48,7 @@ export default {
         onEnd: evt => {
           const targetRow = tableData.splice(evt.oldIndex, 1)[0]
           tableData.splice(evt.newIndex, 0, targetRow)
+          this.dragCallback && this.dragCallback()
         }
       })
     }
