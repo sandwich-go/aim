@@ -11,21 +11,29 @@
         <i :class="pathGet(shortcut,'icon','el-icon-document-copy')"/>
       </el-link>
       <el-link
-          v-if="shortcut ==='jump' && pathGet(sc,'href',fieldValueFormatted)"
+          v-else-if="shortcut ==='jump' && pathGet(sc,'href',fieldValueFormatted)"
           :type="pathGet(sc,'type','primary')"
           :style="style(sc)"
+          target="_blank"
           :disabled="pathGet(sc,'disabled',false) || fieldValueFormatted===''"
           :href="pathGet(sc,'href',fieldValueFormatted)">
         <i :class="pathGet(shortcut,'icon','el-icon-s-promotion')"/>
       </el-link>
       <el-link
-          v-if="shortcut ==='filter'"
+          v-else-if="shortcut ==='filter'"
           :style="style(sc)"
           :type="pathGet(sc,'type','primary')"
-          :href="pathGet(sc,'href',fieldValueFormatted)"
           :disabled="pathGet(sc,'disabled',false) || fieldValueFormatted===''"
-          @click="clipFilter($event,sc)">
+          @click="clipFilter(sc)">
         <i :class="pathGet(shortcut,'icon','el-icon-search')"/>
+      </el-link>
+        <el-link
+            v-else
+            :style="style(sc)"
+            :type="pathGet(sc,'type','primary')"
+            :disabled="pathGet(sc,'disabled',false)"
+            @click="click(sc,shortcut)">
+        <i :class="pathGet(shortcut,'icon','el-icon-s-grid')"/>
       </el-link>
       </span>
     </template>
@@ -42,15 +50,36 @@ export default {
   },
   data() {
     return {
+      fieldSchemaRef:this.fieldSchema,
       fieldValueFormatted: this.getFieldValueFormatted()
     }
   },
   methods: {
+    click(sc,shortcut){
+      const v = jsb.pathGet(sc,'click')
+      if(v){
+        v({row:this.row,value: this.fieldValueFormatted,})
+        return
+      }
+      jsb.cc.toastWarning(`shortcut ${shortcut} no click function`)
+    },
     clipFilter(){
+      if(!this.fieldSchema.filter){
+        jsb.cc.toastWarning(`shortcut filter not configured for field: ${this.fieldSchema.field}`)
+        return
+      }
+      this.$set(this.fieldSchemaRef.filter.data,this.fieldSchema.field,this.fieldValueFormatted)
+    },
+    clipCopy(event, sc) {
+      let clipCopy = jsb.pathGet(sc, 'click')
+      if (!clipCopy) {
+        clipCopy = jsb.clipCopy
+      }
+      clipCopy(this.row[this.fieldSchema.field], event)
     },
     getFieldValueFormatted() {
       return this.fieldSchema.formatter ?
-          this.fieldSchema.formatter({value: jsb.pathGet(this.row, this.fieldSchema.field), row: this.row}) :
+          this.fieldSchema.formatter({row: this.row,value: this.fieldValueFormatted}) :
           jsb.pathGet(this.row, this.fieldSchema.field)
     },
     style(cc) {
@@ -63,16 +92,9 @@ export default {
     pathGet(cc, name, defaultVal) {
       const v = jsb.pathGet(cc, name, defaultVal)
       if (jsb.isFunction(v)) {
-        return v({value: this.fieldValueFormatted, row: this.row})
+        return v({row: this.row,value: this.fieldValueFormatted})
       }
       return v
-    },
-    clipCopy(event, sc) {
-      let clipCopy = jsb.pathGet(sc, 'click')
-      if (!clipCopy) {
-        clipCopy = jsb.clipCopy
-      }
-      clipCopy(this.row[this.fieldSchema.field], event)
     },
   }
 }

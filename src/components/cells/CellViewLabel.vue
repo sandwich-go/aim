@@ -16,8 +16,5 @@ export default {
   name: 'CellViewLabel',
   methods: {isPlainObject},
   mixins: [MixinCellViewConfig],
-  created() {
-    console.log("fieldValue ",this.fieldValue,this.fieldValueFormatted(),this.data, this.fieldName)
-  }
 }
 </script>

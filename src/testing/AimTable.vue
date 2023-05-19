@@ -65,7 +65,7 @@ import {
   EditTriggerManualAndDBLClick,
   EditTriggerManual,
   EditModeFormInput,
-  EditModeInplace, EditModeInplaceNoTrigger
+  EditModeInplace, EditModeInplaceNoTrigger, xidRow
 } from "@/components/AimTable/table";
 import {
   CodeButtonAdd,
@@ -325,51 +325,65 @@ export default {
           label: "标题内容",
           style: {width: 'fit'}
         }, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
-        rightCells: [{cell: 'CellPager'}, {cell: 'CellViewAlert', label: "标题内容", style: {width: 'fit'}}, CodeButtonRefresh],
+        rightCells: [{cell: 'CellPager'}, {
+          cell: 'CellViewAlert',
+          label: "标题内容",
+          style: {width: 'fit'}
+        }, CodeButtonRefresh],
       },
       rightBarConfig: {
-        cells: [CodeButtonAdd,CodeButtonRowSelectedMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
+        cells: [CodeButtonAdd, CodeButtonRowSelectedMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
       },
-      groupConfig:[
-        {type:'inline',fields:['id','name'],after:'@start'},
-        {type:'tab',fields:['AuthInfo','AuthInfoObject','code']},
-        {type:'divider','content-position':"left",label:'分割线',after:'Link'}
+      groupConfig: [
+        {type: 'inline', fields: ['id', 'name'], after: '@start'},
+        {type: 'tab', fields: ['AuthInfo', 'AuthInfoObject', 'code']},
+        {type: 'divider', 'content-position': "left", label: '分割线', after: 'Link'}
       ],
       schema: [
         {
           field: 'id', name: 'ID',
           type: 'input',
-          show:false,
+          show: false,
           //min_width: 180,
           sortable: true,
-          locked:true,
+          locked: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           summary: true,
           readOnly: true,
-          fixed:"left",
+          fixed: "left",
           backgroundAsHeader: true,
-          filter:{placeholder:'请输入ID',format:(v)=>{ return Number(v)}}
+          filter: {
+            placeholder: '请输入ID', format: (v) => {
+              return Number(v)
+            }
+          }
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
           placeholder: "xxx.xx",
-          shortcuts:{copy:true,jump:true,filter:true},
+          shortcuts: {
+            copy: true, jump: true, filter: true, edit: {
+              click: ({row}) => {
+                jsb.cc.toastWarning(`${xidRow(row)} edit shortcut click`)
+              }
+            }
+          },
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          form:{
-            cell:function ({row}) {
+          form: {
+            cell: function ({row}) {
               return !row.id || row.id < 5 ? 'CellInput' : 'CellSelect'
             },
           }
-          , options:function (){
+          , options: function () {
             return _this.cascader
           },
-          filter:{cell:'CellCascader',placeholder:'CellCascader',},
-          watch:function ({row,newValue}){
-            console.log("watch changed",row,newValue)
+          filter: {placeholder:'name'},
+          watch: function ({row, newValue}) {
+            console.log("watch changed", row, newValue)
           },
         },
         {
@@ -377,77 +391,81 @@ export default {
           placeholder: "xxx.xx",
           commentHTML: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
-          tipSlot:'password_tip',
+          tipSlot: 'password_tip',
           required: true,
-          cellFormConfig:{
-            checkPermission:()=>{return false}
+          cellFormConfig: {
+            checkPermission: () => {
+              return false
+            }
           },
-          type:'password',
+          type: 'password',
         },
         {
           field: 'AuthInfo',
           name: 'AuthInfo',
-          tips:'列表支持',
+          tips: '列表支持',
           width: 160,
-          type:'table',
-          cellConfig:{
-            table:{
-              tableProperty:{autoWidth: false},
-              editConfig:{mode: EditModeInplace},
+          type: 'table',
+          cellConfig: {
+            table: {
+              tableProperty: {autoWidth: false},
+              editConfig: {mode: EditModeInplace},
             },
-            trigger: {label:"查看"}
+            trigger: {label: "查看"}
           },
-          cellFormConfig:{
-            tableProperty:{autoWidth: false},
-            editConfig:{mode: EditModeFormInput,trigger:EditTriggerManualAndDBLClick,name:"testing"},
+          cellFormConfig: {
+            tableProperty: {autoWidth: false},
+            editConfig: {mode: EditModeFormInput, trigger: EditTriggerManualAndDBLClick, name: "testing"},
           },
-          fields:[
-            {field:'UseSystemSSH',name:'系统SSH秘钥',type:'switch', cellForm: 'CellSwitch',width:160,},
-            {field:'UserName',name:'UserName',type:'input', cellForm: 'CellInput',width:300},
-            {field:'Password',name:'Password',type:'input', cellForm: 'CellInput',}
+          fields: [
+            {field: 'UseSystemSSH', name: '系统SSH秘钥', type: 'switch', cellForm: 'CellSwitch', width: 160,},
+            {field: 'UserName', name: 'UserName', type: 'input', cellForm: 'CellInput', width: 300},
+            {field: 'Password', name: 'Password', type: 'input', cellForm: 'CellInput',}
           ],
         },
         {
           field: 'AuthInfoObject', name: 'AuthInfoObject',
-          type:'object',
-          tips:'对象支持',
-          cellFormConfig:{
-            table:{
-              tableProperty:{autoWidth: false},
-              editConfig:{mode: EditModeInplace},
+          type: 'object',
+          tips: '对象支持',
+          cellFormConfig: {
+            table: {
+              tableProperty: {autoWidth: false},
+              editConfig: {mode: EditModeInplace},
             },
           },
-          cell:'CellViewBoolean',
-          formatter:({value})=>{
+          cell: 'CellViewBoolean',
+          formatter: ({value}) => {
             return value && value.UseSystemSSH
           },
-          fields:[
-            {field:'UseSystemSSH',name:'系统SSH秘钥',cellForm: 'CellSwitch',cell:'CellSwitch',width:160,},
-            {field:'UserName',name:'UserName',cellForm: 'CellInput',cell:'CellInput',width:300},
-            {field:'Password',name:'Password',cellForm: 'CellInput',cell:'CellInput'}
+          fields: [
+            {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,},
+            {field: 'UserName', name: 'UserName', cellForm: 'CellInput', cell: 'CellInput', width: 300},
+            {field: 'Password', name: 'Password', cellForm: 'CellInput', cell: 'CellInput'}
           ],
         },
         {
           field: 'code',
           name: 'code',
-          type:'code',
-          tips:'代码编辑支持',
-          watch:({row,newValue,oldValue})=>{console.log("watch code change ",row,newValue,oldValue)},
-          cellConfig:{
-            codeMirror:{
-              infoConfig:{mode:'go'},
-              headerConfig:{rightCells:['btnLint','btnCopy']}
+          type: 'code',
+          tips: '代码编辑支持',
+          watch: ({row, newValue, oldValue}) => {
+            console.log("watch code change ", row, newValue, oldValue)
+          },
+          cellConfig: {
+            codeMirror: {
+              infoConfig: {mode: 'go'},
+              headerConfig: {rightCells: ['btnLint', 'btnCopy']}
             }
           },
-          cellFormConfig:{
-            infoConfig:{mode:'json'},
-            headerConfig:{rightCells:['btnLint','btnCopy']}
+          cellFormConfig: {
+            infoConfig: {mode: 'json'},
+            headerConfig: {rightCells: ['btnLint', 'btnCopy']}
           },
         },
         {
           field: 'Version', name: 'Version', type: 'select', sortable: false,
           required: true,
-          options:[{label:"v1",value:"v1"},{label:"v2",value:"v2"}],
+          options: [{label: "v1", value: "v1"}, {label: "v2", value: "v2"}],
         },
         {
           field: 'Link',
@@ -457,10 +475,10 @@ export default {
           align: 'center',
           cell: 'CellList',
           cellConfig: function ({fieldValue}) {
-            if(!fieldValue){
+            if (!fieldValue) {
               return []
             }
-            return [CodeLinkFieldCopy, {href: fieldValue, label: 'PMT地址', cell: 'CellViewLink'},CodeButtonRowEdit]
+            return [CodeLinkFieldCopy, {href: fieldValue, label: 'PMT地址', cell: 'CellViewLink'}, CodeButtonRowEdit]
           }
         },
         {
@@ -492,7 +510,7 @@ export default {
           type: 'switch',
           sortable: false,
           align: 'center',
-          tips:'当前玩家是否在线',
+          tips: '当前玩家是否在线',
           readOnly: true,
           default: false,
           cellForm: 'CellSwitch',
@@ -523,15 +541,15 @@ export default {
         },
         {
           field: 'Datetime',
-          type:'datetime',
+          type: 'datetime',
           name: 'Datetime',
           cell: 'CellDatePicker',
           cellForm: 'CellDatePicker',
-          filter:{},
+          filter: {},
         },
         {
           field: 'DatetimeRange',
-          type:'datetime_range',
+          type: 'datetime_range',
           name: 'Datetime',
           cell: 'CellDateRangePicker',
           cellForm: 'CellDateRangePicker',
@@ -544,53 +562,53 @@ export default {
           cellForm: 'CellColorPicker',
         },
         {
-          field:'virtualLinks',
+          field: 'virtualLinks',
           virtual: true,
           name: '操作',
           // min_width: 50,
-          align:'center',
+          align: 'center',
           fixed: 'right',
-          sortable:false,
+          sortable: false,
           cell: 'CellList',
-          cellConfig: ['link@'+CodeButtonRowClose]
+          cellConfig: ['link@' + CodeButtonRowClose]
         },
         {
-          field:'virtualButtons',
+          field: 'virtualButtons',
           virtual: true,
-          backgroundAsHeader:true,
+          backgroundAsHeader: true,
           fixed: 'right',
           name: '操作',
           width: 200,
-          sortable:false,
+          sortable: false,
           cell: 'CellList',
-          cellConfig: [`link@${CodeButtonRowEdit}`, 'link@'+CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
+          cellConfig: [`link@${CodeButtonRowEdit}`, 'link@' + CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },
       ],
 
-      editorProxyConfig:{
+      editorProxyConfig: {
         query() {
           return new Promise((resolve) => {
-            resolve( {
+            resolve({
               Data: jsb.clone(_this.tableVisitorData), //模拟数据返回
             })
           })
         },
         saveTableData({tableData}) {
           console.log(tableData)
-          _this.tableVisitorData= tableData
+          _this.tableVisitorData = tableData
         }
       },
       proxyConfig: {
         query({params}) {
           const dataRet = jsb.clone(_this.tableData)
-          if(params && params.id){
-            jsb.remove(dataRet,item => item.id !== params.id)
+          if (params && params.id) {
+            jsb.remove(dataRet, item => item.id !== params.id)
           }
-          if(params && params.name){
-            jsb.remove(dataRet,item => item.name !== params.name)
+          if (params && params.name) {
+            jsb.remove(dataRet, item => item.name !== params.name)
           }
           return new Promise((resolve) => {
-            resolve( {
+            resolve({
               Data: dataRet, //模拟数据返回
               Total: dataRet.length,
             })
@@ -600,7 +618,7 @@ export default {
           jsb.remove(_this.tableData, item => item.id === row.id)
         },
         deleteRows({rows}) {
-          jsb.remove(_this.tableData, item => jsb.find(rows,v=>v.id === item.id))
+          jsb.remove(_this.tableData, item => jsb.find(rows, v => v.id === item.id))
         },
         save: ({row}) => {
           return new Promise((resolve) => {
@@ -615,17 +633,17 @@ export default {
                   _this.tableData[index] = row
                 }
               })
-              console.log("_this.tableData_this.tableData",_this.tableData)
+              console.log("_this.tableData_this.tableData", _this.tableData)
             }
             resolve(true)
           })
         },
       },
-      tableVisitorData:{
-        fieldMap:{
-          id:{show:true,groupCouldView:['*'],groupCouldEdit:['server']},
-          name:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
-          Link:{show:true,userCouldView:['*'],groupCouldEdit:['server']},
+      tableVisitorData: {
+        fieldMap: {
+          id: {show: true, groupCouldView: ['*'], groupCouldEdit: ['server']},
+          name: {show: true, userCouldView: ['*'], groupCouldEdit: ['server']},
+          Link: {show: true, userCouldView: ['*'], groupCouldEdit: ['server']},
         }
       },
       tableData: [
@@ -666,17 +684,17 @@ export default {
     toolbarAlert(name, val) {
       this.alertTitle = `toolbar ${name} change to ${val}`
     },
-    shouldCellDisable({code,row,fieldSchema}) {
-      if(row && code===CodeButtonRowDelete){
+    shouldCellDisable({code, row, fieldSchema}) {
+      if (row && code === CodeButtonRowDelete) {
         return row.Online
       }
-      if(row && fieldSchema){
-        return fieldSchema.field ==='name' && row[fieldSchema.field]<2000
+      if (row && fieldSchema) {
+        return fieldSchema.field === 'name' && row[fieldSchema.field] < 2000
       }
       return false
     },
-    shouldCellHide({code,row}) {
-      if(row && code===CodeButtonRowDelete){
+    shouldCellHide({code, row}) {
+      if (row && code === CodeButtonRowDelete) {
         return row.Checkbox
       }
       return false
@@ -686,8 +704,8 @@ export default {
       return {
         leftSpan: 21,
         leftCells: [
-            "filter",
-          {paddingLeft:80},
+          "filter",
+          {paddingLeft: 80},
           {
             cell: 'CellSelect',
             options: [
@@ -730,7 +748,7 @@ export default {
           {},
           {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
         ],
-        rightCells: [CodeButtonSaveTableData,CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint,CodeButtonExpandAll,CodeButtonTableSetting,CodeButtonDebug],
+        rightCells: [CodeButtonSaveTableData, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint, CodeButtonExpandAll, CodeButtonTableSetting, CodeButtonDebug],
         style: {}
       }
     }
