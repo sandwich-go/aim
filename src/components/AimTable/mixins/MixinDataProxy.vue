@@ -58,6 +58,12 @@ export default {
           reject("saveTableData not implemented")
         })
       },
+      // eslint-disable-next-line no-unused-vars
+      saveField: function ({tableData,field}) {
+        return new Promise((resolve, reject) => {
+          reject("saveField not implemented")
+        })
+      },
       // 删除时的asking回调
       // eslint-disable-next-line no-unused-vars
       deleteConfirmConfig: ({row}) => {
@@ -86,10 +92,14 @@ export default {
         this.inLoading = false
       })
     },
-
+    trySaveField(field, {done} = {}) {
+      this.tryPromise('saveField',{tableData:this.tableData,field},({error})=>{
+        done && done({error})
+      },`字段 ${field} 已保存`)
+    },
     // eslint-disable-next-line no-unused-vars
     trySaveTableData({done} = {}) {
-      this.tryPromise('saveTableData',this.tableData,({error})=>{
+      this.tryPromise('saveTableData',{tableData:this.tableData},({error})=>{
         if(!error){
           this.doLayout(true)
         }

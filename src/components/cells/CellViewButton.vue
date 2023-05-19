@@ -1,5 +1,8 @@
 <template>
-  <el-button :disabled="disabled" v-bind="cc" size="mini" @click="emitClick($event)">
+  <el-button :disabled="disabled" v-bind="cc" size="mini" @click="click($event)"
+             :icon="stateSwitch?cc.iconTrue:cc.icon"
+             :type="stateSwitch?cc.typeTrue:cc.type"
+  >
     <template v-if="!cc.circle">{{ cc.label ? cc.label : "" }}</template>
   </el-button>
 </template>
@@ -12,6 +15,17 @@ export default {
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
+  },
+  methods:{
+    click(jsEvent) {
+      this.stateSwitch = !this.stateSwitch
+      this.emitClick(jsEvent)
+    },
+  },
+  data(){
+    return {
+      stateSwitch:false
+    }
   },
 }
 </script>

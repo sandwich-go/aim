@@ -32,6 +32,8 @@ export default {
       filterData:{},
       filterTypeMapping:{},
       debug:this.enableDebug,
+      inSortIndexEdit:false,
+      sortIndexChanged:false,
     }
   },
   watch:{

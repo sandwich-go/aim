@@ -79,7 +79,7 @@
               :max-width="fs.max_width"
               :show-overflow-tooltip="fs.showOverflowTooltip"
               :label="fs.name"
-              :fixed="fs.fixed"
+              :fixed="inSortIndexEdit?false:fs.fixed"
               :sortable="fs.sortable||fs.sortable===undefined"
               :align="fs.align || 'left'"
               :fied-schema="fs"
@@ -92,7 +92,8 @@
               </column-header>
             </template>
             <template slot-scope="scope">
-              <div :style="{ 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}">
+              <div
+                  :style="{ 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}">
                 <column-shortcuts :row="scope.row" :field-schema="fs"/>
                 <template v-if="cellName(fs,scope.row)">
                   <!-- CellList列表组件单独处理 -->
@@ -142,7 +143,7 @@
                     ></slot>
                   </template>
                   <span v-else-if="cellName(fs,scope.row)">
-                    {{`${cellName(fs,scope.row)} not supported`}}
+                    {{ `${cellName(fs, scope.row)} not supported` }}
                   </span>
                   <span v-else>{{ cellShowWhenGetLostForTable(scope.row, fs) }}</span>
                 </template>
@@ -279,7 +280,7 @@ import {
   CodeButtonRowSelectedClose,
   CodeButtonRowSelectedDelete,
   CodeButtonRowSelectedMinus,
-  CodeButtonSaveTableData,
+  CodeButtonSaveTableData, CodeButtonSortIndex,
   CodeButtonTableSetting,
   CodeLinkFieldCopy
 } from "@/components/cells/const";
@@ -315,6 +316,7 @@ import {AimFormInputView} from "@/components/AimFormInput";
 import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 import AimPopup from "@/components/AimPopup/index.vue";
 import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
+
 const jsb = require("@sandwich-go/jsb")
 
 export default {
@@ -322,7 +324,7 @@ export default {
   computed: {
     cellName() {
       return (fs, row) => {
-        return cellNameForTable(fs, row,isModeInplace(this.editConfigRef.mode))
+        return cellNameForTable(fs, row, isModeInplace(this.editConfigRef.mode))
       }
     },
     cellConfig() {
@@ -392,15 +394,19 @@ export default {
     this.tipSlotName()
 
     let dragCallback = null
-    if(this.sortConfigRef.sortIdxField){
+    if (this.sortConfigRef.sortIdxField) {
       this.dragConfigRef.row = true
-      dragCallback = ()=>{
-        jsb.each(this.tableData,(v,index)=>{
-          v[this.sortConfigRef.sortIdxField] = index +1
+      this.headerConfigRef.rightCells.push(CodeButtonSortIndex)
+      dragCallback = () => {
+        if (!this.inSortIndexEdit) {
+          return
+        }
+        jsb.each(this.tableData, (v, index) => {
+          v[this.sortConfigRef.sortIdxField] = index + 1
         })
+        this.sortIndexChanged = true
       }
-      console.log("this.pagerConfigRef ",this.pagerConfigRef)
-      if(this.pagerConfigRef.enable){
+      if (this.pagerConfigRef.enable) {
         aimTableError(`分页模式 与 ${this.sortConfigRef.sortIdxField} 配置不兼容`)
       }
     }
@@ -417,8 +423,8 @@ export default {
     tipSlotName,
     getProxySlotName,
     getProxyTipSlotName,
-    setDebugMessage(title,msg='') {
-      aimTableLog(title,msg)
+    setDebugMessage(title, msg = '') {
+      aimTableLog(title, msg)
     },
     fieldShow(fs) {
       return jsb.pathGet(fs, 'show', true)
@@ -432,21 +438,21 @@ export default {
       }
       return ''
     },
-    processSchemaFilter(){
+    processSchemaFilter() {
       const _this = this
       let schemaFilter = []
-      jsb.each(this.schema,function (fieldSchema){
-        if(fieldSchema.filter){
-          if(!fieldSchema.filter.type){
+      jsb.each(this.schema, function (fieldSchema) {
+        if (fieldSchema.filter) {
+          if (!fieldSchema.filter.type) {
             fieldSchema.filter.type = fieldSchema.type
           }
-          if(!fieldSchema.filter.field){
+          if (!fieldSchema.filter.field) {
             fieldSchema.filter.field = fieldSchema.field
           }
-          if(!fieldSchema.filter.options){
+          if (!fieldSchema.filter.options) {
             fieldSchema.filter.options = fieldSchema.options
           }
-          if(!fieldSchema.filter.cell){
+          if (!fieldSchema.filter.cell) {
             fieldSchema.filter.cell = cellNameForFormByType(fieldSchema.filter.type)
           }
           fieldSchema.filter.data = _this.filterData
@@ -454,11 +460,11 @@ export default {
           schemaFilter.push(fieldSchema.filter)
         }
       })
-      if(schemaFilter.length) {
-        schemaFilter.push({code:CodeButtonFilterSearch})
+      if (schemaFilter.length) {
+        schemaFilter.push({code: CodeButtonFilterSearch})
         let leftCells = this.headerConfigRef.leftCells
-        jsb.each(leftCells,function (cell,index) {
-          if(jsb.isString(cell) && cell.toUpperCase() ==='FILTER') {
+        jsb.each(leftCells, function (cell, index) {
+          if (jsb.isString(cell) && cell.toUpperCase() === 'FILTER') {
             leftCells.splice(index, 1, ...schemaFilter);
           }
         })
@@ -469,11 +475,11 @@ export default {
         this.rowInEdit = null
       }
     },
-    getFormPopupConfig(){
+    getFormPopupConfig() {
       return {
-        appendToBody:this.popupAppendToBody,
-        close:this.rowFormEditorClose,
-        footer:true,
+        appendToBody: this.popupAppendToBody,
+        close: this.rowFormEditorClose,
+        footer: true,
       }
     },
     thisTarget() {
@@ -496,7 +502,6 @@ export default {
       let sub = 70 + this.tablePropertyRef.heightSubVH
       sub += this.headerConfigRef.enable ? 40 : 0
       sub += this.pagerConfigRef.enable ? 40 : 0
-      sub += this.debug ? 37 : 0
       return `${jsb.clientHeight(sub)}px`
     },
     // current-change 回调
@@ -523,16 +528,29 @@ export default {
     // 默认的code处理逻辑
     defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
       const editDone = ({error}) => {
-        if(!error && fromForm) {
+        if (!error && fromForm) {
           this.rowFormEditorVisible = false
           // form表单编辑完后重新拉取数据
           this.proxyQueryData()
         }
       }
       switch (code) {
+        case CodeButtonSortIndex:
+          if (this.inSortIndexEdit) {
+            // 提交index变更
+            this.inSortIndexEdit = false
+            if (this.sortIndexChanged) {
+              this.trySaveField(this.sortConfigRef.sortIdxField)
+            }
+          } else {
+            this.inSortIndexEdit = true
+            this.sortIndexChanged = false
+          }
+          aimTableWarn(`sort index edit  ${this.inSortIndexEdit ? 'opened' : 'closed'}`)
+          break
         case CodeButtonDebug:
           this.debug = !this.debug
-          aimTableWarn(`${this.debug?'opened':'closed'}`)
+          aimTableWarn(`${this.debug ? 'opened' : 'closed'}`)
           break
         case CodeButtonRefresh:
           this.proxyQueryData()
@@ -561,7 +579,7 @@ export default {
         case CodeButtonRowDelete:
         case CodeButtonRowMinus:
         case CodeButtonRowClose:
-          this.tryProxyDelete(row, {done:editDone})
+          this.tryProxyDelete(row, {done: editDone})
           break
         case CodeButtonRowSelectedMinus:
         case CodeButtonRowSelectedDelete:
@@ -577,11 +595,11 @@ export default {
         case CodeButtonRowSave:
           if (fromForm) {
             this.$refs.aimFormInput.validate(() => {
-              this.tryProxySaveRow(row, {done:editDone})
+              this.tryProxySaveRow(row, {done: editDone})
             })
           } else {
             //fixme inplace下无法使用form的validate
-            this.tryProxySaveRow(row, {done:editDone})
+            this.tryProxySaveRow(row, {done: editDone})
           }
           break
         default:
@@ -592,16 +610,19 @@ export default {
       // this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
     },
     privateShouldCellDisable({code, cell, row, fieldSchema}) {
-      if(this.readOnly) {
+      if (this.readOnly) {
         // 按钮的禁用需要根据code区分，暂时全部屏蔽
         return true
+      }
+      if (this.inSortIndexEdit) {
+        return code !== CodeButtonSortIndex;
       }
       if (code === CodeButtonRowSelectedMinus ||
           code === CodeButtonRowSelectedClose ||
           code === CodeButtonRowSelectedDelete) {
         return this.getSelectionRows().length === 0
       }
-      if(row && this.editConfigRef.mode === EditModeInplace && row !== this.rowInEdit) {
+      if (row && this.editConfigRef.mode === EditModeInplace && row !== this.rowInEdit) {
         return true
       }
       if (cell.disable || cell.disabled) {
@@ -617,12 +638,12 @@ export default {
       }
       return this.shouldCellDisable({code, cell, row, fieldSchema})
     },
-    cloneSchema(){
+    cloneSchema() {
       return jsb.clone(this.schema)
     },
-    doLayout(freshAutoWidth=false) {
-      if(freshAutoWidth && this.tablePropertyRef.autoWidth){
-        flexColumnWidth(this.schema,this.tableData)
+    doLayout(freshAutoWidth = false) {
+      if (freshAutoWidth && this.tablePropertyRef.autoWidth) {
+        flexColumnWidth(this.schema, this.tableData)
       }
       this.debug && this.setDebugMessage(`call doLayout`)
       this.$refs.table && this.$refs.table.doLayout()

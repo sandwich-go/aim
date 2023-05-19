@@ -344,7 +344,7 @@ export default {
         {
           field: 'id', name: 'ID',
           type: 'input',
-          show: false,
+          show: true,
           //min_width: 180,
           sortable: true,
           locked: true,
@@ -354,7 +354,6 @@ export default {
           summary: true,
           readOnly: true,
           fixed: "left",
-          backgroundAsHeader: true,
           filter: {
             placeholder: '请输入ID', format: (v) => {
               return Number(v)
@@ -616,6 +615,15 @@ export default {
         },
         deleteRows({rows}) {
           jsb.remove(_this.tableData, item => jsb.find(rows, v => v.id === item.id))
+        },
+        saveField:({tableData,field})=>{
+          jsb.each(_this.tableData, function (itemLocal) {
+            jsb.each(tableData, function (item) {
+              if (item.id === itemLocal.id) {
+                itemLocal[field] = item[field]
+              }
+            })
+          })
         },
         save: ({row}) => {
           return new Promise((resolve) => {
