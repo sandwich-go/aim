@@ -92,68 +92,64 @@
               </column-header>
             </template>
             <template slot-scope="scope">
-
-              <column-shortcuts
-                  :row="scope.row"
-                  :field-schema="fs"
-              >
-              </column-shortcuts>
-
-              <template v-if="cellName(fs,scope.row)">
-                <!-- CellList列表组件单独处理 -->
-                <template v-if="cellName(fs,scope.row)==='CellList'">
-                  <cell-list
-                      :style="{'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
-                      :cells="cellConfig(fs,scope.row)"
-                      :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
-                      :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
-                      @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
-                  ></cell-list>
-                </template>
-                <template v-else-if="registeredComponentMap[cellName(fs,scope.row)]">
-                  <component
-                      v-if="!privateShouldCellHide({
+              <div :style="{ 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}">
+                <column-shortcuts :row="scope.row" :field-schema="fs"/>
+                <template v-if="cellName(fs,scope.row)">
+                  <!-- CellList列表组件单独处理 -->
+                  <template v-if="cellName(fs,scope.row)==='CellList'">
+                    <cell-list
+                        :style="{ 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
+                        :cells="cellConfig(fs,scope.row)"
+                        :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
+                        :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
+                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    ></cell-list>
+                  </template>
+                  <template v-else-if="registeredComponentMap[cellName(fs,scope.row)]">
+                    <component
+                        v-if="!privateShouldCellHide({
                             cell : cellConfig(fs,scope.row),
                             row : scope.row,
                             fieldSchema:fs
                         })"
-                      :disabled="privateShouldCellDisable({
+                        :disabled="privateShouldCellDisable({
                             cell: cellConfig(fs,scope.row),
                             row :scope.row,
                             fieldSchema : fs
                         })"
-                      :is="registeredComponentMap[cellName(fs,scope.row)]"
-                      :data="scope.row"
-                      :field-name="fs.field"
-                      :formatter="formatterFunction(fs)"
-                      :cell-config="cellConfig(fs,scope.row)"
-                      :options="fs.options || []"
-                      :field-schema="fs"
-                      @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,fieldSchema:fs,jsEvent})"
-                  ></component>
-                </template>
-                <template v-else-if="fs.slot">
-                  <slot
-                      v-if="!privateShouldCellHide({
+                        :is="registeredComponentMap[cellName(fs,scope.row)]"
+                        :data="scope.row"
+                        :field-name="fs.field"
+                        :formatter="formatterFunction(fs)"
+                        :cell-config="cellConfig(fs,scope.row)"
+                        :options="fs.options || []"
+                        :field-schema="fs"
+                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,fieldSchema:fs,jsEvent})"
+                    ></component>
+                  </template>
+                  <template v-else-if="fs.slot">
+                    <slot
+                        v-if="!privateShouldCellHide({
                                             cell : cellConfig(fs,scope.row),
                                            row : scope.row,fieldSchema : fs})"
-                      :disabled="privateShouldCellDisable({cell: cellConfig(fs,scope.row),row:scope.row,fieldSchema:fs})"
-                      :name="fs.slot"
-                      :row="scope.row"
-                      :cell-config="cellConfig(fs,scope.row)"
-                      :options="fs.options || []"
-                      :field-schema="fs"
-                      @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
-                  ></slot>
-                </template>
-                <span v-else-if="cellName(fs,scope.row)">
+                        :disabled="privateShouldCellDisable({cell: cellConfig(fs,scope.row),row:scope.row,fieldSchema:fs})"
+                        :name="fs.slot"
+                        :row="scope.row"
+                        :cell-config="cellConfig(fs,scope.row)"
+                        :options="fs.options || []"
+                        :field-schema="fs"
+                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    ></slot>
+                  </template>
+                  <span v-else-if="cellName(fs,scope.row)">
                     {{`${cellName(fs,scope.row)} not supported`}}
                   </span>
-                <span v-else>{{ cellShowWhenGetLostForTable(scope.row, fs) }}</span>
-              </template>
-              <span v-else>
+                  <span v-else>{{ cellShowWhenGetLostForTable(scope.row, fs) }}</span>
+                </template>
+                <span v-else>
                     {{ cellShowWhenGetLostForTable(scope.row, fs) }}
                   </span>
+              </div>
             </template>
           </el-table-column>
         </template>

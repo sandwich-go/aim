@@ -369,15 +369,13 @@ export default {
                 jsb.cc.toastWarning(`${xidRow(row)} edit shortcut click`)
               }
             }
+          },          cell:'CellList',
+          cellConfig(){
+            return [{cell:'CellViewTag',label: "点击初始化", type: "danger"}]
           },
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
-          required: true,
-          form: {
-            cell: function ({row}) {
-              return !row.id || row.id < 5 ? 'CellInput' : 'CellSelect'
-            },
-          }
+          required: true
           , options: function () {
             return _this.cascader
           },

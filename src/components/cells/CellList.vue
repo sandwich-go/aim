@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: inline">
     <template v-for="(cell,index) of cellsRef">
       <div :key="index" :style="divStyle">
         <template v-if="cell.cell && registeredComponentMap[cell.cell]">
