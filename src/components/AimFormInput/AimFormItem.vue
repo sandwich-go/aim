@@ -49,8 +49,8 @@
     </div>
     <div v-else>{{ cellName(fs) }} not supported</div>
 
-    <span v-if="fs.comment" class="aim-form-item-comment">{{ comment(getRow(), fs, 'comment') }}</span>
-    <span v-if="fs.commentHTML" class="aim-form-item-comment" v-html="comment(getRow(),fs,'commentHTML')"></span>
+    <span v-if="fs.comment" class="aim-form-item-comment" :style="commentStyle">{{ comment(getRow(), fs, 'comment') }}</span>
+    <span v-if="fs.commentHTML" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),fs,'commentHTML')"></span>
   </el-form-item>
 </template>
 
@@ -123,6 +123,15 @@ export default {
   created() {
     // 占位
     this.getProxyTipSlotName()
+  },
+  data(){
+    return {
+      commentStyle :jsb.cc.aimFormCommentStyle || {
+        'font-style':'italic',
+        'color':'dodgerblue',
+        'font-size':'12px'
+      }
+    }
   },
   methods: {
     getProxyTipSlotName,
