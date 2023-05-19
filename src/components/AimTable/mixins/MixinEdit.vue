@@ -6,7 +6,7 @@ import {
   EditTriggerManual, mustCtrlData,
   EditModeFormInput, isModeInplace,
 } from "@/components/AimTable/table";
-import {CodeButtonRowDelete, CodeButtonRowHistory, CodeButtonRowSave} from "@/components/cells/const";
+import {CodeButtonRowDelete, CodeButtonRowSave} from "@/components/cells/const";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {
   AimFormInputCopy,
@@ -56,7 +56,7 @@ export default {
       },
       // eslint-disable-next-line no-unused-vars
       formEditorCells: function ({row}) {
-        return [CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowHistory]
+        return [CodeButtonRowSave, CodeButtonRowDelete]
       }
     })
     this.debug && this.setDebugMessage("editConfig",JSON.stringify(this.editConfigRef))
