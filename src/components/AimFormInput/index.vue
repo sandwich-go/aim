@@ -310,13 +310,6 @@ export default {
   justify-content: flex-end;
 }
 
-.aim-form-item-comment {
-  color: dodgerblue;
-  font-size: 12px;
-  font-style:italic;
-  //align-items: center;
-  //justify-content: flex-start;
-}
 
 </style>
 
