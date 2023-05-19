@@ -75,7 +75,7 @@ export default {
       if (!clipCopy) {
         clipCopy = jsb.clipCopy
       }
-      clipCopy(this.row[this.fieldSchema.field], event)
+      clipCopy(this.fieldValueFormatted, event)
     },
     getFieldValueFormatted() {
       return this.fieldSchema.formatter ?
