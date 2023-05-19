@@ -75,7 +75,7 @@
               :prop="fs.field"
               :class-name="columnClass(fs)"
               :width="fs.width"
-              :min-width="fs.min_width"
+              :min-width="fs.min_width || fs.min_width_dynamic"
               :max-width="fs.max_width"
               :show-overflow-tooltip="fs.showOverflowTooltip"
               :label="fs.name"

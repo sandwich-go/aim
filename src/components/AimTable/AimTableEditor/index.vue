@@ -29,7 +29,7 @@ import {
 } from "@/components/AimTable/table";
 import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
-import {cellNameForFormByType, cellNameForTableByType} from "@/components/cells/types";
+import { typeOptions} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")
 export default {
@@ -56,16 +56,8 @@ export default {
         {field: 'field', name: '字段名',type:'input'},
         {field: 'name', name: '名称',type:'input'},
         {
-          field: 'type',type:'input',
-          name: '类型',
-        },
-        {
-          field: 'cellForTable',
-          name: 'Table显示/编辑组件',
-        },
-        {
-          field: 'cellForForm',
-          name: 'Form编辑组件',
+          field: 'type',type:'select',
+          name: '类型',options:typeOptions,
         },
         {field: 'width', name: '宽度',  type: 'input_number'},
         {field: 'min_width', name: '最小宽度',  type: 'input_number'},
@@ -119,8 +111,6 @@ export default {
           if(jsb.eqNull(item.show)){
             item.show = true
           }
-          item.cellForTable = cellNameForTableByType(item.type)
-          item.cellForForm = cellNameForFormByType(item.type)
           item.groupCouldView = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.groupCouldView`, ['*'])
           item.groupCouldEdit = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.groupCouldEdit`, ['*'])
           item.userCouldView = jsb.pathGet(_this.visitorData.fieldMap, `${item.field}.userCouldView`, ['*'])

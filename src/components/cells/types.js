@@ -101,6 +101,10 @@ export const typeDefaults = {
     }
 }
 
+export const typeOptions = []
+jsb.each(typeDefaults,(_,key)=>{
+    typeOptions.push({label:key,value:key})
+})
 
 // 基础类型到table显示组件的映射
 export const types2TableCellName = {}

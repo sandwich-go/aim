@@ -37,7 +37,7 @@ export function forceAdjustColumnWidth(tableEL, bindingValue) {
 const jsb = require("@sandwich-go/jsb")
 export function flexColumnWidth(schema,tableData) {
     jsb.each(schema,(fieldSchema)=>{
-        if(fieldSchema.width || fieldSchema.min_width){
+        if(fieldSchema.width || fieldSchema.min_width || fieldSchema.min_width_dynamic){
             return
         }
         let headerExtraWidth = 0
@@ -67,6 +67,6 @@ export function flexColumnWidth(schema,tableData) {
             width = headerWidth
         }
         // shortcut 14宽度+ 3 padding
-        fieldSchema.min_width = width + jsb.size(fieldSchema.shortcuts || {})*20
+        fieldSchema.min_width_dynamic = width + jsb.size(fieldSchema.shortcuts || {})*20
     })
 }

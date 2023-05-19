@@ -311,7 +311,7 @@ export default {
 }
 
 .aim-form-item-comment {
-  color: #707070;
+  color: dodgerblue;
   font-size: 12px;
   //align-items: center;
   //justify-content: flex-start;
