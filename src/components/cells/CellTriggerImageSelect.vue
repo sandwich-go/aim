@@ -1,0 +1,90 @@
+<template>
+  <cell-trigger :cell-config="cc"
+                :field-name="fieldName"
+                :field-schema="fieldSchema"
+                :data="dataRef"
+                @code-cell-click="({code,jsEvent})=>emitClickWithCode(jsEvent,code)">
+    <template v-slot:target>
+      <div style="padding-top: 9px">
+        <el-input
+            placeholder="搜索"
+            clearable
+            size="mini"
+            style="width: 100%"
+            @input="imagePickerFilter"
+            v-model="currentImagePickerSelected">
+          <i slot="suffix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+        <vue-select-image
+            :dataImages="imageListFiltered"
+            :useLabel="true"
+            @onselectimage="onSelectImage">
+        </vue-select-image>
+      </div>
+    </template>
+    <template v-slot:summary>
+      <div style="padding-left: 9px;display: inline">
+        <cell-view-image
+            :cell-config="cellConfig"
+            :field-schema="fieldSchema"
+            :field-name="fieldName"
+            :data="data"
+            :disabled="disabled"
+        ></cell-view-image>
+      </div>
+    </template>
+  </cell-trigger>
+</template>
+
+
+<script>
+import VueSelectImage from 'vue-select-image'
+require('vue-select-image/dist/vue-select-image.css')
+import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import CellTrigger from "@/components/cells/CellTrigger.vue";
+import jsb from "@sandwich-go/jsb";
+import CellViewImage from "@/components/cells/CellViewImage.vue";
+
+export default {
+  name: 'CellTriggerImageSelect',
+  components: {CellViewImage, CellTrigger,VueSelectImage},
+  mixins: [MixinCellEditorConfig],
+  data(){
+    return {
+      imageList:[],
+      imageListFiltered:[],
+      currentImagePickerSelected:'',
+    }
+  },
+  created() {
+    this.ccConfigMerge()
+    const _this = this
+    jsb.each(this.getOptions(),(v)=>{
+      const option = {
+        id:v.id || v.key || v.value,
+        src:v.src || v.value,
+        alt:v.alt || v.label,
+      }
+      _this.imageListFiltered.push(option)
+      _this.imageList.push(option)
+    })
+  },
+  methods:{
+    onSelectImage(v){
+      this.dataRef[this.fieldName] = v.src
+    },
+    imagePickerFilter() {
+      if (this.currentImagePickerSelected) {
+        let value = this.currentImagePickerSelected.toLowerCase();
+        this.imageListFiltered = this.imageList.filter((item) => {
+          if (item.alt.toLowerCase().indexOf(value) > -1) {
+            return true
+          }
+        })
+      } else {
+        this.imageListFiltered = this.imageList;
+      }
+    },
+  }
+}
+</script>

@@ -361,6 +361,21 @@ export default {
           }
         },
         {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable: true, align: 'center',default:0},
+        {field: 'image', name: 'image', type: 'image',sortable: false, align: 'center',width:80,          options:[{
+            id: '1',
+            src: 'https://unsplash.it/200?random',
+            alt: 'Alt Image 1'
+          }, {
+            id: '2',
+            src: 'https://unsplash.it/201?random',
+            alt: 'Alt Image 2'
+          }, {
+            id: '3',
+            src: 'https://unsplash.it/202?random',
+            alt: 'Alt Image 3',
+            disabled: true
+          }],
+        },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
           placeholder: "xxx.xx",
@@ -659,6 +674,7 @@ export default {
           Icon: 'el-icon-user-solid',
           Online: true,
           Tag: "g1",
+          image:'https://ffs-global-asset.s3.amazonaws.com/dreamlife.png',
           Color: '#ea8271'
         },
         {
@@ -666,6 +682,7 @@ export default {
           name: '2222',
           Link: "http://sample.pmt.centurygame.io/pmt#/dashboard",
           Icon: '',
+          image:'https://bingo-cdn.centurygame.com/pmtlogo.png',
           Online: false,
           Tag: "g2",
           Color: '#4b4ba3',

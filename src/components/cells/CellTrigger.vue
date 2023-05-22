@@ -40,6 +40,7 @@
         <cell-view-label v-if="cc.trigger.label" :cell-config="cc.trigger.label" style="padding-left: 3px"/>
       </el-link>
     </template>
+    <slot name="summary"/>
   </div>
 </template>
 

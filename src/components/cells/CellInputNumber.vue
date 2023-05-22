@@ -26,7 +26,7 @@ export default {
       step: 1,
       controlsPosition:'right'
     })
-    this.calcWidthPxString("100%")
+    this.calcWidthPixString("100%")
   },
 }
 </script>

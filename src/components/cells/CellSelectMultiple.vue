@@ -28,7 +28,7 @@ export default {
     this.ccConfigMerge({
       style:{},
     })
-    this.calcWidthPxString("100%")
+    this.calcWidthPixString("100%")
   },
 }
 </script>

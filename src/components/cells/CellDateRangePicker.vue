@@ -30,7 +30,7 @@ export default {
       defaultTime:['00:00:00','23:59:59'],
       pickerOptions:{},
     })
-    this.calcWidthPxString("100%")
+    this.calcWidthPixString("100%")
   },
 }
 </script>

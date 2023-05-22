@@ -38,7 +38,7 @@ export default {
     emitChange(valNew) {
       this.$emit("input", valNew)
     },
-    calcWidthPxString(defaultVal){
+    calcWidthPixString(defaultVal){
       this.cc.style.width = this.cc.style.width?(jsb.isString(this.cc.style.width)?this.cc.style.width : `${ this.cc.style.width}px`):defaultVal
       return this.cc.style.width
     },

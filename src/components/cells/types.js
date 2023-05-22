@@ -98,6 +98,12 @@ export const typeDefaults = {
         table:'CellPassword',
         form:'CellPassword',
         default:'',
+    },
+    image:{
+        table:'CellTriggerImageSelect',
+        table_inplace:'CellViewImage',
+        form:'CellInputImage',
+        default:'',
     }
 }
 

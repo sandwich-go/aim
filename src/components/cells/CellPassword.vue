@@ -72,7 +72,7 @@ export default {
     cssVars() {
       // 如果在table列中，且设定了列元素则主动撑满整个表格
       return {
-        "--input-width": this.calcWidthPxString() || '100%',
+        "--input-width": this.calcWidthPixString() || '100%',
         width:"100%"
       };
     }
