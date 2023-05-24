@@ -3,24 +3,24 @@
                 :field-name="fieldName"
                 :field-schema="fieldSchema"
                 :data="dataRef"
+                :popup-append-to-body="popupAppendToBody"
                 @code-cell-click="({code,jsEvent})=>emitClickWithCode(jsEvent,code)">
     <template v-slot:target>
-      <div style="padding-top: 9px">
-        <el-input
-            placeholder="搜索"
-            clearable
-            size="mini"
-            style="width: 100%"
-            @input="imagePickerFilter"
-            v-model="currentImagePickerSelected">
-          <i slot="suffix" class="el-input__icon el-icon-search"></i>
-        </el-input>
-        <vue-select-image
-            :dataImages="imageListFiltered"
-            :useLabel="true"
-            @onselectimage="onSelectImage">
-        </vue-select-image>
-      </div>
+      <el-input
+          placeholder="搜索"
+          clearable
+          size="mini"
+          style="width: 100%"
+          @input="imagePickerFilter"
+          v-model="currentImagePickerSelected">
+        <i slot="suffix" class="el-input__icon el-icon-search"></i>
+      </el-input>
+      <vue-select-image
+          style="padding-top: 9px"
+          :dataImages="imageListFiltered"
+          :useLabel="true"
+          @onselectimage="onSelectImage">
+      </vue-select-image>
     </template>
     <template v-slot:summary>
       <div style="padding-left: 9px;display: inline">
@@ -49,6 +49,9 @@ export default {
   name: 'CellTriggerImageSelect',
   components: {CellViewImage, CellTrigger,VueSelectImage},
   mixins: [MixinCellEditorConfig],
+  props:{
+    popupAppendToBody: Boolean
+  },
   data(){
     return {
       imageList:[],
@@ -58,6 +61,11 @@ export default {
   },
   created() {
     this.ccConfigMerge()
+    this.cc.trigger = jsb.objectAssignNX(this.cc.trigger, {
+      isButton: false,
+      icon: 'el-icon-edit-outline',
+    })
+
     const _this = this
     jsb.each(this.getOptions(),(v)=>{
       const option = {

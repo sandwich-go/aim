@@ -1,13 +1,15 @@
 <template>
-  <cell-input
-      :as-image="true"
-      :cell-config="cellConfig"
-      :field-schema="fieldSchema"
-      :field-name="fieldName"
-      :data="data"
-      :disabled="disabled"
-  >
-  </cell-input>
+  <div disabled="inline-flex">
+    <cell-input
+        :as-image="true"
+        :cell-config="cellConfig"
+        :field-schema="fieldSchema"
+        :field-name="fieldName"
+        :data="data"
+        :options="options"
+        :disabled="disabled"
+    ></cell-input>
+  </div>
 </template>
 
 <script>

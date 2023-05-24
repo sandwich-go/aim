@@ -100,8 +100,8 @@ export const typeDefaults = {
         default:'',
     },
     image:{
-        table:'CellTriggerImageSelect',
-        table_inplace:'CellViewImage',
+        table:'CellViewImage',
+        table_inplace:'CellTriggerImageSelect',
         form:'CellInputImage',
         default:'',
     }

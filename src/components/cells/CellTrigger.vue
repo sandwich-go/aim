@@ -24,6 +24,7 @@
         ></cell-list>
       </span>
     </aim-popup>
+    <div style="display:inline-flex;align-items:center">
     <template v-if="!!cc.trigger.isButton">
       <el-button
           :disabled="disabled"
@@ -41,6 +42,7 @@
       </el-link>
     </template>
     <slot name="summary"/>
+    </div>
   </div>
 </template>
 
@@ -62,6 +64,9 @@ export default {
       return flexEndStyle
     }
   },
+  props:{
+    popupAppendToBody: Boolean
+  },
   components: {AimPopup, CellList, CellViewLabel, CellViewIcon},
   mixins: [MixinCellEditorConfig],
   created() {
@@ -76,6 +81,7 @@ export default {
         direction: 'ltr',
         size: '80%',
         footer:true,
+        appendToBody:this.popupAppendToBody
       },
       footer:[CodeButtonRowSave],
     })

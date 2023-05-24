@@ -1,7 +1,7 @@
 <template>
   <el-button :disabled="disabled" v-bind="cc" size="mini" @click="click($event)"
-             :icon="stateSwitch?cc.iconTrue:cc.icon"
-             :type="stateSwitch?cc.typeTrue:cc.type"
+             :icon="stateSwitch?(cc.iconTrue||cc.icon):cc.icon"
+             :type="stateSwitch?(cc.typeTrue||cc.type):cc.type"
   >
     <template v-if="!cc.circle">{{ cc.label ? cc.label : "" }}</template>
   </el-button>
