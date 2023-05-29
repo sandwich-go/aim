@@ -33,6 +33,13 @@ export const typeDefaults = {
             return jsb.pathGet(fs, 'options.0.value')
         },
     },
+    select_input_tag:{
+        table:'CellViewTag',
+        form:'CellSelectInput',
+        default: (fs) => {
+            return jsb.pathGet(fs, 'options.0.value')
+        },
+    },
     select_multiple: {
         table:'CellViewTag',
         form:'CellSelectMultiple',
