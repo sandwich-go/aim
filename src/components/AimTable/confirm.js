@@ -12,6 +12,5 @@ export function deleteConfirmConfig(proxyConfig,{row,rows}) {
         return {enable:false}
     }
     config.enable = config.enable===undefined?true:config.enable
-    config.message = config.message || "确认操作?"
     return config
 }

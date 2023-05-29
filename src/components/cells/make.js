@@ -75,7 +75,6 @@ export function makeCellFromString(codeOrDescription, ...options) {
             // 快捷方式禁用文字
             options.unshift(parseOptions({label:''},strList))
             options.unshift(shortcutOption)
-            console.log("shortcutOption",codeOrDescription,options)
         }else{
             options.unshift(parseOptions({code:cellCode},strList))
         }
