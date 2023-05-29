@@ -20,7 +20,7 @@ export const typeDefaults = {
         default:'',
     },
     select: {
-        table:'CellViewTag',
+        table:'CellViewLabel',
         form:'CellSelect',
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
