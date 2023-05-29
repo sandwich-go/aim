@@ -58,6 +58,7 @@ export default {
         this.cc = Object.assign(this.cc, this.cellConfig)
       }
       this.cc.style = jsb.assign(this.cc.style, this.styleOverride)
+      this.cc.placeholder = this.fieldSchema.placeholder
     },
     change(newVal) {
       this.$forceUpdate()

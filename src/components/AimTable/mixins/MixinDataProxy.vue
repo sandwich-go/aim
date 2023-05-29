@@ -87,7 +87,13 @@ export default {
         done && done({resp})
       }).catch(error => {
         done && done({error})
-        !this.proxyConfigRef.isLocalData && this.toastError(error)
+        let needToast = true
+        if(jsb.isPlainObject(error)){
+          needToast = jsb.pathGet(error,'toast',false)
+        }
+        if(needToast){
+          !this.proxyConfigRef.isLocalData && this.toastError(error)
+        }
       }).finally(() => {
         this.inLoading = false
       })
@@ -142,7 +148,7 @@ export default {
     // eslint-disable-next-line no-unused-vars
     tryProxySaveRow(row, {done} = {}) {
       let toSave = row
-      if(!this.proxyConfig.isLocalData){
+      if(!this.proxyConfigRef.isLocalData){
         toSave = removeCtrlData(jsb.clone(row))
       }
       toSave = trimInvisibleChar(this.schema,toSave,true)
