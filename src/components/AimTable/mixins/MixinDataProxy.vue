@@ -139,7 +139,7 @@ export default {
       const confirmConfig = deleteConfirmConfig(this.proxyConfigRef, {row,rows})
       if(confirmConfig.enable){
         confirmConfig.doneFunc = confirmDoneFunc
-        jsb.cc.confirm(_this, confirmConfig)
+        jsb.cc.confirmDelete(_this, confirmConfig)
       }else{
         confirmDoneFunc()
       }
