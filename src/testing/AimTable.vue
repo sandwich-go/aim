@@ -592,7 +592,7 @@ export default {
           width: 200,
           sortable: false,
           cell: 'CellList',
-          cellConfig: [`link@${CodeButtonRowEdit}`, 'link@' + CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
+          cellConfig: [`btn@btnRowDelete@l_删除`, 'link@' + CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },
       ],
 

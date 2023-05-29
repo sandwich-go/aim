@@ -81,7 +81,7 @@ export default {
         _this.cellsRef[key]= makeCellFromString(codeOrItem.code,codeOrItem)
         codeOrItem.cell = 'CellButton'
       }
-      // 纯字符串，认为是一个只有code按钮，内部如已设定了code的icon映射则直接使用
+      // 纯字符串，认为是一个code按钮，内部如已设定了code的icon映射则直接使用
       if (jsb.isString(codeOrItem)) {
         _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
       }

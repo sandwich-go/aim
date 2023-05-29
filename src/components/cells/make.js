@@ -42,9 +42,13 @@ function parseOptions(options,strList) {
         }
         if (v.startsWith("l_") || v.startsWith("label_")) {
             options.label = v.substr([v.indexOf('_')+1])
+            options.circle = false
         }
         if (v.startsWith("t_") || v.startsWith("type_")) {
             options.type = v.substr([v.indexOf('_')+1])
+        }
+        if (v === "p" || v === "plain") {
+            options.plain = true
         }
     })
     return options
@@ -69,10 +73,11 @@ export function makeCellFromString(codeOrDescription, ...options) {
         const shortcutOption = code2OptionsMapping[cellCode]
         if(shortcutOption){
             // 快捷方式禁用文字
-            options.unshift({label:''},parseOptions(strList))
+            options.unshift(parseOptions({label:''},strList))
             options.unshift(shortcutOption)
+            console.log("shortcutOption",codeOrDescription,options)
         }else{
-            options.unshift(parseOptions({},strList))
+            options.unshift(parseOptions({code:cellCode},strList))
         }
         if (strList[0] === 'link') {
             return makeCellLink(...options)
