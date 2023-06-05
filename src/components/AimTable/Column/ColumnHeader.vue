@@ -5,7 +5,7 @@
     <cell-view-label-tooltip
         v-if="fieldSchema['tips'] || fieldSchema['tipsHTML']"
         :cell-config="{
-          label:fieldSchema['name'],
+          label:name,
           tips:fieldSchema['tips'],
           tipsHTML:fieldSchema['tipsHTML']
         }"></cell-view-label-tooltip>
@@ -30,6 +30,7 @@ export default {
   components: {CellViewLabelTooltip},
   props: {
     fieldSchema: Object,
+    name:String,
     ignoreRequired:Boolean
   },
 }

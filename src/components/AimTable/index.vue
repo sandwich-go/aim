@@ -85,7 +85,7 @@
               :fied-schema="fs"
           >
             <template slot="header">
-              <column-header :field-schema="fs">
+              <column-header :field-schema="fs" :name="fs['name']">
                 <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
                   <slot :name="tipSlotName(fs)" :field-schema="fs"/>
                 </template>

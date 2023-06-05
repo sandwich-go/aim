@@ -38,7 +38,7 @@
             <el-tabs v-model="currTab[`group_tab_${fs.index}`]">
               <el-tab-pane v-for="(fss,subIndex) in fs.fieldSchemaList" :key="`group_tab_${fs.index}_${subIndex}`" :label="formLabel(fss)" :name="formLabel(fss)" :lazy="true">
                 <span slot='label'>
-                  <column-header :field-schema="fss" :ignore-required="true">
+                  <column-header :field-schema="fss" :ignore-required="true" :name="formLabel(fss)">
                     <template v-if="tipSlotName(fss)" v-slot:[getProxyTipSlotName(fss)]="{}">
                       <slot :name="tipSlotName(fss)" :field-schema="fss"/>
                     </template>

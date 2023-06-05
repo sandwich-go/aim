@@ -450,8 +450,10 @@ export default {
           },
           fields: [
             {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,},
-            {field: 'UserName', name: 'UserName', cellForm: 'CellInput', cell: 'CellInput', width: 300,'placeholder':'placeholder'},
-            {field: 'Password', name: 'Password', cellForm: 'CellInput', cell: 'CellInput'}
+            {field: 'UserName', name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder'
+              ,options:[{"label":"user1",value:"user1"},{"label":"user2",value:"user2"}]},
+            {field: 'UserKey', name: 'UserKey',type:'select_input' , width: 300,'placeholder':'placeholder'
+              ,options:[{"label":"key1",value:"key1"},{"label":"key2",value:"key2"}]}
           ],
         },
         {
