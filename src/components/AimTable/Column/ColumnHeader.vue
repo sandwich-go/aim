@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span v-if="name">
     <i v-if="!ignoreRequired&&fieldSchema.required" class="aim-required-icon"></i>
     <i v-if="fieldSchema.locked" class="el-icon-lock"></i>
     <cell-view-label-tooltip
@@ -13,9 +13,9 @@
       <div slot="content">
         <slot :name="getProxyTipSlotName(fieldSchema)" :field-schema="fieldSchema"></slot>
       </div>
-      <span><i class="el-icon-info"></i>{{ fieldSchema.name }}</span>
+      <span><i class="el-icon-info"></i>{{ name }}</span>
     </el-tooltip>
-    <span v-else>{{ fieldSchema.name }}</span>
+    <span v-else>{{ name }}</span>
   </span>
 </template>
 

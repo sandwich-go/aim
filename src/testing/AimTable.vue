@@ -337,7 +337,6 @@ export default {
       },
       groupConfig: [
         {type: 'inline', fields: ['id', 'name'], after: '@start'},
-        {type: 'tab', fields: ['AuthInfo', 'AuthInfoObject', 'code']},
         {type: 'divider', 'content-position': "left", label: '分割线', after: 'Link'}
       ],
       schema: [
@@ -436,6 +435,7 @@ export default {
         },
         {
           field: 'AuthInfoObject', name: 'AuthInfoObject',
+          nameForm:'',
           type: 'object',
           tips: '对象支持',
           cellFormConfig: {

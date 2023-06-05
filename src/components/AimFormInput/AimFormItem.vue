@@ -3,7 +3,7 @@
                 :label-width="labelWidth">
 
   <span slot='label' v-if="showLabel">
-      <column-header :field-schema="fs" :ignore-required="true">
+      <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)">
         <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
           <slot :name="tipSlotName(fs)" :field-schema="fs"/>
         </template>
