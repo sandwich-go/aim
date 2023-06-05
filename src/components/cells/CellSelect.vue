@@ -4,6 +4,7 @@
       :disabled="disabled"
       :style="cc.style"
       size="mini"
+      clearable
       @change="change">
     <el-option
         v-for="option in getOptions()"
