@@ -31,8 +31,12 @@
       </el-card>
     </div>
     <div v-else-if="isAimFormInput(cellName)">
+      <template v-if="fs['squashDivider']">
+        <el-divider v-bind="squashDividerConfig(fs)">{{formLabel(fs)}}</el-divider>
+      </template>
+
       <aim-form-input
-          v-if="fs.squash"
+          v-if="shouldSquash(fs)"
           :schema="fs.fields"
           :data="dataRef[fs.field]"
           :row-top="getRow()"
@@ -89,7 +93,6 @@ export default {
     shouldCellDisable: Function,
     dataRef: Object,
     labelWidth: String,
-    parentSquash:Boolean,
     showLabel: {
       type: Boolean,
       default: true
@@ -152,17 +155,25 @@ export default {
         return false
       }
       // 如果是一个form input组件，默认应该显示label，但当讲内部元素提升一级显示时，label不再显示
-      if(isAimFormInput(this.cellName)) {
-        return !fs.squash
+      if(this.shouldSquash(fs)) {
+        return false
       }
       return this.showLabel
     },
-    shouldSquash(fs){
-      let shouldSquash = this.parentSquash
-      if(!shouldSquash) {
-        shouldSquash = fs.squash
+    squashDividerConfig(fs){
+      let defaultConfig = {
+        'content-position':"left"
       }
-      return shouldSquash
+      if(jsb.isPlainObject(fs.squashDivider)) {
+        return Object.assign(defaultConfig,fs.squashDivider)
+      }
+      return defaultConfig
+    },
+    shouldSquash(fs){
+      if(!isAimFormInput(this.cellName)){
+        return false
+      }
+      return fs.squash || fs.squashDivider
     },
     getLabelWidth(fs){
       if(isAimFormInput(this.cellName)){
