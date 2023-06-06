@@ -1,18 +1,15 @@
 <template>
-  <el-form-item :key="fs.field" :label="showLabel?formLabel(fs):''" :prop="fs.field" :ref="fs.field"
-                :label-width="labelWidth">
-
-  <span slot='label' v-if="showLabel">
+  <el-form-item :key="fs['field']" :prop="fs['field']" :ref="fs['field']" :label-width="getLabelWidth(fs)">
+  <span slot='label' v-if="getShowLabel(fs)">
       <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)">
         <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
           <slot :name="tipSlotName(fs)" :field-schema="fs"/>
         </template>
       </column-header>
   </span>
-
-    <template v-if="registeredComponentMap[cellName(fs)]">
+    <template v-if="registeredComponentMap[cellName]">
       <component
-          :is="registeredComponentMap[cellName(fs)]"
+          :is="registeredComponentMap[cellName]"
           :data="dataRef"
           :field-name="fs.field"
           :options="fs.options || []"
@@ -23,7 +20,7 @@
           :key="fieldComponentKey(fs)"
       ></component>
     </template>
-    <div v-else-if="isAimTable(cellName(fs))">
+    <div v-else-if="isAimTable(cellName)">
       <el-card class="box-card" shadow="always">
         <aim-table
             :schema="fs.fields"
@@ -33,12 +30,25 @@
         ></aim-table>
       </el-card>
     </div>
-    <div v-else-if="isAimFormInput(cellName(fs))">
-      <el-card class="box-card" shadow="always">
+    <div v-else-if="isAimFormInput(cellName)">
+      <aim-form-input
+          v-if="fs.squash"
+          :schema="fs.fields"
+          :data="dataRef[fs.field]"
+          :row-top="getRow()"
+          :label-width="getSubFormLabelWidth(fs)"
+          :parent-key="fs.field"
+          :key="fieldComponentKey(fs)"
+          :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
+          :should-cell-disable="shouldCellDisable"
+          :popup-append-to-body="true"
+      ></aim-form-input>
+      <el-card v-else  class="box-card" shadow="always">
         <aim-form-input
             :schema="fs.fields"
             :data="dataRef[fs.field]"
             :row-top="getRow()"
+            :label-width="getSubFormLabelWidth(fs)"
             :parent-key="fs.field"
             :key="fieldComponentKey(fs)"
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
@@ -47,7 +57,7 @@
         ></aim-form-input>
       </el-card>
     </div>
-    <div v-else>{{ cellName(fs) }} not supported</div>
+    <div v-else>{{ cellName }} not supported</div>
 
     <span v-if="fs.comment" class="aim-form-item-comment" :style="commentStyle">{{ comment(getRow(), fs, 'comment') }}</span>
     <span v-if="fs.commentHTML" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),fs,'commentHTML')"></span>
@@ -86,11 +96,6 @@ export default {
   },
   mixins: [mixinComponentMap],
   computed: {
-    cellName() {
-      return (fs) => {
-        return cellNameForForm(fs, this.getRow())
-      }
-    },
     // 如果类型为table，返回字段对应的table配置
     cellConfigForTable() {
       return (fs) => {
@@ -126,6 +131,7 @@ export default {
   },
   data(){
     return {
+      cellName:cellNameForForm(this.fs, this.getRow()),
       commentStyle :jsb.cc.aimFormCommentStyle || {
         'font-style':'italic',
         'color':'dodgerblue',
@@ -139,8 +145,26 @@ export default {
     isAimFormInput,
     isAimTable,
     comment,
-    formLabel(si) {
-      return jsb.pathGet(si, 'nameForm', si['name'])
+    getShowLabel(fs){
+      if(isAimFormInput(this.cellName)) {
+        return fs.squash?false:true
+      }
+      return this.showLabel
+    },
+    getLabelWidth(fs){
+      if(isAimFormInput(this.cellName)){
+        return fs.squash?'0px':this.labelWidth
+      }
+      return this.labelWidth
+    },
+    getSubFormLabelWidth(fs){
+      if(isAimFormInput(this.cellName)){
+        return fs.squash?this.labelWidth:null
+      }
+      return null
+    },
+    formLabel(fs) {
+      return jsb.pathGet(fs, 'nameForm', fs['name'])
     },
     fieldComponentKey(fs) {
       return `${this.parentKey}_${fs.field}_${xidRow(this.getRow())}`

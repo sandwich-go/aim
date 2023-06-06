@@ -34,7 +34,7 @@
           </el-row>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='tab'">
-          <el-form-item :key="`group_tab_${fs.index}`">
+          <el-form-item :key="`group_tab_${fs.index}`" :label-width="fs.setting.squash?'0px':null">
             <el-tabs v-model="currTab[`group_tab_${fs.index}`]">
               <el-tab-pane v-for="(fss,subIndex) in fs.fieldSchemaList" :key="`group_tab_${fs.index}_${subIndex}`" :label="formLabel(fss)" :name="formLabel(fss)" :lazy="true">
                 <span slot='label'>
