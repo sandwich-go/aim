@@ -13,9 +13,18 @@ AimFormInputMode2Title[AimFormInputCopy] = '复制'
 AimFormInputMode2Title[AimFormInputView] = '查看'
 
 export function calcLabelWidth(schema) {
-    let longestTextWidth = jsb.longestTextWidth(schema.map(function (element) {
-        return `${element.name}`;
-    }))
+    let nameList = schema.map(function (element) {
+        return jsb.pathGet(element,'nameForm',element['name'])
+    })
+    jsb.each(schema,(fs)=>{
+        if(fs.type ==='object' && fs.squash) {
+            jsb.each(fs.fields,(subFs)=>{
+                nameList.push(jsb.pathGet(subFs,'nameForm',subFs['name']))
+            })
+        }
+    })
+
+    let longestTextWidth = jsb.longestTextWidth(nameList)
     const extraWidth = new Map();
     for (const item of schema) {
         if (item['tips']) {

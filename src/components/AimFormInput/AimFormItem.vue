@@ -89,6 +89,7 @@ export default {
     shouldCellDisable: Function,
     dataRef: Object,
     labelWidth: String,
+    parentSquash:Boolean,
     showLabel: {
       type: Boolean,
       default: true
@@ -146,20 +147,39 @@ export default {
     isAimTable,
     comment,
     getShowLabel(fs){
+      // tab显示的时候不再显示label，遵循上级设定
+      if(!this.showLabel){
+        return false
+      }
+      // 如果是一个form input组件，默认应该显示label，但当讲内部元素提升一级显示时，label不再显示
       if(isAimFormInput(this.cellName)) {
-        return fs.squash?false:true
+        return !fs.squash
       }
       return this.showLabel
     },
+    shouldSquash(fs){
+      let shouldSquash = this.parentSquash
+      if(!shouldSquash) {
+        shouldSquash = fs.squash
+      }
+      return shouldSquash
+    },
     getLabelWidth(fs){
       if(isAimFormInput(this.cellName)){
-        return fs.squash?'0px':this.labelWidth
+        // 元素提级显示，子元素的label宽度等同父级,本身的label宽度设定为0
+        if(this.shouldSquash(fs)){
+          return "0px"
+        }
+        return this.labelWidth
       }
       return this.labelWidth
     },
     getSubFormLabelWidth(fs){
       if(isAimFormInput(this.cellName)){
-        return fs.squash?this.labelWidth:null
+        if(this.shouldSquash(fs)){
+          return this.labelWidth
+        }
+        return null
       }
       return null
     },

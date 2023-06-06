@@ -48,7 +48,7 @@
                     :fs="fss"
                     :data-ref="dataRef"
                     :get-row="getRow"
-                    label-width="0px"
+                    :label-width="labelWidth"
                     :show-label="false"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
