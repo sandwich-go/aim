@@ -67,7 +67,7 @@ export const typeDefaults = {
         table:'CellViewLabel',
         form:'CellDatePicker',
         default: () => jsb.dateTime(),
-        minTableColumnWidth:180
+        minTableColumnWidth:200
     },
     datetime_range:  {
         table:'CellDateRangePicker',
