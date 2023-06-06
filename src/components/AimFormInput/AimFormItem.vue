@@ -32,9 +32,9 @@
     </div>
     <div v-else-if="isAimFormInput(cellName)">
       <template v-if="fs['squashDivider']">
-        <el-divider v-bind="squashDividerConfig(fs)">{{formLabel(fs)}}</el-divider>
+        <el-divider v-bind="squashDividerConfig">
+          <i v-if="squashDividerConfig.icon" :class="squashDividerConfig.icon" :style="getSquashDividerIconStyle()"></i>{{formLabel(fs)}}</el-divider>
       </template>
-
       <aim-form-input
           v-if="shouldSquash(fs)"
           :schema="fs.fields"
@@ -136,6 +136,7 @@ export default {
   data(){
     return {
       cellName:cellNameForForm(this.fs, this.getRow()),
+      squashDividerConfig:this.getSquashDividerConfig(this.fs),
       commentStyle :jsb.cc.aimFormCommentStyle || {
         'font-style':'italic',
         'color':'dodgerblue',
@@ -160,7 +161,16 @@ export default {
       }
       return this.showLabel
     },
-    squashDividerConfig(fs){
+    getSquashDividerIconStyle(){
+      let defaultConfig = {
+        'padding-right':"3px"
+      }
+      if(jsb.isPlainObject(this.squashDividerConfig['iconStyle'])) {
+        return Object.assign(defaultConfig,this.squashDividerConfig['iconStyle'])
+      }
+      return defaultConfig
+    },
+    getSquashDividerConfig(fs){
       let defaultConfig = {
         'content-position':"left"
       }
