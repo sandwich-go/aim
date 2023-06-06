@@ -9,7 +9,7 @@
         :style-base="styleBase"
         :style-override="styleOverride"
         :disabled="disabled"/>
-    <span style="padding-left: 3px;padding-right: 3px">↔️</span>
+    <span style="padding-left: 3px;padding-right: 3px">&#8646;</span>
     <cell-input
         :data="data"
         :field-name="fieldName"
