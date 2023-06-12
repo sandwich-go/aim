@@ -12,7 +12,7 @@
 
 <script>
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
-import CellInput from "@/components/cells/CellColorPicker.vue";
+import CellInput from "@/components/cells/CellInput.vue";
 export default {
   name: 'CellInputTextArea',
   components: {CellInput},
