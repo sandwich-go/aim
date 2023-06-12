@@ -47,12 +47,12 @@
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import CellViewIcon from "@/components/cells/CellViewIcon.vue";
 import CellViewLabel from "@/components/cells/CellViewLabel.vue";
 import CellList from "@/components/cells/CellList.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
-import {CodeButtonRowSave} from "@/components/cells/const";
+import {CodeButtonRowSave} from "@/components/cells/code";
 import AimPopup from "@/components/AimPopup/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
@@ -68,9 +68,9 @@ export default {
     popupAppendToBody: Boolean
   },
   components: {AimPopup, CellList, CellViewLabel, CellViewIcon},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
     this.cc.trigger = jsb.objectAssignNX(this.cc.trigger, {
       isButton: false,
       icon: 'el-icon-view',

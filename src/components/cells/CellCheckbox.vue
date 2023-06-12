@@ -1,10 +1,8 @@
 <template>
   <el-checkbox
+      v-bind="cc"
       v-model="dataRef[fieldName]"
-      :border="cc.border"
-      :style="cc.style"
       :disabled="disabled"
-      size="mini"
       @change="change">
     {{cc.label}}
   </el-checkbox>
@@ -12,12 +10,12 @@
 
 <script>
 
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 export default {
   name: 'CellCheckbox',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge({
+    this.ccMerge({
           border: false,
           style: {
             width:null,// checkbox不应该设定宽度

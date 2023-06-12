@@ -74,13 +74,12 @@ import jsb from "@sandwich-go/jsb";
 import {
   CodeButtonAdd, CodeButtonRowSave,
   CodeButtonRowSelectedMinus
-} from "@/components/cells/const";
+} from "@/components/cells/code";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import {xidRow} from "@/components/AimTable/table";
 import {isAimFormInput, isAimTable} from "@/components/cells/is";
 import {comment} from "@/components/AimFormInput/index";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
-import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
@@ -125,7 +124,6 @@ export default {
   },
   components: {
     ColumnHeader,
-    CellViewLabelTooltip,
     AimFormInput: () => import("@/components/AimFormInput/index.vue"),
     AimTable: () => import("@/components/AimTable/index.vue"),
   },

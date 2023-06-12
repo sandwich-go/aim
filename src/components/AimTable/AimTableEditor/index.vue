@@ -20,7 +20,7 @@
 <script>
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
-import {CodeButtonRefresh, CodeButtonSaveTableData} from "@/components/cells/const";
+import {CodeButtonRefresh, CodeButtonSaveTableData} from "@/components/cells/code";
 import {
   EditTriggerDBLClick, EditTriggerManualAndDBLClick,
   EditTriggerManual,

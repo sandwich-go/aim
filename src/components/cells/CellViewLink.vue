@@ -1,39 +1,47 @@
 <template>
-  <span v-if="fieldValue">
-    <template style="align-items: center">
-      <template v-if="!isObject(fieldValue)">
-         <el-link type="primary" :href="fieldValue" target="_blank">{{ fieldValue }}</el-link>
-      </template>
-      <template v-else-if="fieldValue.code || fieldValue.href || fieldValue.click">
-        <el-link :type="fieldValue.type || 'primary'" @click="emitClick($event)" :href="fieldValue.href" target="_blank">
-          <cell-view-icon v-if="fieldValue.icon || 'el-icon-document-copy'" :cell-config="fieldValue.icon || 'el-icon-document-copy'"/>
-          <cell-view-label v-if="fieldValue.label" :cell-config="fieldValue.label" style="padding-left: 3px"></cell-view-label>
-        </el-link>
-      </template>
-    </template>
+  <span v-if="fieldValueFormatted" style="align-items: center">
+    <el-link v-bind="_val" @click="emitClick($event)">
+      <cell-view-label v-if="_val.label" :formatter="()=>{return _val.label}"></cell-view-label>
+    </el-link>
   </span>
 </template>
 
 <script>
-import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import isObject from "@sandwich-go/jsb/isObject";
-import CellViewIcon from "@/components/cells/CellViewIcon.vue";
 import CellViewLabel from "@/components/cells/CellViewLabel.vue";
-
+import jsb from "@sandwich-go/jsb";
+import {assignWithMerge} from "@/components/utils/jsb";
 
 export default {
   name: 'CellViewLink',
-  components: {CellViewLabel, CellViewIcon},
-  mixins: [MixinCellViewConfig],
+  components: {CellViewLabel},
+  mixins: [MixinCell],
+  computed: {
+    _val(){
+      let obj = {type :'primary',target:'_blank',href:'',label:''}
+      if(jsb.isString(this.fieldValueFormatted)){
+        obj.href = this.fieldValueFormatted
+        obj.label = obj.href
+      }else {
+        assignWithMerge(obj,this.fieldValueFormatted,['style'])
+      }
+      obj.label = obj.label || obj.href
+      return obj
+    }
+  },
+  created() {
+    this.ccMerge()
+  },
   methods: {
     isObject,
     emitClick(jsEvent) {
-      if(this.fieldValue.click) {
-        this.fieldValue.click({jsEvent})
+      if(this._val.click) {
+        this._val.click({jsEvent})
       }
-      if(this.fieldValue.code) {
+      if(this._val.code) {
         this.$emit('code-cell-click', this.emitData({
-          code: this.fieldValue.code,
+          code: this._val.code,
           jsEvent:jsEvent,
         }))
       }

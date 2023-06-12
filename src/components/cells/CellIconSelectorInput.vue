@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import AimIconSelector from "@/components/AimIconSelector/index.vue";
 
 export default {
   name: 'CellIconSelectorInput',
   components: {AimIconSelector},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge({
+    this.ccMerge({
       showLabel: true,
       element: true,
       style:{width:'100%'}

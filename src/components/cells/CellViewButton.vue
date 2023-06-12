@@ -1,30 +1,52 @@
 <template>
-  <el-button :disabled="disabled" v-bind="cc" size="mini" @click="click($event)"
-             :icon="stateSwitch?(cc.iconTrue||cc.icon):cc.icon"
-             :type="stateSwitch?(cc.typeTrue||cc.type):cc.type"
-  >
-    <template v-if="!cc.circle">{{ cc.label ? cc.label : "" }}</template>
+  <el-button :disabled="disabled" v-bind="_val"  @click="click($event)" :icon="icon()" :type="type()">
+    <template v-if="!_val.circle">{{ _val.label }}</template>
   </el-button>
 </template>
 
 <script>
 
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
+import jsb from "@sandwich-go/jsb";
+import {makeCellFromString} from "@/components/cells/make";
+import {assignWithMerge} from "@/components/utils/jsb";
 export default {
   name: 'CellViewButton',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
+  },
+  computed: {
+    _val() {
+      let obj = {size:"mini",label:''}
+      if (jsb.isString(this.fieldValueFormatted)) {
+        obj = makeCellFromString(this.fieldValueFormatted,{cell:'CellViewButton'})
+      }else{
+        obj = Object.assign(obj,this.fieldValueFormatted)
+      }
+      assignWithMerge(obj,this.cc,['style'])
+      return obj
+    }
   },
   methods:{
     click(jsEvent) {
       this.stateSwitch = !this.stateSwitch
       this.emitClick(jsEvent)
     },
+    icon(){
+      return this.getStateSwitch()?(this._val.iconTrue||this._val.icon):this._val.icon
+    },
+    type(){
+      return this.getStateSwitch()?(this._val.typeTrue||this._val.type):this._val.type
+    },
+    getStateSwitch(){
+      return this.useInnerStateSwitch?this.stateSwitch:this.dataRef[this.fieldName]
+    },
   },
   data(){
     return {
-      stateSwitch:false
+      stateSwitch:false,
+      useInnerStateSwitch: this.fieldName && this.dataRef,
     }
   },
 }

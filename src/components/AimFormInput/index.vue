@@ -82,7 +82,7 @@ import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import isString from "@sandwich-go/jsb/isString";
 import jsb from "@sandwich-go/jsb";
 import {AimFormInputInsert, AimFormInputView, calcLabelWidth} from "./index";
-import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
+import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/code";
 import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import {isVirtualField} from "@/components/AimTable/schema";

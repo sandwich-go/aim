@@ -1,12 +1,12 @@
 <template>
   <div>
-      <span v-if="fieldValue">
-        <template v-for="(item,index) of wrapAsTagList(fieldValue,getOptions())">
+      <span v-if="fieldValueFormatted">
+        <template v-for="(item,index) of _val">
           <el-tag
               v-if="item.label"
               :key="index"
               size="mini"
-              :style="cc.style"
+              :style="item.style"
               @click.native="function(){ item.click && item.click()}"
               :type="item.type || 'info'"
               :effect="item.effect || 'light'">
@@ -18,17 +18,28 @@
 </template>
 
 <script>
-import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import {wrapAsTagList} from "@/components/utils/jsb";
+import jsb from "@sandwich-go/jsb";
 
 export default {
   name: 'CellViewTag',
-  mixins: [MixinCellViewConfig],
-  created() {
-    this.ccConfigMerge({style:{"margin-right": "3px"}})
+  mixins: [MixinCell],
+  computed: {
+    _val(){
+      let tags = wrapAsTagList(this.fieldValueFormatted,this.optionsComputed)
+      jsb.each(tags,(v,index)=>{
+        v.style = v.style || {}
+        if(index !== 0 && v.style["margin-left"]){
+          v.style["margin-left"] = "3px"
+          jsb.objectAssignNX(v.style,this.cc)
+        }
+      })
+      return tags
+    }
   },
-  methods: {
-    wrapAsTagList,
+  created() {
+    this.ccMerge()
   },
 }
 </script>

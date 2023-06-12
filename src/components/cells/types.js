@@ -80,6 +80,11 @@ export const typeDefaults = {
         form:'CellSwitch',
         default:false,
     },
+    address:  {
+        table:'CellViewLink',
+        form:'CellInput',
+        default:'',
+    },
     checkbox: {
         table:'CellViewBoolean',
         form:'CellCheckbox',
@@ -137,10 +142,13 @@ jsb.each(typeDefaults,(val,key)=>{
 })
 
 
+// minWidthTableColumn 表内显示时列宽最小值
 export function minWidthTableColumn(fieldType) {
     return jsb.pathGet(typeDefaults,`${fieldType}.minTableColumnWidth`,80)
 }
 
+// formatValue 格式化数据，如数字格式化为数值类型
+// todo 后续考虑单独在schema层加入format支持，支持在提交数据的时候对数据做一次格式化
 export function formatValue(fieldType,fieldValue) {
     if(fieldType === 'input_number') {
         return Number(fieldValue)
@@ -152,15 +160,14 @@ export function formatValue(fieldType,fieldValue) {
 }
 
 
-
 // 基础类型到table显示组件的映射
-export const types2TableInplaceCellName = jsb.clone(type2FormCellName)
-types2TableInplaceCellName.table = 'CellTriggerTable'
-types2TableInplaceCellName.object = 'CellTriggerFormInput'
+export const types2TableInPlaceCellName = jsb.clone(type2FormCellName)
+types2TableInPlaceCellName.table = 'CellTriggerTable'
+types2TableInPlaceCellName.object = 'CellTriggerFormInput'
 
-// cellNameForTableInplaceByType 由基础类型获取table内的组件名称
-export function cellNameForTableInplaceByType(sType, defaultVal = 'CellInput') {
-    return jsb.pathGet(types2TableInplaceCellName, sType, defaultVal)
+// cellNameForTableInPlaceByType 由基础类型获取table内的组件名称
+export function cellNameForTableInPlaceByType(sType, defaultVal = 'CellInput') {
+    return jsb.pathGet(types2TableInPlaceCellName, sType, defaultVal)
 }
 
 // cellNameForTableByType 由基础类型获取table内的组件名称

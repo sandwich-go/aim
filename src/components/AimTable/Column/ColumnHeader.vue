@@ -2,13 +2,13 @@
   <span v-if="name">
     <i v-if="!ignoreRequired&&fieldSchema.required" class="aim-required-icon"></i>
     <i v-if="fieldSchema.locked" class="el-icon-lock"></i>
-    <cell-view-label-tooltip
-        v-if="fieldSchema['tips'] || fieldSchema['tipsHTML']"
-        :cell-config="{
-          label:name,
-          tips:fieldSchema['tips'],
-          tipsHTML:fieldSchema['tipsHTML']
-        }"></cell-view-label-tooltip>
+    <el-tooltip v-if="fieldSchema['tips'] || fieldSchema['tipsHTML']" effect="light">
+      <span><i class="el-icon-info"></i>{{name}}</span>
+      <template slot="content">
+        <span v-if="fieldSchema.tips">{{fieldSchema.tips}}</span>
+        <span v-if="fieldSchema.tipsHTML" v-html='fieldSchema.tipsHTML'></span>
+      </template>
+    </el-tooltip>
     <el-tooltip v-else-if="tipSlotName(fieldSchema)" effect="light">
       <div slot="content">
         <slot :name="getProxyTipSlotName(fieldSchema)" :field-schema="fieldSchema"></slot>
@@ -21,13 +21,11 @@
 
 <script>
 
-import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 
 export default {
   name: 'ColumnHeader',
   methods: {getProxyTipSlotName, tipSlotName},
-  components: {CellViewLabelTooltip},
   props: {
     fieldSchema: Object,
     name:String,

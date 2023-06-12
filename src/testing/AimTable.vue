@@ -75,11 +75,9 @@ import {
   CodeButtonRefresh, CodeButtonRowClose,
   CodeButtonRowCopy,
   CodeButtonRowDelete,
-  CodeButtonRowEdit,
   CodeButtonRowHistory, CodeButtonRowSave,
   CodeButtonRowSelectedMinus, CodeButtonSaveTableData, CodeButtonTableSetting,
-  CodeLinkFieldCopy,
-} from "@/components/cells/const";
+} from "@/components/cells/code";
 
 const jsb = require("@sandwich-go/jsb")
 export default {
@@ -448,7 +446,11 @@ export default {
           },
           cell: 'CellViewBoolean',
           formatter: ({value}) => {
-            return value && value.UseSystemSSH
+            if(value){
+              console.log("formatterformatterformatterformatter ",value)
+            }
+            return true
+            // return value && value.UseSystemSSH
           },
           fields: [
             {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,},
@@ -485,16 +487,10 @@ export default {
         {
           field: 'Link',
           name: 'Link',
+          type:'address',
           showOverflowTooltip: true,
           sortable: true,
           align: 'center',
-          cell: 'CellList',
-          cellConfig: function ({fieldValue}) {
-            if (!fieldValue) {
-              return []
-            }
-            return [CodeLinkFieldCopy, {href: fieldValue, label: 'PMT地址', cell: 'CellViewLink'}, CodeButtonRowEdit]
-          }
         },
         {
           field: 'Number', name: 'InputNumber', type: 'input', sortable: true,
@@ -513,7 +509,6 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           required: true,
-          cell: 'CellIconSelectorInput',
           cellForm: 'CellIconSelectorInput',
           cellConfig: function ({fieldValue}) {
             return {class: fieldValue, label: fieldValue}
@@ -556,10 +551,8 @@ export default {
         },
         {
           field: 'Datetime',
-          type: 'datetime',
           name: 'Datetime',
-          cell: 'CellDatePicker',
-          cellForm: 'CellDatePicker',
+          type: 'textarea',
           filter: {},
         },
         {
@@ -609,7 +602,6 @@ export default {
           })
         },
         saveTableData({tableData}) {
-          console.log(tableData)
           _this.tableVisitorData = tableData
         }
       },

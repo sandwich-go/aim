@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import jsb from "@sandwich-go/jsb";
 export default {
   name: 'CellInput',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
   },
   data(){
     return {

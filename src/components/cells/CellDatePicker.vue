@@ -1,26 +1,22 @@
 <template>
   <el-date-picker
+      type="datetime"
       :disabled="disabled"
       v-model="dataRef[fieldName]"
-      type="datetime"
-      :default-time="cc.defaultTime"
-      :placeholder="cc.placeholder"
       @change="change"
-      size="mini"
-      :style="cc.style"
-  >
+      v-bind="cc">
   </el-date-picker>
 </template>
 
 <script>
 
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 
 export default {
   name: 'CellDatePicker',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge({
+    this.ccMerge({
       defaultTime: "00:00:00",
       placeholder: "选择日期时间"
     })

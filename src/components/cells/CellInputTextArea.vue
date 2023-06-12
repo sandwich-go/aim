@@ -11,12 +11,12 @@
 
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
-import CellInput from "@/components/cells/CellColorPicker.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
+import CellInput from "@/components/cells/CellInput.vue";
 export default {
   name: 'CellInputTextArea',
   components: {CellInput},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
     if(!this.cellConfig){
       this.cellConfig = {}

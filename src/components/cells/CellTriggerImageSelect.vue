@@ -40,7 +40,7 @@
 <script>
 import VueSelectImage from 'vue-select-image'
 require('vue-select-image/dist/vue-select-image.css')
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import CellTrigger from "@/components/cells/CellTrigger.vue";
 import jsb from "@sandwich-go/jsb";
 import CellViewImage from "@/components/cells/CellViewImage.vue";
@@ -48,7 +48,7 @@ import CellViewImage from "@/components/cells/CellViewImage.vue";
 export default {
   name: 'CellTriggerImageSelect',
   components: {CellViewImage, CellTrigger,VueSelectImage},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   props:{
     popupAppendToBody: Boolean
   },
@@ -60,14 +60,14 @@ export default {
     }
   },
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
     this.cc.trigger = jsb.objectAssignNX(this.cc.trigger, {
       isButton: false,
       icon: 'el-icon-edit-outline',
     })
 
     const _this = this
-    jsb.each(this.getOptions(),(v)=>{
+    jsb.each(this.optionsComputed,(v)=>{
       const option = {
         id:v.id || v.key || v.value,
         src:v.src || v.value,

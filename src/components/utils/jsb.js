@@ -44,3 +44,16 @@ export function wrapAsTagList(val, options) {
     }
     return tagList
 }
+
+export function assignWithMerge(target,src,mergeFiled) {
+    jsb.each(src, function (val, key) {
+        if (mergeFiled.includes(key)) {
+            if(!target[key]) {
+                target[key] = {}
+            }
+            target[key] = jsb.merge(target[key], val)
+        } else {
+            target[key] = val
+        }
+    })
+}

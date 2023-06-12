@@ -1,5 +1,5 @@
 import {pathGet} from "@/components/utils/jsb";
-import {cellNameForFormByType, cellNameForTableByType, cellNameForTableInplaceByType} from "@/components/cells/types";
+import {cellNameForFormByType, cellNameForTableByType, cellNameForTableInPlaceByType} from "@/components/cells/types";
 import {aimTableError} from "@/components/AimTable/table";
 
 const jsb = require("@sandwich-go/jsb")
@@ -18,7 +18,7 @@ export const FieldPathCellConfigForForm = 'cellFormConfig'
 
 // cellNameForTable 获取table内fs使用的组件名称
 export function cellNameForTable(fs,row,inplace=false) {
-    const cellTable  = pathGet(fs, FieldPathCellNameForTable,inplace?cellNameForTableInplaceByType(fs.type):cellNameForTableByType(fs.type))
+    const cellTable  = pathGet(fs, FieldPathCellNameForTable,inplace?cellNameForTableInPlaceByType(fs.type):cellNameForTableByType(fs.type))
     if(jsb.isFunction(cellTable)){
         return cellTable({row})
     }

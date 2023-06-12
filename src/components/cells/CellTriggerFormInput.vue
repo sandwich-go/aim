@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import CellTrigger from "@/components/cells/CellTrigger.vue";
 
@@ -24,9 +24,9 @@ const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'CellTriggerFormInput',
   components: {CellTrigger, AimFormInput},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
     this.cc.form = jsb.objectAssignNX(this.cc.form, {
       popupAppendToBody:true,
     })

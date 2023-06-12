@@ -1,5 +1,5 @@
 import jsb from "@sandwich-go/jsb";
-import {code2OptionsMapping} from "@/components/cells/const";
+import {code2OptionsMapping} from "@/components/cells/code";
 
 export function makeCell(initVal, ...options) {
     let cc = {

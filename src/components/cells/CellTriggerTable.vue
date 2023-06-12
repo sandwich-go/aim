@@ -16,18 +16,18 @@
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import CellTrigger from "@/components/cells/CellTrigger.vue";
-import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
+import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/code";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import AimTable from "@/components/AimTable/index.vue";
 
 export default {
   name: 'CellTriggerFormInput',
   components: {AimTable, CellTrigger},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
     // tableConfig以cc本地数据为源，防止被多行数据共享
     this.cc.table = Object.assign({
       righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},

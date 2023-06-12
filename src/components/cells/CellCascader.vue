@@ -1,11 +1,9 @@
 <template>
   <el-cascader
       v-bind="cc"
-      :options="getOptions()"
       clearable
-      size="mini"
-      v-model="dataRef[fieldName]"
-  >
+      :options="optionsComputed"
+      v-model="dataRef[fieldName]">
     <template slot-scope="{ node, data }">
       <span>{{ data.label }}</span>
       <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -15,15 +13,14 @@
 
 <script>
 
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 
 export default {
   name: 'CellCascader',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
     this.calcWidthPixString("100%")
-    console.log(this.options())
   },
 }
 </script>

@@ -1,29 +1,23 @@
 <template>
   <el-date-picker
+      v-bind="cc"
       v-model="dataRef[fieldName]"
       type="datetimerange"
-      :disabled="disabled"
-      :default-time="cc.defaultTime"
-      :style="cc.style"
-      :range-separator="cc.rangeSeparator"
-      :picker-options="cc.pickerOptions"
-      :start-placeholder="cc.startPlaceholder"
-      :end-placeholder="cc.endPlaceholder"
       @change="change"
-      size="mini"
+      :disabled="disabled"
   >
   </el-date-picker>
 </template>
 
 <script>
 
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 
 export default {
   name: 'CellDateRangePicker',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge({
+    this.ccMerge({
       startPlaceholder:'开始时间',
       endPlaceholder:'开始时间',
       rangeSeparator:'~',

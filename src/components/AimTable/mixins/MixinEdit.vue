@@ -6,7 +6,7 @@ import {
   EditTriggerManual, mustCtrlData,
   EditModeFormInput, isModeInplace,
 } from "@/components/AimTable/table";
-import {CodeButtonRowDelete, CodeButtonRowSave} from "@/components/cells/const";
+import {CodeButtonRowDelete, CodeButtonRowSave} from "@/components/cells/code";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {
   AimFormInputCopy,

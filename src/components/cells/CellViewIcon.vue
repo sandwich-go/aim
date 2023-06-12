@@ -1,30 +1,37 @@
 <template>
   <span>
-    <template v-if="fieldValue">
+    <template v-if="fieldValueFormatted">
       <template style="align-items: center">
-        <i v-if="!isPlainObject(fieldValue)" :class="fieldValue"></i>
-        <i v-else :class="fieldValue.class || fieldValue.icon" :style="fieldValue.style || {}"></i>
-        <span v-if="fieldValue.label" style="padding-left: 9px">{{ fieldValue.label }}</span>
+        <i v-bind="_val"></i>
+        <span v-if="_val.label" style="padding-left: 9px">{{ _val.label }}</span>
       </template>
-    </template>
-    <template v-else>
-      <i :class="fieldValue"></i>
     </template>
   </span>
 </template>
 
 <script>
-import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
-import {isPlainObject} from "@/components/utils/jsb";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
+import {assignWithMerge} from "@/components/utils/jsb";
+import jsb from "@sandwich-go/jsb";
 
 export default {
   name: "CellViewIcon",
-  mixins: [MixinCellViewConfig],
-  methods: {
-    isPlainObject,
+  mixins: [MixinCell],
+  computed: {
+    _val() {
+      // fixme 显示在表格内的时候设定高度，外部传入，同表格行高度，暂时写死
+      let obj = {class: ''}
+      if (jsb.isString(this.fieldValueFormatted)) {
+        obj.class = this.fieldValueFormatted
+      } else {
+        assignWithMerge(obj,this.fieldValueFormatted,['style'])
+      }
+      obj.class = obj.class || obj.class.icon
+      return obj
+    }
   },
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
   }
 }
 </script>

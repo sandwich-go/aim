@@ -9,15 +9,15 @@
 
 <script>
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import jsb from "@sandwich-go/jsb";
 
 export default {
   name: 'CellCodeMirror',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   components: {AimCodeMirror},
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
     this.cc.codeMirror = jsb.objectAssignNX(this.cc.codeMirror, {
       popupAppendToBody:true,
     })

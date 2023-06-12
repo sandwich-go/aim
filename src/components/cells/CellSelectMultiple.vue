@@ -9,7 +9,7 @@
       :disabled="disabled"
       clearable
       @change="change">
-    <el-option v-for="(val,idx) in getOptions()"
+    <el-option v-for="(val,idx) in optionsComputed"
                :value="val.value"
                :key="idx"
                :disabled="val.disabled"
@@ -19,13 +19,13 @@
 
 <script>
 
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 
 export default {
   name: 'CellSelectMultiple',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge({
+    this.ccMerge({
       style:{},
     })
     this.calcWidthPixString("100%")

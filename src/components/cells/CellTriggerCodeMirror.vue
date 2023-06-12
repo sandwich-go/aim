@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import CellTrigger from "@/components/cells/CellTrigger.vue";
 import CellCodeMirror from "@/components/cells/CellCodeMirror.vue";
 import jsb from "@sandwich-go/jsb";
@@ -26,9 +26,9 @@ import jsb from "@sandwich-go/jsb";
 export default {
   name: 'CellTriggerCodeMirror',
   components: {CellCodeMirror, CellTrigger},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
     this.cc.codeMirror = jsb.objectAssignNX(this.cc.codeMirror, {
       popupAppendToBody:true,
       height:`${jsb.clientHeight(120)}px`

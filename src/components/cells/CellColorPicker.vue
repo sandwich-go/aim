@@ -1,23 +1,21 @@
 <template>
   <el-color-picker
+      v-bind="cc"
       v-model="dataRef[fieldName]"
       show-alpha
-      :style="cc.style"
-      size="mini"
-      :predefine="cc.predefine"
       :disabled="disabled">
   </el-color-picker>
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import {ReservedColorList} from "@/components/utils/ui";
 const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'CellColorPicker',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   created() {
-    this.ccConfigMerge({
+    this.ccMerge({
       style: {width:null},
       predefine:jsb.ccPath('predefine',ReservedColorList)
     })

@@ -283,7 +283,7 @@ import {
   CodeButtonSaveTableData, CodeButtonSortIndex,
   CodeButtonTableSetting,
   CodeLinkFieldCopy
-} from "@/components/cells/const";
+} from "@/components/cells/code";
 import {formRulesFromSchema} from "@/components/AimTable/validate";
 import {directionToolbarSpan} from "@/components/AimTable/toolbar";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";

@@ -1,39 +1,48 @@
 <template>
-  <el-alert
-      size="mini"
-      v-bind="cc"
-  />
+  <el-alert v-bind="_val"/>
 </template>
 
 <script>
 import {parseWidthToPixelString} from "@/components/utils/ui";
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
+import jsb from "@sandwich-go/jsb";
+import {assignWithMerge} from "@/components/utils/jsb";
 export default {
   name: 'CellViewAlert',
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   props: {
     center: {
       type: Boolean,
       default: null
     },
   },
-  created() {
-    this.ccConfigMerge({
-      label: '',
-      title: '',
-      center: this.center,
-      type: 'warning',
-      effect: 'dark',
-      style: {height:'28px'},
-      closable: false,
-      showIcon: true
-    })
-    this.cc.title = this.cc.title?String(this.cc.title) : String(this.cc.label)
-    this.cc.style['height'] = '28px'
-    if (this.cc.style['width']) {
-      this.cc.style['width'] = parseWidthToPixelString(this.cc.style['width'], this.cc.label || this.cc.title,
-          this.cc.showIcon ? 30 : 0)
+  computed: {
+    _val() {
+      let obj = {
+        title: '',
+        center: this.center,
+        type: 'warning',
+        size:"mini",
+        effect: 'dark',
+        style: {height:'28px'},
+        closable: false,
+        showIcon: true
+      }
+      if (jsb.isString(this.fieldValueFormatted)) {
+        obj.title = this.fieldValueFormatted
+      } else {
+        assignWithMerge(obj,this.fieldValueFormatted,['style'])
+      }
+      assignWithMerge(obj,this.cc,['style'])
+      obj.title = obj.title || obj.label
+      if (obj.style['width']) {
+        obj.style['width'] = parseWidthToPixelString(obj.style['width'], obj.label, this.cc.showIcon ? 30 : 0)
+      }
+      return obj
     }
+  },
+  created() {
+    this.ccMerge()
   },
 }
 </script>

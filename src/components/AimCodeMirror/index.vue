@@ -115,7 +115,7 @@ import {directionToolbarSpan, initToolbarConfig} from "@/components/AimTable/too
 import CellList from "@/components/cells/CellList.vue";
 import {
   CodeButtonCopy, CodeButtonLint, CodeButtonRefresh, CodeButtonRowSave,
-} from "@/components/cells/const";
+} from "@/components/cells/code";
 import AimPopup from "@/components/AimPopup/index.vue";
 // eslint-disable-next-line no-undef
 const yaml = require('js-yaml');

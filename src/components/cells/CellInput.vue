@@ -11,51 +11,38 @@
       <template v-if="asImage">
         <cell-trigger-image-select
             v-if="options"
-            :cell-config="cellConfig"
-            :field-schema="fieldSchema"
-            :field-name="fieldName"
-            :data="data"
-            :disabled="disabled"
-            :options="options"
+            v-bind="$props"
             :popup-append-to-body="true"
         ></cell-trigger-image-select>
         <cell-view-image
             v-else
-            :cell-config="cellConfig"
-            :field-schema="fieldSchema"
-            :field-name="fieldName"
-            :data="data"
-            :disabled="disabled"
-            :options="options"
-            :popup-append-to-body="true"></cell-view-image>
+            v-bind="$props"
+            :popup-append-to-body="true"
+        ></cell-view-image>
       </template>
       <cell-view-image
           v-else-if="isValidImageUrl(dataRef[fieldName])"
-          :cell-config="cellConfig"
-          :field-schema="fieldSchema"
-          :field-name="fieldName"
-          :data="data"
-          :disabled="disabled"
-          :options="options"
-          :popup-append-to-body="true"></cell-view-image>
+          v-bind="$props"
+          :popup-append-to-body="true"
+      ></cell-view-image>
     </div>
   </div>
 </template>
 
 <script>
-import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import MixinCell from "@/components/cells/mixins/MixinCell.vue";
 import CellTriggerImageSelect from "@/components/cells/CellTriggerImageSelect.vue";
 import CellViewImage from "@/components/cells/CellViewImage.vue";
 
 export default {
   name: 'CellInput',
   components: {CellViewImage, CellTriggerImageSelect},
-  mixins: [MixinCellEditorConfig],
+  mixins: [MixinCell],
   props:{
     asImage:Boolean,
   },
   created() {
-    this.ccConfigMerge()
+    this.ccMerge()
   },
   methods:{
     divClass(){
