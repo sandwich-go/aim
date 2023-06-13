@@ -8,6 +8,7 @@ export const typeDefaults = {
         form:'CellInput',
         default:'',
     },
+
     input_number:{
         table:'CellViewLabel',
         form:'CellInputNumber',
@@ -150,8 +151,6 @@ export function formatValue(fieldType,fieldValue) {
     }
     return fieldValue
 }
-
-
 
 // 基础类型到table显示组件的映射
 export const types2TableInplaceCellName = jsb.clone(type2FormCellName)

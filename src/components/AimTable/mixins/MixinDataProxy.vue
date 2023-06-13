@@ -3,7 +3,7 @@ import {deleteConfirmConfig} from "@/components/AimTable/confirm";
 import {cleanData, removeCtrlData} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
-import {trimInvisibleChar} from "@/components/AimTable/clean";
+import {formatterForUpdate} from "@/components/AimTable/clean";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -151,7 +151,7 @@ export default {
       if(!this.proxyConfigRef.isLocalData){
         toSave = removeCtrlData(jsb.clone(row))
       }
-      toSave = trimInvisibleChar(this.schema,toSave,true)
+      toSave = formatterForUpdate(this.schema,toSave,true)
       this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){
           this.doLayout(true)
