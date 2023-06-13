@@ -16,7 +16,8 @@
           :style-base="{width:'100%'}"
           :cell-config="cellConfig(fs)"
           :field-schema="fs"
-          :disabled="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
+          :formatter="shouldDisable()?fs['formatterForm']:null"
+          :disabled="shouldDisable()"
           :key="fieldComponentKey(fs)"
       ></component>
     </template>
@@ -150,6 +151,9 @@ export default {
     isAimFormInput,
     isAimTable,
     comment,
+    shouldDisable(){
+      return this.privateShouldCellDisable({fieldSchema:this.fs,cell:this.cellConfig(this.fs) ||{}})
+    },
     getShowLabel(fs){
       // tab显示的时候不再显示label，遵循上级设定
       if(!this.showLabel){
