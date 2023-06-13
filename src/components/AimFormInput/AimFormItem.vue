@@ -16,7 +16,7 @@
           :style-base="{width:'100%'}"
           :cell-config="cellConfig(fs)"
           :field-schema="fs"
-          :formatter="shouldDisable()?fs['formatterForm']:null"
+          :formatter="fs['formatterForm']"
           :disabled="shouldDisable()"
           :key="fieldComponentKey(fs)"
       ></component>
@@ -136,6 +136,7 @@ export default {
   },
   data(){
     return {
+      dateFormatter:{},
       cellName:cellNameForForm(this.fs, this.getRow()),
       squashDividerConfig:this.getSquashDividerConfig(this.fs),
       commentStyle :jsb.cc.aimFormCommentStyle || {

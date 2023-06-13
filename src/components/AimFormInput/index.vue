@@ -181,6 +181,10 @@ export default {
         if (isVirtualField(fs)) {
           return
         }
+        if (fs['formOff']) {
+          return
+        }
+
         const itemType = _this.fieldType(fs)
         // 如果是object类型，在传递进 FormInput 组件前需要给默认值
         if (itemType === 'object' && jsb.isEmpty(_this.dataRef[fs.field])) {
