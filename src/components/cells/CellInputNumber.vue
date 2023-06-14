@@ -3,6 +3,7 @@
       v-model="dataRef[fieldName]"
       :min="cc.min"
       :max="cc.max"
+      :precision="cc.precision"
       :step="cc.step"
       :disabled="disabled"
       :controls-position="cc.controlsPosition"

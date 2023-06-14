@@ -103,7 +103,7 @@ export const typeDefaults = {
         default:'',
     },
     password:{
-        table:'CellPassword',
+        table:'CellViewLabel',
         form:'CellPassword',
         default:'',
     },

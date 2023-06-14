@@ -37,6 +37,10 @@ export function defaultRow(schema, row) {
             row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal() : defaultVal
             return
         }
+        if(fieldSchema.type==='object' && fieldSchema.fields) {
+            row[fieldName] = defaultRow(fieldSchema.fields,row[fieldName])
+            return;
+        }
         const vByType = type2DefaultVal[fieldSchema.type]
         if(jsb.isFunction(vByType)){
             row[fieldName] = vByType(fieldSchema)
