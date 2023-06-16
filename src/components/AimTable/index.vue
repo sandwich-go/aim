@@ -520,7 +520,10 @@ export default {
     },
     privateCellClick({code, row, fieldSchema, fieldValue, jsEvent, fromForm}) {
       this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
-      if (this.codeItemClick({code, row, fieldSchema, fieldValue})) {
+      const done = () => {
+        this.defaultCellClick({code, row, fieldValue, jsEvent, fromForm})
+      }
+      if (this.codeItemClick({code, row, fieldSchema, fieldValue,done})) {
         return
       }
       this.defaultCellClick({code, row, fieldValue, jsEvent, fromForm})
