@@ -16,7 +16,7 @@
       <template v-for="(fs,index) in fieldSorted">
         <template v-if="fs.__isGroup && fs.setting.type ==='divider'">
           <el-divider :key="`group_divider_${index}`" v-bind="fs.setting">
-            <el-icon v-if="fs.setting.icon" v-bind="iconBind(s.setting.icon)" ></el-icon>
+            <el-icon v-if="fs.setting.icon" v-bind="iconBind(fs.setting.icon)" ></el-icon>
             {{fs.setting.label}}</el-divider>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='inline'">
