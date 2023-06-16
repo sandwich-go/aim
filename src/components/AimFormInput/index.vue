@@ -15,7 +15,9 @@
         size="mini">
       <template v-for="(fs,index) in fieldSorted">
         <template v-if="fs.__isGroup && fs.setting.type ==='divider'">
-          <el-divider :key="`group_divider_${index}`" v-bind="fs.setting">{{fs.setting.label}}</el-divider>
+          <el-divider :key="`group_divider_${index}`" v-bind="fs.setting">
+            <el-icon v-if="fs.setting.icon" v-bind="iconBind(s.setting.icon)" ></el-icon>
+            {{fs.setting.label}}</el-divider>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='inline'">
           <el-row :key="`group_inline_${index}`">
@@ -173,6 +175,12 @@ export default {
         return indexA - indexB;
       });
       return ret
+    },
+    iconBind(icon) {
+      if(jsb.isString(icon)){
+        return {class:icon,style:{'padding-right':'3px'}}
+      }
+      return icon
     },
     processSchema() {
       if (!this.dataRef) {
