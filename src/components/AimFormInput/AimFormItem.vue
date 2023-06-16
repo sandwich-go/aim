@@ -8,18 +8,34 @@
       </column-header>
   </span>
     <template v-if="registeredComponentMap[cellName]">
-      <component
-          :is="registeredComponentMap[cellName]"
-          :data="dataRef"
-          :field-name="fs.field"
-          :options="fs.options || []"
-          :style-base="{width:'100%'}"
-          :cell-config="cellConfig(fs)"
-          :field-schema="fs"
-          :formatter="fs['formatterForm']"
-          :disabled="shouldDisable()"
-          :key="fieldComponentKey(fs)"
-      ></component>
+        <component
+            v-if="!fs['formButton']"
+            :is="registeredComponentMap[cellName]"
+            :data="dataRef"
+            :field-name="fs.field"
+            :options="fs.options || []"
+            :style-base="{width:'100%'}"
+            :cell-config="cellConfig(fs)"
+            :field-schema="fs"
+            :formatter="fs['formatterForm']"
+            :disabled="shouldDisable()"
+            :key="fieldComponentKey(fs)"
+        ></component>
+      <div v-else style="display:inline-flex;align-items:center;width: 100%">
+        <component
+            :is="registeredComponentMap[cellName]"
+            :data="dataRef"
+            :field-name="fs.field"
+            :options="fs.options || []"
+            :style-base="{width:'100%'}"
+            :cell-config="cellConfig(fs)"
+            :field-schema="fs"
+            :formatter="fs['formatterForm']"
+            :disabled="shouldDisable()"
+            :key="fieldComponentKey(fs)"
+        ></component>
+        <el-button v-bind="fs['formButton']" @click="$emit('code-cell-click', {code: fs['formButton'].code, jsEvent:$event,row:getRow()})"></el-button>
+      </div>
     </template>
     <div v-else-if="isAimTable(cellName)">
       <el-card class="box-card" shadow="always">
