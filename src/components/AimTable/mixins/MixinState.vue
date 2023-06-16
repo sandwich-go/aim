@@ -64,6 +64,9 @@ export default {
     thisTarget() {
       return this
     },
+    each(visitor){
+      jsb.each(this.tableData,visitor)
+    },
     setLoading(inLoading){this.inLoading = inLoading},
     summaryRow(row) {
       let info = [`xid(${xidRow(row)})`]

@@ -204,6 +204,9 @@ export default {
           if(!asCommonField) {
             return
           }
+          if(groupSetting.type==='divider') {
+            fieldGroupList.push({index:index,setting:groupSetting,__isGroup:true})
+          }
           const fields = groupSetting.fields
           let fieldShouldInGroup
           if(fields){
@@ -228,12 +231,6 @@ export default {
         })
         if(asCommonField){
           fieldsCommon.push(fs)
-        }
-      })
-
-      jsb.each(_this.groupConfig,function (groupSetting,index){
-        if(groupSetting.type==='divider') {
-          fieldGroupList.push({index:index,setting:groupSetting,__isGroup:true})
         }
       })
 
