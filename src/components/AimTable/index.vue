@@ -617,6 +617,7 @@ export default {
         // 按钮的禁用需要根据code区分，暂时全部屏蔽
         return true
       }
+      code = code || jsb.pathGet(cell,'code')
       if (this.inSortIndexEdit) {
         return code !== CodeButtonSortIndex;
       }

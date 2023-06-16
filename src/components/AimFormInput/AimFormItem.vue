@@ -34,7 +34,9 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-        <el-button v-bind="fs['formButton']" @click="$emit('code-cell-click', {code: fs['formButton'].code, jsEvent:$event,row:getRow()})"></el-button>
+        <el-button v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
+          {{fs['formButton'].circle?'':fs['formButton'].label}}
+        </el-button>
       </div>
     </template>
     <div v-else-if="isAimTable(cellName)">
