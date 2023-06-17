@@ -191,10 +191,11 @@ export default {
       const _this = this
 
       jsb.each(this.schema, function (fs) {
+        let formOff = fs['formOff']
         if (isVirtualField(fs)) {
-          return
+          formOff = true
         }
-        if (fs['formOff']) {
+        if (formOff) {
           return
         }
 

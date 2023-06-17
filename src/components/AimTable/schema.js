@@ -5,6 +5,8 @@
 import jsb from "@sandwich-go/jsb";
 import {type2DefaultVal} from "@/components/cells/types";
 
+
+
 export function isVirtualField(fs) {
     return !fs.field || fs.virtual
 }
