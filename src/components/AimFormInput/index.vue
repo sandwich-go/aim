@@ -191,11 +191,15 @@ export default {
       const _this = this
 
       jsb.each(this.schema, function (fs) {
-        let formOff = fs['formOff']
-        if (isVirtualField(fs)) {
-          formOff = true
+        let formOff = jsb.pathGet(fs,'formOff',undefined)
+        if(formOff === undefined) {
+          formOff = !!isVirtualField(fs);
         }
         if (formOff) {
+          return
+        }
+
+        if(_this.mode === AimFormInputInsert && jsb.pathGet(fs,'insertOff',false)){
           return
         }
 
