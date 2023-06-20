@@ -67,6 +67,9 @@ export default {
     each(visitor){
       jsb.each(this.tableData,visitor)
     },
+    eachSelected(visitor,clean=false){
+      jsb.each(this.getSelectionRows(clean),visitor)
+    },
     setLoading(inLoading){this.inLoading = inLoading},
     summaryRow(row) {
       let info = [`xid(${xidRow(row)})`]
