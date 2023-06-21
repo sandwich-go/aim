@@ -219,7 +219,10 @@
             :enable-watcher="false"
         >
           <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
-            <slot :name="tipSlotName(fs)" :field-schema="fs"/>
+            <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
+          </template>
+          <template v-for="fs in schema" v-slot:[getProxyCommentSlotName(fs)]="{}">
+            <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fs"/>
           </template>
         </aim-form-input>
       </template>
@@ -307,7 +310,13 @@ import {
   cellNameForTable,
   formatterFunction
 } from "@/components/AimTable/cell";
-import {getProxySlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import {
+  commentSlotName,
+  getProxyCommentSlotName,
+  getProxySlotName,
+  getProxyTipSlotName,
+  tipSlotName
+} from "@/components/AimTable/slot";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
 import {cellNameForFormByType} from "@/components/cells/types";
@@ -391,6 +400,7 @@ export default {
     // 占位
     this.getProxySlotName()
     this.getProxyTipSlotName()
+    this.getProxyCommentSlotName()
     this.tipSlotName()
 
     let dragCallback = null
@@ -413,6 +423,7 @@ export default {
     this.initDrag(dragCallback)
   },
   methods: {
+    commentSlotName,
     rowFormEditorTitle,
     formatterFunction,
     cellShowWhenGetLostForTable: cellShowWhenLostForTable,
@@ -423,6 +434,7 @@ export default {
     tipSlotName,
     getProxySlotName,
     getProxyTipSlotName,
+    getProxyCommentSlotName,
     setDebugMessage(title, msg = '') {
       aimTableLog(title, msg)
     },

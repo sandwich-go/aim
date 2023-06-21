@@ -30,7 +30,14 @@
                     :get-row="getRow"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
-                ></aim-form-item>
+                >
+                  <template :slot="tipSlotName(fs)">
+                    <slot :name="getProxyTipSlotName(fs)"></slot>
+                  </template>
+                  <template :slot="commentSlotName(fs)">
+                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  </template>
+                </aim-form-item>
               </el-col>
             </template>
           </el-row>
@@ -54,7 +61,14 @@
                     :show-label="false"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
-                ></aim-form-item>
+                >
+                  <template :slot="tipSlotName(fs)">
+                    <slot :name="getProxyTipSlotName(fs)"></slot>
+                  </template>
+                  <template :slot="commentSlotName(fs)">
+                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  </template>
+                </aim-form-item>
               </el-tab-pane>
             </el-tabs>
           </el-form-item>
@@ -71,6 +85,9 @@
         >
           <template :slot="tipSlotName(fs)">
             <slot :name="getProxyTipSlotName(fs)"></slot>
+          </template>
+          <template :slot="commentSlotName(fs)">
+            <slot :name="getProxyCommentSlotName(fs)"></slot>
           </template>
         </aim-form-item>
       </template>
@@ -89,7 +106,7 @@ import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import {isVirtualField} from "@/components/AimTable/schema";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
-import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
 export default {
@@ -142,6 +159,7 @@ export default {
   },
   created() {
     this.getProxyTipSlotName()
+    this.getProxyCommentSlotName()
   },
   data() {
     return {
@@ -159,9 +177,11 @@ export default {
     }
   },
   methods: {
+    commentSlotName,
     tipSlotName,
     isString,
     getProxyTipSlotName,
+    getProxyCommentSlotName,
     afterField(fieldGroupList,field){
       let ret = []
       jsb.each(fieldGroupList,function (group){

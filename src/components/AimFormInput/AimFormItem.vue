@@ -86,6 +86,7 @@
 
     <span v-if="fs.comment" class="aim-form-item-comment" :style="commentStyle">{{ comment(getRow(), fs, 'comment') }}</span>
     <span v-if="fs.commentHTML" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),fs,'commentHTML')"></span>
+    <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fs" :row="getRow()"/>
   </el-form-item>
 </template>
 
@@ -102,7 +103,7 @@ import {isAimFormInput, isAimTable} from "@/components/cells/is";
 import {comment} from "@/components/AimFormInput/index";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
-import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
 export default {
@@ -153,6 +154,7 @@ export default {
   created() {
     // 占位
     this.getProxyTipSlotName()
+    this.getProxyCommentSlotName()
   },
   data(){
     return {
@@ -167,6 +169,8 @@ export default {
     }
   },
   methods: {
+    commentSlotName,
+    getProxyCommentSlotName,
     getProxyTipSlotName,
     tipSlotName,
     isAimFormInput,
