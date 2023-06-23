@@ -78,6 +78,7 @@ export default {
     if(this.drawer){
       jsb.element.fixDrawerClose(this, 'aimPopupDrawer')
     }
+    jsb.ass
     this.configData = jsb.objectAssignNX(this.configData, {
       showClose: true,
       withHeader: false,
@@ -90,6 +91,7 @@ export default {
       appendToBody: false,
       close: null,
       customClass: '',
+      footerStyle:{'padding-right':'6px','padding-top':'9px'}
     })
     if(this.title) {
       this.configData.withHeader = true

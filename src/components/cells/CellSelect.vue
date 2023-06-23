@@ -10,6 +10,7 @@
         v-for="option in optionsComputed"
         :key="option.value"
         :label="option.label"
+        :disabled="option.disabled"
         :value="option.value">
     </el-option>
   </el-select>

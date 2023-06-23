@@ -8,6 +8,7 @@ export const typeDefaults = {
         form:'CellInput',
         default:'',
     },
+
     input_number:{
         table:'CellViewLabel',
         form:'CellInputNumber',
@@ -107,7 +108,7 @@ export const typeDefaults = {
         default:'',
     },
     password:{
-        table:'CellPassword',
+        table:'CellViewLabel',
         form:'CellPassword',
         default:'',
     },
@@ -158,7 +159,6 @@ export function formatValue(fieldType,fieldValue) {
     }
     return fieldValue
 }
-
 
 // 基础类型到table显示组件的映射
 export const types2TableInPlaceCellName = jsb.clone(type2FormCellName)

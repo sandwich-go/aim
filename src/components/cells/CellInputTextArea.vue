@@ -12,6 +12,7 @@
 
 <script>
 import MixinCell from "@/components/cells/mixins/MixinCell.vue";
+
 import CellInput from "@/components/cells/CellInput.vue";
 export default {
   name: 'CellInputTextArea',
@@ -22,7 +23,7 @@ export default {
       this.cellConfig = {}
     }
     this.cellConfig.type = 'textarea'
-    this.cellConfig.size = 1
+    this.cellConfig.autosize={ minRows: 1}
   }
 }
 </script>

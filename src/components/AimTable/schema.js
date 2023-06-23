@@ -5,6 +5,8 @@
 import jsb from "@sandwich-go/jsb";
 import {type2DefaultVal} from "@/components/cells/types";
 
+
+
 export function isVirtualField(fs) {
     return !fs.field || fs.virtual
 }
@@ -36,6 +38,10 @@ export function defaultRow(schema, row) {
         if (!jsb.isUndefined(defaultVal)) {
             row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal() : defaultVal
             return
+        }
+        if(fieldSchema.type==='object' && fieldSchema.fields) {
+            row[fieldName] = defaultRow(fieldSchema.fields,row[fieldName])
+            return;
         }
         const vByType = type2DefaultVal[fieldSchema.type]
         if(jsb.isFunction(vByType)){

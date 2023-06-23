@@ -15,7 +15,9 @@
         size="mini">
       <template v-for="(fs,index) in fieldSorted">
         <template v-if="fs.__isGroup && fs.setting.type ==='divider'">
-          <el-divider :key="`group_divider_${index}`" v-bind="fs.setting">{{fs.setting.label}}</el-divider>
+          <el-divider :key="`group_divider_${index}`" v-bind="fs.setting">
+            <el-icon v-if="fs.setting.icon" v-bind="iconBind(fs.setting.icon)" ></el-icon>
+            {{fs.setting.label}}</el-divider>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='inline'">
           <el-row :key="`group_inline_${index}`">
@@ -28,7 +30,14 @@
                     :get-row="getRow"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
-                ></aim-form-item>
+                >
+                  <template :slot="tipSlotName(fs)">
+                    <slot :name="getProxyTipSlotName(fs)"></slot>
+                  </template>
+                  <template :slot="commentSlotName(fs)">
+                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  </template>
+                </aim-form-item>
               </el-col>
             </template>
           </el-row>
@@ -52,7 +61,14 @@
                     :show-label="false"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
-                ></aim-form-item>
+                >
+                  <template :slot="tipSlotName(fs)">
+                    <slot :name="getProxyTipSlotName(fs)"></slot>
+                  </template>
+                  <template :slot="commentSlotName(fs)">
+                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  </template>
+                </aim-form-item>
               </el-tab-pane>
             </el-tabs>
           </el-form-item>
@@ -69,6 +85,9 @@
         >
           <template :slot="tipSlotName(fs)">
             <slot :name="getProxyTipSlotName(fs)"></slot>
+          </template>
+          <template :slot="commentSlotName(fs)">
+            <slot :name="getProxyCommentSlotName(fs)"></slot>
           </template>
         </aim-form-item>
       </template>
@@ -87,7 +106,7 @@ import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import {isVirtualField} from "@/components/AimTable/schema";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
-import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
 export default {
@@ -140,6 +159,7 @@ export default {
   },
   created() {
     this.getProxyTipSlotName()
+    this.getProxyCommentSlotName()
   },
   data() {
     return {
@@ -157,9 +177,11 @@ export default {
     }
   },
   methods: {
+    commentSlotName,
     tipSlotName,
     isString,
     getProxyTipSlotName,
+    getProxyCommentSlotName,
     afterField(fieldGroupList,field){
       let ret = []
       jsb.each(fieldGroupList,function (group){
@@ -167,7 +189,18 @@ export default {
           ret.push(group)
         }
       })
+      ret.sort(function(a, b) {
+        const indexA = a.setting.index || 0
+        const indexB = b.setting.index || 0
+        return indexA - indexB;
+      });
       return ret
+    },
+    iconBind(icon) {
+      if(jsb.isString(icon)){
+        return {class:icon,style:{'padding-right':'3px'}}
+      }
+      return icon
     },
     processSchema() {
       if (!this.dataRef) {
@@ -178,9 +211,18 @@ export default {
       const _this = this
 
       jsb.each(this.schema, function (fs) {
-        if (isVirtualField(fs)) {
+        let formOff = jsb.pathGet(fs,'formOff',undefined)
+        if(formOff === undefined) {
+          formOff = !!isVirtualField(fs);
+        }
+        if (formOff) {
           return
         }
+
+        if(_this.mode === AimFormInputInsert && jsb.pathGet(fs,'insertOff',false)){
+          return
+        }
+
         const itemType = _this.fieldType(fs)
         // 如果是object类型，在传递进 FormInput 组件前需要给默认值
         if (itemType === 'object' && jsb.isEmpty(_this.dataRef[fs.field])) {
@@ -192,7 +234,7 @@ export default {
         const watch = jsb.pathGet(fs,'watch')
         if(_this.enableWatcher && watch){
           _this.$watch(`dataRef.${fs.field}`,function (newValue, oldValue){
-            watch({row:this.data,newValue, oldValue})
+            watch({row:this.getRow(),newValue, oldValue})
           })
         }
         let asCommonField = true

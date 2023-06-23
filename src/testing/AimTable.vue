@@ -35,6 +35,26 @@
           ></el-option>
         </el-select>
       </template>
+      <template v-slot:commentSlot>
+        <el-table
+            :data="tipTableData"
+            style="width: 100%">
+          <el-table-column
+              prop="date"
+              label="日期"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="name"
+              label="姓名"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="address"
+              label="地址">
+          </el-table-column>
+        </el-table>
+      </template>
       <template v-slot:password_tip>
         <el-table
             :data="tipTableData"
@@ -398,9 +418,10 @@ export default {
         {
           field: 'password', name: 'password', sortable: true, uniq: true,
           placeholder: "xxx.xx",
-          commentHTML: "用户名不要携带@centurygame.com后缀",
+          // commentHTML: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           tipSlot: 'password_tip',
+          commentSlot: 'commentSlot',
           required: true,
           cellFormConfig: {
             checkPermission: () => {

@@ -9,6 +9,7 @@
   </span>
     <template v-if="registeredComponentMap[cellName]">
       <component
+            v-if="!fs['formButton']"
           :is="registeredComponentMap[cellName]"
           :data="dataRef"
           :field-name="fs.field"
@@ -16,9 +17,27 @@
           :style-base="{width:'100%'}"
           :cell-config="cellConfig(fs)"
           :field-schema="fs"
-          :disabled="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
+            :formatter="fs['formatterForm']"
+            :disabled="shouldDisable()"
           :key="fieldComponentKey(fs)"
       ></component>
+      <div v-else style="display:inline-flex;align-items:center;width: 100%">
+        <component
+            :is="registeredComponentMap[cellName]"
+            :data="dataRef"
+            :field-name="fs.field"
+            :options="fs.options || []"
+            :style-base="{width:'100%'}"
+            :cell-config="cellConfig(fs)"
+            :field-schema="fs"
+            :formatter="fs['formatterForm']"
+            :disabled="shouldDisable()"
+            :key="fieldComponentKey(fs)"
+        ></component>
+        <el-button v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
+          {{fs['formButton'].circle?'':fs['formButton'].label}}
+        </el-button>
+      </div>
     </template>
     <div v-else-if="isAimTable(cellName)">
       <el-card class="box-card" shadow="always">
@@ -43,6 +62,7 @@
           :label-width="getSubFormLabelWidth(fs)"
           :parent-key="fs.field"
           :key="fieldComponentKey(fs)"
+          :group-config="fs['groupConfig'] || []"
           :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
           :should-cell-disable="shouldCellDisable"
           :popup-append-to-body="true"
@@ -55,6 +75,7 @@
             :label-width="getSubFormLabelWidth(fs)"
             :parent-key="fs.field"
             :key="fieldComponentKey(fs)"
+            :group-config="fs['groupConfig'] || []"
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
             :should-cell-disable="shouldCellDisable"
             :popup-append-to-body="true"
@@ -65,6 +86,7 @@
 
     <span v-if="fs.comment" class="aim-form-item-comment" :style="commentStyle">{{ comment(getRow(), fs, 'comment') }}</span>
     <span v-if="fs.commentHTML" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),fs,'commentHTML')"></span>
+    <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fs" :row="getRow()"/>
   </el-form-item>
 </template>
 
@@ -79,8 +101,8 @@ import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local"
 import {xidRow} from "@/components/AimTable/table";
 import {isAimFormInput, isAimTable} from "@/components/cells/is";
 import {comment} from "@/components/AimFormInput/index";
-import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
-import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";;
+import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
 export default {
@@ -130,9 +152,11 @@ export default {
   created() {
     // 占位
     this.getProxyTipSlotName()
+    this.getProxyCommentSlotName()
   },
   data(){
     return {
+      dateFormatter:{},
       cellName:cellNameForForm(this.fs, this.getRow()),
       squashDividerConfig:this.getSquashDividerConfig(this.fs),
       commentStyle :jsb.cc.aimFormCommentStyle || {
@@ -143,11 +167,16 @@ export default {
     }
   },
   methods: {
+    commentSlotName,
+    getProxyCommentSlotName,
     getProxyTipSlotName,
     tipSlotName,
     isAimFormInput,
     isAimTable,
     comment,
+    shouldDisable(){
+      return this.privateShouldCellDisable({fieldSchema:this.fs,cell:this.cellConfig(this.fs) ||{}})
+    },
     getShowLabel(fs){
       // tab显示的时候不再显示label，遵循上级设定
       if(!this.showLabel){
