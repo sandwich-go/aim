@@ -101,7 +101,7 @@ import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local"
 import {xidRow} from "@/components/AimTable/table";
 import {isAimFormInput, isAimTable} from "@/components/cells/is";
 import {comment} from "@/components/AimFormInput/index";
-import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";;
+import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 
