@@ -12,6 +12,7 @@
             v-if="!fs['formButton']"
             :is="registeredComponentMap[cellName]"
             :data="dataRef"
+            :get-row="getRow"
             :field-name="fs.field"
             :options="fs.options || []"
             :style-base="{width:'100%'}"
@@ -25,6 +26,7 @@
         <component
             :is="registeredComponentMap[cellName]"
             :data="dataRef"
+            :get-row="getRow"
             :field-name="fs.field"
             :options="fs.options || []"
             :style-base="{width:'100%'}"

@@ -18,6 +18,8 @@ export default {
     disabled: Boolean,    // 是否只读
 
     fieldSchema:Object,   // trigger时需要通过fieldSchema定位fields字段数据
+
+    getRow:Function,
   },
   data() {
     const _this = this
@@ -67,7 +69,7 @@ export default {
       }
     },
     getOptions() {
-      return (jsb.isFunction(this.options)?this.options():this.options) || []
+      return (jsb.isFunction(this.options)?this.options({row:this.getRow(),data:this.dataRef}):this.options) || []
     },
     emitClick(jsEvent) {
       this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})
