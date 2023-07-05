@@ -69,7 +69,11 @@ export default {
       }
     },
     getOptions() {
-      return (jsb.isFunction(this.options)?this.options({row:this.getRow(),data:this.dataRef}):this.options) || []
+      let row = null
+      if(this.getRow){
+        row = this.getRow()
+      }
+      return (jsb.isFunction(this.options)?this.options({row:row,data:this.dataRef}):this.options) || []
     },
     emitClick(jsEvent) {
       this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})
