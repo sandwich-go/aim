@@ -55,7 +55,7 @@ export default {
         }
         _this.rowWatchFunc(() => row[fieldSchema.field],(newValue, oldValue) => {
           fieldSchema.watch({newValue, oldValue,row})
-        });
+        },fieldSchema.watchOptions);
       })
     },
     getTableRef() {
