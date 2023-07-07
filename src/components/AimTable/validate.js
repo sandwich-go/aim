@@ -1,3 +1,4 @@
+
 const jsb = require("@sandwich-go/jsb")
 
 import {xidRow} from "@/components/AimTable/table";
@@ -40,4 +41,5 @@ export function formRulesFromSchema(schema, paramsVisitor = undefined, nameField
     })
     return rules
 }
+
 
