@@ -59,6 +59,7 @@ export function flexColumnWidth(schema,tableData) {
 
         const minWidth = minWidthTableColumn(fieldSchema.type)
         const arr = tableData.map(x => x[fieldSchema.field])
+        jsb.remove(arr,item => jsb.isEmpty(item))
         let width = jsb.longestTextWidth(arr)
         if(width < minWidth){
             width = minWidth
