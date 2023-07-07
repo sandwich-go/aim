@@ -130,7 +130,7 @@ export default {
       this.updateRowInEdit(newRow)
 
       if (this.isModeInplace()) {
-        // inplace编辑模式
+        // in place 编辑模式
         this.tableData.push(newRow)
       } else {
         // form 表单编辑逻辑

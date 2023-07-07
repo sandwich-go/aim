@@ -372,11 +372,13 @@ export default {
           summary: true,
           readOnly: true,
           fixed: "left",
+          uniq: true,
           filter: {
             placeholder: '请输入ID', format: (v) => {
               return Number(v)
             }
-          }
+          },
+          rules:[{required: true, message: '参数不能为空', trigger: 'blur'},{required: true, message: '参数不能为空', trigger: 'blur'}]
         },
         {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable: true, align: 'center',default:0},
         {field: 'image', name: 'image', type: 'image',sortable: false, align: 'center',width:80,          options:[{
@@ -445,7 +447,7 @@ export default {
           },
           cellFormConfig: {
             tableProperty: {autoWidth: false},
-            editConfig: {mode: EditModeFormInput, trigger: EditTriggerManualAndDBLClick, name: "testing"},
+            editConfig: {mode: EditModeInplace, name: "testing"},
           },
           fields: [
             {field: 'UseSystemSSH', name: '系统SSH秘钥', type: 'switch', cellForm: 'CellSwitch', width: 160,},
