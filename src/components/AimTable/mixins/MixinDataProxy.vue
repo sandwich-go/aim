@@ -1,6 +1,6 @@
 <script>
 import {deleteConfirmConfig} from "@/components/AimTable/confirm";
-import {cleanData, removeCtrlData} from "@/components/AimTable/table";
+import {aimTableError, cleanData, removeCtrlData} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
 import {formatterForUpdate} from "@/components/AimTable/clean";
@@ -86,13 +86,14 @@ export default {
         okToast && !this.proxyConfigRef.isLocalData && this.toastSuccess(okToast)
         done && done({resp})
       }).catch(error => {
+        aimTableError(`tryPromise ${funcName} err:${error.toString()}`,error.stack)
         done && done({error})
         let needToast = true
         if(jsb.isPlainObject(error)){
           needToast = jsb.pathGet(error,'toast',false)
         }
         if(needToast){
-          !this.proxyConfigRef.isLocalData && this.toastError(error)
+          !this.proxyConfigRef.isLocalData && this.toastError(error.toString())
         }
       }).finally(() => {
         this.inLoading = false
