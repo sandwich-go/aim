@@ -54,7 +54,13 @@
     <div v-else-if="isAimFormInput(cellName)">
       <template v-if="fs['squashDivider']">
         <el-divider v-bind="squashDividerConfig">
-          <i v-if="squashDividerConfig.icon" :class="squashDividerConfig.icon" :style="getSquashDividerIconStyle()"></i>{{formLabel(fs)}}</el-divider>
+          <i v-if="squashDividerConfig.icon" :class="squashDividerConfig.icon" :style="getSquashDividerIconStyle()"></i>
+          <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)">
+            <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
+              <slot :name="tipSlotName(fs)" :field-schema="fs"/>
+            </template>
+          </column-header>
+        </el-divider>
       </template>
       <aim-form-input
           v-if="shouldSquash(fs)"
