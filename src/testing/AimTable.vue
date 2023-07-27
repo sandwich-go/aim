@@ -381,6 +381,8 @@ export default {
           }
         },
         {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable: true, align: 'center',default:0},
+        {field: 'TagList', name: 'TagList', type: 'select_multiple_input', sortable: true, align: 'center'},
+
         {field: 'image', name: 'image', type: 'image',sortable: false, align: 'center',width:80,          options:[{
             id: '1',
             src: 'https://unsplash.it/200?random',

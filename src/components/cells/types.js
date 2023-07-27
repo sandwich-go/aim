@@ -46,6 +46,11 @@ export const typeDefaults = {
         form:'CellSelectMultiple',
         default: () => [],
     },
+    select_multiple_input: {
+        table:'CellViewTag',
+        form:'CellSelectMultipleInput',
+        default: () => [],
+    },
     select_group:  {
         table:'CellViewTag',
         form:'CellSelectGroup',
