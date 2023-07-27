@@ -21,8 +21,9 @@ export default {
       enable: true,
       layout: `->,total, prev, pager, next,sizes`,
       background: true,
-      pageSizes :[1,10,20,30,50],
+      pageSizes :[10,20,30,50],
     })
+
     this.pagerConfigRef.cell = 'CellPager'
     this.pagerConfigRef.data = this.thisTarget()
     this.PagerInit(this.proxyQueryData)
@@ -30,7 +31,7 @@ export default {
   methods: {
     PagerInit(onPageChangeFunc) {
       this.PagerFreshFunc = onPageChangeFunc
-      this.PagerAutoGenSize = this.pagerConfigRef.pageSizes[0]
+      this.PagerAutoGenSize = 30
     },
     PagerPageChange(e) {
       this.PagerAutoGenPage = e - 1
