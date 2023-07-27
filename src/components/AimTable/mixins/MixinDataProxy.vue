@@ -174,7 +174,10 @@ export default {
           jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')),(item)=>{
             this.tableData.push(item)
           })
-          this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
+          this.PagerTotal = jsb.pathGet(resp, 'PagerTotal')
+          if(!this.PagerTotal){
+            this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
+          }
           this.doLayout(true)
         }
         done && done({error})

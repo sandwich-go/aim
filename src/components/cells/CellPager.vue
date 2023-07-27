@@ -1,11 +1,11 @@
 <template>
   <el-pagination
-      background
+      :background="cc.background"
       :layout="cc.layout"
       :total="dataRef['PagerTotal']"
       :current-page="dataRef['PagerAutoGenPage'] + 1"
       :page-size="dataRef['PagerAutoGenSize']"
-      :page-sizes="[10, 20, 30, 50]"
+      :page-sizes="cc.pageSizes"
       @size-change="dataRef['PagerPageSizeChange']"
       @current-change="dataRef['PagerPageChange']"
   />

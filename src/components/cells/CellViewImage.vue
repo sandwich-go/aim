@@ -33,8 +33,5 @@ import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.v
 export default {
   name: "CellViewImage",
   mixins: [MixinCellViewConfig],
-  created() {
-    console.log("fieldValueFormatted ",this.fieldValueFormatted)
-  }
 }
 </script>

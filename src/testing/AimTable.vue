@@ -643,9 +643,10 @@ export default {
           if (params && params.name) {
             jsb.remove(dataRet, item => item.name !== params.name)
           }
+          const start = params.AutoGenPage*params.AutoGenSize
           return new Promise((resolve) => {
             resolve({
-              Data: dataRet, //模拟数据返回
+              Data: dataRet.slice(start,start+params.AutoGenSize), //模拟数据返回
               Total: dataRet.length,
             })
           })

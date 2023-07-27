@@ -12,27 +12,25 @@ export default {
       pagerConfigRef: this.pagerConfig ||{enable:false},
       PagerTotal: 0,
       PagerAutoGenPage: 0,
-      PagerAutoGenSize: 30,
+      PagerAutoGenSize: 1,
       PagerFreshFunc: null,
     }
   },
   created() {
     this.pagerConfigRef = jsb.objectAssignNX(this.pagerConfigRef, {
       enable: true,
-      pagerConfig: {
-        layout: `->,total, prev, pager, next, sizes`,
-        background: true,
-        totalFiled: 'PagerTotal',
-        currentPageField: 'PagerAutoGenPage',
-        pageSizeField: 'PagerAutoGenSize',
-      }
+      layout: `->,total, prev, pager, next,sizes`,
+      background: true,
+      pageSizes :[1,10,20,30,50],
     })
+    this.pagerConfigRef.cell = 'CellPager'
+    this.pagerConfigRef.data = this.thisTarget()
     this.PagerInit(this.proxyQueryData)
   },
   methods: {
-    PagerInit(onPageChangeFunc, autoGenSize = 30) {
+    PagerInit(onPageChangeFunc) {
       this.PagerFreshFunc = onPageChangeFunc
-      this.PagerAutoGenSize = autoGenSize
+      this.PagerAutoGenSize = this.pagerConfigRef.pageSizes[0]
     },
     PagerPageChange(e) {
       this.PagerAutoGenPage = e - 1

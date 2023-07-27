@@ -30,7 +30,7 @@ export default {
       })
     })
     if (this.pagerConfigRef.enable && !pagerFound) {
-      this.footerConfigRef.rightCells.push({cell: 'CellPager', data: this.thisTarget()})
+      this.footerConfigRef.rightCells.push(this.pagerConfigRef)
     }
   }
 }
