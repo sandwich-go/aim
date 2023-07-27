@@ -31,7 +31,7 @@ export function defaultRow(schema, row) {
             return;
         }
         const fieldName = fieldSchema.field
-        if (!jsb.isUndefined(row[fieldName])) {
+        if (!jsb.isUndefined(row[fieldName]) && !jsb.isNull(row[fieldName])) {
             return
         }
         const defaultVal = jsb.pathGet(fieldSchema, 'default', undefined)
