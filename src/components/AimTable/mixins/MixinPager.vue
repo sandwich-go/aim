@@ -27,7 +27,7 @@ export default {
         pageSizeField: 'PagerAutoGenSize',
       }
     })
-    this.PagerInit(this.tryProxyQueryData)
+    this.PagerInit(this.proxyQueryData)
   },
   methods: {
     PagerInit(onPageChangeFunc, autoGenSize = 30) {
