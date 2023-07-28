@@ -64,16 +64,23 @@ export function rowFormEditorTitle(mode) {
     return AimFormInputMode2Title[mode]
 }
 
-function autoOption(fieldSchema, fieldVal) {
-    if (!fieldSchema.filter.options) {
-        fieldSchema.filter.options = []
+function autoOption(parent, fieldVal) {
+    if (!parent.options) {
+        parent.options = []
     }
-    const optionIndex = jsb.findIndexOf(fieldSchema.filter.options, function (option) {
+    const optionIndex = jsb.findIndexOf(parent.options, function (option) {
         return option.value === fieldVal
     })
     if (optionIndex === -1) {
-        fieldSchema.filter.options.push({label: fieldVal, value: fieldVal})
+        parent.options.push({label: fieldVal, value: fieldVal})
     }
+}
+
+function autoOptionFunc(autoOption,fieldVal){
+    if(jsb.isFunction(autoOption)){
+        return autoOption(fieldVal)
+    }
+    return jsb.wrapArray(fieldVal)
 }
 
 
@@ -84,12 +91,21 @@ export function cleanData(data, schema,item2Row) {
         row = defaultRow(schema, row)
         jsb.each(schema, function (fieldSchema) {
             // 自动为filter准备option
-            if (jsb.pathGet(fieldSchema, 'filter.autoOption', false)) {
-                const fieldVal = row[fieldSchema.field]
-                if (!fieldVal) {
-                    return
-                }
-                autoOption(fieldSchema, fieldVal)
+            const fieldVal = row[fieldSchema.field]
+            if (!fieldVal) {
+                return
+            }
+            const filterAutoOption = jsb.pathGet(fieldSchema, 'filter.autoOption', false)
+            if (filterAutoOption) {
+                jsb.each(autoOptionFunc(filterAutoOption,fieldVal),option=>{
+                    autoOption(fieldSchema.filter, option)
+                })
+            }
+            const schemaAutoOption = jsb.pathGet(fieldSchema, 'autoOption', false)
+            if (schemaAutoOption) {
+                jsb.each(autoOptionFunc(schemaAutoOption,fieldVal),option=>{
+                    autoOption(fieldSchema, option)
+                })
             }
         })
         data[index] = row
