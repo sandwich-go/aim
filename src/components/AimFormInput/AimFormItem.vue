@@ -36,7 +36,7 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-        <el-button v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})" style="margin-left: 3px">
+        <el-button v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
           {{fs['formButton'].circle?'':fs['formButton'].label}}
         </el-button>
       </div>
