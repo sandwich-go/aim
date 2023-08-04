@@ -39,6 +39,9 @@
         <el-button v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
           {{fs['formButton'].circle?'':fs['formButton'].label}}
         </el-button>
+        <el-link v-bind="fs['formLink']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
+          {{fs['formButton'].label}}
+        </el-link>
       </div>
     </template>
     <div v-else-if="isAimTable(cellName)">
