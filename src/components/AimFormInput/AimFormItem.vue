@@ -9,7 +9,7 @@
   </span>
     <template v-if="registeredComponentMap[cellName]">
         <component
-            v-if="!fs['formButton']"
+            v-if="!fs['formButton'] && !fs['formLink']"
             :is="registeredComponentMap[cellName]"
             :data="dataRef"
             :get-row="getRow"
@@ -36,11 +36,11 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-        <el-button v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
+        <el-button v-if="fs['formButton']" v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
           {{fs['formButton'].circle?'':fs['formButton'].label}}
         </el-button>
-        <el-link v-bind="fs['formLink']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
-          {{fs['formButton'].label}}
+        <el-link v-if="fs['formLink']" v-bind="fs['formLink']" @click="fs['formLink'].click({jsEvent:$event,row:getRow()})">
+          {{fs['formLink'].label}}
         </el-link>
       </div>
     </template>
