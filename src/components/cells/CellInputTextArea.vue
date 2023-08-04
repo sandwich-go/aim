@@ -22,7 +22,9 @@ export default {
       this.cellConfig = {}
     }
     this.cellConfig.type = 'textarea'
-    this.cellConfig.autosize={ minRows: 3}
+    if(!this.cellConfig.autosize){
+      this.cellConfig.autosize={ minRows: 3}
+    }
   }
 }
 </script>
