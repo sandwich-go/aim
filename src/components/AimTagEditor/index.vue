@@ -6,6 +6,8 @@
         v-for="tag in tags"
         closable
         :disable-transitions="false"
+        :type="tagType(tag)"
+        :effect="tagEffect(tag)"
         @close="handleClose(tag)">
       {{tag}}
     </el-tag>
@@ -38,6 +40,8 @@
 </template>
 
 <script>
+const jsb = require("@sandwich-go/jsb")
+
 export default {
   name: 'AimTagEditor',
   props: {
@@ -70,6 +74,12 @@ export default {
     }
   },
   methods: {
+    tagType(tag){
+      return jsb.pathGet(tag.split('@'),[1],'primary')
+    },
+    tagEffect(tag){
+      return jsb.pathGet(tag.split('@'),[2],'light')
+    },
     handleClose(tag) {
       this.tagsRef.splice(this.tagsRef.indexOf(tag), 1);
     },

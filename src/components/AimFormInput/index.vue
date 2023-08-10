@@ -1,5 +1,6 @@
 <template>
   <div :class="height?'aim-form-container':''" :style="cssVars">
+    <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
     <cell-view-alert v-if="alertInfo"
                      :center="true"
                      style="position: sticky;font-weight: bold;top:0;margin-bottom: 9px;z-index: 1000000;"
@@ -108,10 +109,13 @@ import {isVirtualField} from "@/components/AimTable/schema";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
 import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
+import Loading from "vue-loading-overlay";
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: "AimFormInput",
   components: {
+    Loading,
     ColumnHeader,
     AimFormItem,
     CellViewAlert,
@@ -170,7 +174,7 @@ export default {
       rulesRef: this.rules,
       fieldsCommon: [],
       dataRef: this.data,
-
+      inLoading:false,
       // inline显示的字段
       fieldSorted:[],
       currTab:{},
@@ -201,6 +205,9 @@ export default {
         return {class:icon,style:{'padding-right':'3px'}}
       }
       return icon
+    },
+    setInLoading(v){
+      this.inLoading = v
     },
     processSchema() {
       if (!this.dataRef) {
