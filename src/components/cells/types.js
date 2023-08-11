@@ -120,9 +120,9 @@ export const typeDefaults = {
     }
 }
 
-export const typeOptions = []
+export const TypeOptions = []
 jsb.each(typeDefaults,(_,key)=>{
-    typeOptions.push({label:key,value:key})
+    TypeOptions.push({label:key,value:key})
 })
 
 // 基础类型到table显示组件的映射

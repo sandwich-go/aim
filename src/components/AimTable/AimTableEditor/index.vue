@@ -29,7 +29,7 @@ import {
 } from "@/components/AimTable/table";
 import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
-import { typeOptions} from "@/components/cells/types";
+import { TypeOptions} from "@/components/cells/types";
 
 const jsb = require("@sandwich-go/jsb")
 export default {
@@ -57,7 +57,7 @@ export default {
         {field: 'name', name: '名称',type:'input'},
         {
           field: 'type',type:'select',
-          name: '类型',options:typeOptions,
+          name: '类型',options:TypeOptions,
         },
         {field: 'width', name: '宽度',  type: 'input_number'},
         {field: 'min_width', name: '最小宽度',  type: 'input_number'},
