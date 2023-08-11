@@ -7,18 +7,21 @@ export const typeDefaults = {
         table:'CellViewLabel',
         form:'CellInput',
         default:'',
+        label:'单行文本输入'
     },
 
     input_number:{
         table:'CellViewLabel',
         form:'CellInputNumber',
         default:0,
-        minTableColumnWidth:90
+        minTableColumnWidth:90,
+        label:'数组输入'
     },
     textarea: {
         table:'CellViewLabel',
         form:'CellInputTextArea',
         default:'',
+        label:'多行文本输入'
     },
     select: {
         table:'CellViewTag',
@@ -26,6 +29,7 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
         },
+        label:'下拉单选'
     },
     select_input:{
         table:'CellViewLabel',
@@ -33,6 +37,7 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
         },
+        label:'下拉单选 或 单行文本输入'
     },
     select_input_tag:{
         table:'CellViewTag',
@@ -40,16 +45,19 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
         },
+        label:'下拉单选 或 标签输入'
     },
     select_multiple: {
         table:'CellViewTag',
         form:'CellSelectMultiple',
         default: () => [],
+        label:'下拉多选'
     },
     select_multiple_input: {
         table:'CellViewTag',
         form:'CellSelectMultipleInput',
         default: () => [],
+        label:'下拉多选 或 标签输入'
     },
     select_group:  {
         table:'CellViewTag',
@@ -57,72 +65,84 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.options.0.value')
         },
+        label:'下拉单选，候选项分组显示'
     },
     element_icon: {
         table:'CellViewIcon',
         form:'CellIconSelectorInput',
         default: '',
-        minTableColumnWidth:180
+        minTableColumnWidth:180,
+        label:'Element icon选择'
     },
     color: {
         table:'CellViewColor',
         form:'CellColorPicker',
         default: '',
+        label:'颜色选择'
     },
     datetime:  {
         table:'CellViewLabel',
         form:'CellDatePicker',
         default: () => jsb.dateTime(),
-        minTableColumnWidth:200
+        minTableColumnWidth:200,
+        label:'日期时间选择'
     },
     datetime_range:  {
         table:'CellDateRangePicker',
         form:'CellDateRangePicker',
         default: () => jsb.dateTime(),
-        minTableColumnWidth:360
+        minTableColumnWidth:360,
+        label:'日期时间范围选择'
     },
     switch:  {
         table:'CellViewBoolean',
         form:'CellSwitch',
         default:false,
+        label:'状态开关'
     },
     checkbox: {
         table:'CellViewBoolean',
         form:'CellCheckbox',
         default:false,
+        label:'单选状态开关'
     },
     // 复杂类型
     table: {
         table:'CellTriggerTable',
         form:'AimTable',
         default:() => [],
+        label:'表格'
     },
     object: {
         table:'CellTriggerFormInput',
         form:'AimFormInput',
         default:() => {},
+        label:'对象'
     },
     code:{
         table:'CellTriggerCodeMirror',
         form:'CellCodeMirror',
         default:'',
+        label:'代码'
     },
     password:{
         table:'CellViewLabel',
         form:'CellPassword',
         default:'',
+        label:'密码'
     },
     image:{
         table:'CellViewImage',
         table_inplace:'CellTriggerImageSelect',
         form:'CellInputImage',
         default:'',
+        label:'图像'
     }
 }
 
 export const TypeOptions = []
-jsb.each(typeDefaults,(_,key)=>{
-    TypeOptions.push({label:key,value:key})
+jsb.each(typeDefaults,(item,key)=>{
+    TypeOptions.push({label:item.label,value:key})
 })
 
 // 基础类型到table显示组件的映射
