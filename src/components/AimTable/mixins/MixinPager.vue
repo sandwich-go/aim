@@ -12,7 +12,7 @@ export default {
       pagerConfigRef: this.pagerConfig ||{enable:false},
       PagerTotal: 0,
       PagerAutoGenPage: 0,
-      PagerAutoGenSize: 1,
+      PagerAutoGenSize: 30,
       PagerFreshFunc: null,
     }
   },
@@ -31,7 +31,6 @@ export default {
   methods: {
     PagerInit(onPageChangeFunc) {
       this.PagerFreshFunc = onPageChangeFunc
-      this.PagerAutoGenSize = 30
     },
     PagerPageChange(e) {
       this.PagerAutoGenPage = e - 1

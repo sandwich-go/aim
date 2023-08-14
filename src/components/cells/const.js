@@ -50,7 +50,7 @@ code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-s-grid', type: 'primary'
 code2OptionsMapping[CodeButtonExpandAll] = {icon: 'el-icon-more', type: 'primary', circle: true, label: '展开所有'}
 code2OptionsMapping[CodeButtonTableSetting] = {icon: 'el-icon-setting',type: 'primary', circle: true, label: '表格设定'}
 code2OptionsMapping[CodeButtonSaveTableData] = {icon: 'el-icon-check', type: 'primary', circle: true, label: '保存全表'}
-code2OptionsMapping[CodeButtonFilterSearch] = {icon: 'el-icon-search', type: 'primary', circle: false,plain:true}
+code2OptionsMapping[CodeButtonFilterSearch] = {icon: 'el-icon-search', type: 'primary', circle: true,plain:true}
 
 
 code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true,plain:true}

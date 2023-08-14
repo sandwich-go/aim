@@ -8,8 +8,8 @@
               size="mini"
               :style="cc.style"
               @click.native="function(){ item.click && item.click()}"
-              :type="item.type || 'info'"
-              :effect="item.effect || 'light'">
+              :type="item.type || item.tagType || 'info'"
+              :effect="item.effect|| item.tagEffect || 'light'">
               {{ item.label }}
           </el-tag>
         </template>

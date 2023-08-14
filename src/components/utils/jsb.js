@@ -27,8 +27,8 @@ export function wrapAsTagList(val, options) {
         for (const item of options) {
             if (item.value === v) {
                 tagList.push(Object.assign({
-                    type: item.type || 'info',
-                    effect: item.effect || 'light',
+                    type: item.type || item.tagType|| 'info',
+                    effect: item.effect || item.tagEffect || 'light',
                     label: item.label
                 }, jsb.pathGet(item, 'asTag', {})))
                 found = true
