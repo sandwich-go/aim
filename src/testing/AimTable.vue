@@ -375,7 +375,8 @@ export default {
           readOnly: true,
           fixed: "left",
           filter: {
-            placeholder: '请输入ID', format: (v) => {
+            placeholder: '请输入ID',
+            format: (v) => {
               return Number(v)
             }
           }
