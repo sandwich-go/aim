@@ -431,6 +431,8 @@ export default {
             }
           },
           type: 'password',
+          disableForm:({})=>{
+            return true}
         },
         {
           field: 'AuthInfo',

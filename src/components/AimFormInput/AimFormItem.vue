@@ -193,7 +193,7 @@ export default {
     isAimTable,
     comment,
     shouldDisable(){
-      const v = disableForm(this.getRow,this.fieldSchema)
+      const v = disableForm(this.getRow(),this.fs)
       if(v){
         return v
       }

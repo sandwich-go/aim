@@ -37,6 +37,7 @@ function parseOptions(options,strList) {
         if (index === 0) {
             return
         }
+        options.circle = true
         if (v.startsWith("i_") || v.startsWith("icon_")) {
             options.icon = v.substr([v.indexOf('_')+1])
         }

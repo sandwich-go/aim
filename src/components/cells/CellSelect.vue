@@ -40,7 +40,6 @@ export default {
     isOptionsGroup(){
       const firstElement =this.optionsUsing[0] || {}
       return !!firstElement['options'];
-
     }
   }
 }
