@@ -330,6 +330,10 @@ export default {
         return true
       }
       // 只读属性，如id等依赖服务器返回，只展现不允许编辑
+      if (jsb.pathGet(fieldSchema, 'disabled', false)) {
+        return true
+      }
+      // 只读属性，如id等依赖服务器返回，只展现不允许编辑
       if (jsb.pathGet(fieldSchema, 'readOnly', false)) {
         return true
       }

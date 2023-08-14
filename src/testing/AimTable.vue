@@ -490,12 +490,16 @@ export default {
           cellConfig: {
             codeMirror: {
               infoConfig: {mode: 'go'},
+              placeholder:'placeholder',
               headerConfig: {rightCells: ['btnLint', 'btnCopy']}
             }
           },
           cellFormConfig: {
-            infoConfig: {mode: 'json'},
-            headerConfig: {rightCells: ['btnLint', 'btnCopy']}
+            codeMirror: {
+              infoConfig: {mode: 'json'},
+              placeholder:'placeholder',
+              headerConfig: {rightCells: ['btnLint', 'btnCopy']}
+            }
           },
         },
         {

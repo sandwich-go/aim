@@ -7,7 +7,7 @@ export const typeDefaults = {
         table:'CellViewLabel',
         form:'CellInput',
         default:'',
-        label:'单行文本输入'
+        label:'单行文本输入',
     },
 
     input_number:{
@@ -111,13 +111,17 @@ export const typeDefaults = {
         table:'CellTriggerTable',
         form:'AimTable',
         default:() => [],
-        label:'表格'
+        label:'表格',
+        tagType:"warning",
+        tagEffect:"dark"
     },
     object: {
         table:'CellTriggerFormInput',
         form:'AimFormInput',
         default:() => {},
-        label:'对象'
+        label:'对象',
+        tagType:"warning",
+        tagEffect:"dark"
     },
     code:{
         table:'CellTriggerCodeMirror',
@@ -142,7 +146,13 @@ export const typeDefaults = {
 
 export const TypeOptions = []
 jsb.each(typeDefaults,(item,key)=>{
-    TypeOptions.push({label:item.label,value:key})
+    TypeOptions.push({
+        label:item.label,
+        value:key,
+        tagType:item.tagType,
+        tagEffect:item.tagEffect,
+        comment:item.comment,
+    })
 })
 
 // 基础类型到table显示组件的映射

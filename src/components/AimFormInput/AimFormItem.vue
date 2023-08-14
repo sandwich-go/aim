@@ -36,10 +36,10 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-        <el-button v-if="fs['formButton']" v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow()})">
+        <el-button v-if="fs['formButton']" v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow(),value:dataRef[fs.field]})">
           {{fs['formButton'].circle?'':fs['formButton'].label}}
         </el-button>
-        <el-link v-if="fs['formLink']" v-bind="fs['formLink']" @click="fs['formLink'].click({jsEvent:$event,row:getRow()})">
+        <el-link v-if="fs['formLink']" v-bind="fs['formLink']" @click="fs['formLink'].click({jsEvent:$event,row:getRow(),value:dataRef[fs.field]})">
           {{fs['formLink'].label}}
         </el-link>
       </div>

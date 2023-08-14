@@ -22,6 +22,7 @@
         :options="optionsUsing()"
         @input="privateOnInputEvent"
         @ready="this.onCmReady"
+        :placeholder="placeholder"
         :id="codemirrorEditorID"
         ref="codemirror"
         @keydown.native="onKeyDown"
@@ -71,6 +72,7 @@ import "codemirror/addon/selection/mark-selection.js";
 import "codemirror/addon/search/match-highlighter.js";
 
 // 行注释
+import "codemirror/addon/display/placeholder.js";
 import "codemirror/addon/comment/comment.js";
 // 搜索功能的依赖
 import "codemirror/addon/dialog/dialog.js";
@@ -153,6 +155,7 @@ export default {
       default: function (newCode) {
       }
     },
+    placeholder:String,
     modeOptions: CodeMirrorModeOptions,
     height: {
       type: String,
