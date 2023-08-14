@@ -16,6 +16,8 @@
           :label="optionItem.label"
           :disabled="optionItem.disabled"
           :value="optionItem.value">
+        <span>{{ optionItem.label }}</span>
+        <span v-if="optionItem.comment" style="float:right;right: 0;gap: 3px;color:dodgerblue;font-size:12px" v-html="optionItem.comment"/>
       </el-option>
     </el-option-group>
   </el-select>
