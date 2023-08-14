@@ -7,7 +7,7 @@
       clearable
       @change="change">
     <el-option
-        v-for="option in getOptions()"
+        v-for="option in optionsUsing"
         :key="option.value"
         :label="option.label"
         :disabled="option.disabled"

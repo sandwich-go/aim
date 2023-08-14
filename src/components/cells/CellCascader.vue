@@ -1,7 +1,7 @@
 <template>
   <el-cascader
       v-bind="cc"
-      :options="getOptions()"
+      :options="optionsUsing"
       clearable
       size="mini"
       v-model="dataRef[fieldName]"

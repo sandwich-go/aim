@@ -15,7 +15,7 @@ export const typeDefaults = {
         form:'CellInputNumber',
         default:0,
         minTableColumnWidth:90,
-        label:'数组输入'
+        label:'数字输入'
     },
     textarea: {
         table:'CellViewLabel',

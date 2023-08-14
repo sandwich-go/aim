@@ -42,3 +42,18 @@ export function comment(row,fieldSchema, commentField = 'comment') {
     const commentVal = fieldSchema[commentField]
     return jsb.isFunction(commentVal)?commentVal({row, fieldSchema, fieldValue: row[fieldSchema.field]}):commentVal
 }
+
+export function showForm(row,fieldSchema){
+    const showForm = jsb.pathGet(fieldSchema,'showForm',true)
+    if(jsb.isFunction(showForm)){
+        return showForm({row,fieldSchema})
+    }
+    return showForm
+}
+export function disableForm(row,fieldSchema){
+    const disableForm = jsb.pathGet(fieldSchema,'disableForm',false)
+    if(jsb.isFunction(disableForm)){
+        return disableForm({row,fieldSchema})
+    }
+    return disableForm
+}

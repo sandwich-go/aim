@@ -11,7 +11,7 @@ export default {
 
     formatter:Function, // 格式化化方法
 
-    options:[Function,Array],
+    options:[Function,Array,Promise],
 
     styleOverride: Object, // 便于组件覆盖基础配置，如form中所有的元素设定为100% width，但是少数对象如checkbox不允许100%
     styleBase: Object,     // 便于父对象定义基础配置，如form中所有的元素设定为100% width
@@ -28,15 +28,29 @@ export default {
       cc: {
         style: {},
         change: _this.emitChange
-      }
+      },
+      optionsUsing:[],
     }
   },
-  created() {
+  async created() {
     if (this.data) {
       this.dataRef = this.data
     }
+    await this.fetchOptionsData()
   },
   methods: {
+    async fetchOptionsData() {
+      if (typeof this.options === 'function') {
+        // 如果 options 是一个函数，则调用它并等待它的返回值（一个 Promise）
+        this.optionsUsing = await this.options();
+      } else if (this.options instanceof Promise) {
+        // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
+        this.optionsUsing = await this.options;
+      } else if (Array.isArray(this.options)) {
+        // 如果 options 是一个数组，则直接赋值给 optionsInner
+        this.optionsUsing = this.options;
+      }
+    },
     emitChange(valNew) {
       this.$emit("input", valNew)
     },
@@ -67,13 +81,6 @@ export default {
       if (this.cc.change) {
         this.cc.change(newVal)
       }
-    },
-    getOptions() {
-      let row = null
-      if(this.getRow){
-        row = this.getRow()
-      }
-      return (jsb.isFunction(this.options)?this.options({row:row,data:this.dataRef}):this.options) || []
     },
     emitClick(jsEvent) {
       this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})

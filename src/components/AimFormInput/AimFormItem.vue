@@ -1,5 +1,5 @@
 <template>
-  <el-form-item :key="fs['field']" :prop="fs['field']" :ref="fs['field']" :label-width="getLabelWidth(fs)">
+  <el-form-item v-if="showForm(getRow(),fs)" :key="fs['field']" :prop="fs['field']" :ref="fs['field']" :label-width="getLabelWidth(fs)">
   <span slot='label' v-if="getShowLabel(fs)">
       <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)">
         <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
@@ -77,6 +77,7 @@
           :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
           :should-cell-disable="shouldCellDisable"
           :popup-append-to-body="true"
+          :rules="formRulesFromSchema(fs.fields)"
       ></aim-form-input>
       <el-card v-else  class="box-card" shadow="always">
         <aim-form-input
@@ -90,6 +91,7 @@
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
             :should-cell-disable="shouldCellDisable"
             :popup-append-to-body="true"
+            :rules="formRulesFromSchema(fs.fields)"
         ></aim-form-input>
       </el-card>
     </div>
@@ -111,11 +113,12 @@ import {
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import {xidRow} from "@/components/AimTable/table";
 import {isAimFormInput, isAimTable} from "@/components/cells/is";
-import {comment} from "@/components/AimFormInput/index";
+import {comment, disableForm, showForm} from "@/components/AimFormInput/index";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
+import {formRulesFromSchema} from "@/components/AimTable/validate";
 
 export default {
   name: "AimFormItem",
@@ -175,11 +178,13 @@ export default {
       commentStyle :jsb.cc.aimFormCommentStyle || {
         'font-style':'italic',
         'color':'dodgerblue',
-        'font-size':'12px'
+        'font-size':'12px',
       }
     }
   },
   methods: {
+    showForm,
+    formRulesFromSchema,
     commentSlotName,
     getProxyCommentSlotName,
     getProxyTipSlotName,
@@ -188,6 +193,10 @@ export default {
     isAimTable,
     comment,
     shouldDisable(){
+      const v = disableForm(this.getRow,this.fieldSchema)
+      if(v){
+        return v
+      }
       return this.privateShouldCellDisable({fieldSchema:this.fs,cell:this.cellConfig(this.fs) ||{}})
     },
     getShowLabel(fs){

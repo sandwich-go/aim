@@ -410,10 +410,7 @@ export default {
           },
           comment: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
-          required: true
-          , options: function () {
-            return _this.cascader
-          },
+          required: true,
           filter: {placeholder:'name'},
           watch: function ({row, newValue}) {
             console.log("watch changed", row, newValue)
@@ -503,7 +500,9 @@ export default {
         {
           field: 'Version', name: 'Version', type: 'select', sortable: false,
           required: true,
-          options: [{label: "v1", value: "v1"}, {label: "v2", value: "v2"}],
+         options:new Promise((resolve) => {
+           resolve([{label: "v1", value: "v1"}, {label: "v2", value: "v2"}])
+         })
         },
         {
           field: 'Link',

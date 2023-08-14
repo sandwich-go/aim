@@ -9,7 +9,7 @@
       :disabled="disabled"
       clearable
       @change="change">
-    <el-option v-for="(val,idx) in getOptions()"
+    <el-option v-for="(val,idx) in optionsUsing"
                :value="val.value"
                :key="idx"
                :disabled="val.disabled"
