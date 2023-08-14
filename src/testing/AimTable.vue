@@ -502,7 +502,7 @@ export default {
           field: 'Version', name: 'Version', type: 'select', sortable: false,
           required: true,
          options:new Promise((resolve) => {
-           resolve([{label: "v1", value: "v1"}, {label: "v2", value: "v2"}])
+           resolve([{label: "v1", value: "v1",comment:'版本号v1'}, {label: "v2", value: "v2"}])
          })
         },
         {
