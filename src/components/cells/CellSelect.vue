@@ -1,6 +1,6 @@
 <template>
   <cell-select-group
-      :
+      v-bind="$props"
       v-if="isOptionsGroup()">
   </cell-select-group>
   <el-select
