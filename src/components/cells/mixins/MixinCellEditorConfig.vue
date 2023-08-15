@@ -18,8 +18,6 @@ export default {
     disabled: Boolean,    // 是否只读
 
     fieldSchema:Object,   // trigger时需要通过fieldSchema定位fields字段数据
-
-    getRow:Function,
   },
   data() {
     const _this = this
@@ -44,12 +42,12 @@ export default {
       let optionsGot = []
       if (typeof this.options === 'function') {
         // 如果 options 是一个函数，则调用它并等待它的返回值（一个 Promise）
-        optionsGot = this.options({row:this.getRow(),parent:this.dataRef});
+        optionsGot = this.options({parent:this.dataRef});
         // 返回的是一个数组，说明上层是同步的操作, 动态刷新
         if(Array.isArray(optionsGot)){
           this.optionDynamicGetter = this.options
         }else{
-          optionsGot = await this.options({row:this.getRow(),parent:this.dataRef});
+          optionsGot = await this.options({parent:this.dataRef});
         }
       } else if (this.options instanceof Promise) {
         // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
@@ -70,7 +68,7 @@ export default {
     },
     getOptions(){
       if(this.optionDynamicGetter) {
-        return this.optionDynamicGetter({row:this.getRow(),parent:this.dataRef})
+        return this.optionDynamicGetter({parent:this.dataRef})
       }
       return this.optionsUsing
     },
