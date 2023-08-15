@@ -1,5 +1,5 @@
 <template>
-  <el-form-item v-if="showForm(getRow(),fs)" :key="fs['field']" :prop="fs['field']" :ref="fs['field']" :label-width="getLabelWidth(fs)">
+  <el-form-item v-if="showForm(getRow(),fs,dataRef)" :key="fs['field']" :prop="fs['field']" :ref="fs['field']" :label-width="getLabelWidth(fs)">
   <span slot='label' v-if="getShowLabel(fs)">
       <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)">
         <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
@@ -36,10 +36,10 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-        <el-button v-if="fs['formButton']" v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow(),value:dataRef[fs.field]})">
+        <el-button v-if="fs['formButton']" v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
           {{fs['formButton'].circle?'':fs['formButton'].label}}
         </el-button>
-        <el-link v-if="fs['formLink']" v-bind="fs['formLink']" @click="fs['formLink'].click({jsEvent:$event,row:getRow(),value:dataRef[fs.field]})">
+        <el-link v-if="fs['formLink']" v-bind="fs['formLink']" @click="fs['formLink'].click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
           {{fs['formLink'].label}}
         </el-link>
       </div>
@@ -193,7 +193,7 @@ export default {
     isAimTable,
     comment,
     shouldDisable(){
-      const v = disableForm(this.getRow(),this.fs)
+      const v = disableForm(this.getRow(),this.fs,this.dataRef)
       if(v){
         return v
       }

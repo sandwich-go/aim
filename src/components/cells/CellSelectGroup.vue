@@ -7,7 +7,7 @@
       size="mini"
       @change="change">
     <el-option-group
-        v-for="group in optionsUsing"
+        v-for="group in getOptions()"
         :key="group.label"
         :label="group.label">
       <el-option

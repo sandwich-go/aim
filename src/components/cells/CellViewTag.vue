@@ -1,7 +1,7 @@
 <template>
   <div>
       <span v-if="fieldValue">
-        <template v-for="(item,index) of wrapAsTagList(fieldValue,optionsUsing)">
+        <template v-for="(item,index) of wrapAsTagList(fieldValue,getOptions())">
           <el-tag
               v-if="item.label"
               :key="index"

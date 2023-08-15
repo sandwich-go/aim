@@ -30,6 +30,7 @@ export default {
         change: _this.emitChange
       },
       optionsUsing:[],
+      optionDynamicGetter:null
     }
   },
   async created() {
@@ -40,16 +41,38 @@ export default {
   },
   methods: {
     async fetchOptionsData() {
+      let optionsGot = []
       if (typeof this.options === 'function') {
         // 如果 options 是一个函数，则调用它并等待它的返回值（一个 Promise）
-        this.optionsUsing = await this.options();
+        optionsGot = this.options({row:this.getRow(),parent:this.dataRef});
+        // 返回的是一个数组，说明上层是同步的操作, 动态刷新
+        if(Array.isArray(optionsGot)){
+          this.optionDynamicGetter = this.options
+        }else{
+          optionsGot = await this.options({row:this.getRow(),parent:this.dataRef});
+        }
       } else if (this.options instanceof Promise) {
         // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
-        this.optionsUsing = await this.options;
+        optionsGot = await this.options;
       } else if (Array.isArray(this.options)) {
         // 如果 options 是一个数组，则直接赋值给 optionsInner
-        this.optionsUsing = this.options;
+        optionsGot = this.options;
+        this.optionDynamicGetter = ()=>{return this.options}
       }
+      this.optionsUsing = []
+      jsb.each(optionsGot,v=>{
+        if(jsb.isString(v) || jsb.isNumber(v)){
+          this.optionsUsing.push({label:v,value:v})
+        }else{
+          this.optionsUsing.push(v)
+        }
+      })
+    },
+    getOptions(){
+      if(this.optionDynamicGetter) {
+        return this.optionDynamicGetter({row:this.getRow(),parent:this.dataRef})
+      }
+      return this.optionsUsing
     },
     emitChange(valNew) {
       this.$emit("input", valNew)

@@ -241,7 +241,7 @@ export default {
         const watch = jsb.pathGet(fs,'watch')
         if(_this.enableWatcher && watch){
           _this.$watch(`dataRef.${fs.field}`,function (newValue, oldValue){
-            watch({row:this.getRow(),newValue, oldValue})
+            watch({row:this.getRow(),newValue, oldValue,parent:this.dataRef})
           })
         }
         let asCommonField = true

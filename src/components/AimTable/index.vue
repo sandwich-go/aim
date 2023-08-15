@@ -216,7 +216,7 @@
             :mode="rowEditState"
             :rules="formRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
             :row-top="rowInEditForm"
-            :enable-watcher="false"
+            :enable-watcher="true"
         >
           <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
             <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>

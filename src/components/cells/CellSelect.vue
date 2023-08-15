@@ -12,7 +12,7 @@
       clearable
       @change="change">
     <el-option
-        v-for="option in optionsUsing"
+        v-for="option in getOptions()"
         :key="option.value"
         :label="option.label"
         :disabled="option.disabled"
@@ -38,7 +38,8 @@ export default {
   },
   methods:{
     isOptionsGroup(){
-      const firstElement =this.optionsUsing[0] || {}
+      const options  = this.getOptions()
+      const firstElement =options[0] || {}
       return !!firstElement['options'];
     }
   }
