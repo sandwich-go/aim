@@ -384,7 +384,7 @@ export default {
     selectionEnable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
-      default: function (row) {
+      default: function () {
         return true
       },
     },
