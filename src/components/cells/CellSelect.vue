@@ -13,7 +13,7 @@
       @change="change">
     <el-option
         v-for="option in getOptions()"
-        :key="option.value"
+        :key="option.key || option.value"
         :label="option.label"
         :disabled="option.disabled"
         :value="option.value">

@@ -12,7 +12,7 @@
         :label="group.label">
       <el-option
           v-for="optionItem in group.options"
-          :key="optionItem.value"
+          :key="optionItem.key || optionItem.value"
           :label="optionItem.label"
           :disabled="optionItem.disabled"
           :value="optionItem.value">
