@@ -125,7 +125,7 @@ export const typeDefaults = {
         default:() => [],
         label:'表格',
         tagType:"warning",
-        tagEffect:"dark"
+        tagEffect:"light"
     },
     object: {
         table:'CellTriggerFormInput',
@@ -133,7 +133,7 @@ export const typeDefaults = {
         default:() => {},
         label:'对象',
         tagType:"warning",
-        tagEffect:"dark"
+        tagEffect:"light"
     },
     code:{
         table:'CellTriggerCodeMirror',
