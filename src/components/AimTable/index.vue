@@ -59,9 +59,14 @@
           </template>
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
-        <el-table-column v-if="selection" :fixed="inSortIndexEdit?false:'left'" class-name="aim-column-fixed-width"
+        <el-table-column v-if="selection"
+                         :selectable="selectionEnable"
+                         :fixed="inSortIndexEdit?false:'left'"
+                         class-name="aim-column-fixed-width"
                          key="aim_table_auto_column_selection" width="50"
-                         type="selection" align="center"/>
+                         type="selection"
+                         align="center"
+        />
         <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
             <el-checkbox :value="scope.row === currentRow"
@@ -263,7 +268,15 @@
 import {
   EditTriggerManual,
   EventCurrentRowChange,
-  xidRow, isModeInplace, EditModeInplace, copyRow, aimTableWarn, aimTableLog, rowFormEditorTitle, aimTableError
+  xidRow,
+  isModeInplace,
+  EditModeInplace,
+  copyRow,
+  aimTableWarn,
+  aimTableLog,
+  rowFormEditorTitle,
+  aimTableError,
+  mustCtrlData
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/schema";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -321,7 +334,7 @@ import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
 import {cellNameForFormByType} from "@/components/cells/types";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
-import {AimFormInputView} from "@/components/AimFormInput";
+import {AimFormInputCopy, AimFormInputInsert, AimFormInputView} from "@/components/AimFormInput";
 import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 import AimPopup from "@/components/AimPopup/index.vue";
 import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
@@ -368,6 +381,13 @@ export default {
   },
   props: {
     selection: Boolean,// 是否支持选择
+    selectionEnable: {
+      type: Function,
+      // eslint-disable-next-line no-unused-vars
+      default: function (row) {
+        return true
+      },
+    },
     radio: Boolean,// 是否支持radio选择
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true
     shouldFieldDisable: {
@@ -613,12 +633,36 @@ export default {
               this.tryProxySaveRow(row, {done: editDone})
             })
           } else {
-            //fixme inplace下无法使用form的validate
+            //fixme inplace 下无法使用form的validate
             this.tryProxySaveRow(row, {done: editDone})
           }
           break
         default:
           this.toastWarning(`code ${code} no handler`)
+      }
+    },
+    addRow({initRow, isCopy} = {initRow: {}, isCopy: false}) {
+      if (jsb.eqNull(this.tableData)) {
+        this.tableData = []
+      }
+      this.rowEditorAlert = ''
+      this.rowEditState = AimFormInputInsert
+      if (isCopy) {
+        this.rowEditState = AimFormInputCopy
+      }
+      let newRow = mustCtrlData(this.editConfigRef.newRow(this.schema, initRow))
+      this.currentRow = newRow
+      this.updateRowInEdit(newRow)
+
+      if (this.isModeInplace()) {
+        // inplace编辑模式
+        this.tableData.push(newRow)
+        if(this.proxyConfigRef.isLocalData ){
+          this.tryProxySaveRow(newRow)
+        }
+      } else {
+        // form 表单编辑逻辑
+        this.showFormEditorForRow(newRow)
       }
     },
     rowFormEditorClose() {

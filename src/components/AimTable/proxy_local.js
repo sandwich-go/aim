@@ -17,7 +17,6 @@ export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {
             return v
         },
         query() {
-            console.log("proxy local data query",parent[fieldName])
             return new Promise((resolve) => {
                 resolve({
                     Data: parent[fieldName],

@@ -47,6 +47,7 @@
     <div v-else-if="isAimTable(cellName)">
       <el-card class="box-card" shadow="always">
         <aim-table
+            :ref="`aimTable_${fs['field']}`"
             :schema="fs.fields"
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
             v-bind="cellConfigForTable(fs)"
@@ -97,8 +98,8 @@
     </div>
     <div v-else>{{ cellName }} not supported</div>
 
-    <span v-if="fs.comment" class="aim-form-item-comment" :style="commentStyle">{{ comment(getRow(), fs, 'comment') }}</span>
-    <span v-if="fs.commentHTML" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),fs,'commentHTML')"></span>
+    <span v-if="fs.comment" class="aim-form-item-comment" :style="commentStyle">{{ comment(getRow(), dataRef,fs, 'comment') }}</span>
+    <span v-if="fs.commentHTML" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),dataRef,fs,'commentHTML')"></span>
     <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fs" :row="getRow()"/>
   </el-form-item>
 </template>
@@ -198,6 +199,13 @@ export default {
         return v
       }
       return this.privateShouldCellDisable({fieldSchema:this.fs,cell:this.cellConfig(this.fs) ||{}})
+    },
+    // 刷新当前表内local proxy 的aim表数据
+    reloadLocalProxyAimTableData(field){
+      const ref = this.$refs[`aimTable_${field}`]
+      if(ref) {
+        ref.proxyQueryData()
+      }
     },
     getShowLabel(fs){
       // tab显示的时候不再显示label，遵循上级设定

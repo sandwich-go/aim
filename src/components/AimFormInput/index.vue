@@ -25,6 +25,7 @@
             <template v-for="(fss,subIndex) in fs.fieldSchemaList">
               <el-col :key="`group_inline_${index}_${subIndex}`" :span="span(fs,fss.field)">
                 <aim-form-item
+                    ref="aimFormItem"
                     :fs="fss"
                     :label-width="labelWidthPixel"
                     :data-ref="dataRef"
@@ -55,6 +56,7 @@
                   </column-header>
                 </span>
                 <aim-form-item
+                    ref="aimFormItem"
                     :fs="fss"
                     :data-ref="dataRef"
                     :get-row="getRow"
@@ -76,6 +78,7 @@
         </template>
         <aim-form-item
             v-else
+            ref="aimFormItem"
             :fs="fs"
             :label-width="labelWidthPixel"
             :key="index"
@@ -209,6 +212,13 @@ export default {
     setInLoading(v){
       this.inLoading = v
     },
+    // 刷新当前表内local proxy 的aim表数据
+    reloadLocalProxyAimTableData(field){
+      const refs = this.$refs['aimFormItem']
+      jsb.each(jsb.wrapArray(refs),v=>{
+        v.reloadLocalProxyAimTableData(field)
+      })
+    },
     processSchema() {
       if (!this.dataRef) {
         return
@@ -241,7 +251,13 @@ export default {
         const watch = jsb.pathGet(fs,'watch')
         if(_this.enableWatcher && watch){
           _this.$watch(`dataRef.${fs.field}`,function (newValue, oldValue){
-            watch({row:this.getRow(),newValue, oldValue,parent:this.dataRef})
+            watch({
+              row:this.getRow(),
+              newValue,
+              oldValue,
+              parent:this.dataRef,
+              target:this
+            })
           })
         }
         let asCommonField = true

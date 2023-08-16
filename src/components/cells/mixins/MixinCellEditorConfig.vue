@@ -57,18 +57,22 @@ export default {
         optionsGot = this.options;
         this.optionDynamicGetter = ()=>{return this.options}
       }
-      this.optionsUsing = []
+      this.optionsUsing = this.optionsFmt(optionsGot)
+    },
+    optionsFmt(optionsGot){
+      const options = []
       jsb.each(optionsGot,v=>{
         if(jsb.isString(v) || jsb.isNumber(v)){
-          this.optionsUsing.push({label:v,value:v})
+          options.push({label:v,value:v})
         }else{
-          this.optionsUsing.push(v)
+          options.push(v)
         }
       })
+      return options
     },
     getOptions(){
       if(this.optionDynamicGetter) {
-        return this.optionDynamicGetter({parent:this.dataRef})
+        return this.optionsFmt(this.optionDynamicGetter({parent:this.dataRef}))
       }
       return this.optionsUsing
     },

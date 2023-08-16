@@ -10,6 +10,7 @@
         ref="table"
         :enable-debug="true"
         :schema="schema"
+        :selection-enable="selectionEnable"
         :group-config="groupConfig"
         :should-cell-disable="shouldCellDisable"
         :should-cell-hide="shouldCellHide"
@@ -423,6 +424,7 @@ export default {
           // commentHTML: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           tipSlot: 'password_tip',
+
           commentSlot: 'commentSlot',
           required: true,
           cellFormConfig: {
@@ -736,6 +738,9 @@ export default {
     }
   },
   methods: {
+    selectionEnable(row){
+      return row.id>5
+    },
     toolbarAlert(name, val) {
       this.alertTitle = `toolbar ${name} change to ${val}`
     },

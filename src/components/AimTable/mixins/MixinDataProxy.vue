@@ -145,14 +145,13 @@ export default {
         confirmDoneFunc()
       }
     },
-
     // eslint-disable-next-line no-unused-vars
     tryProxySaveRow(row, {done} = {}) {
       let toSave = row
-      if(!this.proxyConfigRef.isLocalData){
-        toSave = removeCtrlData(jsb.clone(row))
-      }
       toSave = formatterForUpdate(this.schema,toSave,true)
+      if(!this.proxyConfigRef.isLocalData){
+        toSave = this.proxyConfigRef.row2Item(removeCtrlData(jsb.clone(row)))
+      }
       this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){
           this.doLayout(true)

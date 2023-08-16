@@ -8,6 +8,7 @@ export const typeDefaults = {
         form:'CellInput',
         default:'',
         label:'单行文本输入',
+        placeholderSupport:true,
     },
 
     input_number:{
@@ -15,13 +16,15 @@ export const typeDefaults = {
         form:'CellInputNumber',
         default:0,
         minTableColumnWidth:90,
-        label:'数字输入'
+        label:'数字输入',
+        placeholderSupport:true,
     },
     textarea: {
         table:'CellViewLabel',
         form:'CellInputTextArea',
         default:'',
-        label:'多行文本输入'
+        label:'多行文本输入',
+        placeholderSupport:true,
     },
     select: {
         table:'CellViewTag',
@@ -29,7 +32,8 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
         },
-        label:'下拉单选'
+        label:'下拉单选',
+        placeholderSupport:true,
     },
     select_input:{
         table:'CellViewLabel',
@@ -37,7 +41,8 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
         },
-        label:'下拉单选 或 单行文本输入'
+        label:'下拉单选 或 单行文本输入',
+        placeholderSupport:true,
     },
     select_input_tag:{
         table:'CellViewTag',
@@ -45,19 +50,22 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.value')
         },
-        label:'下拉单选 或 标签输入'
+        label:'下拉单选 或 标签输入',
+        placeholderSupport:true,
     },
     select_multiple: {
         table:'CellViewTag',
         form:'CellSelectMultiple',
         default: () => [],
-        label:'下拉多选'
+        label:'下拉多选',
+        placeholderSupport:true,
     },
     select_multiple_input: {
         table:'CellViewTag',
         form:'CellSelectMultipleInput',
         default: () => [],
-        label:'下拉多选 或 标签输入'
+        label:'下拉多选 或 标签输入',
+        placeholderSupport:true,
     },
     select_group:  {
         table:'CellViewTag',
@@ -65,14 +73,16 @@ export const typeDefaults = {
         default: (fs) => {
             return jsb.pathGet(fs, 'options.0.options.0.value')
         },
-        label:'下拉单选，候选项分组显示'
+        label:'下拉单选，候选项分组显示',
+        placeholderSupport:true,
     },
     element_icon: {
         table:'CellViewIcon',
         form:'CellIconSelectorInput',
         default: '',
         minTableColumnWidth:180,
-        label:'Element icon选择'
+        label:'Element icon选择',
+        placeholderSupport:true,
     },
     color: {
         table:'CellViewColor',
@@ -85,14 +95,16 @@ export const typeDefaults = {
         form:'CellDatePicker',
         default: () => jsb.dateTime(),
         minTableColumnWidth:200,
-        label:'日期时间选择'
+        label:'日期时间选择',
+        placeholderSupport:true,
     },
     datetime_range:  {
         table:'CellDateRangePicker',
         form:'CellDateRangePicker',
         default: () => jsb.dateTime(),
         minTableColumnWidth:360,
-        label:'日期时间范围选择'
+        label:'日期时间范围选择',
+        placeholderSupport:true,
     },
     switch:  {
         table:'CellViewBoolean',
@@ -127,20 +139,23 @@ export const typeDefaults = {
         table:'CellTriggerCodeMirror',
         form:'CellCodeMirror',
         default:'',
-        label:'代码'
+        label:'代码',
+        placeholderSupport:true,
     },
     password:{
         table:'CellViewLabel',
         form:'CellPassword',
         default:'',
-        label:'密码'
+        label:'密码',
+        placeholderSupport:true,
     },
     image:{
         table:'CellViewImage',
         table_inplace:'CellTriggerImageSelect',
         form:'CellInputImage',
         default:'',
-        label:'图像'
+        label:'图像',
+        placeholderSupport:true,
     }
 }
 

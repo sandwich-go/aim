@@ -3,15 +3,13 @@ import {
   EditTriggerClick,
   EditTriggerDBLClick,
   EditTriggerManualAndDBLClick,
-  EditTriggerManual, mustCtrlData,
+  EditTriggerManual,
   EditModeFormInput, isModeInplace,
 } from "@/components/AimTable/table";
 import {CodeButtonRowDelete, CodeButtonRowSave} from "@/components/cells/const";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {
-  AimFormInputCopy,
   AimFormInputEdit,
-  AimFormInputInsert,
   AimFormInputView
 } from "@/components/AimFormInput";
 import {defaultRow} from "@/components/AimTable/schema";
@@ -114,27 +112,6 @@ export default {
       if (!this.isModeInplace()) {
         // form 表单编辑逻辑
         this.showFormEditorForRow(this.rowInEdit)
-      }
-    },
-    addRow({initRow, isCopy} = {initRow: {}, isCopy: false}) {
-      if (jsb.eqNull(this.tableData)) {
-        this.tableData = []
-      }
-      this.rowEditorAlert = ''
-      this.rowEditState = AimFormInputInsert
-      if (isCopy) {
-        this.rowEditState = AimFormInputCopy
-      }
-      let newRow = mustCtrlData(this.editConfigRef.newRow(this.schema, initRow))
-      this.currentRow = newRow
-      this.updateRowInEdit(newRow)
-
-      if (this.isModeInplace()) {
-        // inplace编辑模式
-        this.tableData.push(newRow)
-      } else {
-        // form 表单编辑逻辑
-        this.showFormEditorForRow(newRow)
       }
     },
     showFormEditorForRow(row) {
