@@ -149,6 +149,7 @@ export default {
     tryProxySaveRow(row, {done} = {}) {
       let toSave = row
       toSave = formatterForUpdate(this.schema,toSave,true)
+      // 本地proxy的数据依赖xid定位，保留xid数据
       if(!this.proxyConfigRef.isLocalData){
         toSave = this.proxyConfigRef.row2Item(removeCtrlData(jsb.clone(row)))
       }

@@ -54,10 +54,15 @@ export function mustCtrlData(row) {
     return row
 }
 
-
-export function removeCtrlData(row) {
-    delete row.___aim_table_ctrl_data
-    return row
+export function removeCtrlData(obj) {
+    delete obj.___aim_table_ctrl_data
+    // 递归obj的每一个值
+    jsb.each(obj,v=>{
+        if(jsb.isVisitable(v)){
+            removeCtrlData(v)
+        }
+    })
+    return obj
 }
 
 export function rowFormEditorTitle(mode) {

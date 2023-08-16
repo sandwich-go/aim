@@ -619,7 +619,8 @@ export default {
         case CodeButtonRowSelectedMinus:
         case CodeButtonRowSelectedDelete:
         case CodeButtonRowSelectedClose:
-          this.tryProxyDeleteRows(this.getSelectionRows(true))
+          // 本地删除依赖ctrl xid数据
+          this.tryProxyDeleteRows(this.getSelectionRows(false))
           break
         case CodeButtonTableSetting:
           this.visitSettingDrawerVisible = true

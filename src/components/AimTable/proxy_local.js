@@ -1,8 +1,9 @@
 import jsb from "@sandwich-go/jsb";
-import {xidRow} from "@/components/AimTable/table";
+import {mustCtrlData, xidRow} from "@/components/AimTable/table";
 
 
 // newLocalDataProxyWithFieldName 本地数据代理,form表单内使用
+// 不能依赖xid，删除数据，数据存储后应该将xid删除，此时再次加载数据删除数据导致xid丢失
 export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {
     if(!parent[fieldName]){
         parent[fieldName] = []
@@ -17,6 +18,8 @@ export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {
             return v
         },
         query() {
+            // 为每一个数据添加xid
+            jsb.each(parent[fieldName],v=>mustCtrlData(v))
             return new Promise((resolve) => {
                 resolve({
                     Data: parent[fieldName],
