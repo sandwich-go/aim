@@ -4,27 +4,10 @@
 //  - 为指定field字段
 import jsb from "@sandwich-go/jsb";
 import {type2DefaultVal} from "@/components/cells/types";
+import {isVirtualField} from "@/components/AimTable/virtual_field";
 
-
-
-export function isVirtualField(fs) {
-    return !fs.field || fs.virtual
-}
-
-// filterVirtualField 过滤虚拟列
-export function filterVirtualField(schema) {
-    let schemaValid = []
-    jsb.each(schema, function (fieldSchema) {
-        if (isVirtualField(fieldSchema)) {
-            return;
-        }
-        schemaValid.push(fieldSchema)
-    })
-    return schemaValid
-}
-
-// defaultRow 根据schema构造默认行数据
-export function defaultRow(schema, row) {
+// FillDefaultDataWithSchema 根据schema填充默认数据
+export function FillDefaultDataWithSchema(schema, row) {
     row = row || {}
     jsb.each(schema, function (fieldSchema) {
         if (isVirtualField(fieldSchema)) {
@@ -40,7 +23,7 @@ export function defaultRow(schema, row) {
             return
         }
         if(fieldSchema.type==='object' && fieldSchema.fields) {
-            row[fieldName] = defaultRow(fieldSchema.fields,row[fieldName])
+            row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName])
             return;
         }
         const vByType = type2DefaultVal[fieldSchema.type]
