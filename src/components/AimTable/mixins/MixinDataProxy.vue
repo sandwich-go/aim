@@ -1,9 +1,10 @@
 <script>
 import {deleteConfirmConfig} from "@/components/AimTable/confirm";
-import {aimTableError, cleanData, removeCtrlData} from "@/components/AimTable/table";
+import {aimTableError} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
-import {formatterForUpdate} from "@/components/AimTable/clean";
+import {cleanDataForTable} from "@/components/AimTable/clean";
+import {CleanDataForStorage} from "@/components/AimTable/formatterForUpdate";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -147,12 +148,9 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     tryProxySaveRow(row, {done} = {}) {
-      let toSave = row
-      toSave = formatterForUpdate(this.schema,toSave,true)
       // 本地proxy的数据依赖xid定位，保留xid数据
-      if(!this.proxyConfigRef.isLocalData){
-        toSave = this.proxyConfigRef.row2Item(removeCtrlData(jsb.clone(row)))
-      }
+      const removeCtrlData = !this.proxyConfigRef.isLocalData
+      let toSave = CleanDataForStorage(this.schema,row,this.proxyConfigRef.row2Item,true,removeCtrlData)
       this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){
           this.doLayout(true)
@@ -209,7 +207,7 @@ export default {
       this.rowWatcher = []
     },
     processTableData(data){
-      data = cleanData(data,this.schema,this.proxyConfigRef.item2Row)
+      data = cleanDataForTable(data,this.schema,this.proxyConfigRef.item2Row)
       if(this.sortConfigRef.enable && !this.sortConfigRef.remote) {
         if (this.sortConfigRef.orders.length > 0) {
           data = jsb.orderBy(data,this.sortConfigRef.orders)

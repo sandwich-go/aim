@@ -1,6 +1,4 @@
 import {AimFormInputMode2Title} from "@/components/AimFormInput";
-import {defaultRow} from "@/components/AimTable/schema";
-
 const jsb = require("@sandwich-go/jsb")
 
 
@@ -69,51 +67,3 @@ export function rowFormEditorTitle(mode) {
     return AimFormInputMode2Title[mode]
 }
 
-function autoOption(parent, fieldVal) {
-    if (!parent.options) {
-        parent.options = []
-    }
-    const optionIndex = jsb.findIndexOf(parent.options, function (option) {
-        return option.value === fieldVal
-    })
-    if (optionIndex === -1) {
-        parent.options.push({label: fieldVal, value: fieldVal})
-    }
-}
-
-function autoOptionFunc(autoOption,fieldVal){
-    if(jsb.isFunction(autoOption)){
-        return autoOption(fieldVal)
-    }
-    return jsb.wrapArray(fieldVal)
-}
-
-
-export function cleanData(data, schema,item2Row) {
-    jsb.each(data, function (item, index) {
-        // 检查数据的ctrl字段，填充组件需要的控制性数据
-        let row = mustCtrlData(item2Row ? item2Row(item) : item)
-        row = defaultRow(schema, row)
-        jsb.each(schema, function (fieldSchema) {
-            // 自动为filter准备option
-            const fieldVal = row[fieldSchema.field]
-            if (!fieldVal) {
-                return
-            }
-            const filterAutoOption = jsb.pathGet(fieldSchema, 'filter.autoOption', false)
-            if (filterAutoOption) {
-                jsb.each(autoOptionFunc(filterAutoOption,fieldVal),option=>{
-                    autoOption(fieldSchema.filter, option)
-                })
-            }
-            const schemaAutoOption = jsb.pathGet(fieldSchema, 'autoOption', false)
-            if (schemaAutoOption) {
-                jsb.each(autoOptionFunc(schemaAutoOption,fieldVal),option=>{
-                    autoOption(fieldSchema, option)
-                })
-            }
-        })
-        data[index] = row
-    })
-    return data
-}

@@ -9,6 +9,7 @@ export const typeDefaults = {
         default:'',
         label:'单行文本输入',
         placeholderSupport:true,
+        valueTypeSupport:true, // 无法区分是字符串或者数字
     },
 
     input_number:{
@@ -34,6 +35,7 @@ export const typeDefaults = {
         },
         label:'下拉单选',
         placeholderSupport:true,
+        valueTypeSupport:true, // 无法区分是字符串或者数字
     },
     select_input:{
         table:'CellViewLabel',
@@ -43,6 +45,7 @@ export const typeDefaults = {
         },
         label:'下拉单选 或 单行文本输入',
         placeholderSupport:true,
+        valueTypeSupport:true, // 无法区分是字符串或者数字
     },
     select_input_tag:{
         table:'CellViewTag',

@@ -278,7 +278,7 @@ import {
   aimTableError,
   mustCtrlData
 } from "@/components/AimTable/table";
-import {filterVirtualField,} from "@/components/AimTable/schema";
+import {filterVirtualField,} from "@/components/AimTable/virtual_field";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 
 import Loading from 'vue-loading-overlay';

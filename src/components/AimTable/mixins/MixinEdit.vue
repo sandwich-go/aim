@@ -12,7 +12,7 @@ import {
   AimFormInputEdit,
   AimFormInputView
 } from "@/components/AimFormInput";
-import {defaultRow} from "@/components/AimTable/schema";
+import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -42,7 +42,7 @@ export default {
       },
       // 新建一行数据
       newRow(schema, row) {
-        return defaultRow(schema, row)
+        return FillDefaultDataWithSchema(schema, row)
       },
       // 拷贝一行数据,逻辑层替换关键数据
       // eslint-disable-next-line no-unused-vars
