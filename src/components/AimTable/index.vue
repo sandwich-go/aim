@@ -381,13 +381,9 @@ export default {
   },
   props: {
     selection: Boolean,// 是否支持选择
-    selectionEnable: {
-      type: Function,
-      // eslint-disable-next-line no-unused-vars
-      default: function () {
-        return true
-      },
-    },
+    // eslint-disable-next-line no-unused-vars
+    selectionEnable: {type: Function, default: (row)=> {return true},},
+    autoQuery: {type: Boolean, default:true},
     radio: Boolean,// 是否支持radio选择
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true
     shouldFieldDisable: {
@@ -414,7 +410,9 @@ export default {
   },
   created() {
     this.tableData = this.processTableData(this.tableData)
-    this.proxyQueryData()
+    if(this.autoQuery){
+      this.proxyQueryData()
+    }
     this.schemaApplyVisitorData()
     this.processSchemaFilter()
     // 占位
@@ -630,7 +628,7 @@ export default {
           break
         case CodeButtonRowSave:
           if (fromForm) {
-            this.$refs.aimFormInput.validate(() => {
+            this.$refs.aimFormInput.__validateFromAimTable(() => {
               this.tryProxySaveRow(row, {done: editDone})
             })
           } else {

@@ -68,7 +68,7 @@ export function makeCellFromString(codeOrDescription, ...options) {
     if (shortcut) {
         return makeCell(shortcut, ...options)
     }
-    const strList = codeOrDescription.split('@')
+    const strList = codeOrDescription?codeOrDescription.split('@'):[]
     if (strList.length > 1) {
         const cellCode =  strList[1]
         const shortcutOption = code2OptionsMapping[cellCode]

@@ -1,7 +1,7 @@
 import jsb from "@sandwich-go/jsb";
-import {formatValue} from "@/components/cells/types";
-import {isVirtualField} from "@/components/AimTable/virtual_field";
-import {removeCtrlData} from "@/components/AimTable/table";
+import {formatValue} from "../cells/types";
+import {isVirtualField} from "./virtual_field";
+import {removeCtrlData} from "./table";
 
 // CleanDataForStorage 为数据存储清理数据，如移除虚拟字段，移除控制字段，字段数据的格式化等
 export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual=false,removeCtrl=true,) {

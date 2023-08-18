@@ -114,6 +114,7 @@ import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/vue-loading.css';
 import {isVirtualField} from "@/components/AimTable/virtual_field";
+import {CleanDataForStorage} from "@/components/AimTable/formatterForUpdate";
 
 export default {
   name: "AimFormInput",
@@ -163,6 +164,7 @@ export default {
       default:true,
     },
     groupConfig:Array,
+    row2Storage:Function,
   },
   created() {
     this.getProxyTipSlotName()
@@ -328,10 +330,20 @@ export default {
     formLabel(si) {
       return jsb.pathGet(si, 'nameForm', si['name'])
     },
+    // validate 逻辑层主动调用，单独使用AimFormInput的场景
     validate(validCallback) {
+      const _this = this
+      this.__validateFromAimTable(validCallback,(v)=>{
+        // 移除虚拟字段、移除控制字段，转换为
+        return CleanDataForStorage(_this.schema,v,this.row2Storage,true,true)
+      })
+    },
+    // __validateFromAimTable aim table 内部调用
+    __validateFromAimTable(validCallback,processor=(v)=>{return v}) {
+      const _this = this
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          validCallback()
+          validCallback(processor(_this.dataRef))
         }
       })
     },

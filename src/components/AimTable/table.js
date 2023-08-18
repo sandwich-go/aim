@@ -1,4 +1,4 @@
-import {AimFormInputMode2Title} from "@/components/AimFormInput";
+import {AimFormInputMode2Title} from "../AimFormInput";
 const jsb = require("@sandwich-go/jsb")
 
 

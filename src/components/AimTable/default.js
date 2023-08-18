@@ -3,8 +3,8 @@
 //  - virtual = true
 //  - 为指定field字段
 import jsb from "@sandwich-go/jsb";
-import {type2DefaultVal} from "@/components/cells/types";
-import {isVirtualField} from "@/components/AimTable/virtual_field";
+import {type2DefaultVal} from "../cells/types";
+import {isVirtualField} from "./virtual_field";
 
 // FillDefaultDataWithSchema 根据schema填充默认数据
 export function FillDefaultDataWithSchema(schema, row) {

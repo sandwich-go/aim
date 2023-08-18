@@ -75,9 +75,11 @@ export default {
   },
   methods: {
     tagType(tag){
+      tag = tag || ""
       return jsb.pathGet(tag.split('@'),[1],'primary')
     },
     tagEffect(tag){
+      tag = tag || ""
       return jsb.pathGet(tag.split('@'),[2],'light')
     },
     handleClose(tag) {

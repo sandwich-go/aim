@@ -36,12 +36,19 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-        <el-button v-if="fs['formButton']" v-bind="fs['formButton']" @click="fs['formButton'].click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
-          {{fs['formButton'].circle?'':fs['formButton'].label}}
-        </el-button>
-        <el-link v-if="fs['formLink']" v-bind="fs['formLink']" @click="fs['formLink'].click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
-          {{fs['formLink'].label}}
-        </el-link>
+        <template v-if="fs['formButton']" >
+          <el-button v-for="(v,index) in formButtonLinkArray('formButton')" v-bind="v" :key="index"
+                     @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
+          {{v.circle?'':v.label}}
+          </el-button>
+        </template>
+
+        <template v-if="fs['formLink']" >
+          <el-button v-for="(v,index) in formButtonLinkArray('formLink')" v-bind="v" :key="index"
+                     @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
+            {{v.label}}
+          </el-button>
+        </template>
       </div>
     </template>
     <div v-else-if="isAimTable(cellName)">
@@ -178,7 +185,7 @@ export default {
       squashDividerConfig:this.getSquashDividerConfig(this.fs),
       commentStyle :jsb.cc.aimFormCommentStyle || {
         'font-style':'italic',
-        'color':'dodgerblue',
+        'color':'#707070',
         'font-size':'12px',
       }
     }
@@ -193,6 +200,13 @@ export default {
     isAimFormInput,
     isAimTable,
     comment,
+    formButtonLinkArray(field){
+      const fb = jsb.pathGet(this.fs,field)
+      if(jsb.isFunction(fb)){
+        return jsb.wrapArray(fb({row:this.getRow(),parent:this.dataRef}))
+      }
+      return jsb.wrapArray(fb)
+    },
     shouldDisable(){
       const v = disableForm(this.getRow(),this.fs,this.dataRef)
       if(v){
