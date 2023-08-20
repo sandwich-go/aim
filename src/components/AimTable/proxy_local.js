@@ -33,6 +33,7 @@ export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {
         deleteRows({rows}) {
             jsb.remove(parent[fieldName], item => jsb.find(rows, v => xidRow(v) === xidRow(item)))
         },
+        // inPlace模式下不会调用该接口，只是通过query返回的数据直接push
         save: ({row}) => {
             const index = jsb.findIndexOf(parent[fieldName], item => xidRow(item) === xidRow(row))
             if (index === -1) {

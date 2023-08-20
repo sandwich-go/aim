@@ -139,7 +139,8 @@ export default {
         },'数据已删除')
       }
       const confirmConfig = deleteConfirmConfig(this.proxyConfigRef, {row,rows})
-      if(confirmConfig.enable){
+      if(confirmConfig.enable && !this.proxyConfigRef.isLocalData ){
+        // 如果是本地数据proxy不再询问
         confirmConfig.doneFunc = confirmDoneFunc
         jsb.cc.confirmDelete(_this, confirmConfig)
       }else{
@@ -168,10 +169,16 @@ export default {
       this.tryPromise('query',{params:params},({resp,error})=>{
         if(resp){
           // 不能直接赋值，vue检测array元素变化存在一些问题
-          this.tableData = []
-          jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')),(item)=>{
-            this.tableData.push(item)
-          })
+          if(this.isModeInplace()){
+            // inPlace模式下直接使用传入的数据，增加入proxy，编辑，缺少提交的窗口
+            this.tableData = jsb.pathGet(resp, 'Data')
+            this.processTableData(this.tableData)
+          }else{
+            this.tableData = []
+            jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')),(item)=>{
+              this.tableData.push(item)
+            })
+          }
           this.PagerTotal = jsb.pathGet(resp, 'PagerTotal')
           if(!this.PagerTotal){
             this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)

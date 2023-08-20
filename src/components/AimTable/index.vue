@@ -656,9 +656,6 @@ export default {
       if (this.isModeInplace()) {
         // inplace编辑模式
         this.tableData.push(newRow)
-        if(this.proxyConfigRef.isLocalData ){
-          this.tryProxySaveRow(newRow)
-        }
       } else {
         // form 表单编辑逻辑
         this.showFormEditorForRow(newRow)
