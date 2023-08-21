@@ -1215,11 +1215,43 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@sandwich-go/aim@0.1.114":
+  version "0.1.114"
+  resolved "https://registry.yarnpkg.com/@sandwich-go/aim/-/aim-0.1.114.tgz#f26a74cd182e259540a120439afa89aee504d97f"
+  integrity sha512-swnEwcROLPIDwnrQSy3qRRPFHrPLNXC5CTa0ewFl8bwZnuAOc8eFWFTBorFU/uLHj3GuJNqsHbBawCxniSIkgw==
+  dependencies:
+    "@sandwich-go/jsb" "0.1.105"
+    codemirror "^5.41.0"
+    core-js "^3.8.3"
+    crypto "^1.0.1"
+    element-ui "2.12.0"
+    i "^0.3.7"
+    js-yaml "4.1.0"
+    jsonlint-mod "1.7.6"
+    sass "^1.62.0"
+    sass-loader "^13.2.2"
+    sortablejs "^1.15.0"
+    vue "^2.6.14"
+    vue-codemirror "^4.0.6"
+    vue-loading-overlay "3.4.2"
+    vue-select-image "^1.9.0"
+
 "@sandwich-go/jsb@0.1.100":
   version "0.1.100"
   resolved "https://registry.yarnpkg.com/@sandwich-go/jsb/-/jsb-0.1.100.tgz#bf68c77fe0e81605bc2604d7679044daf7a1b88f"
   integrity sha512-90WzoHDt7NkpntGQ16FD1pLhvpMyPvttBO0WWlFU1A+Ve0oqyj+ef+RRE6ARrRTsKn+mzx1r7CNhIJyjUutzbA==
   dependencies:
+    buffer "^6.0.3"
+    clipboard "^2.0.11"
+    moment "^2.29.4"
+    sass-loader "7.1.0"
+
+"@sandwich-go/jsb@0.1.105":
+  version "0.1.105"
+  resolved "https://registry.yarnpkg.com/@sandwich-go/jsb/-/jsb-0.1.105.tgz#065446fb5888286b5301dc9b3b5c4b9585e22319"
+  integrity sha512-O8lzYa3z/KKRRJ6nfMS5zICFpw26tZkJa7bAIOq0Yycz3QVIIyZP0KhyV9FHU/1sKcfPE/oHABKPOakIWw0MmQ==
+  dependencies:
+    "@sandwich-go/jsb" "0.1.100"
     buffer "^6.0.3"
     clipboard "^2.0.11"
     moment "^2.29.4"

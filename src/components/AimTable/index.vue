@@ -408,7 +408,11 @@ export default {
       visitSettingDrawerVisible: false,
     }
   },
+  destroyed() {
+    jsb.cc.emitter.off("aim_table_layout",this.doLayout)
+  },
   created() {
+    jsb.cc.emitter.on("aim_table_layout",this.doLayout)
     this.tableData = this.processTableData(this.tableData)
     if(this.autoQuery){
       this.proxyQueryData()
