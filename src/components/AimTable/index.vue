@@ -380,6 +380,10 @@ export default {
     Loading
   },
   props: {
+    onEventDoLayout:{
+      type:String,
+      default:'aim_table_layout'
+    },
     selection: Boolean,// 是否支持选择
     // eslint-disable-next-line no-unused-vars
     selectionEnable: {type: Function, default: (row)=> {return true},},
@@ -409,10 +413,14 @@ export default {
     }
   },
   destroyed() {
-    jsb.cc.emitter.off("aim_table_layout",this.doLayout)
+    if(this.onEventDoLayout){
+      jsb.cc.emitter.off(this.onEventDoLayout,this.doLayoutByEvent)
+    }
   },
   created() {
-    jsb.cc.emitter.on("aim_table_layout",this.doLayout)
+    if(this.onEventDoLayout){
+      jsb.cc.emitter.on(this.onEventDoLayout,this.doLayoutByEvent)
+    }
     this.tableData = this.processTableData(this.tableData)
     if(this.autoQuery){
       this.proxyQueryData()
@@ -457,6 +465,15 @@ export default {
     getProxySlotName,
     getProxyTipSlotName,
     getProxyCommentSlotName,
+    doLayoutByEvent(nextTick){
+      if(nextTick){
+        this.$nextTick(() => {
+          this.doLayout()
+        })
+      }else{
+        this.doLayout()
+      }
+    },
     setDebugMessage(title, msg = '') {
       aimTableLog(title, msg)
     },

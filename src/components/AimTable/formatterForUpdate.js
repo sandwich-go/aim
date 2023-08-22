@@ -14,6 +14,11 @@ export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual
     return row2StorageItemFunc(ret)
 }
 
+const str2Func = {
+    "number":({value})=>{ return Number(value)},
+    "string":({value})=>{ return String(value)}
+}
+
 export function formatterForUpdate(schema,row,removeVirtual=false){
     jsb.each(schema, function (fieldSchema) {
         if (isVirtualField(fieldSchema)) {
@@ -27,7 +32,13 @@ export function formatterForUpdate(schema,row,removeVirtual=false){
         row[fieldName] = formatValue(fieldSchema.type,row[fieldName])
 
         if (fieldSchema['formatterUpdate']) {
-            row[fieldName] = fieldSchema['formatterUpdate']({row:row,value:row[fieldName]})
+            let formatter = fieldSchema['formatterUpdate']
+            if(jsb.isString(formatter)){
+                formatter = str2Func[formatter.toLowerCase()]
+            }
+            if(formatter) {
+                row[fieldName] = formatter({row:row,value:row[fieldName]})
+            }
         }
 
         if (jsb.isUndefined(row[fieldName])) {
