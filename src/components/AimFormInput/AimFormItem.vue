@@ -151,6 +151,7 @@ export default {
           righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
           proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, fs.field),
           selection: true,
+          rowRemoveShortcut: true,
           popupAppendToBody: true,
         }, this.cellConfig(fs))
         cc.editConfig = jsb.objectAssignNX(cc.editConfig, {
