@@ -20,22 +20,26 @@ function boolProcess({value}) {
     const strVal = String(value).toLowerCase()
     return !(value === false || strVal === "false" || strVal === "0" || strVal === "null" || strVal === "undefined" ||jsb.isEmpty(value));
 }
+
 export const Str2FormatterFunc = {
     "string":stringProcess,
     "number":numberProcess,
+    "boolean":boolProcess,
     "float":numberProcess,
     "double":numberProcess,
-    "boolean":boolProcess,
-    "int8":numberProcess,
-    "int16":numberProcess,
     "int32":numberProcess,
-    "int64":numberProcess,
-    "uint8":numberProcess,
-    "uint16":numberProcess,
     "uint32":numberProcess,
+    "int64":numberProcess,
     "uint64":numberProcess,
+    "bytes":stringProcess,
     "json":stringProcess,
     "lua":stringProcess,
+    "sint32":numberProcess,
+    "sint64":numberProcess,
+    "fixed32":numberProcess,
+    "fixed64":numberProcess,
+    "sfixed32":numberProcess,
+    "sfixed64":numberProcess,
 }
 
 export function formatterForUpdate(schema,row,removeVirtual=false){
