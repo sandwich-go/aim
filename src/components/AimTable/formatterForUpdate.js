@@ -49,6 +49,7 @@ export function formatterForUpdate(schema,row,removeVirtual=false){
 
         row[fieldName] = formatValue(fieldSchema.type,row[fieldName])
 
+        // 如果上层错误设定了formatterUpdate会导致此处无法对数据进行格式化，如对{}设定了 formatterUpdate = string
         if (fieldSchema['formatterUpdate']) {
             let formatter = fieldSchema['formatterUpdate']
             if(jsb.isString(formatter)){

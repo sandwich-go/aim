@@ -17,9 +17,21 @@ export function calcLabelWidth(schema) {
         return jsb.pathGet(element,'nameForm',element['name'])
     })
     jsb.each(schema,(fs)=>{
+        const nameSub = jsb.pathGet(fs,'nameSubForm',fs['nameSub'])
+        if(nameSub){
+            nameList.push(nameSub)
+        }
+    })
+
+
+    jsb.each(schema,(fs)=>{
         if(fs.type ==='object' && fs.squash) {
             jsb.each(fs.fields,(subFs)=>{
                 nameList.push(jsb.pathGet(subFs,'nameForm',subFs['name']))
+                const nameSub = jsb.pathGet(subFs,'nameSubForm',subFs['nameSub'])
+                if(nameSub){
+                    nameList.push(nameSub)
+                }
             })
         }
     })

@@ -1,7 +1,7 @@
 <template>
   <el-form-item v-if="showForm(getRow(),fs,dataRef)" :key="fs['field']" :prop="fs['field']" :ref="fs['field']" :label-width="getLabelWidth(fs)">
   <span slot='label' v-if="getShowLabel(fs)">
-      <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)">
+      <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)" :sub="formNameSub(fs)">
         <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
           <slot :name="tipSlotName(fs)" :field-schema="fs"/>
         </template>
@@ -66,7 +66,7 @@
       <template v-if="fs['squashDivider']">
         <el-divider v-bind="squashDividerConfig">
           <i v-if="squashDividerConfig.icon" :class="squashDividerConfig.icon" :style="getSquashDividerIconStyle()"></i>
-          <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)">
+          <column-header :field-schema="fs" :ignore-required="true" :name="formLabel(fs)" :sub="formNameSub(fs)">
             <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
               <slot :name="tipSlotName(fs)" :field-schema="fs"/>
             </template>
@@ -278,6 +278,9 @@ export default {
     },
     formLabel(fs) {
       return jsb.pathGet(fs, 'nameForm', fs['name'])
+    },
+    formNameSub(fs) {
+      return jsb.pathGet(fs, 'nameSubForm', fs['nameSub'])
     },
     fieldComponentKey(fs) {
       return `${this.parentKey}_${fs.field}_${xidRow(this.getRow())}`

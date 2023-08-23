@@ -6,6 +6,8 @@
         v-if="fieldSchema['tips'] || fieldSchema['tipsHTML']"
         :cell-config="{
           label:name,
+          labelSub:sub,
+          containerStyleForSub:containerStyleForSub,
           tips:fieldSchema['tips'],
           tipsHTML:fieldSchema['tipsHTML']
         }"></cell-view-label-tooltip>
@@ -15,6 +17,10 @@
       </div>
       <span><i class="el-icon-info"></i>{{ name }}</span>
     </el-tooltip>
+    <span v-else-if="sub" class="aim-title-sub-container" :style="containerStyleForSub">
+      <span class="aim-title-sub-main">{{ name }}</span>
+      <span class="aim-title-sub-info">{{ sub }}</span>
+    </span>
     <span v-else>{{ name }}</span>
   </span>
 </template>
@@ -31,6 +37,8 @@ export default {
   props: {
     fieldSchema: Object,
     name:String,
+    sub:String,
+    containerStyleForSub:{},
     ignoreRequired:Boolean
   },
 }
@@ -55,4 +63,26 @@ export default {
     top: 0.4em;
   }
 }
+
+.aim-title-sub-container {
+  display: inline-block;
+  position: relative;
+  line-height: 1.5; /* 设置行高 */
+  text-align: right; /* 右对齐文本 */
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+.aim-title-sub-main {
+  display: block;
+}
+
+.aim-title-sub-info {
+  position: absolute;
+  font-size: 10px; /* 设置说明信息字号 */
+  bottom: -1.6em; /* 负的字号差值，用于在主文本下方显示 */
+  right: 0; /* 右对齐说明信息 */
+  color:#707070;
+  font-weight: lighter;
+}
+
 </style>
