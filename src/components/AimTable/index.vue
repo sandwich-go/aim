@@ -90,7 +90,7 @@
               :fied-schema="fs"
           >
             <template slot="header">
-              <column-header :field-schema="fs" :name="fs['name']" :sub="fs['nameSub']" :container-style-for-sub="{'margin-bottom':'16px'}">
+              <column-header :field-schema="fs" :name="fs['name']" :sub="isModeInplace()?fs['nameSub']:''" :container-style-for-sub="{'margin-bottom':'16px'}">
                 <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
                   <slot :name="tipSlotName(fs)" :field-schema="fs"/>
                 </template>
