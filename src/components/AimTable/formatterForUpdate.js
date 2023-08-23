@@ -21,7 +21,11 @@ function boolProcess({value}) {
     return !(value === false || strVal === "false" || strVal === "0" || strVal === "null" || strVal === "undefined" ||jsb.isEmpty(value));
 }
 export const Str2FormatterFunc = {
+    "string":stringProcess,
     "number":numberProcess,
+    "float":numberProcess,
+    "double":numberProcess,
+    "boolean":boolProcess,
     "int8":numberProcess,
     "int16":numberProcess,
     "int32":numberProcess,
@@ -30,11 +34,8 @@ export const Str2FormatterFunc = {
     "uint16":numberProcess,
     "uint32":numberProcess,
     "uint64":numberProcess,
-    "string":stringProcess,
     "json":stringProcess,
     "lua":stringProcess,
-    "boolean":boolProcess,
-    "bool":boolProcess,
 }
 
 export function formatterForUpdate(schema,row,removeVirtual=false){
