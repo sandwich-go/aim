@@ -159,6 +159,11 @@
             </template>
           </el-table-column>
         </template>
+        <el-table-column key="shortcut_row_remove" v-if="rowRemoveShortcut" width="40" align="center">
+          <template slot-scope="{row}">
+            <el-link :disabled="rowRemoveDisable(row)" @click="tryProxyDelete(row)"><i class="el-icon-close"></i></el-link>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="aim-table-shortcuts-button">
         <div style="float:right">
@@ -387,6 +392,7 @@ export default {
     selection: Boolean,// 是否支持选择
     // eslint-disable-next-line no-unused-vars
     selectionEnable: {type: Function, default: (row)=> {return true},},
+    rowRemoveShortcut: {type: Boolean, default:false},// 是否显示当行删除快捷方式
     autoQuery: {type: Boolean, default:true},
     radio: Boolean,// 是否支持radio选择
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true
@@ -413,12 +419,12 @@ export default {
     }
   },
   destroyed() {
-    if(this.onEventDoLayout){
+    if(this.onEventDoLayout && jsb.cc.emitter){
       jsb.cc.emitter.off(this.onEventDoLayout,this.doLayoutByEvent)
     }
   },
   created() {
-    if(this.onEventDoLayout){
+    if(this.onEventDoLayout && jsb.cc.emitter){
       jsb.cc.emitter.on(this.onEventDoLayout,this.doLayoutByEvent)
     }
     this.tableData = this.processTableData(this.tableData)
@@ -465,6 +471,17 @@ export default {
     getProxySlotName,
     getProxyTipSlotName,
     getProxyCommentSlotName,
+    rowRemoveDisable(row){
+      if(this.readOnly){
+        return true
+      }
+      if(this.selectionEnable){
+        if(!this.selectionEnable(row)){
+          return true
+        }
+      }
+      return false
+    },
     doLayoutByEvent(nextTick){
       if(nextTick){
         this.$nextTick(() => {

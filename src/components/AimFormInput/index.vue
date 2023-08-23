@@ -104,7 +104,7 @@ import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 
 import isString from "@sandwich-go/jsb/isString";
 import jsb from "@sandwich-go/jsb";
-import {AimFormInputInsert, AimFormInputView, calcLabelWidth} from "./index";
+import {AimFormInputInsert, AimFormInputView, calcLabelWidth, showForm} from "./index";
 import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
 import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
@@ -183,6 +183,7 @@ export default {
       // inline显示的字段
       fieldSorted:[],
       currTab:{},
+      groupMaxFieldNumber:0,
     }
   },
   methods: {
@@ -263,6 +264,7 @@ export default {
           })
         }
         let asCommonField = true
+        _this.groupMaxFieldNumber = 0
         jsb.each(_this.groupConfig,function (groupSetting,index){
           if(!asCommonField) {
             return
@@ -287,18 +289,21 @@ export default {
               _this.currTab[`group_tab_${index}`] = _this.formLabel(fs)
             }
             group.fieldSchemaList.push(fs)
+            if(group.fieldSchemaList.length > _this.groupMaxFieldNumber) {
+              _this.groupMaxFieldNumber = group.fieldSchemaList.length
+            }
           }
         })
         if(asCommonField){
           fieldsCommon.push(fs)
         }
       })
-
       jsb.each(_this.groupConfig,function (groupSetting,index){
         if(groupSetting.type==='divider') {
           fieldGroupList.push({index:index,setting:groupSetting,__isGroup:true})
         }
       })
+
 
       _this.fieldSorted = []
       _this.fieldSorted.push(..._this.afterField(fieldGroupList,'@start'))
@@ -313,6 +318,18 @@ export default {
       })
     },
     span(group,field){
+      let showCount = 0
+      jsb.each(group.setting.fields,v=>{
+        if(showForm(this.getRow(),v,this.dataRef)){
+          showCount += 1
+        }
+      })
+      if(showCount === 1){
+        return 24
+      }
+      if(this.groupMaxFieldNumber){
+        return 24 / this.groupMaxFieldNumber
+      }
       if(jsb.isArray(group.setting.fields)) {
         return 24/group.setting.fields.length
       }

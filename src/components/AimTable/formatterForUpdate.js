@@ -14,9 +14,27 @@ export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual
     return row2StorageItemFunc(ret)
 }
 
-const str2Func = {
-    "number":({value})=>{ return Number(value)},
-    "string":({value})=>{ return String(value)}
+function numberProcess({value}) {return Number(value)}
+function stringProcess({value}) {return String(value)}
+function boolProcess({value}) {
+    const strVal = String(value).toLowerCase()
+    return !(value === false || strVal === "false" || strVal === "0" || strVal === "null" || strVal === "undefined" ||jsb.isEmpty(value));
+}
+export const Str2FormatterFunc = {
+    "number":numberProcess,
+    "int8":numberProcess,
+    "int16":numberProcess,
+    "int32":numberProcess,
+    "int64":numberProcess,
+    "uint8":numberProcess,
+    "uint16":numberProcess,
+    "uint32":numberProcess,
+    "uint64":numberProcess,
+    "string":stringProcess,
+    "json":stringProcess,
+    "lua":stringProcess,
+    "boolean":boolProcess,
+    "bool":boolProcess,
 }
 
 export function formatterForUpdate(schema,row,removeVirtual=false){
@@ -34,7 +52,7 @@ export function formatterForUpdate(schema,row,removeVirtual=false){
         if (fieldSchema['formatterUpdate']) {
             let formatter = fieldSchema['formatterUpdate']
             if(jsb.isString(formatter)){
-                formatter = str2Func[formatter.toLowerCase()]
+                formatter = Str2FormatterFunc[formatter.toLowerCase()]
             }
             if(formatter) {
                 row[fieldName] = formatter({row:row,value:row[fieldName]})
