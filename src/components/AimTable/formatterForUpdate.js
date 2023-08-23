@@ -14,7 +14,17 @@ export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual
     return row2StorageItemFunc(ret)
 }
 
-function numberProcess({value}) {return Number(value)}
+function numberProcess({value,pathSlice,fieldName}) {
+    if(!value){
+        return 0
+    }
+    let num = parseFloat(value);
+    if (isNaN(num)) {
+        throw `value: ${value} at ${pathSlice.join(".")}.${fieldName} is not number`
+    }
+    return num;
+}
+
 function stringProcess({value}) {return String(value)}
 function boolProcess({value}) {
     const strVal = String(value).toLowerCase()
@@ -42,7 +52,7 @@ export const Str2FormatterFunc = {
     "sfixed64":numberProcess,
 }
 
-export function formatterForUpdate(schema,row,removeVirtual=false){
+export function formatterForUpdate(schema,row,removeVirtual,parentNameSlice=[]){
     jsb.each(schema, function (fieldSchema) {
         if (isVirtualField(fieldSchema)) {
             if(removeVirtual){
@@ -61,7 +71,7 @@ export function formatterForUpdate(schema,row,removeVirtual=false){
                 formatter = Str2FormatterFunc[formatter.toLowerCase()]
             }
             if(formatter) {
-                row[fieldName] = formatter({row:row,value:row[fieldName]})
+                row[fieldName] = formatter({row:row,value:row[fieldName],pathSlice:parentNameSlice,fieldName:fieldSchema.name})
             }
         }
 
@@ -71,13 +81,18 @@ export function formatterForUpdate(schema,row,removeVirtual=false){
         if(jsb.isString(row[fieldName])){
             row[fieldName] = row[fieldName].trim().replace(/^\s+|\s+$/g, '')
         }
-
         if(fieldSchema.type ==='object' && fieldSchema.fields){
-            row[fieldName] = formatterForUpdate(fieldSchema.fields,row[fieldName])
+            let objectTrace = parentNameSlice.slice();
+            objectTrace.push(fieldSchema.name)
+            row[fieldName] = formatterForUpdate(fieldSchema.fields,row[fieldName],removeVirtual,objectTrace)
         }
         if(fieldSchema.type ==='table' && fieldSchema.fields){
+            let tableTrace = parentNameSlice.slice();
+            tableTrace.push(fieldSchema.name)
             jsb.each(row[fieldName],function (subRow,index){
-                row[fieldName][index] = formatterForUpdate(fieldSchema.fields,subRow)
+                const rowTrace = tableTrace.slice()
+                rowTrace.push(`[${index}]`)
+                row[fieldName][index] = formatterForUpdate(fieldSchema.fields,subRow,removeVirtual,rowTrace)
             })
         }
     })

@@ -348,19 +348,28 @@ export default {
       return jsb.pathGet(si, 'nameForm', si['name'])
     },
     // validate 逻辑层主动调用，单独使用AimFormInput的场景
-    validate(validCallback) {
+    validate(validCallback,errorCallback=null) {
       const _this = this
-      this.__validateFromAimTable(validCallback,(v)=>{
+      this.__validateFromAimTable(validCallback,errorCallback,(v)=>{
         // 移除虚拟字段、移除控制字段，转换为
         return CleanDataForStorage(_this.schema,v,this.row2Storage,true,true)
       })
     },
     // __validateFromAimTable aim table 内部调用
-    __validateFromAimTable(validCallback,processor=(v)=>{return v}) {
+    __validateFromAimTable(validCallback,errorCallback=null,processor=(v)=>{return v}) {
       const _this = this
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          validCallback(processor(_this.dataRef))
+          try {
+            const tmp = processor(_this.dataRef)
+            validCallback(tmp)
+          }catch (e){
+            if(jsb.isFunction(errorCallback)){
+              errorCallback(e)
+            }else{
+              jsb.cc.toastWarning(e)
+            }
+          }
         }
       })
     },
