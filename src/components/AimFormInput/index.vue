@@ -385,6 +385,9 @@ export default {
     formHeight() {
       return this.$refs.form.$el.clientHeight
     },
+    formRows() {
+      return this.fieldSorted.length
+    },
     privateShouldCellDisable({fieldSchema, cell}) {
       if(this.readOnly){
         return true
