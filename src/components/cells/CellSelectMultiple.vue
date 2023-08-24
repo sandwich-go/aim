@@ -14,8 +14,8 @@
                :key="val.key || val.value"
                :disabled="val.disabled"
                :label="val.label">
-      <span>{{ option.label }}</span>
-      <span v-if="option.comment" style="float:right;right: 0;gap: 3px;color:dodgerblue;font-size:12px" v-html="option.comment"/>
+      <span>{{ val.label }}</span>
+      <span v-if="val.comment" style="float:right;right: 0;gap: 3px;color:#707070;font-size:12px" v-html="val.comment"/>
     </el-option>
   </el-select>
 </template>
