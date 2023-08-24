@@ -382,6 +382,9 @@ export default {
     fieldComponentKey(fs) {
       return `${this.parentKey}_${fs.field}_${xidRow(this.getRow())}`
     },
+    formHeight() {
+      return this.$refs.form.$el.clientHeight
+    },
     privateShouldCellDisable({fieldSchema, cell}) {
       if(this.readOnly){
         return true
