@@ -482,14 +482,12 @@ export default {
       }
       return false
     },
-    doLayoutByEvent(nextTick){
-      if(nextTick){
-        this.$nextTick(() => {
-          this.doLayout()
-        })
-      }else{
-        this.doLayout()
-      }
+    doLayoutByEvent(){
+      const _this = this
+      _this.$nextTick(() => {
+        _this.doLayout()
+        setTimeout(function () {_this.doLayout()}, 50)
+      })
     },
     setDebugMessage(title, msg = '') {
       aimTableLog(title, msg)
