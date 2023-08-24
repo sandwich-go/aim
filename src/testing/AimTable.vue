@@ -373,6 +373,7 @@ export default {
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           summary: true,
+          errorMessage:"test",
           readOnly: true,
           fixed: "left",
           filter: {

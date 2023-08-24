@@ -1,5 +1,11 @@
 <template>
   <span v-if="name">
+    <el-tooltip v-if="fieldSchema.errorMessage" effect="light">
+      <div slot="content">
+        <div v-html="fieldSchema.errorMessage"></div>
+      </div>
+      <span><i v-if="fieldSchema.errorMessage" class="el-icon-warning" style="color: red"></i></span>
+    </el-tooltip>
     <i v-if="!ignoreRequired&&fieldSchema.required" class="aim-required-icon"></i>
     <i v-if="fieldSchema.locked" class="el-icon-lock"></i>
     <cell-view-label-tooltip
@@ -36,10 +42,10 @@ export default {
   components: {CellViewLabelTooltip},
   props: {
     fieldSchema: Object,
-    name:String,
-    sub:String,
-    containerStyleForSub:{},
-    ignoreRequired:Boolean
+    name: String,
+    sub: String,
+    containerStyleForSub: {},
+    ignoreRequired: Boolean
   },
 }
 </script>
@@ -81,7 +87,7 @@ export default {
   font-size: 10px; /* 设置说明信息字号 */
   bottom: -1.6em; /* 负的字号差值，用于在主文本下方显示 */
   right: 0; /* 右对齐说明信息 */
-  color:#707070;
+  color: #707070;
   font-weight: lighter;
 }
 
