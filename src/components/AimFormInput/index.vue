@@ -115,6 +115,7 @@ import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/vue-loading.css';
 import {isVirtualField} from "@/components/AimTable/virtual_field";
 import {CleanDataForStorage} from "@/components/AimTable/formatterForUpdate";
+import {FormRulesFromSchema} from "@/components/AimTable/validate";
 
 export default {
   name: "AimFormInput",
@@ -150,7 +151,7 @@ export default {
       type: [Object, String],
       default: null,
     },
-    rules: Object,
+    rules:Object,
     shouldCellDisable: Function,
     // 最外层调用不要设定rowTop,递归时传递到最底层便于统一回调外层
     rowTop: Object,
@@ -167,6 +168,11 @@ export default {
     row2Storage:Function,
   },
   created() {
+    if(this.rules){
+      this.rulesRef = this.rules
+    }else{
+      this.rulesRef = FormRulesFromSchema(this.schema)
+    }
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
   },
@@ -176,7 +182,7 @@ export default {
       CodeButtonRowSelectedMinus,
       labelWidthPixel: this.labelWidth || calcLabelWidth(this.schema),
       //fixme 需要table打入rules,独立使用AimFormInput的时候需要根据schema更新rules
-      rulesRef: this.rules,
+      rulesRef: {},
       fieldsCommon: [],
       dataRef: this.data,
       inLoading:false,

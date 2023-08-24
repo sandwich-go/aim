@@ -23,8 +23,10 @@ const uniqueFieldNameValidator = (fieldSchema,params) => {
     }
 }
 
-export function formRulesFromSchema(schema, paramsVisitor = undefined, nameField = 'name') {
+// FormRulesFromSchema 构造schema的rules
+export function FormRulesFromSchema(schema, paramsVisitor = undefined, nameField = 'name') {
     let rules = {}
+    nameField = nameField || 'name'
     jsb.each(schema, function (fs) {
         if (!rules[fs.field]) {
             rules[fs.field] = []
@@ -35,7 +37,7 @@ export function formRulesFromSchema(schema, paramsVisitor = undefined, nameField
         if (fs.required) {
             rules[fs.field].push({required: true, message: `${fs[nameField]}不能为空`, trigger: 'blur'})
         }
-        if (fs.uniq) {
+        if (fs.uniq && paramsVisitor) {
             rules[fs.field].push({validator: uniqueFieldNameValidator(fs,paramsVisitor), trigger: 'blur'})
         }
     })

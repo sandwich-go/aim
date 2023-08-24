@@ -224,7 +224,7 @@
             :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
             :alert-info="rowEditorAlert"
             :mode="rowEditState"
-            :rules="formRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
+            :rules="FormRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
             :row-top="rowInEditForm"
             :enable-watcher="true"
         >
@@ -305,7 +305,7 @@ import {
   CodeButtonTableSetting,
   CodeLinkFieldCopy
 } from "@/components/cells/const";
-import {formRulesFromSchema} from "@/components/AimTable/validate";
+import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {directionToolbarSpan} from "@/components/AimTable/toolbar";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 import ColumnExpand from "@/components/AimTable/Column/ColumnExpand.vue";
@@ -464,7 +464,7 @@ export default {
     formatterFunction,
     cellShowWhenGetLostForTable: cellShowWhenLostForTable,
     directionToolbarSpan,
-    formRulesFromSchema,
+    FormRulesFromSchema,
     validSchema: filterVirtualField,
     xidRow,
     tipSlotName,

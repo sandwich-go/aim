@@ -4,7 +4,7 @@
       <div slot="content">
         <div v-html="fieldSchema.errorMessage"></div>
       </div>
-      <span><i v-if="fieldSchema.errorMessage" class="el-icon-warning" style="color: red"></i></span>
+      <span><i class="el-icon-warning" style="color: red"></i></span>
     </el-tooltip>
     <i v-if="!ignoreRequired&&fieldSchema.required" class="aim-required-icon"></i>
     <i v-if="fieldSchema.locked" class="el-icon-lock"></i>

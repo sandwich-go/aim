@@ -85,7 +85,7 @@
           :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
           :should-cell-disable="shouldCellDisable"
           :popup-append-to-body="true"
-          :rules="formRulesFromSchema(fs.fields)"
+          :rules="FormRulesFromSchema(fs.fields)"
       ></aim-form-input>
       <el-card v-else  class="box-card" shadow="always">
         <aim-form-input
@@ -99,7 +99,7 @@
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
             :should-cell-disable="shouldCellDisable"
             :popup-append-to-body="true"
-            :rules="formRulesFromSchema(fs.fields)"
+            :rules="FormRulesFromSchema(fs.fields)"
         ></aim-form-input>
       </el-card>
     </div>
@@ -126,7 +126,7 @@ import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
-import {formRulesFromSchema} from "@/components/AimTable/validate";
+import {FormRulesFromSchema} from "@/components/AimTable/validate";
 
 export default {
   name: "AimFormItem",
@@ -193,7 +193,7 @@ export default {
   },
   methods: {
     showForm,
-    formRulesFromSchema,
+    FormRulesFromSchema,
     commentSlotName,
     getProxyCommentSlotName,
     getProxyTipSlotName,
