@@ -62,10 +62,11 @@ export default {
     optionsTryGroup(options,field='aimGroup'){
       let group2Options = {}
       jsb.each(options,item=>{
-        if(!group2Options[field]){
-          group2Options[field] = []
+        const groupVal = item[field] || ''
+        if(!group2Options[groupVal]){
+          group2Options[groupVal] = []
         }
-        group2Options[field].push(item)
+        group2Options[groupVal].push(item)
       })
       const optionGroup = []
       jsb.each(group2Options,(item,key)=>{
