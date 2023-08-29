@@ -8,6 +8,7 @@
       v-model="dataRef[fieldName]"
       :disabled="disabled"
       :style="cc.style"
+      :loading="inOptionLoading"
       size="mini"
       clearable
       @change="change">

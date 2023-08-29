@@ -4,6 +4,7 @@
       v-model="dataRef[fieldName]"
       :disabled="disabled"
       clearable
+      :loading="inOptionLoading"
       size="mini"
       @change="change">
     <el-option-group

@@ -27,6 +27,7 @@ export default {
         style: {},
         change: _this.emitChange
       },
+      inOptionLoading:false,
       optionsUsing:[],
       optionDynamicGetter:null
     }
@@ -35,7 +36,12 @@ export default {
     if (this.data) {
       this.dataRef = this.data
     }
-    await this.fetchOptionsData()
+    try{
+      this.inOptionLoading = true
+       await this.fetchOptionsData()
+    }finally {
+      this.inOptionLoading = false
+    }
   },
   methods: {
     async fetchOptionsData() {
@@ -59,7 +65,7 @@ export default {
       }
       this.optionsUsing = this.optionsFmt(optionsGot)
     },
-    optionsTryGroup(options,field='aimGroup'){
+    optionsTryGroup(options,field,autoGroupSort){
       let group2Options = {}
       jsb.each(options,item=>{
         const groupVal = item[field] || ''
@@ -68,26 +74,24 @@ export default {
         }
         group2Options[groupVal].push(item)
       })
-      const optionGroup = []
+      let optionGroup = []
       jsb.each(group2Options,(item,key)=>{
         optionGroup.push({label:key,options:item})
       })
       // 优先显示group
-      optionGroup.sort( (a, b) =>{
-        if (a.label === "") {
-          return 1;
-        } else if (b.label === "") {
-          return -1;
-        } else {
-          return a.label.localeCompare(b.label); // 比较非空label的字符串值
-        }
-      })
+      optionGroup = jsb.orderBy(optionGroup,[{field:'label',order:autoGroupSort}])
+
       if(optionGroup.length === 1 && optionGroup[0].label===""){
         return optionGroup[0].options
       }
       return optionGroup
     },
     optionsFmt(optionsGot){
+      const autoGroupField = jsb.pathGet(optionsGot,'autoGroup','autoGroup')
+      const autoGroupSort = jsb.pathGet(optionsGot,'autoGroupSort','desc')
+      if(autoGroupField || autoGroupSort){
+        optionsGot = jsb.pathGet(optionsGot,'options',[])
+      }
       const options = []
       // 将数组转换为option对象
       jsb.each(optionsGot,v=>{
@@ -97,8 +101,11 @@ export default {
           options.push(v)
         }
       })
-      // 如果option的属性字段中含有aimGroup,则自动将其聚合为group
-      return this.optionsTryGroup(options)
+      if(autoGroupField) {
+        // 如果option的属性字段中含有aimGroup,则自动将其聚合为group
+        return this.optionsTryGroup(options,autoGroupField,autoGroupSort)
+      }
+      return options
     },
     getOptions(){
       if(this.optionDynamicGetter) {

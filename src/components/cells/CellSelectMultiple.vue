@@ -5,6 +5,7 @@
       size="mini"
       :style="cc.style"
       filterable
+      :loading="inOptionLoading"
       default-first-option
       :disabled="disabled"
       clearable
