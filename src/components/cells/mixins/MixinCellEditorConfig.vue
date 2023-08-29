@@ -87,9 +87,9 @@ export default {
       return optionGroup
     },
     optionsFmt(optionsGot){
-      const autoGroupField = jsb.pathGet(optionsGot,'autoGroup','autoGroup')
+      const autoGroupField = jsb.pathGet(optionsGot,'autoGroup','')
       const autoGroupSort = jsb.pathGet(optionsGot,'autoGroupSort','desc')
-      if(autoGroupField || autoGroupSort){
+      if(autoGroupField){
         optionsGot = jsb.pathGet(optionsGot,'options',[])
       }
       const options = []
