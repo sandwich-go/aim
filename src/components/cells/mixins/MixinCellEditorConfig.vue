@@ -59,8 +59,36 @@ export default {
       }
       this.optionsUsing = this.optionsFmt(optionsGot)
     },
+    optionsTryGroup(options,field='aimGroup'){
+      let group2Options = {}
+      jsb.each(options,item=>{
+        if(!group2Options[field]){
+          group2Options[field] = []
+        }
+        group2Options[field].push(item)
+      })
+      const optionGroup = []
+      jsb.each(group2Options,(item,key)=>{
+        optionGroup.push({label:key,options:item})
+      })
+      // 优先显示group
+      optionGroup.sort( (a, b) =>{
+        if (a.label === "") {
+          return 1;
+        } else if (b.label === "") {
+          return -1;
+        } else {
+          return a.label.localeCompare(b.label); // 比较非空label的字符串值
+        }
+      })
+      if(optionGroup.length === 1 && optionGroup[0].label===""){
+        return optionGroup[0].options
+      }
+      return optionGroup
+    },
     optionsFmt(optionsGot){
       const options = []
+      // 将数组转换为option对象
       jsb.each(optionsGot,v=>{
         if(jsb.isString(v) || jsb.isNumber(v)){
           options.push({label:v,value:v})
@@ -68,7 +96,8 @@ export default {
           options.push(v)
         }
       })
-      return options
+      // 如果option的属性字段中含有aimGroup,则自动将其聚合为group
+      return this.optionsTryGroup(options)
     },
     getOptions(){
       if(this.optionDynamicGetter) {
