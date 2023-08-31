@@ -23,7 +23,6 @@ export default {
   created() {
     this.ccConfigMerge()
     this.calcWidthPixString("100%")
-    console.log(this.options())
   },
 }
 </script>
