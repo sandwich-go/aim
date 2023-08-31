@@ -42,6 +42,7 @@
           @row-dblclick="rowDblClick"
           @row-click="rowClick"
           :row-key="xidRow"
+          @selection-change="selectionChange"
       >
         <el-table-column v-if="expandConfig" type="expand" key="aim-table-column-expand" width="30"
                          class-name="aim-column-fixed-width" :fixed="inSortIndexEdit?false:'left'">
@@ -281,7 +282,7 @@ import {
   aimTableLog,
   rowFormEditorTitle,
   aimTableError,
-  mustCtrlData
+  mustCtrlData, setRowSelected
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/virtual_field";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -550,6 +551,13 @@ export default {
     },
     thisTarget() {
       return this
+    },
+    // 在控制字段中记录数据是否被选中
+    selectionChange(selectedRows){
+      const selected = jsb.map(selectedRows,row=>xidRow(row))
+      jsb.each(this.tableData,v=>{
+        setRowSelected(v,selected.includes(xidRow(v)))
+      })
     },
     radioRowChanged(row, selected) {
       this.radioRow = selected ? row : null

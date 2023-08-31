@@ -52,6 +52,15 @@ export function mustCtrlData(row) {
     return row
 }
 
+export function setRowSelected(row,selected){
+    row = mustCtrlData(row)
+    row[CtrlDataInRowData].selected =selected
+}
+
+export function isRowSelected(row){
+    return jsb.pathGet(row,`${CtrlDataInRowData}.selected`,false)
+}
+
 export function removeCtrlData(obj) {
     delete obj.___aim_table_ctrl_data
     // 递归obj的每一个值

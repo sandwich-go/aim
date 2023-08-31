@@ -159,6 +159,9 @@ export default {
             return [CodeButtonRowSave]
           }
         })
+        if(jsb.isFunction(cc.proxyConfig)) {
+          cc.proxyConfig = cc.proxyConfig({parent:this.dataRef})
+        }
         return cc
       }
     },
