@@ -57,7 +57,7 @@
             :ref="`aimTable_${fs['field']}`"
             :schema="fs.fields"
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
-            v-bind="cellConfigForTable(fs)"
+            v-bind="cellConfigForTable"
             :key="fieldComponentKey(fs)"
         ></aim-table>
       </el-card>
@@ -144,27 +144,6 @@ export default {
   },
   mixins: [mixinComponentMap],
   computed: {
-    // 如果类型为table，返回字段对应的table配置
-    cellConfigForTable() {
-      return (fs) => {
-        let cc = Object.assign({
-          righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
-          proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, fs.field),
-          selection: true,
-          rowRemoveShortcut: true,
-          popupAppendToBody: true,
-        }, this.cellConfig(fs))
-        cc.editConfig = jsb.objectAssignNX(cc.editConfig, {
-          formEditorCells: function () {
-            return [CodeButtonRowSave]
-          }
-        })
-        if(jsb.isFunction(cc.proxyConfig)) {
-          cc.proxyConfig = cc.proxyConfig({parent:this.dataRef})
-        }
-        return cc
-      }
-    },
     cellConfig() {
       return (fs) => {
         return cellConfigForForm(fs, this.getRow())
@@ -181,6 +160,12 @@ export default {
     // 占位
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
+    if(isAimTable(this.cellName)){
+      this.cellConfigForTable = this.getCellConfigForTable()
+    }
+  },
+  beforeDestroy() {
+    this.cleanTableWatcher()
   },
   data(){
     return {
@@ -191,7 +176,9 @@ export default {
         'font-style':'italic',
         'color':'#707070',
         'font-size':'12px',
-      }
+      },
+      tableWatcher:[],
+      cellConfigForTable:{}
     }
   },
   methods: {
@@ -204,6 +191,42 @@ export default {
     isAimFormInput,
     isAimTable,
     comment,
+    getCellConfigForTable(){
+      const fs = this.fs
+      let cc = Object.assign({
+        righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
+        proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, fs.field),
+        selection: true,
+        rowRemoveShortcut: true,
+        popupAppendToBody: true,
+      }, this.cellConfig(fs))
+      cc.editConfig = jsb.objectAssignNX(cc.editConfig, {
+        formEditorCells: function () {
+          return [CodeButtonRowSave]
+        }
+      })
+      // 逻辑层指定proxyConfig为function，激活动态获取数据属性
+      if(jsb.isFunction(cc.proxyConfig)) {
+        cc.proxyConfig = cc.proxyConfig({parent:this.dataRef})
+        this.setUpTableWatcher(fs.field,jsb.pathGet(cc.proxyConfig,'watch',[]))
+      }
+      return cc
+    },
+    setUpTableWatcher(field,watchFieldList){
+      // 数据更新需要watch同form内的字段
+      // fixme $watch同一个字段会被覆盖，简化处理基于一个form中只有一个动态数据表
+      this.cleanTableWatcher()
+      jsb.each(watchFieldList,watchField=>{
+        const watcher = this.$watch(`dataRef.${watchField}`,function (){
+          this.reloadLocalProxyAimTableData(field)
+        })
+        this.tableWatcher.push(watcher)
+      })
+    },
+    cleanTableWatcher(){
+      this.tableWatcher.forEach((watcher) => watcher());
+      this.tableWatcher = []
+    },
     formButtonLinkArray(field){
       const fb = jsb.pathGet(this.fs,field)
       if(jsb.isFunction(fb)){

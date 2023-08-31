@@ -190,7 +190,11 @@ export default {
       fieldSorted:[],
       currTab:{},
       groupMaxFieldNumber:0,
+      fieldWatcher:[]
     }
+  },
+  beforeDestroy() {
+    this.cleanFieldWatcher()
   },
   methods: {
     commentSlotName,
@@ -198,6 +202,10 @@ export default {
     isString,
     getProxyTipSlotName,
     getProxyCommentSlotName,
+    cleanFieldWatcher(){
+      this.fieldWatcher.forEach((watcher) => watcher());
+      this.fieldWatcher = []
+    },
     afterField(fieldGroupList,field){
       let ret = []
       jsb.each(fieldGroupList,function (group){
@@ -236,6 +244,7 @@ export default {
       const fieldGroupList = []
       const _this = this
 
+      this.cleanFieldWatcher()
       jsb.each(this.schema, function (fs) {
         let formOff = jsb.pathGet(fs,'formOff',undefined)
         if(formOff === undefined) {
@@ -259,7 +268,7 @@ export default {
         }
         const watch = jsb.pathGet(fs,'watch')
         if(_this.enableWatcher && watch){
-          _this.$watch(`dataRef.${fs.field}`,function (newValue, oldValue){
+          const  watcher = _this.$watch(`dataRef.${fs.field}`,function (newValue, oldValue){
             watch({
               row:this.getRow(),
               newValue,
@@ -267,7 +276,8 @@ export default {
               parent:this.dataRef,
               target:this
             })
-          })
+          },jsb.pathGet(fs,'watchOption',{}))
+          _this.fieldWatcher.push(watcher)
         }
         let asCommonField = true
         _this.groupMaxFieldNumber = 0
