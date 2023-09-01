@@ -58,6 +58,7 @@
         <aim-table
             :ref="`aimTable_${fs['field']}`"
             :schema="fs.fields"
+            :group-config="fs['groupConfig'] || []"
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
             v-bind="cellConfigForTable"
             :key="fieldComponentKey(fs)"

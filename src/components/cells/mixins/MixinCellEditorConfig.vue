@@ -32,6 +32,7 @@ export default {
       inOptionLoading:false,
       optionsUsing:[],
       optionsRefresh:false,
+      fieldSchemaRef:this.fieldSchema,
     }
   },
   async created() {
@@ -50,6 +51,17 @@ export default {
       return {parent:this.dataRef,row:this.getRow?this.getRow():null,table:this.tableDataGetter?this.tableDataGetter():null}
     },
     async fetchOptionsData() {
+      try {
+        await this.__fetchOptionsData()
+      }catch (error){
+        if(this.fieldSchemaRef){
+          this.fieldSchemaRef.errorMessage = error
+        }else{
+          console.log("aim option fresh got error ",error)
+        }
+      }
+    },
+    async __fetchOptionsData() {
       let optionsGot = []
       if (typeof this.options === 'function') {
         // 如果 options 是一个函数，则调用它并等待它的返回值
