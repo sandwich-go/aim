@@ -67,7 +67,7 @@ export default {
     })
 
     const _this = this
-    jsb.each(this.getOptions(),(v)=>{
+    jsb.each(this.optionsUsing,(v)=>{
       const option = {
         id:v.id || v.key || v.value,
         src:v.src || v.value,

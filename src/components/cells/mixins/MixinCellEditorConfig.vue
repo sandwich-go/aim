@@ -31,7 +31,7 @@ export default {
       },
       inOptionLoading:false,
       optionsUsing:[],
-      optionDynamicGetter:null
+      optionsRefresh:false,
     }
   },
   async created() {
@@ -52,23 +52,29 @@ export default {
     async fetchOptionsData() {
       let optionsGot = []
       if (typeof this.options === 'function') {
-        // 如果 options 是一个函数，则调用它并等待它的返回值（一个 Promise）
+        // 如果 options 是一个函数，则调用它并等待它的返回值
         optionsGot = this.options(this.optionsParameter());
-        // 返回的是一个数组，说明上层是同步的操作, 动态刷新
-        if(Array.isArray(optionsGot)){
-          this.optionDynamicGetter = this.options
-        }else{
+        if(optionsGot instanceof Promise){
           optionsGot = await this.options(this.optionsParameter());
         }
+        this.optionsRefresh = true
       } else if (this.options instanceof Promise) {
         // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
         optionsGot = await this.options;
+        this.optionsRefresh = true
       } else if (Array.isArray(this.options)) {
-        // 如果 options 是一个数组，则直接赋值给 optionsInner
+        // 如果 options 是一个数组,直接赋值
         optionsGot = this.options;
-        this.optionDynamicGetter = ()=>{return this.options}
+        this.optionsRefresh = false
       }
-      this.optionsUsing = this.optionsFmt(optionsGot)
+      if(jsb.isObjectOrMap(optionsGot)){
+        this.optionsRefresh = jsb.pathGet(optionsGot,'refresh',false)
+        optionsGot = jsb.pathGet(optionsGot,'options',[])
+      }
+      this.optionsUsing = []
+      jsb.each(this.optionsFmt(optionsGot),v=>{
+        this.optionsUsing.push(v)
+      })
     },
     optionsTryGroup(options,field,autoGroupSort){
       let group2Options = {}
@@ -111,12 +117,6 @@ export default {
         return this.optionsTryGroup(options,autoGroupField,autoGroupSort)
       }
       return options
-    },
-    getOptions(){
-      if(this.optionDynamicGetter) {
-        return this.optionsFmt(this.optionDynamicGetter(this.optionsParameter()))
-      }
-      return this.optionsUsing
     },
     emitChange(valNew) {
       this.$emit("input", valNew)

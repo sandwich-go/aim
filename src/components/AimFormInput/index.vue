@@ -279,7 +279,7 @@ export default {
               parent:this.dataRef,
               target:this
             })
-          },jsb.pathGet(fs,'watchOption',{}))
+          },jsb.pathGet(fs,'watchOptions',{}))
           _this.fieldWatcher.push(watcher)
         }
         let asCommonField = true

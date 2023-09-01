@@ -1,27 +1,30 @@
 <template>
-  <cell-select-group
-      v-bind="$props"
-      v-if="isOptionsGroup()">
-  </cell-select-group>
-  <el-select
-      v-else
-      v-model="dataRef[fieldName]"
-      :disabled="disabled"
-      :style="cc.style"
-      :loading="inOptionLoading"
-      size="mini"
-      clearable
-      @change="change">
-    <el-option
-        v-for="option in getOptions()"
-        :key="option.key || option.value"
-        :label="option.label"
-        :disabled="option.disabled"
-        :value="option.value">
-      <span>{{ option.label }}</span>
-      <span v-if="option.comment" style="float:right;right: 0;gap: 3px;color:#707070;font-size:12px" v-html="option.comment"/>
-    </el-option>
-  </el-select>
+  <div  style="display: inline-flex;width: 100%;gap: 2px">
+    <cell-select-group
+        v-bind="$props"
+        v-if="isOptionsGroup()">
+    </cell-select-group>
+    <el-select
+        v-else
+        v-model="dataRef[fieldName]"
+        :disabled="disabled"
+        :style="cc.style"
+        :loading="inOptionLoading"
+        size="mini"
+        clearable
+        @change="change">
+      <el-option
+          v-for="option in optionsUsing"
+          :key="option.key || option.value"
+          :label="option.label"
+          :disabled="option.disabled"
+          :value="option.value">
+        <span>{{ option.label }}</span>
+        <span v-if="option.comment" style="float:right;right: 0;gap: 3px;color:#707070;font-size:12px" v-html="option.comment"/>
+      </el-option>
+    </el-select>
+    <el-button v-if="optionsRefresh" size="mini" circle icon="el-icon-refresh" @click="fetchOptionsData"></el-button>
+  </div>
 </template>
 
 <script>
@@ -39,7 +42,7 @@ export default {
   },
   methods:{
     isOptionsGroup(){
-      const options  = this.getOptions()
+      const options  = this.optionsUsing
       const firstElement =options[0] || {}
       return !!firstElement['options'];
     }
