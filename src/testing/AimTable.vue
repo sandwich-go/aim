@@ -358,6 +358,7 @@ export default {
       },
       groupConfig: [
         {type: 'inline', fields: ['id', 'name'], after: '@start'},
+        {type: 'inline', fields: ['Checkbox', 'Color','SortIdx'], after: '@start'},
         {type: 'tab', fields: ['AuthInfo'],squash:false},
         {type: 'divider', 'content-position': "left", label: '分割线', after: 'Link'}
       ],
@@ -554,6 +555,7 @@ export default {
           field: 'Online',
           name: '是否在线',
           type: 'switch',
+          comment:'是否在线',
           sortable: false,
           align: 'center',
           tips: '当前玩家是否在线',
@@ -582,6 +584,7 @@ export default {
           //min_width: 180,
           sortable: true,
           align: 'center',
+          comment:"comment switch",
           cell: 'CellCheckbox',
           cellForm: 'CellCheckbox',
         },
@@ -605,6 +608,7 @@ export default {
           name: 'Color',
           //min_width: 180,
           cell: 'CellViewColor',
+          comment:"comment color",
           cellForm: 'CellColorPicker',
         },
         {

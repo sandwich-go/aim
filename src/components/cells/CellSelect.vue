@@ -1,5 +1,5 @@
 <template>
-  <div  style="display: inline-flex;width: 100%;gap: 2px">
+  <div  style="display: inline-flex;width: 100%;gap: 2px;">
     <cell-select-group
         v-bind="$props"
         v-if="isOptionsGroup()">
