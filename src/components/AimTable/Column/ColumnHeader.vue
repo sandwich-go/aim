@@ -1,8 +1,8 @@
 <template>
   <span v-if="name">
-    <el-tooltip v-if="fieldSchema.errorMessage" effect="light">
+    <el-tooltip v-if="errorMessage(fieldSchema)" effect="light">
       <div slot="content">
-        <div v-html="fieldSchema.errorMessage"></div>
+        <div v-html="errorMessage(fieldSchema)"></div>
       </div>
       <span><i class="el-icon-warning" style="color: red"></i></span>
     </el-tooltip>
@@ -35,10 +35,11 @@
 
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
 import {getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import {errorMessage} from "@/components/AimFormInput";
 
 export default {
   name: 'ColumnHeader',
-  methods: {getProxyTipSlotName, tipSlotName},
+  methods: {errorMessage, getProxyTipSlotName, tipSlotName},
   components: {CellViewLabelTooltip},
   props: {
     fieldSchema: Object,

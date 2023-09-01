@@ -221,6 +221,7 @@
             :schema="validSchema(schema)"
             :group-config="groupConfig"
             :data="rowInEditForm"
+            :table-data-getter="()=>{return tableData}"
             :popup-append-to-body="true"
             :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
             :alert-info="rowEditorAlert"

@@ -55,6 +55,11 @@ export function comment(row,parent,fieldSchema, commentField = 'comment') {
     return jsb.isFunction(commentVal)?commentVal({row,parent,fieldSchema, fieldValue: row[fieldSchema.field]}):commentVal
 }
 
+export function errorMessage(fieldSchema) {
+    const errorMessageVal = fieldSchema['errorMessage']
+    return jsb.isFunction(errorMessageVal)?errorMessageVal():errorMessageVal
+}
+
 export function showForm(row,fieldSchema,parent){
     const showForm = jsb.pathGet(fieldSchema,'showForm',true)
     if(jsb.isFunction(showForm)){

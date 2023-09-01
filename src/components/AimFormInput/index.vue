@@ -62,6 +62,7 @@
                     :get-row="getRow"
                     :label-width="labelWidth"
                     :show-label="false"
+                    :table-data-getter="tableDataGetter"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
                 >
@@ -84,6 +85,7 @@
             :key="index"
             :data-ref="dataRef"
             :get-row="getRow"
+            :table-data-getter="tableDataGetter"
             :should-cell-disable="shouldCellDisable"
             :private-should-cell-disable="privateShouldCellDisable"
         >
@@ -166,6 +168,7 @@ export default {
     },
     groupConfig:Array,
     row2Storage:Function,
+    tableDataGetter:Function
   },
   created() {
     if(this.rules){

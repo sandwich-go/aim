@@ -12,12 +12,13 @@
             v-if="!fs['formButton'] && !fs['formLink']"
             :is="registeredComponentMap[cellName]"
             :data="dataRef"
-            :get-row="getRow"
             :field-name="fs.field"
             :options="fs.options || []"
             :style-base="{width:'100%'}"
             :cell-config="cellConfig(fs)"
             :field-schema="fs"
+            :table-data-getter="tableDataGetter"
+            :get-row="getRow"
             :formatter="fs['formatterForm']"
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
@@ -31,6 +32,7 @@
             :options="fs.options || []"
             :style-base="{width:'100%'}"
             :cell-config="cellConfig(fs)"
+            :table-data-getter="tableDataGetter"
             :field-schema="fs"
             :formatter="fs['formatterForm']"
             :disabled="shouldDisable()"
@@ -80,6 +82,7 @@
           :row-top="getRow()"
           :label-width="getSubFormLabelWidth(fs)"
           :parent-key="fs.field"
+          :table-data-getter="tableDataGetter"
           :key="fieldComponentKey(fs)"
           :group-config="fs['groupConfig'] || []"
           :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
@@ -92,6 +95,7 @@
             :schema="fs.fields"
             :data="dataRef[fs.field]"
             :row-top="getRow()"
+            :table-data-getter="tableDataGetter"
             :label-width="getSubFormLabelWidth(fs)"
             :parent-key="fs.field"
             :key="fieldComponentKey(fs)"
@@ -131,6 +135,7 @@ import {FormRulesFromSchema} from "@/components/AimTable/validate";
 export default {
   name: "AimFormItem",
   props: {
+    tableDataGetter:Function,
     getRow: Function,
     fs: Object,
     privateShouldCellDisable: Function,
