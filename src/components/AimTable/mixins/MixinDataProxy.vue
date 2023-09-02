@@ -12,6 +12,13 @@ export default {
   name: 'MixinDataProxy',
   props: {
     proxyConfig: Object,
+    // 单独提供费，复用proxy
+    proxyParameter:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
+    },
   },
   mixins:[CreateMixinState()],
   data() {
@@ -75,6 +82,7 @@ export default {
   methods:{
     // eslint-disable-next-line no-unused-vars
     tryPromise(funcName,params,done=null,okToast='') {
+      params = params || {}
       const funcToCall = jsb.pathGet(this.proxyConfigRef,funcName)
       if (!funcToCall) {
         const error = `proxy中未指定 ${funcName} 方法`
@@ -83,6 +91,13 @@ export default {
         return
       }
       this.inLoading = true
+      // 填充预设基础参数
+      jsb.each(this.proxyParameter,(v,k)=>{
+        if(!params[k]){
+          params[k] = v
+        }
+      })
+
       Promise.resolve(funcToCall(params)).then((resp) => {
         okToast && !this.proxyConfigRef.isLocalData && this.toastSuccess(okToast)
         done && done({resp})

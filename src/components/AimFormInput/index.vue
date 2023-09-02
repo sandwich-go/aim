@@ -44,6 +44,31 @@
             </template>
           </el-row>
         </template>
+        <template v-else-if="fs.__isGroup && fs.setting.type ==='card'">
+          <el-form-item v-if="groupShow(fs)" :key="`group_card_${index}`" :label-width="fs.setting.squash?'0px':null" :label="fs.setting.label || ''">
+            <el-card class="box-card" shadow="always">
+              <template v-for="(fss,subIndex) in fs.fieldSchemaList">
+                <aim-form-item
+                    ref="aimFormItem"
+                    :key="`group_card_${index}_${subIndex}`"
+                    :fs="fss"
+                    :label-width="labelWidthPixel"
+                    :data-ref="dataRef"
+                    :get-row="getRow"
+                    :should-cell-disable="shouldCellDisable"
+                    :private-should-cell-disable="privateShouldCellDisable"
+                >
+                  <template :slot="tipSlotName(fs)">
+                    <slot :name="getProxyTipSlotName(fs)"></slot>
+                  </template>
+                  <template :slot="commentSlotName(fs)">
+                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  </template>
+                </aim-form-item>
+              </template>
+            </el-card>
+          </el-form-item>
+        </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='tab'">
           <el-form-item :key="`group_tab_${fs.index}`" :label-width="fs.setting.squash?'0px':null">
             <el-tabs v-model="currTab[`group_tab_${fs.index}`]">
@@ -336,9 +361,18 @@ export default {
         }
       })
     },
+    groupShow(group){
+      let showCount = 0
+      jsb.each(group.fieldSchemaList,v=>{
+        if(showForm(this.getRow(),v,this.dataRef)){
+          showCount += 1
+        }
+      })
+      return showCount !==0
+    },
     span(group,field){
       let showCount = 0
-      jsb.each(group.setting.fields,v=>{
+      jsb.each(group.fieldSchemaList,v=>{
         if(showForm(this.getRow(),v,this.dataRef)){
           showCount += 1
         }
