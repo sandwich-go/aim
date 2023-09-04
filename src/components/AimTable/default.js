@@ -1,16 +1,15 @@
 // isVirtualField 是否为虚拟列
 // 以下情况会认为是一个虚拟列，只进行展示，不参与编辑操作
-//  - virtual = true
 //  - 未指定field字段
+// virtual字段会被赋默认数值，如果指定了field
 import jsb from "@sandwich-go/jsb";
 import {type2DefaultVal} from "../cells/types";
-import {isVirtualField} from "./virtual_field";
 
 // FillDefaultDataWithSchema 根据schema填充默认数据
 export function FillDefaultDataWithSchema(schema, row) {
     row = row || {}
     jsb.each(schema, function (fieldSchema) {
-        if (isVirtualField(fieldSchema)) {
+        if (!fieldSchema.field ) {
             return;
         }
         const fieldName = fieldSchema.field
