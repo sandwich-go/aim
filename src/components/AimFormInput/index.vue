@@ -382,7 +382,7 @@ export default {
       if(showCount === 1){
         return 24
       }
-      if(this.groupMaxFieldNumber && jsb.pathGet(group.setting,'spanAlign',true)){
+      if(this.groupMaxFieldNumber && jsb.pathGet(group.setting,'itemAlign',true)){
         return 24 / this.groupMaxFieldNumber
       }
       if(jsb.isArray(group.setting.fields)) {
