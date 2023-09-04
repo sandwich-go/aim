@@ -1,7 +1,7 @@
 // isVirtualField 是否为虚拟列
 // 以下情况会认为是一个虚拟列，只进行展示，不参与编辑操作
 //  - virtual = true
-//  - 为指定field字段
+//  - 未指定field字段
 import jsb from "@sandwich-go/jsb";
 import {type2DefaultVal} from "../cells/types";
 import {isVirtualField} from "./virtual_field";
