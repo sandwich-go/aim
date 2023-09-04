@@ -144,8 +144,6 @@ import {isVirtualField} from "@/components/AimTable/virtual_field";
 import {CleanDataForStorage} from "@/components/AimTable/formatterForUpdate";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
-import row from "element-ui/packages/row";
-
 export default {
   name: "AimFormInput",
   components: {
@@ -206,7 +204,7 @@ export default {
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
     // 创建视图的时候根据schema填充默认数值，防止由于数值缺失导致的访问undefined
-    this.dataRef = FillDefaultDataWithSchema(this.dataRef,this.schema)
+    this.dataRef = FillDefaultDataWithSchema(this.schema,this.dataRef)
   },
   data() {
     return {
