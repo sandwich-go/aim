@@ -275,6 +275,7 @@ export default {
       const _this = this
 
       this.cleanFieldWatcher()
+      _this.groupMaxFieldNumber = 0
       jsb.each(this.schema, function (fs) {
         let formOff = jsb.pathGet(fs,'formOff',undefined)
         if(formOff === undefined) {
@@ -310,7 +311,6 @@ export default {
           _this.fieldWatcher.push(watcher)
         }
         let asCommonField = true
-        _this.groupMaxFieldNumber = 0
         jsb.each(_this.groupConfig,function (groupSetting,index){
           if(!asCommonField) {
             return
