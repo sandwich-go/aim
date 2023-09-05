@@ -463,8 +463,8 @@ export default {
         {
           field: 'AuthInfoObject', name: 'AuthInfoObject',
           type: 'object',
-          squash:true,
-          squashDivider:{icon:'el-icon-mobile-phone'},
+          squash:false,
+          // squashDivider:{icon:'el-icon-mobile-phone'},
           tips: '对象支持',
           cellFormConfig: {
             table: {
