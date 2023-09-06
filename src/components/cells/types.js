@@ -59,14 +59,14 @@ export const typeDefaults = {
     select_multiple: {
         table:'CellViewTag',
         form:'CellSelectMultiple',
-        default: () => [],
+        default: () => {return []},
         label:'下拉多选',
         placeholderSupport:true,
     },
     select_multiple_input: {
         table:'CellViewTag',
         form:'CellSelectMultipleInput',
-        default: () => [],
+        default: () => {return []},
         label:'下拉多选 或 标签输入',
         placeholderSupport:true,
     },
@@ -125,7 +125,7 @@ export const typeDefaults = {
     table: {
         table:'CellTriggerTable',
         form:'AimTable',
-        default:() => [],
+        default: () => {return []},
         label:'表格',
         tagType:"warning",
         tagEffect:"light"
@@ -133,7 +133,7 @@ export const typeDefaults = {
     object: {
         table:'CellTriggerFormInput',
         form:'AimFormInput',
-        default:() => {},
+        default: () => {return {}},
         label:'对象',
         tagType:"warning",
         tagEffect:"light"

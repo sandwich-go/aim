@@ -13,23 +13,35 @@ export function FillDefaultDataWithSchema(schema, row) {
             return;
         }
         const fieldName = fieldSchema.field
-        if (!jsb.isUndefined(row[fieldName]) && !jsb.isNull(row[fieldName])) {
-            return
+
+        let noValue = jsb.isUndefined(row[fieldName]) || jsb.isNull(row[fieldName])
+        if (noValue) {
+            // 如果不存在值，调用默认的default初始化
+            const defaultVal = jsb.pathGet(fieldSchema, 'default', undefined)
+            if (!jsb.isUndefined(defaultVal)) {
+                row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal() : defaultVal
+            }
         }
-        const defaultVal = jsb.pathGet(fieldSchema, 'default', undefined)
-        if (!jsb.isUndefined(defaultVal)) {
-            row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal() : defaultVal
-            return
+        // 默认值赋值后再次检测
+        noValue = jsb.isUndefined(row[fieldName]) || jsb.isNull(row[fieldName])
+        if(noValue){
+            // 调用类型对应的默认赋值逻辑
+            const vByType = type2DefaultVal[fieldSchema.type]
+            if(jsb.isFunction(vByType)){
+                row[fieldName] = vByType(fieldSchema)
+            }else{
+                row[fieldName] = vByType
+            }
         }
-        if(fieldSchema.type==='object' && fieldSchema.fields) {
+        // object类型防止由于{}无法给子字段赋值
+        if(jsb.isObjectOrMap(row[fieldName]) && fieldSchema.type==='object' && fieldSchema.fields){
             row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName])
-            return;
         }
-        const vByType = type2DefaultVal[fieldSchema.type]
-        if(jsb.isFunction(vByType)){
-            row[fieldName] = vByType(fieldSchema)
-        }else{
-            row[fieldName] = vByType
+        // array嵌套数组类型
+        if(jsb.isArray(row[fieldName]) && fieldSchema.type==='table' && fieldSchema.fields){
+            jsb.each(row[fieldName],(v,index)=>{
+                row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v)
+            })
         }
     })
     return row

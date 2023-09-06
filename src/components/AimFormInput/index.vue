@@ -203,8 +203,6 @@ export default {
     }
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
-    // 创建视图的时候根据schema填充默认数值，防止由于数值缺失导致的访问undefined
-    this.dataRef = FillDefaultDataWithSchema(this.schema,this.dataRef)
   },
   data() {
     return {
@@ -273,6 +271,9 @@ export default {
       const fieldsCommon = []
       const fieldGroupList = []
       const _this = this
+
+      // 创建视图的时候根据schema填充默认数值，防止由于数值缺失导致的访问undefined
+      this.dataRef = FillDefaultDataWithSchema(this.schema,this.dataRef)
 
       this.cleanFieldWatcher()
       _this.groupMaxFieldNumber = 0
