@@ -1,5 +1,5 @@
 import jsb from "@sandwich-go/jsb";
-import {formatValue} from "../cells/types";
+import {boolProcess, formatValue, numberProcess, stringProcess} from "../cells/types";
 import {isVirtualField} from "./virtual_field";
 import {isRowSelected, removeCtrlData} from "./table";
 
@@ -14,22 +14,6 @@ export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual
     return row2StorageItemFunc(ret)
 }
 
-function numberProcess({value,pathSlice,fieldName}) {
-    if(!value){
-        return 0
-    }
-    let num = parseFloat(value);
-    if (isNaN(num)) {
-        throw `value: ${value} at ${pathSlice.join(".")}.${fieldName} is not number`
-    }
-    return num;
-}
-
-function stringProcess({value}) {return String(value)}
-function boolProcess({value}) {
-    const strVal = String(value).toLowerCase()
-    return !(value === false || strVal === "false" || strVal === "0" || strVal === "null" || strVal === "undefined" ||jsb.isEmpty(value));
-}
 
 export const Str2FormatterFunc = {
     "string":stringProcess,
@@ -61,7 +45,8 @@ export function formatterForUpdate(schema,row,removeVirtual,parentNameSlice=[]){
             return;
         }
         const fieldName = fieldSchema.field
-
+        let fieldsSubmit = fieldSchema.fields
+        // 简单的根据类型返回格式化数据
         row[fieldName] = formatValue(fieldSchema.type,row[fieldName])
         // 如果上层错误设定了formatterUpdate会导致此处无法对数据进行格式化，如对{}设定了 formatterUpdate = string
         if (fieldSchema['formatterUpdate']) {
@@ -71,6 +56,7 @@ export function formatterForUpdate(schema,row,removeVirtual,parentNameSlice=[]){
             }
             if(formatter) {
                 let selected = []
+                // table 或者 object 复合类型如果提供了formatter，则完全以formatter为准，不再进行对单个元素的格式化
                 if(fieldSchema.type ==='table'){
                     jsb.each(row[fieldName] || [],(tableRow,index)=>{
                         if(isRowSelected(tableRow)){
@@ -78,34 +64,43 @@ export function formatterForUpdate(schema,row,removeVirtual,parentNameSlice=[]){
                         }
                     })
                 }
-                row[fieldName] = formatter({
+                let valFormatted = formatter({
                     row:row,
                     value:row[fieldName],
                     pathSlice:parentNameSlice,
                     fieldName:fieldSchema.name,
                     selected:selected
                 })
+                // table类型韵如通过fields指定格式化后希望用到的字段，防止后续字段格式化时加入提交时被删除的字段
+                if(fieldSchema.type ==='table' && jsb.isObjectOrMap(valFormatted)){
+                    fieldsSubmit = jsb.pathGet(valFormatted,'aimFieldsSubmit',fieldsSubmit)
+                    valFormatted = jsb.pathGet(valFormatted,'value',valFormatted)
+                }
+                if(fieldSchema.type ==='object' && jsb.isObjectOrMap(valFormatted)){
+                    fieldsSubmit = jsb.pathGet(valFormatted,'aimFieldsSubmit',fieldsSubmit)
+                    valFormatted = jsb.pathGet(valFormatted,'value',valFormatted)
+                }
+                row[fieldName] = valFormatted
             }
         }
-
         if (jsb.isUndefined(row[fieldName])) {
             return
         }
         if(jsb.isString(row[fieldName])){
-            row[fieldName] = row[fieldName].trim().replace(/^\s+|\s+$/g, '')
+            row[fieldName] = stringProcess({value:row[fieldName]})
         }
-        if(fieldSchema.type ==='object' && fieldSchema.fields){
+        if(fieldSchema.type ==='object' && fieldsSubmit){
             let objectTrace = parentNameSlice.slice();
             objectTrace.push(fieldSchema.name)
-            row[fieldName] = formatterForUpdate(fieldSchema.fields,row[fieldName],removeVirtual,objectTrace)
+            row[fieldName] = formatterForUpdate(fieldsSubmit,row[fieldName],removeVirtual,objectTrace)
         }
-        if(fieldSchema.type ==='table' && fieldSchema.fields){
+        if(fieldSchema.type ==='table' && fieldsSubmit){
             let tableTrace = parentNameSlice.slice();
             tableTrace.push(fieldSchema.name)
             jsb.each(row[fieldName],function (subRow,index){
                 const rowTrace = tableTrace.slice()
                 rowTrace.push(`[${index}]`)
-                row[fieldName][index] = formatterForUpdate(fieldSchema.fields,subRow,removeVirtual,rowTrace)
+                row[fieldName][index] = formatterForUpdate(fieldsSubmit,subRow,removeVirtual,rowTrace)
             })
         }
     })

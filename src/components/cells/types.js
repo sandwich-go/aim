@@ -195,12 +195,33 @@ export function minWidthTableColumn(fieldType) {
     return jsb.pathGet(typeDefaults,`${fieldType}.minTableColumnWidth`,80)
 }
 
+export function numberProcess({value,pathSlice,fieldName}) {
+    if(!value){
+        return 0
+    }
+    let num = parseFloat(value);
+    if (isNaN(num)) {
+        pathSlice = pathSlice || []
+        throw `value: ${value} at ${pathSlice.join(".")}.${fieldName} is not number`
+    }
+    return num;
+}
+
+export function stringProcess({value}) {return String(value).trim().replace(/^\s+|\s+$/g, '')}
+export function boolProcess({value}) {
+    const strVal = String(value).toLowerCase()
+    return !(value === false || strVal === "false" || strVal === "0" || strVal === "null" || strVal === "undefined" ||jsb.isEmpty(value));
+}
+
 export function formatValue(fieldType,fieldValue) {
     if(fieldType === 'input_number') {
-        return Number(fieldValue)
+        return numberProcess({value:fieldValue})
+    }
+    if(fieldType === 'switch') {
+        return boolProcess({value:fieldValue})
     }
     if(jsb.isString(fieldValue)){
-        return fieldValue.trim()
+        return stringProcess({value:fieldValue})
     }
     return fieldValue
 }
