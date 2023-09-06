@@ -30,6 +30,7 @@
                     :label-width="labelWidthPixel"
                     :data-ref="dataRef"
                     :get-row="getRow"
+                    :table-data-getter="tableDataGetter"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
                 >
@@ -55,6 +56,7 @@
                     :label-width="labelWidthPixel"
                     :data-ref="dataRef"
                     :get-row="getRow"
+                    :table-data-getter="tableDataGetter"
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
                 >
