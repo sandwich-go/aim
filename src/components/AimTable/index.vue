@@ -458,7 +458,17 @@ export default {
         aimTableError(`分页模式 与 ${this.sortConfigRef.sortIdxField} 配置不兼容`)
       }
     }
-    this.initDrag(dragCallback)
+    this.initDrag(()=>{
+      if(dragCallback){
+        dragCallback()
+      }
+      if(jsb.pathGet(this.proxyConfigRef,'isLocalData',false)){
+        const saveTableData = jsb.pathGet(this.proxyConfigRef,'saveTableData')
+        if(saveTableData){
+          saveTableData({tableData:this.tableData})
+        }
+      }
+    })
   },
   methods: {
     commentSlotName,

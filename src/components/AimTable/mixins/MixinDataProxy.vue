@@ -4,7 +4,7 @@ import {aimTableError} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
 import {cleanDataForTable} from "@/components/AimTable/clean";
-import {CleanDataForStorage} from "@/components/AimTable/formatterForUpdate";
+import {CleanDataForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -30,6 +30,8 @@ export default {
   created() {
     jsb.objectAssignNX(this.proxyConfigRef, {
       isLocalData:false,
+      // 数据提交时是否移除非schema中的字段
+      submitRemoveFieldNotInSchema:true,
       item2Row(item) {
         return item
       },
@@ -167,6 +169,9 @@ export default {
       // 本地proxy的数据依赖xid定位，保留xid数据
       const removeCtrlData = !this.proxyConfigRef.isLocalData
       let toSave = CleanDataForStorage(this.schema,row,this.proxyConfigRef.row2Item,true,removeCtrlData)
+      if(this.proxyConfigRef.submitRemoveFieldNotInSchema){
+        toSave=RemoveFieldNotInSchema(this.schema,toSave)
+      }
       this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){
           this.doLayout(true)

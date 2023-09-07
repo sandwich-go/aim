@@ -3,8 +3,28 @@ import {boolProcess, formatValue, numberProcess, stringProcess} from "../cells/t
 import {isVirtualField} from "./virtual_field";
 import {isRowSelected, removeCtrlData} from "./table";
 
+
+// RemoveFieldNotInSchema 移除data中不在schema中的字段
+export function RemoveFieldNotInSchema(schema,row) {
+    jsb.each(row,(v,k)=>{
+        const validField = jsb.find(schema,fs=>fs.field === k)
+        if(!validField){
+            delete row[k]
+        }
+        if(validField.type ==='object'){
+            row[k] = RemoveFieldNotInSchema(validField.fields||[],v)
+        }
+        if(validField.type ==='table'){
+            jsb.each(v,function (subRow,index){
+                row[k][index] = RemoveFieldNotInSchema(validField.fields||[],subRow)
+            })
+        }
+    })
+    return row
+}
+
 // CleanDataForStorage 为数据存储清理数据，如移除虚拟字段，移除控制字段，字段数据的格式化等
-export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual=false,removeCtrl=true,) {
+export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual=false,removeCtrl=true) {
     row2StorageItemFunc = row2StorageItemFunc || function (v){return v}
     let ret = jsb.clone(row)
     formatterForUpdate(schema,ret,removeVirtual)

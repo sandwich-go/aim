@@ -143,7 +143,7 @@ import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/vue-loading.css';
 import {isVirtualField} from "@/components/AimTable/virtual_field";
-import {CleanDataForStorage} from "@/components/AimTable/formatterForUpdate";
+import {CleanDataForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 export default {
@@ -195,7 +195,11 @@ export default {
     },
     groupConfig:Array,
     row2Storage:Function,
-    tableDataGetter:Function
+    tableDataGetter:Function,
+    submitRemoveFieldNotInSchema:{
+      type:Boolean,
+      default:true,
+    },
   },
   created() {
     if(this.rules){
@@ -408,13 +412,17 @@ export default {
     // validate 逻辑层主动调用，单独使用AimFormInput的场景
     validate(validCallback,errorCallback=null) {
       const _this = this
-      this.__validateFromAimTable(validCallback,errorCallback,(v)=>{
-        // 移除虚拟字段、移除控制字段，转换为
-        return CleanDataForStorage(_this.schema,v,this.row2Storage,true,true)
+      this.__validatePrivate(validCallback,errorCallback,(v)=>{
+        // 移除虚拟字段、移除控制字段
+        const tmp = CleanDataForStorage(_this.schema,v,this.row2Storage,true,true)
+        if(!this.submitRemoveFieldNotInSchema){
+          return tmp
+        }
+        return RemoveFieldNotInSchema(_this.schema,tmp)
       })
     },
-    // __validateFromAimTable aim table 内部调用
-    __validateFromAimTable(validCallback,errorCallback=null,processor=(v)=>{return v}) {
+    // __validatePrivate 外部不要直接调用
+    __validatePrivate(validCallback,errorCallback=null,processor=(v)=>{return v}) {
       const _this = this
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -430,6 +438,10 @@ export default {
           }
         }
       })
+    },
+    // __validateFromAimTable aim table 内部调用，此处不主动清理数据，由aim table完成
+    __validateFromAimTable(validCallback,errorCallback=null,processor=(v)=>{return v}) {
+      this.__validatePrivate(validCallback,errorCallback,processor)
     },
     fieldComponentKey(fs) {
       return `${this.parentKey}_${fs.field}_${xidRow(this.getRow())}`
