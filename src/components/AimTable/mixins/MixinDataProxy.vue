@@ -31,7 +31,7 @@ export default {
     jsb.objectAssignNX(this.proxyConfigRef, {
       isLocalData:false,
       // 数据提交时是否移除非schema中的字段
-      submitRemoveFieldNotInSchema:true,
+      submitRemoveFieldNotInSchema:false,
       item2Row(item) {
         return item
       },

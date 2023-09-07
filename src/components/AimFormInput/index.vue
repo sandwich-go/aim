@@ -198,7 +198,7 @@ export default {
     tableDataGetter:Function,
     submitRemoveFieldNotInSchema:{
       type:Boolean,
-      default:true,
+      default:false,
     },
   },
   created() {
