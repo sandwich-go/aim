@@ -10,6 +10,7 @@ export function RemoveFieldNotInSchema(schema,row) {
         const validField = jsb.find(schema,fs=>fs.field === k)
         if(!validField){
             delete row[k]
+            return
         }
         if(validField.type ==='object'){
             row[k] = RemoveFieldNotInSchema(validField.fields||[],v)
