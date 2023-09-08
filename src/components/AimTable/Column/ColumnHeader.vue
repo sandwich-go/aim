@@ -8,6 +8,15 @@
     </el-tooltip>
     <i v-if="!ignoreRequired&&fieldSchema.required" class="aim-required-icon"></i>
     <i v-if="fieldSchema.locked" class="el-icon-lock"></i>
+    <template v-for="(item,index) in fieldSchema['iconList'] || []">
+    <el-tooltip v-if="item['tooltip'] && item.icon" effect="light" :key="index">
+      <div slot="content">
+        <div v-html="item['tooltip']"></div>
+      </div>
+      <span><i v-if="item.icon" v-bind="item.icon"></i></span>
+    </el-tooltip>
+    </template>
+
     <cell-view-label-tooltip
         v-if="fieldSchema['tips'] || fieldSchema['tipsHTML']"
         :cell-config="{
