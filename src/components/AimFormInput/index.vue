@@ -34,11 +34,11 @@
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
                 >
-                  <template :slot="tipSlotName(fs)">
+                  <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
                   </template>
-                  <template :slot="commentSlotName(fs)">
-                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
+                    <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
                   </template>
                 </aim-form-item>
               </el-col>
@@ -60,11 +60,11 @@
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
                 >
-                  <template :slot="tipSlotName(fs)">
+                  <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
                   </template>
-                  <template :slot="commentSlotName(fs)">
-                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
+                    <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
                   </template>
                 </aim-form-item>
               </template>
@@ -93,11 +93,11 @@
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
                 >
-                  <template :slot="tipSlotName(fs)">
+                  <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
                   </template>
-                  <template :slot="commentSlotName(fs)">
-                    <slot :name="getProxyCommentSlotName(fs)"></slot>
+                  <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
+                    <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
                   </template>
                 </aim-form-item>
               </el-tab-pane>
@@ -116,11 +116,11 @@
             :should-cell-disable="shouldCellDisable"
             :private-should-cell-disable="privateShouldCellDisable"
         >
-          <template :slot="tipSlotName(fs)">
+          <template v-slot:[tipSlotName(fs)]="{}">
             <slot :name="getProxyTipSlotName(fs)"></slot>
           </template>
-          <template :slot="commentSlotName(fs)">
-            <slot :name="getProxyCommentSlotName(fs)"></slot>
+          <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
+            <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
           </template>
         </aim-form-item>
       </template>

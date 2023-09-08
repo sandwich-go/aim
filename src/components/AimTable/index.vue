@@ -233,8 +233,8 @@
           <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
             <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
           </template>
-          <template v-for="fs in schema" v-slot:[getProxyCommentSlotName(fs)]="{}">
-            <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fs"/>
+          <template v-for="fs in schema" v-slot:[getProxyCommentSlotName(fs)]="{fieldSchema,row}">
+            <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fieldSchema" :row="row"/>
           </template>
         </aim-form-input>
       </template>
