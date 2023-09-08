@@ -39,12 +39,7 @@ export default {
     if (this.data) {
       this.dataRef = this.data
     }
-    try{
-      this.inOptionLoading = true
-       await this.fetchOptionsData()
-    }finally {
-      this.inOptionLoading = false
-    }
+    await this.fetchOptionsData()
   },
   methods: {
     optionsParameter(){
@@ -52,6 +47,7 @@ export default {
     },
     async fetchOptionsData() {
       try {
+        this.inOptionLoading = true
         await this.__fetchOptionsData()
       }catch (error){
         if(this.fieldSchemaRef){
@@ -59,25 +55,27 @@ export default {
         }else{
           console.log("aim option fresh got error ",error)
         }
+      }finally {
+        this.inOptionLoading = false
       }
     },
     async __fetchOptionsData() {
       let optionsGot = []
       if (typeof this.options === 'function') {
+        this.optionsRefresh = true
         // 如果 options 是一个函数，则调用它并等待它的返回值
         optionsGot = this.options(this.optionsParameter());
         if(optionsGot instanceof Promise){
-          optionsGot = await this.options(this.optionsParameter());
+          optionsGot = await optionsGot;
         }
-        this.optionsRefresh = true
       } else if (this.options instanceof Promise) {
+        this.optionsRefresh = true
         // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
         optionsGot = await this.options;
-        this.optionsRefresh = true
       } else if (Array.isArray(this.options)) {
+        this.optionsRefresh = false
         // 如果 options 是一个数组,直接赋值
         optionsGot = this.options;
-        this.optionsRefresh = false
       }
       if(jsb.isObjectOrMap(optionsGot)){
         this.optionsRefresh = jsb.pathGet(optionsGot,'refresh',false)
