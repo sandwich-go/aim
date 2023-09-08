@@ -152,6 +152,13 @@ export const typeDefaults = {
         label:'密码',
         placeholderSupport:true,
     },
+    address:{
+        table:'CellViewLink',
+        form:'CellInput',
+        default:'',
+        label:'链接',
+        placeholderSupport:true,
+    },
     image:{
         table:'CellViewImage',
         table_inplace:'CellTriggerImageSelect',

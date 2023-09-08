@@ -78,12 +78,16 @@ export default {
         // 如果 options 是一个数组,直接赋值
         optionsGot = this.options;
       }
+      let autoGroupField = ''
+      let autoGroupSort = ''
       if(jsb.isObjectOrMap(optionsGot)){
         tmpOptionsRefresh = jsb.pathGet(optionsGot,'refresh',false)
+        autoGroupField = jsb.pathGet(optionsGot,'autoGroup','')
+        autoGroupSort = jsb.pathGet(optionsGot,'autoGroupSort','desc')
         optionsGot = jsb.pathGet(optionsGot,'options',[])
       }
       this.optionsUsing = []
-      jsb.each(this.optionsFmt(optionsGot),v=>{
+      jsb.each(this.optionsFmt(optionsGot,autoGroupField,autoGroupSort),v=>{
         this.optionsUsing.push(v)
       })
       this.optionsRefresh = tmpOptionsRefresh
@@ -109,12 +113,7 @@ export default {
       }
       return optionGroup
     },
-    optionsFmt(optionsGot){
-      const autoGroupField = jsb.pathGet(optionsGot,'autoGroup','')
-      const autoGroupSort = jsb.pathGet(optionsGot,'autoGroupSort','desc')
-      if(autoGroupField){
-        optionsGot = jsb.pathGet(optionsGot,'options',[])
-      }
+    optionsFmt(optionsGot,autoGroupField,autoGroupSort){
       const options = []
       // 将数组转换为option对象
       jsb.each(optionsGot,v=>{
