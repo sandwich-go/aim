@@ -61,30 +61,32 @@ export default {
     },
     async __fetchOptionsData() {
       let optionsGot = []
+      let tmpOptionsRefresh = false
       if (typeof this.options === 'function') {
-        this.optionsRefresh = true
+        tmpOptionsRefresh = true
         // 如果 options 是一个函数，则调用它并等待它的返回值
         optionsGot = this.options(this.optionsParameter());
         if(optionsGot instanceof Promise){
           optionsGot = await optionsGot;
         }
       } else if (this.options instanceof Promise) {
-        this.optionsRefresh = true
+        tmpOptionsRefresh = true
         // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
         optionsGot = await this.options;
       } else if (Array.isArray(this.options)) {
-        this.optionsRefresh = false
+        tmpOptionsRefresh = false
         // 如果 options 是一个数组,直接赋值
         optionsGot = this.options;
       }
       if(jsb.isObjectOrMap(optionsGot)){
-        this.optionsRefresh = jsb.pathGet(optionsGot,'refresh',false)
+        tmpOptionsRefresh = jsb.pathGet(optionsGot,'refresh',false)
         optionsGot = jsb.pathGet(optionsGot,'options',[])
       }
       this.optionsUsing = []
       jsb.each(this.optionsFmt(optionsGot),v=>{
         this.optionsUsing.push(v)
       })
+      this.optionsRefresh = tmpOptionsRefresh
     },
     optionsTryGroup(options,field,autoGroupSort){
       let group2Options = {}
