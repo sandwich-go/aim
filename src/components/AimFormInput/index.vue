@@ -37,8 +37,8 @@
                   <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
                   </template>
-                  <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
-                    <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
+                  <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
+                    <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
                   </template>
                 </aim-form-item>
               </el-col>
@@ -63,8 +63,8 @@
                   <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
                   </template>
-                  <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
-                    <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
+                  <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
+                    <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
                   </template>
                 </aim-form-item>
               </template>
@@ -96,8 +96,8 @@
                   <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
                   </template>
-                  <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
-                    <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
+                  <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
+                    <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
                   </template>
                 </aim-form-item>
               </el-tab-pane>
@@ -119,8 +119,8 @@
           <template v-slot:[tipSlotName(fs)]="{}">
             <slot :name="getProxyTipSlotName(fs)"></slot>
           </template>
-          <template v-slot:[commentSlotName(fs)]="{fieldSchema,row}">
-            <slot :name="getProxyCommentSlotName(fs)" :field-chema="fieldSchema" :row="row"></slot>
+          <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
+            <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
           </template>
         </aim-form-item>
       </template>
@@ -138,7 +138,13 @@ import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/cons
 import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
-import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import {
+  allSlotName,
+  commentSlotName,
+  getProxyCommentSlotName, getProxyCommentSlotNameWithName,
+  getProxyTipSlotName,
+  tipSlotName
+} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -169,6 +175,9 @@ export default {
         "--form-container-height": `${this.height}px`
       };
     },
+    allCommentSlotName(){
+      return allSlotName(this.schema,'commentSlot')
+    }
   },
   mixins: [mixinComponentMap],
   props: {
@@ -231,6 +240,7 @@ export default {
     this.cleanFieldWatcher()
   },
   methods: {
+    getProxyCommentSlotNameWithName,
     commentSlotName,
     tipSlotName,
     isString,

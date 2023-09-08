@@ -233,8 +233,8 @@
           <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
             <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
           </template>
-          <template v-for="fs in schema" v-slot:[getProxyCommentSlotName(fs)]="{fieldSchema,row}">
-            <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fieldSchema" :row="row"/>
+          <template v-for="name in allCommentSlotName" v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+            <slot  :name="name" :field-schema="fieldSchema" :row="row"/>
           </template>
         </aim-form-input>
       </template>
@@ -331,8 +331,9 @@ import {
   formatterFunction
 } from "@/components/AimTable/cell";
 import {
+  allSlotName,
   commentSlotName,
-  getProxyCommentSlotName,
+  getProxyCommentSlotName, getProxyCommentSlotNameWithName,
   getProxySlotName,
   getProxyTipSlotName,
   tipSlotName
@@ -360,6 +361,9 @@ export default {
       return (fs, row) => {
         return cellConfigForTable(fs, row)
       }
+    },
+    allCommentSlotName(){
+      return allSlotName(this.schema,'commentSlot')
     }
   },
   mixins: [
@@ -472,6 +476,7 @@ export default {
   },
   methods: {
     commentSlotName,
+    getProxyCommentSlotNameWithName,
     rowFormEditorTitle,
     formatterFunction,
     cellShowWhenGetLostForTable: cellShowWhenLostForTable,

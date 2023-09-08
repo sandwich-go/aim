@@ -36,6 +36,9 @@
           ></el-option>
         </el-select>
       </template>
+      <template v-slot:commentSlot2>
+        <span>11111111111111111111111</span>
+      </template>
       <template v-slot:commentSlot>
         <el-table
             :data="tipTableData"
@@ -477,8 +480,8 @@ export default {
             return value && value.UseSystemSSH
           },
           fields: [
-            {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,},
-            {field: 'UserName', name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder'
+            {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,   },
+            {field: 'UserName', name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder',       commentSlot: 'commentSlot2'
               ,options:[{"label":"user1",value:"user1"},{"label":"user2",value:"user2"}]},
             {field: 'UserKey', name: 'UserKey',type:'select_input' , width: 300,'placeholder':'placeholder'
               ,options:[{"label":"key1",value:"key1"},{"label":"key2",value:"key2"}]}

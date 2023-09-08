@@ -43,7 +43,6 @@ export default {
   },
   methods:{
     isOptionsGroup(){
-      console.log("isOptionsGroup ",this.optionsUsing)
       const options  = this.optionsUsing
       const firstElement = options[0] || {}
       return !!firstElement['options'];

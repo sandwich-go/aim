@@ -15,7 +15,7 @@
             :field-name="fs.field"
             :options="fs.options || []"
             :style-base="{width:'100%'}"
-            :cell-config="cellConfig(fs)"
+            :cell-config="cellConfig"
             :field-schema="fs"
             :table-data-getter="tableDataGetter"
             :get-row="getRow"
@@ -31,7 +31,7 @@
             :field-name="fs.field"
             :options="fs.options || []"
             :style-base="{width:'100%'}"
-            :cell-config="cellConfig(fs)"
+            :cell-config="cellConfig"
             :table-data-getter="tableDataGetter"
             :field-schema="fs"
             :formatter="fs['formatterForm']"
@@ -59,10 +59,17 @@
             :ref="`aimTable_${fs['field']}`"
             :schema="fs.fields"
             :group-config="fs['groupConfig'] || []"
-            :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
+            :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig ||{}})"
             v-bind="cellConfigForTable"
             :key="fieldComponentKey(fs)"
-        ></aim-table>
+        >
+          <template v-for="subFS in fs['fields'] || []" v-slot:[getProxyTipSlotName(subFS)]="{}">
+            <slot  v-if="tipSlotName(subFS)" :name="tipSlotName(subFS)"></slot>
+          </template>
+          <template v-for="name in allCommentSlotName" v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+            <slot :name="name" :field-chema="fieldSchema" :row="row"></slot>
+          </template>
+        </aim-table>
       </el-card>
     </div>
     <div v-else-if="isAimFormInput(cellName)">
@@ -86,11 +93,18 @@
           :table-data-getter="tableDataGetter"
           :key="fieldComponentKey(fs)"
           :group-config="fs['groupConfig'] || []"
-          :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
+          :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig ||{}})"
           :should-cell-disable="shouldCellDisable"
           :popup-append-to-body="true"
           :rules="FormRulesFromSchema(fs.fields)"
-      ></aim-form-input>
+      >
+        <template v-for="subFS in fs['fields'] || []" v-slot:[getProxyTipSlotName(subFS)]="{}">
+          <slot  v-if="tipSlotName(subFS)" :name="tipSlotName(subFS)"></slot>
+        </template>
+        <template v-for="name in allCommentSlotName" v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+          <slot :name="name" :field-chema="fieldSchema" :row="row"></slot>
+        </template>
+      </aim-form-input>
       <el-card v-else  class="box-card" shadow="always">
         <aim-form-input
             :schema="fs.fields"
@@ -101,11 +115,18 @@
             :parent-key="fs.field"
             :key="fieldComponentKey(fs)"
             :group-config="fs['groupConfig'] || []"
-            :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig(fs) ||{}})"
+            :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig ||{}})"
             :should-cell-disable="shouldCellDisable"
             :popup-append-to-body="true"
             :rules="FormRulesFromSchema(fs.fields)"
-        ></aim-form-input>
+        >
+          <template v-for="subFS in fs['fields'] || []" v-slot:[getProxyTipSlotName(subFS)]="{}">
+            <slot  v-if="tipSlotName(subFS)" :name="tipSlotName(subFS)"></slot>
+          </template>
+          <template v-for="name in allCommentSlotName" v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+            <slot :name="name" :field-chema="fieldSchema" :row="row"></slot>
+          </template>
+        </aim-form-input>
       </el-card>
     </div>
     <div v-else>{{ cellName }} not supported</div>
@@ -129,7 +150,13 @@ import {isAimFormInput, isAimTable} from "@/components/cells/is";
 import {comment, disableForm, showForm} from "@/components/AimFormInput/index";
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import CellViewLabelTooltip from "@/components/cells/CellViewTooltip.vue";
-import {commentSlotName, getProxyCommentSlotName, getProxyTipSlotName, tipSlotName} from "@/components/AimTable/slot";
+import {
+  allSlotName,
+  commentSlotName,
+  getProxyCommentSlotName, getProxyCommentSlotNameWithName,
+  getProxyTipSlotName,
+  tipSlotName
+} from "@/components/AimTable/slot";
 import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 
@@ -150,10 +177,8 @@ export default {
   },
   mixins: [mixinComponentMap],
   computed: {
-    cellConfig() {
-      return (fs) => {
-        return cellConfigForForm(fs, this.getRow())
-      }
+    allCommentSlotName(){
+      return allSlotName(this.fs,'commentSlot')
     }
   },
   components: {
@@ -163,6 +188,7 @@ export default {
     AimTable: () => import("@/components/AimTable/index.vue"),
   },
   created() {
+    this.cellConfig = cellConfigForForm(this.fs, this.getRow())
     // 占位
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
@@ -175,6 +201,7 @@ export default {
   },
   data(){
     return {
+      cellConfig:{},
       dateFormatter:{},
       cellName:cellNameForForm(this.fs, this.getRow()),
       squashDividerConfig:this.getSquashDividerConfig(this.fs),
@@ -197,6 +224,7 @@ export default {
     isAimFormInput,
     isAimTable,
     comment,
+    getProxyCommentSlotNameWithName,
     getCellConfigForTable(){
       const fs = this.fs
       let cc = Object.assign({
@@ -205,7 +233,7 @@ export default {
         selection: true,
         rowRemoveShortcut: true,
         popupAppendToBody: true,
-      }, this.cellConfig(fs))
+      }, this.cellConfig)
       cc.editConfig = jsb.objectAssignNX(cc.editConfig, {
         formEditorCells: function () {
           return [CodeButtonRowSave]
@@ -245,7 +273,7 @@ export default {
       if(v){
         return v
       }
-      return this.privateShouldCellDisable({fieldSchema:this.fs,cell:this.cellConfig(this.fs) ||{}})
+      return this.privateShouldCellDisable({fieldSchema:this.fs,cell:this.cellConfig ||{}})
     },
     // 刷新当前表内local proxy 的aim表数据
     reloadLocalProxyAimTableData(field){
