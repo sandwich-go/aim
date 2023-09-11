@@ -597,7 +597,8 @@ export default {
           name: 'Datetime',
           cell: 'CellDatePicker',
           cellForm: 'CellDatePicker',
-          filter: {},
+          filter: {
+          },
         },
         {
           field: 'DatetimeRange',

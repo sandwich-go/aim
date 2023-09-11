@@ -9,6 +9,17 @@ export default {
   props: {
     filterConfig: Object,
   },
+  watch: {
+    filterData: {
+      handler: function () {
+        if(this.isFilterRemote()){
+          return
+        }
+        this.filterSearch()
+      },
+      deep: true,
+    },
+  },
   data() {
     return {
       filterConfigRef: this.filterConfig || {}

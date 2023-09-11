@@ -27,7 +27,8 @@ export default {
       dataRef: {},
       cc: {
         style: {},
-        change: _this.emitChange
+        change: _this.emitChange,
+        clearable:true,
       },
       inOptionLoading:false,
       optionsUsing:[],
