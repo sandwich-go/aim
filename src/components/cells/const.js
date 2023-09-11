@@ -30,7 +30,7 @@ export const CodeButtonRowSelectedClose = "btnRowSelectedClose"
 export const CodeLinkFieldCopy = "linkFieldCopy"
 export const CodeLinkFieldJump = "linkFieldJump"
 export const CodeLinkFilterSearch = "linkFilterSearch"
-
+export const CodeLinkFilterSearchClose = "linkFilterSearchClose"
 
 // 快捷方式按钮属性映射
 export const code2OptionsMapping = {}
@@ -76,6 +76,8 @@ code2OptionsMapping[CodeButtonRowSave] = {
 
 code2OptionsMapping[CodeButtonRowHistory] = {icon: 'el-icon-date', label: '历史', type: 'success', circle: true}
 
+
+code2OptionsMapping[CodeLinkFilterSearchClose] = {icon: 'el-icon-close', type: 'info'}
 code2OptionsMapping[CodeLinkFilterSearch] = {icon: 'el-icon-search', type: 'info'}
 code2OptionsMapping[CodeLinkFieldCopy] = {icon: 'el-icon-document-copy', type: 'primary'}
 code2OptionsMapping[CodeLinkFieldJump ] = {icon: 'el-icon-link', type: 'primary'}

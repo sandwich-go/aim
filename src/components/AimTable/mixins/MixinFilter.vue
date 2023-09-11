@@ -2,7 +2,7 @@
 
 import jsb from "@sandwich-go/jsb";
 import {cellNameForFormByType} from "@/components/cells/types";
-import {CodeLinkFilterSearch} from "@/components/cells/const";
+import {CodeLinkFilterSearch, CodeLinkFilterSearchClose} from "@/components/cells/const";
 
 export default {
   name: 'MixinFilter',
@@ -61,8 +61,11 @@ export default {
         schemaFilter.push(fieldFilter)
       })
       if (schemaFilter.length) {
-        if(jsb.pathGet(this.filterConfigRef, 'btnTrigger', true)){
+        if(jsb.pathGet(this.filterConfigRef, 'linkSearchTrigger', true)){
           schemaFilter.push({code: CodeLinkFilterSearch})
+        }
+        if(jsb.pathGet(this.filterConfigRef, 'linkSearchClose', true)){
+          schemaFilter.push({code: CodeLinkFilterSearchClose})
         }
         let leftCells = jsb.pathGet(this.headerConfigRef, 'leftCells', ['FILTER'])
         if(jsb.isEmpty(leftCells)){

@@ -305,7 +305,7 @@ import {
   CodeButtonRowSelectedMinus,
   CodeButtonSaveTableData, CodeButtonSortIndex,
   CodeButtonTableSetting,
-  CodeLinkFieldCopy
+  CodeLinkFieldCopy, CodeLinkFilterSearch, CodeLinkFilterSearchClose
 } from "@/components/cells/const";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {directionToolbarSpan} from "@/components/AimTable/toolbar";
@@ -589,6 +589,7 @@ export default {
     },
     // 默认的code处理逻辑
     defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
+      const _this = this
       const editDone = ({error}) => {
         if (!error && fromForm) {
           this.rowFormEditorVisible = false
@@ -627,7 +628,13 @@ export default {
           this.addRow()
           break
         case CodeButtonFilterSearch:
+        case CodeLinkFilterSearch:
           this.filterSearch()
+          break
+        case CodeLinkFilterSearchClose:
+          jsb.each(this.filterData ,(v,k)=>{
+            _this.filterData[k] = ''
+          })
           break
         case CodeButtonRowCopy:
           this.addRow({
