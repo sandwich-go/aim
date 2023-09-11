@@ -195,6 +195,14 @@ export default {
     if(isAimTable(this.cellName)){
       this.cellConfigForTable = this.getCellConfigForTable()
     }
+    const updateParentVisitor = this.fs['updateParentVisitor']
+    if(updateParentVisitor){
+      updateParentVisitor({
+        fieldSchema:this.fs,
+        parent:this.dataRef,
+        parentVisitor:()=>{return this.dataRef}}
+      )
+    }
   },
   beforeDestroy() {
     this.cleanTableWatcher()
