@@ -52,6 +52,9 @@ export default {
       if (schemaFilter.length) {
         schemaFilter.push({code: CodeButtonFilterSearch})
         let leftCells = jsb.pathGet(this.headerConfigRef, 'leftCells', ['FILTER'])
+        if(jsb.isEmpty(leftCells)){
+          leftCells = ['FILTER']
+        }
         jsb.each(leftCells, function (cell, index) {
           if (jsb.isString(cell) && cell.toUpperCase() === 'FILTER') {
             leftCells.splice(index, 1, ...schemaFilter);
