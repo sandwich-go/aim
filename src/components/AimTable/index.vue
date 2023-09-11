@@ -629,7 +629,7 @@ export default {
           break
         case CodeButtonFilterSearch:
         case CodeLinkFilterSearch:
-          this.filterSearch()
+          this.filterSearch({mode:jsb.pathGet(this.filterConfigRef,'filterMode',{})})
           break
         case CodeLinkFilterSearchClose:
           jsb.each(this.filterData ,(v,k)=>{

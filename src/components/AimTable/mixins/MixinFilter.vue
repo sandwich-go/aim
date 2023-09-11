@@ -15,7 +15,7 @@ export default {
         if(this.isFilterRemote()){
           return
         }
-        this.filterSearch()
+        this.filterSearch({mode:jsb.pathGet(this.filterConfigRef,'filterMode',{})})
       },
       deep: true,
     },

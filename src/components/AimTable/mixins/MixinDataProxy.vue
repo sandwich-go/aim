@@ -181,8 +181,10 @@ export default {
       },'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
-    filterSearch({done,params} = {}) {
+    filterSearch({done,params,mode={}} = {}) {
       if(this.isFilterRemote()){
+        params = params || {}
+        params.FilterMode = mode
         this.proxyQueryData({done,params})
         return
       }
@@ -191,8 +193,7 @@ export default {
       if(jsb.keys(conditions).length === 0){
         this.tableDataFiltered = []
       }else{
-        this.tableDataFiltered = localFilter(this.tableData,conditions)
-        console.log("filterSearch ",conditions,this.tableDataFiltered)
+        this.tableDataFiltered = localFilter(this.tableData,conditions,mode)
       }
     },
     // eslint-disable-next-line no-unused-vars
