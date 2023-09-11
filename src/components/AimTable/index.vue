@@ -340,12 +340,12 @@ import {
 } from "@/components/AimTable/slot";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
-import {cellNameForFormByType} from "@/components/cells/types";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
 import {AimFormInputCopy, AimFormInputInsert, AimFormInputView} from "@/components/AimFormInput";
 import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 import AimPopup from "@/components/AimPopup/index.vue";
 import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
+import MixinFilter from "@/components/AimTable/mixins/MixinFilter.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -380,6 +380,7 @@ export default {
     MixinTableEditorConfig,
     MixinVisitor,
     MixinSort,
+    MixinFilter,
   ],
   components: {
     ColumnShortcuts,
@@ -520,38 +521,6 @@ export default {
         return 'aim-column-fixed-width'
       }
       return ''
-    },
-    processSchemaFilter() {
-      const _this = this
-      let schemaFilter = []
-      jsb.each(this.schema, function (fieldSchema) {
-        if (fieldSchema.filter) {
-          if (!fieldSchema.filter.type) {
-            fieldSchema.filter.type = fieldSchema.type
-          }
-          if (!fieldSchema.filter.field) {
-            fieldSchema.filter.field = fieldSchema.field
-          }
-          if (!fieldSchema.filter.options) {
-            fieldSchema.filter.options = fieldSchema.options
-          }
-          if (!fieldSchema.filter.cell) {
-            fieldSchema.filter.cell = cellNameForFormByType(fieldSchema.filter.type)
-          }
-          fieldSchema.filter.data = _this.filterData
-          _this.filterTypeMapping[fieldSchema.filter.field] = fieldSchema.filter
-          schemaFilter.push(fieldSchema.filter)
-        }
-      })
-      if (schemaFilter.length) {
-        schemaFilter.push({code: CodeButtonFilterSearch})
-        let leftCells = this.headerConfigRef.leftCells
-        jsb.each(leftCells, function (cell, index) {
-          if (jsb.isString(cell) && cell.toUpperCase() === 'FILTER') {
-            leftCells.splice(index, 1, ...schemaFilter);
-          }
-        })
-      }
     },
     escKey() {
       if (this.isModeInplace()) {
