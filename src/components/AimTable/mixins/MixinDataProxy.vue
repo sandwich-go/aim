@@ -191,7 +191,7 @@ export default {
       // 本地筛选数据
       const conditions = this.addFilterDataToParams()
       if(jsb.keys(conditions).length === 0){
-        this.tableDataFiltered = []
+        this.tableDataFiltered = null
       }else{
         this.tableDataFiltered = localFilter(this.tableData,conditions,mode)
       }
