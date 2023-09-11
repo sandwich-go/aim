@@ -17,7 +17,7 @@ export default {
     return {
       stateXID: jsb.xid(),
       tableData: [],
-
+      tableDataFiltered: [],
       currentRow: null,
       rowInEdit: null,
       rowInEditForm: null, // form正在编辑的行，区别于rowInEdit，form正在编辑的行需要完整拷贝rowInEdit，便于取消提交操作时的回滚操作

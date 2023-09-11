@@ -5,6 +5,7 @@ import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
 import {cleanDataForTable} from "@/components/AimTable/clean";
 import {CleanDataForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
+import {localFilter} from "@/components/AimTable/filter";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -180,9 +181,25 @@ export default {
       },'数据已保存')
     },
     // eslint-disable-next-line no-unused-vars
+    filterSearch({done,params} = {}) {
+      if(this.isFilterRemote()){
+        this.proxyQueryData({done,params})
+        return
+      }
+      // 本地筛选数据
+      const conditions = this.addFilterDataToParams()
+      if(jsb.keys(conditions).length === 0){
+        this.tableDataFiltered = []
+      }else{
+        this.tableDataFiltered = localFilter(this.tableData,conditions)
+        console.log("filterSearch ",conditions,this.tableDataFiltered)
+      }
+    },
+    // eslint-disable-next-line no-unused-vars
     proxyQueryData({done,params} = {}) {
-
-      params = this.addFilterDataToParams(params)
+      if(this.isFilterRemote()){
+        params = this.addFilterDataToParams(params)
+      }
       params = this.PagerAddToParams(params)
       params = this.addRemoteSortParams(params)
 

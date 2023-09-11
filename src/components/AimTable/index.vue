@@ -27,7 +27,7 @@
       <el-table
           ref="table"
           :height="tableHeight()"
-          :data="tableData"
+          :data="tableDataFiltered.length > 0 ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
           :stripe="tablePropertyRef.stripe"
           :class="tablePropertyRef.class"
@@ -627,7 +627,7 @@ export default {
           this.addRow()
           break
         case CodeButtonFilterSearch:
-          this.proxyQueryData()
+          this.filterSearch()
           break
         case CodeButtonRowCopy:
           this.addRow({

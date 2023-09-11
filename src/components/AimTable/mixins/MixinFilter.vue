@@ -15,7 +15,7 @@ export default {
     }
   },
   methods: {
-    filterRemote() {
+    isFilterRemote() {
       return jsb.pathGet(this.filterConfigRef, 'remote', true)
     },
     processSchemaFilter() {
