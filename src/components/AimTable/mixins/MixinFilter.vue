@@ -50,6 +50,9 @@ export default {
         if (!fieldFilter.field) {
           fieldFilter.field = fs.field
         }
+        if (!fieldFilter.placeholder) {
+          fieldFilter.placeholder = fs.placeholder
+        }
         if (jsb.isEmpty(fieldFilter.options)) {
           fieldFilter.options = fs.options
         }
