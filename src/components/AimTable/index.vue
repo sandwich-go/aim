@@ -725,10 +725,10 @@ export default {
       }
       if (jsb.isArray(this.shouldCellDisable)) {
         jsb.each(this.shouldCellDisable, item => () => {
-          item({code, cell, row, fieldSchema})
+          item({table:this.tableData,code, cell, row, fieldSchema})
         })
       }
-      return this.shouldCellDisable({code, cell, row, fieldSchema})
+      return this.shouldCellDisable({table:this.tableData,code, cell, row, fieldSchema})
     },
     cloneSchema() {
       return jsb.clone(this.schema)
