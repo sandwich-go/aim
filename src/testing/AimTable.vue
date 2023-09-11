@@ -36,9 +36,6 @@
           ></el-option>
         </el-select>
       </template>
-      <template v-slot:commentSlot2>
-        <span>11111111111111111111111</span>
-      </template>
       <template v-slot:commentSlot>
         <el-table
             :data="tipTableData"
@@ -438,7 +435,6 @@ export default {
             }
           },
           type: 'password',
-          disableForm:()=>{return true}
         },
         {
           field: 'AuthInfo',

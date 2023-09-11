@@ -7,6 +7,7 @@ import {isRowSelected, removeCtrlData} from "./table";
 // RemoveFieldNotInSchema 移除data中不在schema中的字段
 export function RemoveFieldNotInSchema(schema,row) {
     jsb.each(row,(v,k)=>{
+        // 当前数据的key是否为合法的field
         const validField = jsb.find(schema,fs=>fs.field === k)
         if(!validField){
             delete row[k]
@@ -25,14 +26,13 @@ export function RemoveFieldNotInSchema(schema,row) {
 }
 
 // CleanDataForStorage 为数据存储清理数据，如移除虚拟字段，移除控制字段，字段数据的格式化等
-export function CleanDataForStorage(schema,row,row2StorageItemFunc,removeVirtual=false,removeCtrl=true) {
-    row2StorageItemFunc = row2StorageItemFunc || function (v){return v}
+export function CleanDataForStorage(schema,row,removeVirtual=false,removeCtrl=true) {
     let ret = jsb.clone(row)
     formatterForUpdate(schema,ret,removeVirtual)
     if (removeCtrl){
         ret = removeCtrlData(ret)
     }
-    return row2StorageItemFunc(ret)
+    return ret
 }
 
 

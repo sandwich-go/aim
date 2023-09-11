@@ -169,10 +169,12 @@ export default {
     tryProxySaveRow(row, {done} = {}) {
       // 本地proxy的数据依赖xid定位，保留xid数据
       const removeCtrlData = !this.proxyConfigRef.isLocalData
-      let toSave = CleanDataForStorage(this.schema,row,this.proxyConfigRef.row2Item,true,removeCtrlData)
+      let toSave = CleanDataForStorage(this.schema,row,true,removeCtrlData)
       if(this.proxyConfigRef.submitRemoveFieldNotInSchema){
         toSave=RemoveFieldNotInSchema(this.schema,toSave)
       }
+      toSave =  this.proxyConfigRef.row2Item?this.proxyConfigRef.row2Item(toSave):toSave
+
       this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){
           this.doLayout(true)

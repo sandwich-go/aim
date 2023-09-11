@@ -424,11 +424,12 @@ export default {
       const _this = this
       this.__validatePrivate(validCallback,errorCallback,(v)=>{
         // 移除虚拟字段、移除控制字段
-        const tmp = CleanDataForStorage(_this.schema,v,this.row2Storage,true,true)
+        let tmp = CleanDataForStorage(_this.schema,v,true,true)
         if(!this.submitRemoveFieldNotInSchema){
           return tmp
         }
-        return RemoveFieldNotInSchema(_this.schema,tmp)
+        tmp =  RemoveFieldNotInSchema(_this.schema,tmp)
+        return this.row2Storage?this.row2Storage(tmp):tmp
       })
     },
     // __validatePrivate 外部不要直接调用
