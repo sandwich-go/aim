@@ -8,6 +8,13 @@
     </el-tooltip>
     <i v-if="!ignoreRequired&&fieldSchema.required" class="aim-required-icon"></i>
     <i v-if="fieldSchema.locked" class="el-icon-lock"></i>
+    <el-tooltip v-if="fieldSchema.uniq" effect="light">
+      <div slot="content">
+        <span>表内唯一</span>
+      </div>
+      <span> <i class="el-icon-key"></i></span>
+    </el-tooltip>
+
     <template v-for="(item,index) in fieldSchema['iconList'] || []">
     <el-tooltip v-if="item['tooltip'] && item.icon" effect="light" :key="index">
       <div slot="content">
