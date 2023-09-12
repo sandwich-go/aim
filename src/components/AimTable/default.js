@@ -6,9 +6,10 @@ import jsb from "@sandwich-go/jsb";
 import {type2DefaultVal} from "../cells/types";
 
 // FillDefaultDataWithSchema 根据schema填充默认数据
-export function FillDefaultDataWithSchema(schema, row,rootRow=null) {
+// 新建或者编辑时都可以填充默认字段
+// 注意: 编辑的时候不适合填充填充default返回的数据或者options的默认选项，否则在编辑界面无法区分数据是来自存储本身还是来自默认数据
+export function FillDefaultDataWithSchema(schema, row,fillBySchemaDefault=true) {
     row = row || {}
-    rootRow = rootRow || row
     jsb.each(schema, function (fieldSchema) {
         if (!fieldSchema.field ) {
             return;
@@ -16,15 +17,14 @@ export function FillDefaultDataWithSchema(schema, row,rootRow=null) {
         const fieldName = fieldSchema.field
 
         let noValue = jsb.isUndefined(row[fieldName]) || jsb.isNull(row[fieldName])
-        if (noValue) {
+        if (noValue && fillBySchemaDefault) {
             // 如果不存在值，调用默认的default初始化
             const defaultVal = jsb.pathGet(fieldSchema, 'default', undefined)
             if (!jsb.isUndefined(defaultVal)) {
-                row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal({row:rootRow}) : defaultVal
+                row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal() : defaultVal
             }
+            noValue = jsb.isUndefined(row[fieldName]) || jsb.isNull(row[fieldName])
         }
-        // 默认值赋值后再次检测
-        noValue = jsb.isUndefined(row[fieldName]) || jsb.isNull(row[fieldName])
         if(noValue){
             // 调用类型对应的默认赋值逻辑
             const vByType = type2DefaultVal[fieldSchema.type]
@@ -36,12 +36,12 @@ export function FillDefaultDataWithSchema(schema, row,rootRow=null) {
         }
         // object类型防止由于{}无法给子字段赋值
         if(jsb.isObjectOrMap(row[fieldName]) && fieldSchema.type==='object' && fieldSchema.fields){
-            row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName],rootRow)
+            row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName],fillDefault)
         }
         // array嵌套数组类型
         if(jsb.isArray(row[fieldName]) && fieldSchema.type==='table' && fieldSchema.fields){
             jsb.each(row[fieldName],(v,index)=>{
-                row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v,rootRow)
+                row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v,fillDefault)
             })
         }
     })
