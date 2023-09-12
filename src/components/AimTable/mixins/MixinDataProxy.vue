@@ -234,13 +234,13 @@ export default {
       const _this = this
       jsb.each(_this.filterData,function (val,key) {
         const filter = _this.filterTypeMapping[key]
-        let valFormatted = formatValue(filter.type,val)
+        let formatter = jsb.pathGet(filter,'formatter')
+        if(!formatter){
+          formatter = jsb.pathGet(filter,'format')
+        }
+        const valFormatted = formatter?formatter(filter.type,val):formatValue(filter.type,val)
         if(!valFormatted){
           return
-        }
-        const format = filter['format']
-        if(format){
-          valFormatted = format(valFormatted)
         }
         if(filter['fieldRemote']) {
           params[filter['fieldRemote']] = valFormatted
