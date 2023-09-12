@@ -205,7 +205,9 @@ export default {
       if(this.isFilterRemote()){
         hasFilter = this.remoteFilterDataToParams(params)
       }
-      params = this.PagerAddToParams(params)
+      if(this.pagerConfigRef.enable){
+        params = this.PagerAddToParams(params)
+      }
       params = this.addRemoteSortParams(params)
 
       this.tryPromise('query',{params:params},({resp,error})=>{
