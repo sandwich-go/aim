@@ -36,12 +36,12 @@ export function FillDefaultDataWithSchema(schema, row={},fillBySchemaDefault=tru
         }
         // object类型防止由于{}无法给子字段赋值
         if(jsb.isObjectOrMap(row[fieldName]) && fieldSchema.type==='object' && fieldSchema.fields){
-            row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName],fillDefault)
+            row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName],fillBySchemaDefault)
         }
         // array嵌套数组类型
         if(jsb.isArray(row[fieldName]) && fieldSchema.type==='table' && fieldSchema.fields){
             jsb.each(row[fieldName],(v,index)=>{
-                row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v,fillDefault)
+                row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v,fillBySchemaDefault)
             })
         }
     })
