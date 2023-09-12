@@ -191,7 +191,8 @@ export default {
         return
       }
       // 本地筛选数据
-      const conditions = this.remoteFilterDataToParams()
+      const conditions = {}
+      this.remoteFilterDataToParams(conditions)
       if(jsb.keys(conditions).length === 0){
         this.tableDataFiltered = null
       }else{
@@ -200,8 +201,9 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     proxyQueryData({done,params} = {}) {
+      let hasFilter = false
       if(this.isFilterRemote()){
-        params = this.remoteFilterDataToParams(params)
+        hasFilter = this.remoteFilterDataToParams(params)
       }
       params = this.PagerAddToParams(params)
       params = this.addRemoteSortParams(params)
@@ -223,6 +225,10 @@ export default {
           if(!this.PagerTotal){
             this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
           }
+          // 没有filter 且没有激活pager的情况下检测数据长度
+          if(!hasFilter && !this.pagerConfigRef.enable && this.PagerTotal > this.tableData.length){
+            this.toastWarning(`未激活分页模式，获取到 ${this.tableData.length} 行数据，总数据行数 ${this.PagerTotal}`)
+          }
           this.doLayout(true)
         }
         done && done({error})
@@ -232,6 +238,7 @@ export default {
     remoteFilterDataToParams(params){
       params = params || {}
       const _this = this
+      let hasFilterData = false
       jsb.each(_this.filterData,function (val,key) {
         const filter = _this.filterTypeMapping[key]
         let formatter = jsb.pathGet(filter,'formatter')
@@ -242,13 +249,14 @@ export default {
         if(!valFormatted){
           return
         }
+        hasFilterData = true
         if(filter['fieldRemote']) {
           params[filter['fieldRemote']] = valFormatted
         }else{
           params[key] = valFormatted
         }
       })
-      return params
+      return hasFilterData
     },
     rowWatchFunc(expOrFn,callback,options){
       this.rowWatcher.push(this.$watch(expOrFn,callback,options))

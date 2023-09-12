@@ -15,6 +15,7 @@ export default {
   },
   data() {
     return {
+      tipMessage:'',
       stateXID: jsb.xid(),
       tableData: [],
       tableDataFiltered: null,
@@ -42,6 +43,9 @@ export default {
     }
   },
   methods: {
+    tipWarning(message) {
+      this.tipMessage = message
+    },
     updateRowWatcher(row) {
       //移除老旧watcher
       this.cleanRowWatcher()
