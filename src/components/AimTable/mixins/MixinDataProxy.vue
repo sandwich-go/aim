@@ -191,7 +191,7 @@ export default {
         return
       }
       // 本地筛选数据
-      const conditions = this.addFilterDataToParams()
+      const conditions = this.remoteFilterDataToParams()
       if(jsb.keys(conditions).length === 0){
         this.tableDataFiltered = null
       }else{
@@ -201,7 +201,7 @@ export default {
     // eslint-disable-next-line no-unused-vars
     proxyQueryData({done,params} = {}) {
       if(this.isFilterRemote()){
-        params = this.addFilterDataToParams(params)
+        params = this.remoteFilterDataToParams(params)
       }
       params = this.PagerAddToParams(params)
       params = this.addRemoteSortParams(params)
@@ -228,7 +228,8 @@ export default {
         done && done({error})
       })
     },
-    addFilterDataToParams(params){
+    // remoteFilterDataToParams 远端模式下使用该方式填充数据并进行格式化操作
+    remoteFilterDataToParams(params){
       params = params || {}
       const _this = this
       jsb.each(_this.filterData,function (val,key) {
@@ -241,7 +242,11 @@ export default {
         if(format){
           valFormatted = format(valFormatted)
         }
-        params[key] = valFormatted
+        if(filter['fieldRemote']) {
+          params[filter['fieldRemote']] = valFormatted
+        }else{
+          params[key] = valFormatted
+        }
       })
       return params
     },
