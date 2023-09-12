@@ -8,7 +8,7 @@ import {type2DefaultVal} from "../cells/types";
 // FillDefaultDataWithSchema 根据schema填充默认数据
 // 新建或者编辑时都可以填充默认字段
 // 注意: 编辑的时候不适合填充填充default返回的数据或者options的默认选项，否则在编辑界面无法区分数据是来自存储本身还是来自默认数据
-export function FillDefaultDataWithSchema(schema, row,fillBySchemaDefault=true) {
+export function FillDefaultDataWithSchema(schema, row={},fillBySchemaDefault=true) {
     row = row || {}
     jsb.each(schema, function (fieldSchema) {
         if (!fieldSchema.field ) {
