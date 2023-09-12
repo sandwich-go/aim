@@ -6,8 +6,9 @@ import jsb from "@sandwich-go/jsb";
 import {type2DefaultVal} from "../cells/types";
 
 // FillDefaultDataWithSchema 根据schema填充默认数据
-export function FillDefaultDataWithSchema(schema, row) {
+export function FillDefaultDataWithSchema(schema, row,rootRow=null) {
     row = row || {}
+    rootRow = rootRow || row
     jsb.each(schema, function (fieldSchema) {
         if (!fieldSchema.field ) {
             return;
@@ -19,7 +20,7 @@ export function FillDefaultDataWithSchema(schema, row) {
             // 如果不存在值，调用默认的default初始化
             const defaultVal = jsb.pathGet(fieldSchema, 'default', undefined)
             if (!jsb.isUndefined(defaultVal)) {
-                row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal() : defaultVal
+                row[fieldName] = jsb.isFunction(defaultVal) ? defaultVal({row:rootRow}) : defaultVal
             }
         }
         // 默认值赋值后再次检测
@@ -35,12 +36,12 @@ export function FillDefaultDataWithSchema(schema, row) {
         }
         // object类型防止由于{}无法给子字段赋值
         if(jsb.isObjectOrMap(row[fieldName]) && fieldSchema.type==='object' && fieldSchema.fields){
-            row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName])
+            row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName],rootRow)
         }
         // array嵌套数组类型
         if(jsb.isArray(row[fieldName]) && fieldSchema.type==='table' && fieldSchema.fields){
             jsb.each(row[fieldName],(v,index)=>{
-                row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v)
+                row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v,rootRow)
             })
         }
     })
