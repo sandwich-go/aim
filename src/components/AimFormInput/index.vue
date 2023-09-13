@@ -421,9 +421,9 @@ export default {
       return jsb.pathGet(si, 'nameForm', si['name'])
     },
     // validate 逻辑层主动调用，单独使用AimFormInput的场景
-    validate(validCallback,errorCallback=null) {
+    validate(validCallback,notValidCallback=null,onValidCallbackRunError=(e)=>{jsb.cc.toastWarning(e)}) {
       const _this = this
-      this.__validatePrivate(validCallback,errorCallback,(v)=>{
+      this.__validatePrivate(validCallback,notValidCallback,onValidCallbackRunError,(v)=>{
         // 移除虚拟字段、移除控制字段
         let tmp = CleanDataForStorage(_this.schema,v,true,true)
         if(!this.submitRemoveFieldNotInSchema){
@@ -434,7 +434,7 @@ export default {
       })
     },
     // __validatePrivate 外部不要直接调用
-    __validatePrivate(validCallback,errorCallback=null,processor=(v)=>{return v}) {
+    __validatePrivate(validCallback,notValidCallback=()=>{},onValidCallbackRunError=(e)=>{jsb.cc.toastWarning(e)},processor=(v)=>{return v}) {
       const _this = this
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -442,18 +442,18 @@ export default {
             const tmp = processor(_this.dataRef)
             validCallback(tmp)
           }catch (e){
-            if(jsb.isFunction(errorCallback)){
-              errorCallback(e)
-            }else{
-              jsb.cc.toastWarning(e)
+            if(jsb.isFunction(onValidCallbackRunError)){
+              onValidCallbackRunError(e)
             }
           }
+        }else{
+          notValidCallback && notValidCallback()
         }
       })
     },
     // __validateFromAimTable aim table 内部调用，此处不主动清理数据，由aim table完成
-    __validateFromAimTable(validCallback,errorCallback=null,processor=(v)=>{return v}) {
-      this.__validatePrivate(validCallback,errorCallback,processor)
+    __validateFromAimTable(validCallback) {
+      this.__validatePrivate(validCallback)
     },
     fieldComponentKey(fs) {
       return `${this.parentKey}_${fs.field}_${xidRow(this.getRow())}`
