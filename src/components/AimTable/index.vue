@@ -511,7 +511,11 @@ export default {
       aimTableLog(title, msg)
     },
     fieldShow(fs) {
-      return jsb.pathGet(fs, 'show', true)
+      const show = jsb.pathGet(fs, 'show', true)
+      if(jsb.isFunction(show)){
+        return show()
+      }
+      return show
     },
     pathGet(data, fieldPath, defaultVal = undefined) {
       return jsb.pathGet(data, defaultVal, true)
