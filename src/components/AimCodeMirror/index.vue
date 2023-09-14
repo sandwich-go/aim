@@ -159,7 +159,7 @@ export default {
     modeOptions: CodeMirrorModeOptions,
     height: {
       type: String,
-      default: "400px"
+      default: "100%"
     },
     width: {
       type: String,
