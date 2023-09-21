@@ -23,6 +23,7 @@ function autoOptionFunc(autoOption,fieldVal){
 
 // cleanDataForTable 为表格使用清理数据清理数据，data应该是一个数组，添加必要的xid便于索引，自动为filter填充options
 export function cleanDataForTable(data, schema, item2Row) {
+    data = data || []
     jsb.each(data, function (item, index) {
         // 检查数据的ctrl字段，填充组件需要的控制性数据
         let row = mustCtrlData(item2Row ? item2Row(item) : item)

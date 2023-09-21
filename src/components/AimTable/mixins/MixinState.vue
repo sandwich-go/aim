@@ -69,7 +69,7 @@ export default {
       return this
     },
     each(visitor){
-      jsb.each(this.tableData,visitor)
+      jsb.each(this.tableData || [],visitor)
     },
     eachSelected(visitor,clean=false){
       jsb.each(this.getSelectionRows(clean),visitor)
