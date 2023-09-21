@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <el-switch
-        v-model="data[fieldName]"
-        :active-color="cc.activeColor"
-        :inactive-color="cc.inactiveColor"
-        @change="change"
-        size="mini"
-        :disabled="disabled">
-    </el-switch>
-  </div>
+  <el-switch
+      v-model="data[fieldName]"
+      :active-color="cc.activeColor"
+      :inactive-color="cc.inactiveColor"
+      @change="change"
+      size="mini"
+      :disabled="disabled">
+  </el-switch>
 </template>
 
 <script>

@@ -554,7 +554,7 @@ export default {
           field: 'Online',
           name: '是否在线',
           type: 'switch',
-          comment:'是否在线',
+          commentHTML:'<br>是否在线',
           sortable: false,
           align: 'center',
           tips: '当前玩家是否在线',

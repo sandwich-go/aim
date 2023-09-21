@@ -112,6 +112,20 @@
                         @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                     ></cell-list>
                   </template>
+                  <template v-else-if="fs.slot">
+                    <slot
+                        v-if="!privateShouldCellHide({
+                                            cell : cellConfig(fs,scope.row),
+                                           row : scope.row,fieldSchema : fs})"
+                        :disabled="privateShouldCellDisable({cell: cellConfig(fs,scope.row),row:scope.row,fieldSchema:fs})"
+                        :name="fs.slot"
+                        :row="scope.row"
+                        :cell-config="cellConfig(fs,scope.row)"
+                        :options="fs.options || []"
+                        :field-schema="fs"
+                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    ></slot>
+                  </template>
                   <template v-else-if="registeredComponentMap[cellName(fs,scope.row)]">
                     <component
                         v-if="!privateShouldCellHide({
@@ -133,20 +147,6 @@
                         :field-schema="fs"
                         @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,fieldSchema:fs,jsEvent})"
                     ></component>
-                  </template>
-                  <template v-else-if="fs.slot">
-                    <slot
-                        v-if="!privateShouldCellHide({
-                                            cell : cellConfig(fs,scope.row),
-                                           row : scope.row,fieldSchema : fs})"
-                        :disabled="privateShouldCellDisable({cell: cellConfig(fs,scope.row),row:scope.row,fieldSchema:fs})"
-                        :name="fs.slot"
-                        :row="scope.row"
-                        :cell-config="cellConfig(fs,scope.row)"
-                        :options="fs.options || []"
-                        :field-schema="fs"
-                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
-                    ></slot>
                   </template>
                   <span v-else-if="cellName(fs,scope.row)">
                     {{ `${cellName(fs, scope.row)} not supported` }}
