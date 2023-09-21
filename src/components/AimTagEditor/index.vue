@@ -5,6 +5,7 @@
         :key="tag"
         v-for="tag in tags"
         closable
+        style="font-weight: bold"
         :disable-transitions="false"
         :type="tagType(tag)"
         :effect="tagEffect(tag)"
