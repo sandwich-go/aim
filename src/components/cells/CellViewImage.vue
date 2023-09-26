@@ -1,7 +1,7 @@
 <template>
-  <el-tooltip v-if="fieldValueFormatted"  class="item" effect="light" :open-delay="500">
+  <el-tooltip v-if="fieldValue"  class="item" effect="light" :open-delay="500">
     <div slot="content">
-      <el-image slot="content" :src="fieldValueFormatted">
+      <el-image slot="content" :src="fieldValue">
         <div slot="error" class="image-slot">
           <i class="el-icon-picture-outline"></i>
         </div>
@@ -10,7 +10,7 @@
     <el-image
         :lazy="true"
         style="height:30px;padding-left: 3px"
-        :src="fieldValueFormatted">
+        :src="fieldValue">
       <div slot="error" class="image-slot">
         <i class="el-icon-picture-outline"></i>
       </div>
@@ -20,7 +20,7 @@
       v-else
       :lazy="true"
       style="height:30px;padding-left: 3px"
-      :src="fieldValueFormatted">
+      :src="fieldValue">
     <div slot="error" class="image-slot">
       <i class="el-icon-picture-outline"></i>
     </div>
