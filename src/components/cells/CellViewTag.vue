@@ -30,7 +30,7 @@ export default {
   methods: {
     wrapAsTagList,
     isNullUndefeind(v){
-      return jsb.isNullUndefeind(v)
+      return jsb.isUndefined(v) || jsb.isNull(v)
     }
   },
 }
