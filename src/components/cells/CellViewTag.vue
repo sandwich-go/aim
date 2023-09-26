@@ -1,6 +1,6 @@
 <template>
   <div>
-      <span v-if="fieldValue">
+      <span v-if="!isNullUndefeind(fieldValue)">
         <template v-for="(item,index) of wrapAsTagList(fieldValue,optionsUsing)">
           <el-tag
               v-if="item.label"
@@ -20,7 +20,7 @@
 <script>
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
 import {wrapAsTagList} from "@/components/utils/jsb";
-
+import jsb from "@sandwich-go/jsb";
 export default {
   name: 'CellViewTag',
   mixins: [MixinCellViewConfig],
@@ -29,6 +29,9 @@ export default {
   },
   methods: {
     wrapAsTagList,
+    isNullUndefeind(v){
+      return jsb.isNullUndefeind(v)
+    }
   },
 }
 </script>
