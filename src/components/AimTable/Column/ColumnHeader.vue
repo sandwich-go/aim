@@ -25,13 +25,13 @@
     </template>
 
     <cell-view-label-tooltip
-        v-if="fieldSchema['tips'] || fieldSchema['tipsHTML']"
+        v-if="fieldSchema['tips'] || fieldSchema['tipsHTML'] || fieldSchema['staticHelp']"
         :cell-config="{
           label:name,
           labelSub:sub,
           containerStyleForSub:containerStyleForSub,
           tips:fieldSchema['tips'],
-          tipsHTML:fieldSchema['tipsHTML']
+          tipsHTML:fieldSchema['tipsHTML'] || fieldSchema['staticHelp']
         }"></cell-view-label-tooltip>
     <el-tooltip v-else-if="tipSlotName(fieldSchema)" effect="light">
       <div slot="content">
@@ -55,14 +55,19 @@ import {errorMessage} from "@/components/AimFormInput";
 
 export default {
   name: 'ColumnHeader',
-  methods: {errorMessage, getProxyTipSlotName, tipSlotName},
+  methods: {
+    errorMessage,
+    getProxyTipSlotName,
+    tipSlotName,
+
+  },
   components: {CellViewLabelTooltip},
   props: {
     fieldSchema: Object,
     name: String,
     sub: String,
     containerStyleForSub: {},
-    ignoreRequired: Boolean
+    ignoreRequired: Boolean,
   },
 }
 </script>
