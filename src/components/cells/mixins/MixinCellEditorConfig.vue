@@ -46,6 +46,9 @@ export default {
     optionsParameter(){
       return {parent:this.dataRef,row:this.getRow?this.getRow():null,table:this.tableDataGetter?this.tableDataGetter():null}
     },
+    async manualFetchOptionsData() {
+      return this.fetchOptionsData()
+    },
     async fetchOptionsData() {
       try {
         this.inOptionLoading = true
@@ -92,6 +95,10 @@ export default {
         this.optionsUsing.push(v)
       })
       this.optionsRefresh = tmpOptionsRefresh
+
+      if(this.fieldSchemaRef) {
+        this.fieldSchemaRef.options = this.optionsUsing
+      }
     },
     optionsTryGroup(options,field,autoGroupSort){
       let group2Options = {}

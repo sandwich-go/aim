@@ -23,7 +23,7 @@
         </el-option>
       </el-option-group>
     </el-select>
-    <el-button v-if="optionsRefresh" size="mini" circle icon="el-icon-refresh" @click="fetchOptionsData"></el-button>
+    <el-button v-if="optionsRefresh" size="mini" circle icon="el-icon-refresh" @click="manualFetchOptionsData"></el-button>
   </div>
 </template>
 

@@ -20,7 +20,7 @@
         <span v-if="val.comment" style="float:right;right: 0;gap: 3px;color:#707070;font-size:12px" v-html="val.comment"/>
       </el-option>
     </el-select>
-    <el-button v-if="optionsRefresh" size="mini" circle icon="el-icon-refresh" @click="fetchOptionsData"></el-button>
+    <el-button v-if="optionsRefresh" size="mini" circle icon="el-icon-refresh" @click="manualFetchOptionsData"></el-button>
   </div>
 </template>
 
