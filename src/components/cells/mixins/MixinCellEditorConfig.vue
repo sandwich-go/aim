@@ -43,16 +43,16 @@ export default {
     await this.fetchOptionsData()
   },
   methods: {
-    optionsParameter(){
-      return {parent:this.dataRef,row:this.getRow?this.getRow():null,table:this.tableDataGetter?this.tableDataGetter():null}
+    optionsParameter(force=false){
+      return {force:force,parent:this.dataRef,row:this.getRow?this.getRow():null,table:this.tableDataGetter?this.tableDataGetter():null}
     },
     async manualFetchOptionsData() {
-      return this.fetchOptionsData()
+      return this.fetchOptionsData(true)
     },
-    async fetchOptionsData() {
+    async fetchOptionsData(force=false) {
       try {
         this.inOptionLoading = true
-        await this.__fetchOptionsData()
+        await this.__fetchOptionsData(force)
       }catch (error){
         if(this.fieldSchemaRef){
           this.fieldSchemaRef.errorMessage = error
@@ -63,13 +63,13 @@ export default {
         this.inOptionLoading = false
       }
     },
-    async __fetchOptionsData() {
+    async __fetchOptionsData(force=false) {
       let optionsGot = []
       let tmpOptionsRefresh = false
       if (typeof this.options === 'function') {
         tmpOptionsRefresh = true
         // 如果 options 是一个函数，则调用它并等待它的返回值
-        optionsGot = this.options(this.optionsParameter());
+        optionsGot = this.options(this.optionsParameter(force));
         if(optionsGot instanceof Promise){
           optionsGot = await optionsGot;
         }
@@ -95,10 +95,6 @@ export default {
         this.optionsUsing.push(v)
       })
       this.optionsRefresh = tmpOptionsRefresh
-
-      if(this.fieldSchemaRef) {
-        this.fieldSchemaRef.options = this.optionsUsing
-      }
     },
     optionsTryGroup(options,field,autoGroupSort){
       let group2Options = {}
