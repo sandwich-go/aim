@@ -25,13 +25,13 @@
     </template>
 
     <cell-view-label-tooltip
-        v-if="fieldSchema['tips'] || fieldSchema['tipsHTML'] || fieldSchema['staticHelp']"
+        v-if="fieldSchema['tips'] || fieldSchema['tipsHTML'] || (showStaticHelp && fieldSchema['staticHelp'])"
         :cell-config="{
           label:name,
           labelSub:sub,
           containerStyleForSub:containerStyleForSub,
           tips:fieldSchema['tips'],
-          tipsHTML:fieldSchema['tipsHTML'] || fieldSchema['staticHelp']
+          tipsHTML:fieldSchema['tipsHTML'] || showStaticHelp?fieldSchema['staticHelp']||'':''
         }"></cell-view-label-tooltip>
     <el-tooltip v-else-if="tipSlotName(fieldSchema)" effect="light">
       <div slot="content">
@@ -66,6 +66,7 @@ export default {
     fieldSchema: Object,
     name: String,
     sub: String,
+    showStaticHelp:Boolean,
     containerStyleForSub: {},
     ignoreRequired: Boolean,
   },
