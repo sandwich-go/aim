@@ -31,7 +31,7 @@
           labelSub:sub,
           containerStyleForSub:containerStyleForSub,
           tips:fieldSchema['tips'],
-          tipsHTML:fieldSchema['tipsHTML'] || showStaticHelp?fieldSchema['staticHelp']||'':''
+          tipsHTML:fieldSchema['tipsHTML']|| (showStaticHelp?fieldSchema['staticHelp']:null)
         }"></cell-view-label-tooltip>
     <el-tooltip v-else-if="tipSlotName(fieldSchema)" effect="light">
       <div slot="content">
