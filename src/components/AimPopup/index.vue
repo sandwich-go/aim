@@ -85,7 +85,7 @@ export default {
       destroyOnClose: false,
       closeOnPressEscape: true,
       size: '85%',
-      direction: "ltr",
+      direction: "rtl",
       footer: true,
       beforeClose: null,
       appendToBody: false,
