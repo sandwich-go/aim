@@ -1,5 +1,5 @@
 import jsb from "@sandwich-go/jsb";
-import {mustCtrlData, xidRow} from "@/components/AimTable/table";
+import {mustCtrlData, xidRow} from "./table";
 
 
 // newLocalDataProxyWithFieldName 本地数据代理,form表单内使用
