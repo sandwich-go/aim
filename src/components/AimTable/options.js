@@ -2,7 +2,7 @@ import jsb from "@sandwich-go/jsb";
 
 // aimTableOptionPromise 外部使用，当table的field.option是一个Promise，防止多次产生loader行为
 // eslint-disable-next-line no-unused-vars
-function aimTableOptionPromise(target,optionFetcher,optionLoaderProcess){
+export function aimTableOptionPromise(target,optionFetcher,optionLoaderProcess){
     const optionLoadedTo = `options_${jsb.xid()}`
     const optionLoaded = `${optionLoadedTo}_loaded`
     target[optionLoaded] = false
