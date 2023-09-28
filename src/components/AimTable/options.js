@@ -18,7 +18,7 @@ export function aimTableOptionPromise(target,optionFetcher,optionLoaderProcess){
         if(force){
             return optionLoader()
         }
-        return jsb.waitFor(()=>target[optionLoaded] === true).then(()=>{
+        return jsb.until(()=>target[optionLoaded] === true).then(()=>{
                 return target[optionLoadedTo]
             }
         )
