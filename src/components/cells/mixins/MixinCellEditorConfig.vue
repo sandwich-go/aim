@@ -21,6 +21,14 @@ export default {
     getRow:Function,
     tableDataGetter:Function,
   },
+  watch:{
+    options: {
+      handler: function () {
+        this.fetchOptionsData()
+      },
+      deep:true
+    }
+  },
   data() {
     const _this = this
     return {
