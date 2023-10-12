@@ -139,7 +139,7 @@ export const typeDefaults = {
         tagEffect:"light"
     },
     code:{
-        table:'CellTriggerCodeMirror',
+        table:'CellViewCode',
         form:'CellCodeMirror',
         default:'',
         label:'代码',
@@ -166,6 +166,14 @@ export const typeDefaults = {
         default:'',
         label:'图像',
         placeholderSupport:true,
+    },
+    html:{
+        table:'CellViewHTML',
+        table_inplace:'CellViewHTML',
+        form:'CellEditorHEML',
+        default:'',
+        label:'HTML',
+        placeholderSupport:false,
     }
 }
 

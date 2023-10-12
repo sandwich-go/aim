@@ -421,14 +421,16 @@ export default {
           },
         },
         {
-          field: 'password', name: 'password', sortable: true, uniq: true,
+          field: 'html', name: 'html',type:'html'
+        },
+        {
+          field: 'password', name: 'password', sortable: true,
           placeholder: "xxx.xx",
           // commentHTML: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
           tipSlot: 'password_tip',
 
           commentSlot: 'commentSlot',
-          required: true,
           cellFormConfig: {
             checkPermission: () => {
               return false
@@ -491,13 +493,6 @@ export default {
           watch: ({row, newValue, oldValue}) => {
             console.log("watch code change ", row, newValue, oldValue)
           },
-          cellConfig: {
-            codeMirror: {
-              infoConfig: {mode: 'go'},
-              placeholder:'placeholder',
-              headerConfig: {rightCells: ['btnLint', 'btnCopy']}
-            }
-          },
           cellFormConfig: {
             codeMirror: {
               infoConfig: {mode: 'json'},
@@ -508,7 +503,6 @@ export default {
         },
         {
           field: 'Version', name: 'Version', type: 'select', sortable: false,
-          required: true,
          options:new Promise((resolve) => {
            resolve([{label: "v1", value: "v1",comment:'版本号v1'}, {label: "v2", value: "v2"}])
          })
@@ -533,7 +527,6 @@ export default {
           //min_width: 180,
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
-          required: true,
           cell: 'CellInputNumber',
           cellForm: 'CellInputNumber',
         },
@@ -543,7 +536,6 @@ export default {
           //min_width: 180,
           tips: "用户名不要携带@centurygame.com后缀",
           tips_show_icon: true,
-          required: true,
           cell: 'CellIconSelectorInput',
           cellForm: 'CellIconSelectorInput',
           cellConfig: function ({fieldValue}) {
@@ -714,6 +706,19 @@ export default {
           Icon: 'el-icon-user-solid',
           Online: true,
           Tag: "g1",
+          code:`
+          {
+  "form": {
+    "label-width": "80px",
+    "label-position": "right",
+    "size": "mini"
+  },
+  "row": {
+    "justify": "start",
+    "gutter": 6
+  }
+}
+          `,
           image:'https://ffs-global-asset.s3.amazonaws.com/dreamlife.png',
           Color: '#ea8271'
         },

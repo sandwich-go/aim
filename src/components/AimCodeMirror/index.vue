@@ -17,7 +17,7 @@
       </el-col>
     </el-row>
     <codemirror
-        :value="codeUsing()"
+        :value="codeUsing"
         :indent-with-tab="true"
         :options="optionsUsing()"
         @input="privateOnInputEvent"
@@ -220,6 +220,10 @@ export default {
     })
   },
   computed: {
+    codeUsing() {
+      console.log("this.codeLatest ",this.codeLatest)
+      return this.proxyConfigRef.enable ? this.codeProxy : this.codeLatest
+    },
     cssVars() {
       return {
         "--font-size": `${this.fontSize}px`,
@@ -275,9 +279,7 @@ export default {
       this.options['theme'] = theme
       return this.options
     },
-    codeUsing() {
-      return this.proxyConfigRef.enable ? this.codeProxy : this.codeLatest
-    },
+
     cellReplace(cell) {
       if (cell.code === CodeButtonLint) {
         cell.label = this.formatLintButtonTitle()
