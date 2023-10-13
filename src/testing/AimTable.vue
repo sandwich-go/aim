@@ -489,6 +489,7 @@ export default {
           field: 'code',
           name: 'code',
           type: 'code',
+          width:100,
           tips: '代码编辑支持',
           watch: ({row, newValue, oldValue}) => {
             console.log("watch code change ", row, newValue, oldValue)

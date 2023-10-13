@@ -78,7 +78,6 @@ export default {
     if(this.drawer){
       jsb.element.fixDrawerClose(this, 'aimPopupDrawer')
     }
-    jsb.ass
     this.configData = jsb.objectAssignNX(this.configData, {
       showClose: true,
       withHeader: false,
