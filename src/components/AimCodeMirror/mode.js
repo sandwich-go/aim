@@ -11,6 +11,7 @@ export const CodeMirrorModePHP = "application/x-httpd-php"
 export const CodeMirrorModeVerilog = "text/x-verilog"
 export const CodeMirrorModeMarkdown = "text/x-markdown"
 export const CodeMirrorModeJavascript = "text/javascript"
+export const CodeMirrorModeProtobuf = "text/x-protobuf"
 
 let modeOptions = []
 modeOptions.push({label: 'Shell', value: CodeMirrorModeShell})
@@ -24,6 +25,7 @@ modeOptions.push({label: 'PHP', value: CodeMirrorModePHP})
 modeOptions.push({label: 'Verilog', value: CodeMirrorModeVerilog})
 modeOptions.push({label: 'Markdown', value: CodeMirrorModeMarkdown})
 modeOptions.push({label: 'Javascript', value: CodeMirrorModeJavascript})
+modeOptions.push({label: 'Protobuf', value: CodeMirrorModeProtobuf})
 
 let mapping = {}
 for(const item of modeOptions) {

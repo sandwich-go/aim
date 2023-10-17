@@ -56,6 +56,7 @@ import 'codemirror/theme/rubyblue.css'
 import 'codemirror/mode/toml/toml.js'
 import "codemirror/mode/yaml/yaml.js";
 import "codemirror/mode/sql/sql.js";
+import "codemirror/mode/protobuf/protobuf.js";
 import "codemirror/mode/shell/shell.js";
 import "codemirror/mode/go/go.js";
 import 'codemirror/mode/php/php.js'
