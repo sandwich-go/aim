@@ -194,7 +194,7 @@ export default {
     // 最外层调用不要设定rowTop,递归时传递到最底层便于统一回调外层
     rowTop: Object,
     labelWidth: String,
-    popupAppendToBody: Boolean,
+    viewLevelIndex:Number,// 默认0也就是0级页面
     parentKey: String,
     readOnly:Boolean,
     // 对接AimTable时,AimTable自动完成了watch

@@ -206,10 +206,11 @@
         </cell-list>
       </el-col>
     </el-row>
+    <!--    popupAppendToBody 依赖该字段决定使用drawer 或者dialog显示编辑界面，对于table的一级默认显示drawer-->
     <aim-popup
         v-if="rowInEditForm"
         :title="rowFormEditorTitle(rowEditState)"
-        :drawer="popupAppendToBody?false:editConfigRef.formWrapperDrawer"
+        :drawer="formPopupUsingDrawer"
         :is-show.sync="rowFormEditorVisible"
         :config="getFormPopupConfig(rowInEditForm)">
       <template v-slot:aim-popup-body>
@@ -404,7 +405,8 @@ export default {
     rowRemoveShortcut: {type: Boolean, default:false},// 是否显示当行删除快捷方式
     autoQuery: {type: Boolean, default:true},
     radio: Boolean,// 是否支持radio选择
-    popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true
+    formPopupUsingDrawer: {type: Boolean, default:true},
+    popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true，当设定为true时，启用dialog编辑
     shouldFieldDisable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
