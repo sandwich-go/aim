@@ -91,7 +91,9 @@
               :fied-schema="fs"
           >
             <template slot="header">
-              <column-header :field-schema="fs" :name="fs['name']" :show-static-help="true" :sub="isModeInplace()?fs['nameSub']:''" :container-style-for-sub="{'margin-bottom':'16px'}">
+              <column-header :field-schema="fs" :name="fs['name']" :show-static-help="true"
+                             :sub="isModeInplace()?fs['nameSub']:''"
+                             :container-style-for-sub="{'margin-bottom':'16px'}">
                 <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
                   <slot :name="tipSlotName(fs)" :field-schema="fs"/>
                 </template>
@@ -162,7 +164,8 @@
         </template>
         <el-table-column key="shortcut_row_remove" v-if="rowRemoveShortcut" width="40" align="center">
           <template slot-scope="{row}">
-            <el-link :disabled="rowRemoveDisable(row)" @click="tryProxyDelete(row)"><i class="el-icon-close"></i></el-link>
+            <el-link :disabled="rowRemoveDisable(row)" @click="tryProxyDelete(row)"><i class="el-icon-close"></i>
+            </el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -212,7 +215,7 @@
         :title="rowFormEditorTitle(rowEditState)"
         :drawer="formPopupUsingDrawer"
         :is-show.sync="rowFormEditorVisible"
-        :config="getFormPopupConfig(rowInEditForm)">
+        :config="{appendToBody:popupAppendToBody,close:rowFormEditorClose,footer: true,}">
       <template v-slot:aim-popup-body>
         <aim-form-input
             style="padding-right: 9px"
@@ -223,7 +226,6 @@
             :group-config="groupConfig"
             :data="rowInEditForm"
             :table-data-getter="()=>{return tableData}"
-            :popup-append-to-body="true"
             :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
             :alert-info="rowEditorAlert"
             :mode="rowEditState"
@@ -235,8 +237,9 @@
           <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
             <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
           </template>
-          <template v-for="name in allCommentSlotName" v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
-            <slot  :name="name" :field-schema="fieldSchema" :row="row"/>
+          <template v-for="name in allCommentSlotName"
+                    v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+            <slot :name="name" :field-schema="fieldSchema" :row="row"/>
           </template>
         </aim-form-input>
       </template>
@@ -364,8 +367,8 @@ export default {
         return cellConfigForTable(fs, row)
       }
     },
-    allCommentSlotName(){
-      return allSlotName(this.schema,'commentSlot')
+    allCommentSlotName() {
+      return allSlotName(this.schema, 'commentSlot')
     }
   },
   mixins: [
@@ -394,18 +397,22 @@ export default {
     Loading
   },
   props: {
-    submitRemoveFieldNotInSchema:Boolean,
-    onEventDoLayout:{
-      type:String,
-      default:'aim_table_layout'
+    submitRemoveFieldNotInSchema: Boolean,
+    onEventDoLayout: {
+      type: String,
+      default: 'aim_table_layout'
     },
     selection: Boolean,// 是否支持选择
     // eslint-disable-next-line no-unused-vars
-    selectionEnable: {type: Function, default: (row)=> {return true},},
-    rowRemoveShortcut: {type: Boolean, default:false},// 是否显示当行删除快捷方式
-    autoQuery: {type: Boolean, default:true},
+    selectionEnable: {
+      type: Function, default: (row) => {
+        return true
+      },
+    },
+    rowRemoveShortcut: {type: Boolean, default: false},// 是否显示当行删除快捷方式
+    autoQuery: {type: Boolean, default: true},
     radio: Boolean,// 是否支持radio选择
-    formPopupUsingDrawer: {type: Boolean, default:true},
+    formPopupUsingDrawer: {type: Boolean, default: true},
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true，当设定为true时，启用dialog编辑
     shouldFieldDisable: {
       type: Function,
@@ -430,16 +437,16 @@ export default {
     }
   },
   destroyed() {
-    if(this.onEventDoLayout && jsb.cc.emitter){
-      jsb.cc.emitter.off(this.onEventDoLayout,this.doLayoutByEvent)
+    if (this.onEventDoLayout && jsb.cc.emitter) {
+      jsb.cc.emitter.off(this.onEventDoLayout, this.doLayoutByEvent)
     }
   },
   created() {
-    if(this.onEventDoLayout && jsb.cc.emitter){
-      jsb.cc.emitter.on(this.onEventDoLayout,this.doLayoutByEvent)
+    if (this.onEventDoLayout && jsb.cc.emitter) {
+      jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutByEvent)
     }
     this.tableData = this.processTableData(this.tableData)
-    if(this.autoQuery){
+    if (this.autoQuery) {
       this.proxyQueryData()
     }
     this.schemaApplyVisitorData()
@@ -467,14 +474,14 @@ export default {
         aimTableError(`分页模式 与 ${this.sortConfigRef.sortIdxField} 配置不兼容`)
       }
     }
-    this.initDrag(()=>{
-      if(dragCallback){
+    this.initDrag(() => {
+      if (dragCallback) {
         dragCallback()
       }
-      if(jsb.pathGet(this.proxyConfigRef,'isLocalData',false)){
-        const saveTableData = jsb.pathGet(this.proxyConfigRef,'saveTableData')
-        if(saveTableData){
-          saveTableData({tableData:this.tableData})
+      if (jsb.pathGet(this.proxyConfigRef, 'isLocalData', false)) {
+        const saveTableData = jsb.pathGet(this.proxyConfigRef, 'saveTableData')
+        if (saveTableData) {
+          saveTableData({tableData: this.tableData})
         }
       }
     })
@@ -493,22 +500,24 @@ export default {
     getProxySlotName,
     getProxyTipSlotName,
     getProxyCommentSlotName,
-    rowRemoveDisable(row){
-      if(this.readOnly){
+    rowRemoveDisable(row) {
+      if (this.readOnly) {
         return true
       }
-      if(this.selectionEnable){
-        if(!this.selectionEnable(row)){
+      if (this.selectionEnable) {
+        if (!this.selectionEnable(row)) {
           return true
         }
       }
       return false
     },
-    doLayoutByEvent(){
+    doLayoutByEvent() {
       const _this = this
       _this.$nextTick(() => {
         _this.doLayout()
-        setTimeout(function () {_this.doLayout()}, 50)
+        setTimeout(function () {
+          _this.doLayout()
+        }, 50)
       })
     },
     setDebugMessage(title, msg = '') {
@@ -516,7 +525,7 @@ export default {
     },
     fieldShow(fs) {
       const show = jsb.pathGet(fs, 'show', true)
-      if(jsb.isFunction(show)){
+      if (jsb.isFunction(show)) {
         return show()
       }
       return show
@@ -546,10 +555,10 @@ export default {
       return this
     },
     // 在控制字段中记录数据是否被选中
-    selectionChange(selectedRows){
-      const selected = jsb.map(selectedRows,row=>xidRow(row))
-      jsb.each(this.tableData,v=>{
-        setRowSelected(v,selected.includes(xidRow(v)))
+    selectionChange(selectedRows) {
+      const selected = jsb.map(selectedRows, row => xidRow(row))
+      jsb.each(this.tableData, v => {
+        setRowSelected(v, selected.includes(xidRow(v)))
       })
     },
     radioRowChanged(row, selected) {
@@ -590,7 +599,7 @@ export default {
       const done = () => {
         this.defaultCellClick({code, row, fieldValue, jsEvent, fromForm})
       }
-      if (this.codeItemClick({code, row, fieldSchema, fieldValue,done})) {
+      if (this.codeItemClick({code, row, fieldSchema, fieldValue, done})) {
         return
       }
       this.defaultCellClick({code, row, fieldValue, jsEvent, fromForm})
@@ -637,10 +646,10 @@ export default {
           break
         case CodeButtonFilterSearch:
         case CodeLinkFilterSearch:
-          this.filterSearch({mode:jsb.pathGet(this.filterConfigRef,'filterMode',{})})
+          this.filterSearch({mode: jsb.pathGet(this.filterConfigRef, 'filterMode', {})})
           break
         case CodeLinkFilterSearchClose:
-          jsb.each(this.filterData ,(v,k)=>{
+          jsb.each(this.filterData, (v, k) => {
             _this.filterData[k] = ''
           })
           break
@@ -713,7 +722,7 @@ export default {
         // 按钮的禁用需要根据code区分，暂时全部屏蔽
         return true
       }
-      code = code || jsb.pathGet(cell,'code')
+      code = code || jsb.pathGet(cell, 'code')
       if (this.inSortIndexEdit) {
         return code !== CodeButtonSortIndex;
       }
@@ -733,10 +742,10 @@ export default {
       }
       if (jsb.isArray(this.shouldCellDisable)) {
         jsb.each(this.shouldCellDisable, item => () => {
-          item({table:this.tableData,code, cell, row, fieldSchema})
+          item({table: this.tableData, code, cell, row, fieldSchema})
         })
       }
-      return this.shouldCellDisable({table:this.tableData,code, cell, row, fieldSchema})
+      return this.shouldCellDisable({table: this.tableData, code, cell, row, fieldSchema})
     },
     cloneSchema() {
       return jsb.clone(this.schema)
