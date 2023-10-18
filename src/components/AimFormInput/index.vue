@@ -46,7 +46,7 @@
           </el-row>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='card'">
-          <el-form-item v-if="groupShow(fs)" :key="`group_card_${index}`" :label-width="fs.setting.squash?'0px':null" :label="fs.setting.label || ''">
+          <el-form-item v-if="groupShow(fs)" :key="`group_card_${index}`" :label-width="groupLabelWidth(fs)" :label="fs.setting.label || ''">
             <el-card class="box-card" shadow="always">
               <template v-for="(fss,subIndex) in fs.fieldSchemaList">
                 <aim-form-item
