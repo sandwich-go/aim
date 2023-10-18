@@ -229,6 +229,7 @@
             :rules="FormRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
             :row-top="rowInEditForm"
             :enable-watcher="true"
+            :submit-remove-field-not-in-schema="submitRemoveFieldNotInSchema"
         >
           <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
             <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
@@ -392,6 +393,7 @@ export default {
     Loading
   },
   props: {
+    submitRemoveFieldNotInSchema:Boolean,
     onEventDoLayout:{
       type:String,
       default:'aim_table_layout'
