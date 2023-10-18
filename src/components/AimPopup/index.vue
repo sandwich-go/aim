@@ -74,11 +74,15 @@ export default {
       this.configData.close && this.configData.close()
     },
   },
+  mounted() {
+    if(this.configData.mountedTriggerEvent) {
+      jsb.cc.emitter.emit(this.configData.mountedTriggerEvent)
+    }
+  },
   created() {
     if(this.drawer){
       jsb.element.fixDrawerClose(this, 'aimPopupDrawer')
     }
-    jsb.ass
     this.configData = jsb.objectAssignNX(this.configData, {
       showClose: true,
       withHeader: false,
@@ -91,6 +95,7 @@ export default {
       appendToBody: false,
       close: null,
       customClass: '',
+      mountedTriggerEvent:"",
       footerStyle:{'padding-right':'6px','padding-top':'9px'}
     })
     if(this.title) {
