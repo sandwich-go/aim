@@ -211,7 +211,6 @@
     </el-row>
     <!--    popupAppendToBody 依赖该字段决定使用drawer 或者dialog显示编辑界面，对于table的一级默认显示drawer-->
     <aim-popup
-        v-if="rowInEditForm"
         :title="rowFormEditorTitle(rowEditState)"
         :drawer="formPopupUsingDrawer"
         :is-show.sync="rowFormEditorVisible"
@@ -405,7 +404,7 @@ export default {
     selection: Boolean,// 是否支持选择
     // eslint-disable-next-line no-unused-vars
     selectionEnable: {
-      type: Function, default: (row) => {
+      type: Function, default: () => {
         return true
       },
     },
@@ -542,13 +541,6 @@ export default {
     escKey() {
       if (this.isModeInplace()) {
         this.rowInEdit = null
-      }
-    },
-    getFormPopupConfig() {
-      return {
-        appendToBody: this.popupAppendToBody,
-        close: this.rowFormEditorClose,
-        footer: true,
       }
     },
     thisTarget() {
