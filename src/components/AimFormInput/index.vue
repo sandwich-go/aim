@@ -72,8 +72,8 @@
           </el-form-item>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='tab'">
-          <el-form-item :key="`group_tab_${fs.index}`" :label-width="fs.setting.squash?'0px':null">
-            <el-tabs v-model="currTab[`group_tab_${fs.index}`]">
+          <el-form-item :key="`group_tab_${fs.index}`" :label-width="groupLabelWidth(fs)">
+            <el-tabs v-model="currTab[`group_tab_${fs.index}`]" v-bind="fs.setting.tabs || {}">
               <el-tab-pane v-for="(fss,subIndex) in fs.fieldSchemaList" :key="`group_tab_${fs.index}_${subIndex}`" :label="formLabel(fss)" :name="formLabel(fss)" :lazy="true">
                 <span slot='label'>
                   <column-header :field-schema="fss" :ignore-required="true" :name="formLabel(fss)">
@@ -87,7 +87,7 @@
                     :fs="fss"
                     :data-ref="dataRef"
                     :get-row="getRow"
-                    :label-width="labelWidth"
+                    label-width="0"
                     :show-label="false"
                     :table-data-getter="tableDataGetter"
                     :should-cell-disable="shouldCellDisable"
@@ -240,6 +240,16 @@ export default {
     this.cleanFieldWatcher()
   },
   methods: {
+    groupLabelWidth(gs){
+      const groupSquash = jsb.pathGet(gs.setting,'squash',false)
+      if(groupSquash) {
+        if(jsb.pathGet(gs,'squash',false)) {
+          return null
+        }
+        return '0px'
+      }
+      return null
+    },
     getProxyCommentSlotNameWithName,
     commentSlotName,
     tipSlotName,

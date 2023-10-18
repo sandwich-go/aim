@@ -475,7 +475,13 @@ export default {
           formatter: ({value}) => {
             return value && value.UseSystemSSH
           },
+          groupConfig:[
+            {type: 'tab', fields: ['codeTesting'],squash:true,tabs:{tabPosition:'top'}},
+            {type: 'inline', fields: ['UserName','UserKey']},
+          ],
+
           fields: [
+            {field: 'codeTesting', name: 'codeTesting', type:'code'   },
             {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,   },
             {field: 'UserName', name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder',       commentSlot: 'commentSlot2'
               ,options:[{"label":"user1",value:"user1"},{"label":"user2",value:"user2"}]},
