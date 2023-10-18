@@ -65,6 +65,9 @@ export default {
   watch: {
     isShow(value) {
       this.isShowPopup = value
+      if(value){
+        jsb.cc.emitter.emit(this.configData.triggerEventWhenShow)
+      }
     },
   },
   methods: {
@@ -73,11 +76,6 @@ export default {
       this.$emit("update:isShow", false);
       this.configData.close && this.configData.close()
     },
-  },
-  mounted() {
-    if(this.configData.mountedTriggerEvent) {
-      jsb.cc.emitter.emit(this.configData.mountedTriggerEvent)
-    }
   },
   created() {
     if(this.drawer){
@@ -95,7 +93,7 @@ export default {
       appendToBody: false,
       close: null,
       customClass: '',
-      mountedTriggerEvent:"",
+      triggerEventWhenShow:"aim_table_layout",
       footerStyle:{'padding-right':'6px','padding-top':'9px'}
     })
     if(this.title) {
