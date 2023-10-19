@@ -17,14 +17,23 @@
       </el-col>
     </el-row>
     <div style="position: relative">
-      <el-button
-          v-if="codeLatest"
-          icon="el-icon-document-copy"
-          type="info"
-          plain
-          style="position: absolute;top:1px;right:1px;z-index: 10000"
-          size="mini" @click="handleCopy($event)">
-      </el-button>
+      <template v-if="codeLatest">
+        <el-button
+            v-if="lintSupport()"
+            icon="el-icon-magic-stick"
+            type="info"
+            plain
+            style="position: absolute;top:1px;right:46px;z-index: 10000"
+            size="mini" @click="formatCode()">
+        </el-button>
+        <el-button
+            icon="el-icon-document-copy"
+            type="info"
+            plain
+            style="position: absolute;top:1px;right:1px;z-index: 10000"
+            size="mini" @click="handleCopy(codeLatest,$event)">
+        </el-button>
+      </template>
       <codemirror
           :value="codeUsing()"
           :indent-with-tab="true"
@@ -355,6 +364,10 @@ export default {
         this.visibleLintError = true
         return false
       }
+    },
+    lintSupport(){
+      const mode = getCodeMirrorMode(this.infoConfigRef.mode)
+      return mode === CodeMirrorModeJSON || mode === CodeMirrorModeYAML
     },
     formatCode() {
       // 格式校验
