@@ -133,7 +133,7 @@ import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 
 import isString from "@sandwich-go/jsb/isString";
 import jsb from "@sandwich-go/jsb";
-import {AimFormInputInsert, AimFormInputView, calcLabelWidth, showForm} from "./index";
+import {AimFormInputCopy, AimFormInputInsert, AimFormInputView, calcLabelWidth, showForm} from "./index";
 import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
 import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
@@ -491,7 +491,7 @@ export default {
       }
       if (jsb.pathGet(fieldSchema, 'insertOnly', false)) {
         // 只允许插入时有效，创建后不允许编辑
-        return this.mode !== AimFormInputInsert
+        return this.mode !== AimFormInputInsert && this.mode !== AimFormInputCopy
       }
       if (!this.shouldCellDisable) {
         return false
