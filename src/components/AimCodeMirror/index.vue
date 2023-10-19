@@ -31,7 +31,7 @@
             type="info"
             plain
             style="position: absolute;top:1px;right:1px;z-index: 10000"
-            size="mini" @click="handleCopy(codeLatest,$event)">
+            size="mini" @click="handleCopy($event)">
         </el-button>
       </template>
       <codemirror
