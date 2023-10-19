@@ -16,17 +16,27 @@
         </cell-list>
       </el-col>
     </el-row>
-    <codemirror
-        :value="codeUsing()"
-        :indent-with-tab="true"
-        :options="optionsUsing()"
-        @input="privateOnInputEvent"
-        @ready="this.onCmReady"
-        :placeholder="placeholder"
-        :id="codemirrorEditorID"
-        ref="codemirror"
-        @keydown.native="onKeyDown"
-    />
+    <div style="position: relative">
+      <el-button
+          v-if="codeLatest"
+          icon="el-icon-document-copy"
+          type="info"
+          plain
+          style="position: absolute;top:1px;right:1px;z-index: 10000"
+          size="mini" @click="handleCopy($event)">
+      </el-button>
+      <codemirror
+          :value="codeUsing()"
+          :indent-with-tab="true"
+          :options="optionsUsing()"
+          @input="privateOnInputEvent"
+          @ready="this.onCmReady"
+          :placeholder="placeholder"
+          :id="codemirrorEditorID"
+          ref="codemirror"
+          @keydown.native="onKeyDown"
+      />
+    </div>
     <aim-popup :drawer="true" :is-show.sync="visibleLintError" :config="{appendToBody:popupAppendToBody,direction:'btt',size:'40%'}">
       <template v-slot:aim-popup-body>
         <div class="class-lint-error">
@@ -248,6 +258,9 @@ export default {
         return
       }
       this.defaultCellClick({code, jsEvent})
+    },
+    handleCopy(jsEvent) {
+      jsb.clipCopy(this.codeLatest, jsEvent)
     },
     defaultCellClick({code, jsEvent}) {
       switch (code) {
