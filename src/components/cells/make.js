@@ -9,7 +9,7 @@ export function makeCell(initVal, ...options) {
         disabled: false,
         show: true,
         style: {},
-        plain:false,
+        plain:true,
         cell:'CellViewLabel',
     }
     cc = Object.assign(cc, initVal)
@@ -24,7 +24,7 @@ export function makeCell(initVal, ...options) {
 
 export function makeCellButton(...options) {
     options.push({cell:'CellViewButton'})
-    return makeCell({type: 'primary', plain: false}, ...options)
+    return makeCell({type: 'primary', plain: true}, ...options)
 }
 
 export function makeCellLink(...options) {
