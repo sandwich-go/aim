@@ -15,6 +15,7 @@
         :should-cell-disable="shouldCellDisable"
         :should-cell-hide="shouldCellHide"
         :header-config="toolbarConfig()"
+        :radio="true"
         :selection="true"
         :expand-config="{}"
         :editor-proxy-config="editorProxyConfig"
@@ -749,8 +750,8 @@ export default {
     }
   },
   methods: {
-    selectionEnable(row){
-      return row.id>5
+    selectionEnable(){
+      return true
     },
     toolbarAlert(name, val) {
       this.alertTitle = `toolbar ${name} change to ${val}`

@@ -70,8 +70,7 @@
         />
         <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
-            <el-checkbox :value="scope.row === currentRow"
-                         @change="(val)=>radioRowChanged(scope.row,val)"></el-checkbox>
+            <el-checkbox v-model="scope.row[CtrlDataInRowData].selected" @change="radioRowChanged(scope.row)"></el-checkbox>
           </template>
         </el-table-column>
         <template v-for="(fs,fieldIndex) in schema">
@@ -287,7 +286,7 @@ import {
   aimTableLog,
   rowFormEditorTitle,
   aimTableError,
-  mustCtrlData, setRowSelected
+  mustCtrlData, setRowSelected, CtrlDataInRowData, isRowSelected
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/virtual_field";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -429,6 +428,7 @@ export default {
   },
   data() {
     return {
+      CtrlDataInRowData:CtrlDataInRowData,
       AimFormInputView,
       flexEndStyle,
       radioRow: null,
@@ -553,9 +553,14 @@ export default {
         setRowSelected(v, selected.includes(xidRow(v)))
       })
     },
-    radioRowChanged(row, selected) {
-      this.radioRow = selected ? row : null
-      setRowSelected(row,selected)
+    radioRowChanged(row) {
+      this.radioRow = null
+      jsb.each(this.tableData,v=>{
+        if(xidRow(v) !== xidRow(row)){
+          setRowSelected(v,false)
+        }
+      })
+      this.radioRow = isRowSelected(row)?row:null
       this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`)
     },
     tableHeight() {
