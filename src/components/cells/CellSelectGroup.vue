@@ -6,6 +6,7 @@
         :disabled="disabled"
         clearable
         :loading="inOptionLoading"
+        :value-key="valueKeyEnable?'value':null"
         size="mini"
         @change="change">
       <el-option-group
@@ -30,12 +31,25 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import jsb from "@sandwich-go/jsb";
 
 export default {
   name: 'CellSelectGroup',
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
+    jsb.each(this.optionsUsing,group=>{
+      jsb.each(group.options,option=>{
+        if(jsb.isObjectOrMap(option.value)){
+          this.valueKeyEnable = true
+        }
+      })
+    })
+  },
+  data(){
+    return {
+      valueKeyEnable:false,
+    }
   },
 }
 </script>

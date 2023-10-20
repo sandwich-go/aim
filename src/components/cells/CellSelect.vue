@@ -10,6 +10,7 @@
           :disabled="disabled"
           :style="cc.style"
           :loading="inOptionLoading"
+          :value-key="valueKeyEnable?'value':null"
           size="mini"
           clearable
           @change="change">
@@ -32,7 +33,7 @@
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import CellSelectGroup from "@/components/cells/CellSelectGroup.vue";
-
+import jsb from "@sandwich-go/jsb";
 export default {
   name: 'CellSelect',
   components: {CellSelectGroup},
@@ -40,6 +41,16 @@ export default {
   created() {
     this.ccConfigMerge()
     this.calcWidthPixString("100%")
+    jsb.each(this.optionsUsing,option=>{
+     if(jsb.isObjectOrMap(option.value)){
+        this.valueKeyEnable = true
+      }
+    })
+  },
+  data(){
+    return {
+      valueKeyEnable:false,
+    }
   },
   methods:{
     isOptionsGroup(){
