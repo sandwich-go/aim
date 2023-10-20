@@ -562,7 +562,6 @@ export default {
       })
       this.radioRow = val?row:null
       setRowSelected(row,val)
-      console.log("valvalvalvalval ",val)
       this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row),)
     },
     tableHeight() {
