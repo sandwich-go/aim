@@ -1,6 +1,6 @@
 {
   "name": "@sandwich-go/aim",
-  "version": "0.1.453",
+  "version": "0.1.454",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
