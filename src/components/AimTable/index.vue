@@ -561,7 +561,7 @@ export default {
         }
       })
       this.radioRow = isRowSelected(row)?row:null
-      this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`)
+      this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row))
     },
     tableHeight() {
       if (!this.tablePropertyRef.heightSubVH) {

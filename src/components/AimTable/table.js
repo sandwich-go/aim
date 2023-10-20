@@ -49,6 +49,7 @@ export function mustCtrlData(row) {
         row[CtrlDataInRowData] = {}
     }
     row[CtrlDataInRowData].xid = row[CtrlDataInRowData].xid || jsb.xid()
+    row[CtrlDataInRowData].selected = false
     return row
 }
 
