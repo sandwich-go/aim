@@ -71,7 +71,7 @@
         <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
 <!--            <el-checkbox v-model="scope.row[CtrlDataInRowData].selected" @change="(val)=>{radioRowChanged(val,scope.row)}"></el-checkbox>-->
-            <el-checkbox :value="scope.row === currentRow"
+            <el-checkbox :value="scope.row === radioRow"
                          @change="(val)=>{radioRowChanged(val,scope.row)}"></el-checkbox>
           </template>
         </el-table-column>
@@ -562,7 +562,8 @@ export default {
       })
       this.radioRow = val?row:null
       setRowSelected(row,val)
-      this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row))
+      console.log("valvalvalvalval ",val)
+      this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row),)
     },
     tableHeight() {
       if (!this.tablePropertyRef.heightSubVH) {
