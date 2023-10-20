@@ -6,8 +6,8 @@
         :disabled="disabled"
         clearable
         :loading="inOptionLoading"
-        :value-key="valueKeyEnable?'value':null"
         size="mini"
+        :value-key="optionValueKey"
         @change="change">
       <el-option-group
           v-for="group in optionsUsing"
@@ -15,7 +15,7 @@
           :label="group.label">
         <el-option
             v-for="optionItem in group.options"
-            :key="optionItem.key || optionItem.value"
+            :key=optionKey(optionItem)
             :label="optionItem.label"
             :disabled="optionItem.disabled"
             :value="optionItem.value">
@@ -38,18 +38,11 @@ export default {
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge()
-    jsb.each(this.optionsUsing,group=>{
-      jsb.each(group.options,option=>{
-        if(jsb.isObjectOrMap(option.value)){
-          this.valueKeyEnable = true
-        }
-      })
-    })
   },
-  data(){
-    return {
-      valueKeyEnable:false,
-    }
-  },
+  methods:{
+    optionKey(option){
+      return option.key || jsb.isObjectOrMap(option.value)?option.value[this.optionValueKey]:option.value
+    },
+  }
 }
 </script>

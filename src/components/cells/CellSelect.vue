@@ -10,13 +10,13 @@
           :disabled="disabled"
           :style="cc.style"
           :loading="inOptionLoading"
-          :value-key="valueKeyEnable?'value':null"
+          :value-key="optionValueKey"
           size="mini"
           clearable
           @change="change">
         <el-option
             v-for="option in optionsUsing"
-            :key="option.key || option.value"
+            :key=optionKey(option)
             :label="option.label"
             :disabled="option.disabled"
             :value="option.value">
@@ -30,10 +30,9 @@
 </template>
 
 <script>
-
+const jsb = require("@sandwich-go/jsb")
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import CellSelectGroup from "@/components/cells/CellSelectGroup.vue";
-import jsb from "@sandwich-go/jsb";
 export default {
   name: 'CellSelect',
   components: {CellSelectGroup},
@@ -41,18 +40,11 @@ export default {
   created() {
     this.ccConfigMerge()
     this.calcWidthPixString("100%")
-    jsb.each(this.optionsUsing,option=>{
-     if(jsb.isObjectOrMap(option.value)){
-        this.valueKeyEnable = true
-      }
-    })
-  },
-  data(){
-    return {
-      valueKeyEnable:false,
-    }
   },
   methods:{
+    optionKey(option){
+      return option.key || jsb.isObjectOrMap(option.value)?option.value[this.optionValueKey]:option.value
+    },
     isOptionsGroup(){
       const options  = this.optionsUsing
       const firstElement = options[0] || {}
