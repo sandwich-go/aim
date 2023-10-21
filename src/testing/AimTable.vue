@@ -482,7 +482,15 @@ export default {
           ],
 
           fields: [
-            {field: 'codeTesting', name: 'codeTesting', type:'code'   },
+            {field: 'codeTesting', name: 'codeTesting', type:'code' ,          cellFormConfig: {
+                codeMirror: {
+                  infoConfig: {mode: 'json'},
+                  height:'300px',
+                  placeholder:'placeholder',
+                  headerConfig: {rightCells: ['btnLint', 'btnCopy']}
+                }
+              },
+            },
             {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,   },
             {field: 'UserName', name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder',       commentSlot: 'commentSlot2'
               ,options:[{"label":"user1",value:"user1"},{"label":"user2",value:"user2"}]},
@@ -501,6 +509,7 @@ export default {
           cellConfig: {
             codeMirror: {
               infoConfig: {mode: 'go'},
+              height:'400px',
               placeholder:'placeholder',
               headerConfig: {rightCells: ['btnLint', 'btnCopy']}
             }

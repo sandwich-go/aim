@@ -23,14 +23,14 @@
             icon="el-icon-magic-stick"
             type="info"
             plain
-            style="position: absolute;top:1px;right:46px;z-index: 10000"
+            style="position: absolute;top:4px;right:52px;z-index: 10000"
             size="mini" @click="formatCode()">
         </el-button>
         <el-button
             icon="el-icon-document-copy"
             type="info"
             plain
-            style="position: absolute;top:1px;right:1px;z-index: 10000"
+            style="position: absolute;top:4px;right:4px;z-index: 10000"
             size="mini" @click="handleCopy($event)">
         </el-button>
       </template>
