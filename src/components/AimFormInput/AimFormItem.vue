@@ -242,7 +242,8 @@ export default {
         proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, fs.field),
         selection: true,
         rowRemoveShortcut: true,
-        popupAppendToBody: true,
+        formPopupUsingDrawer:false,
+        popupAppendToBody:true,
       }, this.cellConfig)
       cc.editConfig = jsb.objectAssignNX(cc.editConfig, {
         formEditorCells: function () {

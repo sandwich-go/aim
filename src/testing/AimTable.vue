@@ -15,6 +15,7 @@
         :should-cell-disable="shouldCellDisable"
         :should-cell-hide="shouldCellHide"
         :header-config="toolbarConfig()"
+        :radio="true"
         :selection="true"
         :expand-config="{}"
         :editor-proxy-config="editorProxyConfig"
@@ -477,7 +478,21 @@ export default {
           formatter: ({value}) => {
             return value && value.UseSystemSSH
           },
+          groupConfig:[
+            {type: 'tab', fields: ['codeTesting'],squash:true,tabs:{tabPosition:'top'}},
+            {type: 'inline', fields: ['UserName','UserKey']},
+          ],
+
           fields: [
+            {field: 'codeTesting', name: 'codeTesting', type:'code' ,          cellFormConfig: {
+                codeMirror: {
+                  infoConfig: {mode: 'json'},
+                  height:'300px',
+                  placeholder:'placeholder',
+                  headerConfig: {rightCells: ['btnLint', 'btnCopy']}
+                }
+              },
+            },
             {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,   },
             {field: 'UserName', name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder',       commentSlot: 'commentSlot2'
               ,options:[{"label":"user1",value:"user1"},{"label":"user2",value:"user2"}]},
@@ -505,7 +520,7 @@ export default {
         {
           field: 'Version', name: 'Version', type: 'select', sortable: false,
          options:new Promise((resolve) => {
-           resolve([{label: "v1", value: "v1",comment:'版本号v1'}, {label: "v2", value: "v2"}])
+           resolve([{label: "v1",valueKey:'version', value: {version:"v1"},comment:'版本号v1'}, {label: "v2",valueKey:'version', value: {version:"v2"}}])
          })
         },
         {
@@ -749,8 +764,8 @@ export default {
     }
   },
   methods: {
-    selectionEnable(row){
-      return row.id>5
+    selectionEnable(){
+      return true
     },
     toolbarAlert(name, val) {
       this.alertTitle = `toolbar ${name} change to ${val}`

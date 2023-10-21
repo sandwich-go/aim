@@ -42,6 +42,7 @@ export default {
       optionsUsing:[],
       optionsRefresh:false,
       fieldSchemaRef:this.fieldSchema,
+      optionValueKey:'value',
     }
   },
   async created() {
@@ -135,6 +136,7 @@ export default {
           options.push(v)
         }
       })
+      this.optionValueKey = jsb.pathGet(options,'0.valueKey','value')
       if(autoGroupField) {
         // 如果option的属性字段中含有aimGroup,则自动将其聚合为group
         return this.optionsTryGroup(options,autoGroupField,autoGroupSort)

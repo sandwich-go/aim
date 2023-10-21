@@ -65,6 +65,9 @@ export default {
   watch: {
     isShow(value) {
       this.isShowPopup = value
+      if(value){
+        jsb.cc.emitter.emit(this.configData.triggerEventWhenShow)
+      }
     },
   },
   methods: {
@@ -90,6 +93,7 @@ export default {
       appendToBody: false,
       close: null,
       customClass: '',
+      triggerEventWhenShow:"aim_table_layout",
       footerStyle:{'padding-right':'6px','padding-top':'9px'}
     })
     if(this.title) {

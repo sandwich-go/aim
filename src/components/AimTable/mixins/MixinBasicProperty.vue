@@ -65,6 +65,12 @@ export default {
   methods: {
     // getSelectionRowList 获取选中行，包含__xx_tmp数据
     getSelectionRows(clean=false) {
+      if(this.radio){
+        if(!this.radioRow){
+          return []
+        }
+        return [clean?removeCtrlData(jsb.clone(this.radioRow)):this.radioRow]
+      }
       return clean?removeCtrlData(jsb.clone(this.getTableRef().selection)):this.getTableRef().selection
     },
     // 每一个cell的属性

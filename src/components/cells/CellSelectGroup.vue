@@ -7,6 +7,7 @@
         clearable
         :loading="inOptionLoading"
         size="mini"
+        :value-key="optionValueKey"
         @change="change">
       <el-option-group
           v-for="group in optionsUsing"
@@ -14,7 +15,7 @@
           :label="group.label">
         <el-option
             v-for="optionItem in group.options"
-            :key="optionItem.key || optionItem.value"
+            :key=optionKey(optionItem)
             :label="optionItem.label"
             :disabled="optionItem.disabled"
             :value="optionItem.value">
@@ -30,6 +31,7 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import jsb from "@sandwich-go/jsb";
 
 export default {
   name: 'CellSelectGroup',
@@ -37,5 +39,10 @@ export default {
   created() {
     this.ccConfigMerge()
   },
+  methods:{
+    optionKey(option){
+      return option.key || jsb.isObjectOrMap(option.value)?option.value[this.optionValueKey]:option.value
+    },
+  }
 }
 </script>

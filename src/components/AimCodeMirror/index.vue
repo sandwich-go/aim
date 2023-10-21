@@ -16,6 +16,24 @@
         </cell-list>
       </el-col>
     </el-row>
+    <div style="position: relative">
+      <template v-if="codeLatest">
+        <el-button
+            v-if="lintSupport()"
+            icon="el-icon-magic-stick"
+            type="info"
+            plain
+            style="position: absolute;top:4px;right:52px;z-index: 10000"
+            size="mini" @click="formatCode()">
+        </el-button>
+        <el-button
+            icon="el-icon-document-copy"
+            type="info"
+            plain
+            style="position: absolute;top:4px;right:4px;z-index: 10000"
+            size="mini" @click="handleCopy($event)">
+        </el-button>
+      </template>
     <codemirror
         :value="codeUsing"
         :indent-with-tab="true"
@@ -27,6 +45,7 @@
         ref="codemirror"
         @keydown.native="onKeyDown"
     />
+    </div>
     <aim-popup :drawer="true" :is-show.sync="visibleLintError" :config="{appendToBody:popupAppendToBody,direction:'btt',size:'40%'}">
       <template v-slot:aim-popup-body>
         <div class="class-lint-error">
@@ -56,6 +75,7 @@ import 'codemirror/theme/rubyblue.css'
 import 'codemirror/mode/toml/toml.js'
 import "codemirror/mode/yaml/yaml.js";
 import "codemirror/mode/sql/sql.js";
+import "codemirror/mode/protobuf/protobuf.js";
 import "codemirror/mode/shell/shell.js";
 import "codemirror/mode/go/go.js";
 import 'codemirror/mode/php/php.js'
@@ -252,6 +272,9 @@ export default {
       }
       this.defaultCellClick({code, jsEvent})
     },
+    handleCopy(jsEvent) {
+      jsb.clipCopy(this.codeLatest, jsEvent)
+    },
     defaultCellClick({code, jsEvent}) {
       switch (code) {
         case CodeButtonCopy:
@@ -343,6 +366,10 @@ export default {
         this.visibleLintError = true
         return false
       }
+    },
+    lintSupport(){
+      const mode = getCodeMirrorMode(this.infoConfigRef.mode)
+      return mode === CodeMirrorModeJSON || mode === CodeMirrorModeYAML
     },
     formatCode() {
       // 格式校验

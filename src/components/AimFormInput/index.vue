@@ -18,7 +18,7 @@
         <template v-if="fs.__isGroup && fs.setting.type ==='divider'">
           <el-divider :key="`group_divider_${index}`" v-bind="fs.setting">
             <el-icon v-if="fs.setting.icon" v-bind="iconBind(fs.setting.icon)" ></el-icon>
-            {{fs.setting.label}}</el-divider>
+            <span v-html="fs.setting.label"/></el-divider>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='inline'">
           <el-row :key="`group_inline_${index}`">
@@ -46,7 +46,7 @@
           </el-row>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='card'">
-          <el-form-item v-if="groupShow(fs)" :key="`group_card_${index}`" :label-width="fs.setting.squash?'0px':null" :label="fs.setting.label || ''">
+          <el-form-item v-if="groupShow(fs)" :key="`group_card_${index}`" :label-width="groupLabelWidth(fs)" :label="fs.setting.label || ''">
             <el-card class="box-card" shadow="always">
               <template v-for="(fss,subIndex) in fs.fieldSchemaList">
                 <aim-form-item
@@ -72,8 +72,8 @@
           </el-form-item>
         </template>
         <template v-else-if="fs.__isGroup && fs.setting.type ==='tab'">
-          <el-form-item :key="`group_tab_${fs.index}`" :label-width="fs.setting.squash?'0px':null">
-            <el-tabs v-model="currTab[`group_tab_${fs.index}`]">
+          <el-form-item :key="`group_tab_${fs.index}`" :label-width="groupLabelWidth(fs)" :label="fs.setting.label || ''">
+            <el-tabs v-model="currTab[`group_tab_${fs.index}`]" v-bind="fs.setting.tabs || {}">
               <el-tab-pane v-for="(fss,subIndex) in fs.fieldSchemaList" :key="`group_tab_${fs.index}_${subIndex}`" :label="formLabel(fss)" :name="formLabel(fss)" :lazy="true">
                 <span slot='label'>
                   <column-header :field-schema="fss" :ignore-required="true" :name="formLabel(fss)">
@@ -87,7 +87,7 @@
                     :fs="fss"
                     :data-ref="dataRef"
                     :get-row="getRow"
-                    :label-width="labelWidth"
+                    label-width="0"
                     :show-label="false"
                     :table-data-getter="tableDataGetter"
                     :should-cell-disable="shouldCellDisable"
@@ -133,7 +133,7 @@ import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 
 import isString from "@sandwich-go/jsb/isString";
 import jsb from "@sandwich-go/jsb";
-import {AimFormInputInsert, AimFormInputView, calcLabelWidth, showForm} from "./index";
+import {AimFormInputCopy, AimFormInputInsert, AimFormInputView, calcLabelWidth, showForm} from "./index";
 import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
 import {xidRow} from "@/components/AimTable/table";
 import CellViewAlert from "@/components/cells/CellViewAlert.vue";
@@ -194,7 +194,7 @@ export default {
     // 最外层调用不要设定rowTop,递归时传递到最底层便于统一回调外层
     rowTop: Object,
     labelWidth: String,
-    popupAppendToBody: Boolean,
+    viewLevelIndex:Number,// 默认0也就是0级页面
     parentKey: String,
     readOnly:Boolean,
     // 对接AimTable时,AimTable自动完成了watch
@@ -240,6 +240,16 @@ export default {
     this.cleanFieldWatcher()
   },
   methods: {
+    groupLabelWidth(gs){
+      const groupSquash = jsb.pathGet(gs.setting,'squash',false)
+      if(groupSquash) {
+        if(jsb.pathGet(gs,'squash',false)) {
+          return null
+        }
+        return '0px'
+      }
+      return null
+    },
     getProxyCommentSlotNameWithName,
     commentSlotName,
     tipSlotName,
@@ -481,7 +491,7 @@ export default {
       }
       if (jsb.pathGet(fieldSchema, 'insertOnly', false)) {
         // 只允许插入时有效，创建后不允许编辑
-        return this.mode !== AimFormInputInsert
+        return this.mode !== AimFormInputInsert && this.mode !== AimFormInputCopy
       }
       if (!this.shouldCellDisable) {
         return false
