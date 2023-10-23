@@ -78,6 +78,14 @@
         </el-table>
       </template>
     </aim-table>
+    <aim-popup :is-show.sync="aimFormEditorShow" :drawer="true"
+               :config="{direction:'rtl',appendToBody:false,destroyOnClose:true,size:'75%'}">
+      <template v-slot:aim-popup-body>
+      </template>
+      <template v-slot:aim-popup-footer>
+        <el-button size="mini" type="primary">Save</el-button>
+      </template>
+    </aim-popup>
   </div>
 </template>
 
@@ -102,11 +110,12 @@ import {
   CodeButtonRowSelectedMinus, CodeButtonSaveTableData, CodeButtonTableSetting,
   CodeLinkFieldCopy,
 } from "@/components/cells/const";
+import AimPopup from "@/components/AimPopup/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'TestingAimTable',
-  components: {AimTable},
+  components: {AimPopup, AimTable},
   props: {
     msg: String
   },
@@ -509,11 +518,11 @@ export default {
           watch: ({row, newValue, oldValue}) => {
             console.log("watch code change ", row, newValue, oldValue)
           },
+          formButton: {label: '编辑', click: _this.editAimForm},
           cellFormConfig: {
             codeMirror: {
               infoConfig: {mode: 'json'},
               placeholder:'placeholder',
-              headerConfig: {rightCells: ['btnLint', 'btnCopy']}
             }
           },
         },
@@ -761,6 +770,7 @@ export default {
         }
       ],
       nextID: 1000,
+      aimFormEditorShow: false,
     }
   },
   methods: {
@@ -784,6 +794,9 @@ export default {
         return row.Checkbox
       }
       return false
+    },
+    editAimForm(){
+      this.aimFormEditorShow = true
     },
     toolbarConfig() {
       const _this = this

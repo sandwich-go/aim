@@ -23,35 +23,40 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-      <div v-else style="display:inline-flex;align-items:center;width: 100%">
-        <component
-            :is="registeredComponentMap[cellName]"
-            :data="dataRef"
-            :get-row="getRow"
-            :field-name="fs.field"
-            :options="fs.options || []"
-            :style-base="{width:'100%'}"
-            :cell-config="cellConfig"
-            :table-data-getter="tableDataGetter"
-            :field-schema="fs"
-            :formatter="fs['formatterForm']"
-            :disabled="shouldDisable()"
-            :key="fieldComponentKey(fs)"
-        ></component>
-        <template v-if="fs['formButton']" >
-          <el-button v-for="(v,index) in formButtonLinkArray('formButton')" v-bind="v" :key="index"
-                     @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
-          {{v.circle?'':v.label}}
-          </el-button>
-        </template>
-
-        <template v-if="fs['formLink']" >
-          <el-button v-for="(v,index) in formButtonLinkArray('formLink')" v-bind="v" :key="index"
-                     @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
-            {{v.label}}
-          </el-button>
-        </template>
-      </div>
+      <el-row v-else class="aim-component-flex-end" style="align-items: start;gap: 3px">
+        <div style="width: 100%">
+          <component
+              :is="registeredComponentMap[cellName]"
+              :data="dataRef"
+              :get-row="getRow"
+              :field-name="fs.field"
+              :options="fs.options || []"
+              :style-base="{width:'100%'}"
+              :cell-config="cellConfig"
+              :table-data-getter="tableDataGetter"
+              :field-schema="fs"
+              :formatter="fs['formatterForm']"
+              :disabled="shouldDisable()"
+              :key="fieldComponentKey(fs)"
+          ></component>
+        </div>
+        <div class="aim-table-shortcuts-button">
+          <div style="float:right">
+            <template v-if="fs['formButton']" >
+              <el-button v-for="(v,index) in formButtonLinkArray('formButton')" v-bind="v" :key="index"
+                         @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
+                {{v.circle?'':v.label}}
+              </el-button>
+            </template>
+            <template v-if="fs['formLink']" >
+              <el-button v-for="(v,index) in formButtonLinkArray('formLink')" v-bind="v" :key="index"
+                         @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
+                {{v.label}}
+              </el-button>
+            </template>
+          </div>
+        </div>
+      </el-row>
     </template>
     <div v-else-if="isAimTable(cellName)">
       <el-card class="box-card" shadow="always">
