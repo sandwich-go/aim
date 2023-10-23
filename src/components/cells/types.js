@@ -31,7 +31,7 @@ export const typeDefaults = {
         table:'CellViewTag',
         form:'CellSelect',
         default: (fs) => {
-            return jsb.pathGet(fs, 'options.0.value')
+            return jsb.pathGet(fs, 'options.0.value','')
         },
         label:'下拉单选',
         placeholderSupport:true,
@@ -41,7 +41,7 @@ export const typeDefaults = {
         table:'CellViewLabel',
         form:'CellSelectInput',
         default: (fs) => {
-            return jsb.pathGet(fs, 'options.0.value')
+            return jsb.pathGet(fs, 'options.0.value','')
         },
         label:'下拉单选 或 单行文本输入',
         placeholderSupport:true,
@@ -51,7 +51,7 @@ export const typeDefaults = {
         table:'CellViewTag',
         form:'CellSelectInput',
         default: (fs) => {
-            return jsb.pathGet(fs, 'options.0.value')
+            return jsb.pathGet(fs, 'options.0.value','')
         },
         label:'下拉单选 或 标签输入',
         placeholderSupport:true,
@@ -74,7 +74,7 @@ export const typeDefaults = {
         table:'CellViewTag',
         form:'CellSelectGroup',
         default: (fs) => {
-            return jsb.pathGet(fs, 'options.0.options.0.value')
+            return jsb.pathGet(fs, 'options.0.options.0.value','')
         },
         label:'下拉单选，候选项分组显示',
         placeholderSupport:true,
