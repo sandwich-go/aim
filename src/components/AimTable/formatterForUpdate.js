@@ -1,5 +1,5 @@
 import jsb from "@sandwich-go/jsb";
-import {boolProcess, formatValue, numberProcess, stringProcess} from "../cells/types";
+import {arrayProcess, boolProcess, formatValue, numberProcess, objectProcess, stringProcess} from "../cells/types";
 import {isVirtualField} from "./virtual_field";
 import {isRowSelected, removeCtrlData} from "./table";
 
@@ -55,6 +55,8 @@ export const Str2FormatterFunc = {
     "fixed64":numberProcess,
     "sfixed32":numberProcess,
     "sfixed64":numberProcess,
+    "object":objectProcess,
+    "array":arrayProcess,
 }
 
 export function formatterForUpdate(schema,row,removeVirtual,parentNameSlice=[]){

@@ -221,8 +221,18 @@ export function numberProcess({value,pathSlice,fieldName}) {
     }
     return num;
 }
-
-export function stringProcess({value}) {return String(value).trim().replace(/^\s+|\s+$/g, '')}
+export function objectProcess({value}) {
+    return jsb.isNull(value)||jsb.isUndefined(value)?{}:value
+}
+export function arrayProcess({value}) {
+    return jsb.isNull(value)||jsb.isUndefined(value)?[]:value
+}
+export function stringProcess({value}) {
+    if(!value){
+        value = ''
+    }
+    return  String(value).trim().replace(/^\s+|\s+$/g, '')
+}
 export function boolProcess({value}) {
     const strVal = String(value).toLowerCase()
     return !(value === false || strVal === "false" || strVal === "0" || strVal === "null" || strVal === "undefined" ||jsb.isEmpty(value));
