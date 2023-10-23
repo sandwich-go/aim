@@ -23,7 +23,7 @@
             :disabled="shouldDisable()"
             :key="fieldComponentKey(fs)"
         ></component>
-      <el-row v-else class="aim-component-flex-end" style="align-items: start;gap: 3px">
+      <el-row v-else class="aim-form-input-component-flex-end" style="align-items: start;gap: 3px">
         <div style="width: 100%">
           <component
               :is="registeredComponentMap[cellName]"
@@ -40,22 +40,18 @@
               :key="fieldComponentKey(fs)"
           ></component>
         </div>
-        <div class="aim-table-shortcuts-button">
-          <div style="float:right">
-            <template v-if="fs['formButton']" >
-              <el-button v-for="(v,index) in formButtonLinkArray('formButton')" v-bind="v" :key="index"
-                         @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
-                {{v.circle?'':v.label}}
-              </el-button>
-            </template>
-            <template v-if="fs['formLink']" >
-              <el-button v-for="(v,index) in formButtonLinkArray('formLink')" v-bind="v" :key="index"
-                         @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
-                {{v.label}}
-              </el-button>
-            </template>
-          </div>
-        </div>
+        <template v-if="fs['formButton']" >
+          <el-button v-for="(v,index) in formButtonLinkArray('formButton')" v-bind="v" :key="index"
+                     @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
+            {{v.circle?'':v.label}}
+          </el-button>
+        </template>
+        <template v-if="fs['formLink']" >
+          <el-button v-for="(v,index) in formButtonLinkArray('formLink')" v-bind="v" :key="index"
+                     @click="v.click({jsEvent:$event,row:getRow(),parent:dataRef,value:dataRef[fs.field]})">
+            {{v.label}}
+          </el-button>
+        </template>
       </el-row>
     </template>
     <div v-else-if="isAimTable(cellName)">
@@ -364,3 +360,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.aim-form-input-component-flex-end {
+  display: flex;
+  z-index: 10;
+  justify-content: flex-end;
+}
+</style>

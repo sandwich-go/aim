@@ -431,7 +431,7 @@ export default {
           },
         },
         {
-          field: 'html', name: 'html',type:'html'
+          field: 'html', name: 'html',type:'html',          formButton: {label: '编辑', click: _this.editAimForm},
         },
         {
           field: 'password', name: 'password', sortable: true,
@@ -565,7 +565,8 @@ export default {
           cellForm: 'CellIconSelectorInput',
           cellConfig: function ({fieldValue}) {
             return {class: fieldValue, label: fieldValue}
-          }
+          },
+          formButton: [{label: '编辑1', click: _this.editAimForm},{label: '编辑2', click: _this.editAimForm}],
         },
         {
           field: 'Online',
