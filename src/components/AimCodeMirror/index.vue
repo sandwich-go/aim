@@ -241,7 +241,6 @@ export default {
   },
   computed: {
     codeUsing() {
-      console.log("this.codeLatest ",this.codeLatest)
       return this.proxyConfigRef.enable ? this.codeProxy : this.codeLatest
     },
     cssVars() {
