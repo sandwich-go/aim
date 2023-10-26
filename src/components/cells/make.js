@@ -41,6 +41,9 @@ function parseOptions(options,strList) {
         if (v.startsWith("i_") || v.startsWith("icon_")) {
             options.icon = v.substr([v.indexOf('_')+1])
         }
+        if (v.startsWith("s_") || v.startsWith("svg_")) {
+            options.svg = v.substr([v.indexOf('_')+1])
+        }
         if (v.startsWith("l_") || v.startsWith("label_")) {
             options.label = v.substr([v.indexOf('_')+1])
             options.circle = false

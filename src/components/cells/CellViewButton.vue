@@ -3,6 +3,7 @@
              :icon="stateSwitch?(cc.iconTrue||cc.icon):cc.icon"
              :type="stateSwitch?(cc.typeTrue||cc.type):cc.type"
   >
+    <svg-icon v-if="cc.svg" :icon-class="cc.svg" style="padding-right: 3px" />
     <template v-if="!cc.circle">{{ cc.label ? cc.label : "" }}</template>
   </el-button>
 </template>
