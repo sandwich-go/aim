@@ -69,15 +69,8 @@ export default {
       }
     },
     isValidImageUrl(url) {
-      // 验证URL的合法性
-      const pattern = new RegExp('^(https?:\\/\\/)?' +
-          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
-          '((\\d{1,3}\\.){3}\\d{1,3}))' +
-          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
-          '(\\?[;&a-z\\d%_.~+=-]*)?' +
-          '(\\#[-a-z\\d_]*)?$', 'i');
-      if (!pattern.test(url)) {
-        return false;
+      if(!url){
+        return false
       }
       // 通过文件后缀判断是否是图像
       const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
