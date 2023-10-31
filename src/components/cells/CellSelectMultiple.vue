@@ -7,13 +7,14 @@
         :style="cc.style"
         filterable
         :loading="inOptionLoading"
+        :value-key="optionValueKey"
         default-first-option
         :disabled="disabled"
         clearable
         @change="change">
       <el-option v-for="val in optionsUsing"
                  :value="val.value"
-                 :key="val.key || val.value"
+                 :key="optionKey(val)"
                  :disabled="val.disabled"
                  :label="val.label">
         <span>{{ val.label }}</span>
@@ -27,10 +28,16 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import jsb from "@sandwich-go/jsb";
 
 export default {
   name: 'CellSelectMultiple',
   mixins: [MixinCellEditorConfig],
+  methods: {
+    optionKey(option) {
+      return option.key || jsb.isObjectOrMap(option.value) ? option.value[this.optionValueKey] : option.value
+    },
+  },
   created() {
     this.ccConfigMerge({
       style:{},
