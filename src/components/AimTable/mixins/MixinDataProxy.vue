@@ -4,7 +4,7 @@ import {aimTableError} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
 import {cleanDataForTable} from "@/components/AimTable/clean";
-import {CleanDataForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
+import {CleanRowForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
 import {localFilter} from "@/components/AimTable/filter";
 
 const jsb = require("@sandwich-go/jsb")
@@ -100,6 +100,7 @@ export default {
           params[k] = v
         }
       })
+      params['aimTableSchema'] = this.schema
 
       Promise.resolve(funcToCall(params)).then((resp) => {
         okToast && !this.proxyConfigRef.isLocalData && this.toastSuccess(okToast)
@@ -119,13 +120,31 @@ export default {
       })
     },
     trySaveField(field, {done} = {}) {
-      this.tryPromise('saveField',{tableData:this.tableData,field},({error})=>{
+      const toSave = CleanRowForStorage(
+          this.schema,
+          this.tableData,
+          true,
+          true,
+          this.proxyConfigRef.submitRemoveFieldNotInSchema,
+          this.proxyConfigRef.row2Item
+      )
+      this.tryPromise('saveField',{
+        tableData:toSave,
+        field},({error})=>{
         done && done({error})
       },`字段 ${field} 已保存`)
     },
     // eslint-disable-next-line no-unused-vars
     trySaveTableData({done} = {}) {
-      this.tryPromise('saveTableData',{tableData:this.tableData},({error})=>{
+      const toSave = CleanRowForStorage(
+          this.schema,
+          this.tableData,
+          true,
+          true,
+          this.proxyConfigRef.submitRemoveFieldNotInSchema,
+          this.proxyConfigRef.row2Item
+      )
+      this.tryPromise('saveTableData',{tableData:toSave},({error})=>{
         if(!error){
           this.doLayout(true)
         }
@@ -169,11 +188,13 @@ export default {
     tryProxySaveRow(row, {done} = {}) {
       // 本地proxy的数据依赖xid定位，保留xid数据
       const removeCtrlData = !this.proxyConfigRef.isLocalData
-      let toSave = CleanDataForStorage(this.schema,row,true,removeCtrlData)
-      if(this.proxyConfigRef.submitRemoveFieldNotInSchema){
-        toSave=RemoveFieldNotInSchema(this.schema,toSave)
-      }
-      toSave =  this.proxyConfigRef.row2Item?this.proxyConfigRef.row2Item(toSave):toSave
+
+      let toSave = CleanRowForStorage(
+          this.schema,
+          row,
+          true,removeCtrlData,
+          this.proxyConfigRef.submitRemoveFieldNotInSchema,
+          this.proxyConfigRef.row2Item)
 
       this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){

@@ -25,27 +25,40 @@ export function RemoveFieldNotInSchema(schema,row) {
     return row
 }
 
-function cleanRowForStorage(schema,row,removeVirtual=false,removeCtrl=true){
+// CleanTableForStorage 为存储清理数据
+export function CleanTableForStorage(schema,table,
+                              removeVirtual=false,
+                              removeCtrl=true,
+                              removeFieldNotInSchema=false,
+                              row2Item = (v)=>{return v}
+                              ) {
+    const ret= []
+    jsb.each(table,row=>{
+        ret.push(CleanRowForStorage(schema,row,removeVirtual,removeCtrl,removeFieldNotInSchema,row2Item))
+    })
+    return ret
+}
+
+// CleanRowForStorage 为数据存储清理数据，如移除虚拟字段，移除控制字段，字段数据的格式化等
+export function CleanRowForStorage(schema,row,
+                                   removeVirtual=false,
+                                   removeCtrl=true,
+                                   removeFieldNotInSchema=false,
+                                   row2Item = (v)=>{return v}
+                                   ) {
     let ret = jsb.clone(row)
     formatterForUpdate(schema,ret,removeVirtual)
     if (removeCtrl){
         ret = removeCtrlData(ret)
     }
+
+    if(removeFieldNotInSchema){
+        ret=RemoveFieldNotInSchema(schema,ret)
+    }
+    ret =  row2Item?row2Item(ret):ret
+
     return ret
 }
-
-// CleanDataForStorage 为数据存储清理数据，如移除虚拟字段，移除控制字段，字段数据的格式化等
-export function CleanDataForStorage(schema,rowOrTable,removeVirtual=false,removeCtrl=true) {
-    if(jsb.isArray(rowOrTable)){
-        const ret= []
-        jsb.each(rowOrTable,row=>{
-            ret.push(cleanRowForStorage(schema,row,removeVirtual,removeCtrl))
-        })
-        return ret
-    }
-    return cleanRowForStorage(schema,rowOrTable,removeVirtual,removeCtrl)
-}
-
 
 export const Str2FormatterFunc = {
     "string":stringProcess,

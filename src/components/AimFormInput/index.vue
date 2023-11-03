@@ -149,7 +149,7 @@ import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/vue-loading.css';
 import {isVirtualField} from "@/components/AimTable/virtual_field";
-import {CleanDataForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
+import {CleanRowForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 export default {
@@ -435,12 +435,11 @@ export default {
       const _this = this
       this.__validatePrivate(validCallback,notValidCallback,onValidCallbackRunError,(v)=>{
         // 移除虚拟字段、移除控制字段
-        let tmp = CleanDataForStorage(_this.schema,v,true,true)
-        if(!this.submitRemoveFieldNotInSchema){
-          return tmp
-        }
-        tmp =  RemoveFieldNotInSchema(_this.schema,tmp)
-        return this.row2Storage?this.row2Storage(tmp):tmp
+        return CleanRowForStorage(_this.schema,v,
+            true,
+            true,
+            this.submitRemoveFieldNotInSchema,
+            this.row2Storage)
       })
     },
     // __validatePrivate 外部不要直接调用
