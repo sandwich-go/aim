@@ -16,6 +16,14 @@ export function isPlainObject(s) {
     return jsb.isPlainObject(s)
 }
 
+function  tag(item){
+    return Object.assign({
+        type: item.type || item.tagType|| 'info',
+        effect: item.effect || item.tagEffect || 'light',
+        label: item.label
+    }, jsb.pathGet(item, 'asTag', {}))
+}
+
 export function wrapAsTagList(val, options) {
     let tagList = []
     for (const v of jsb.wrapArray(val)) {
@@ -26,14 +34,26 @@ export function wrapAsTagList(val, options) {
         let found = false
         for (const item of options) {
             if (item.value === v) {
-                tagList.push(Object.assign({
-                    type: item.type || item.tagType|| 'info',
-                    effect: item.effect || item.tagEffect || 'light',
-                    label: item.label
-                }, jsb.pathGet(item, 'asTag', {})))
+                tagList.push(tag(item))
                 found = true
+                break
             }
         }
+        if(!found){
+            for (const groupItem of options) {
+                for (const item of groupItem.options || []) {
+                    if (item.value === v) {
+                        tagList.push(tag(item))
+                        found = true
+                        break
+                    }
+                }
+                if(found){
+                    break
+                }
+            }
+        }
+
         if (!found) {
             tagList.push(Object.assign({
                 type: 'info',

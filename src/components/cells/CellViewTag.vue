@@ -1,6 +1,6 @@
 <template>
   <div>
-      <span v-if="!isNullUndefeind(fieldValue)">
+      <span v-if="!isNullUndefined(fieldValue)">
         <template v-for="(item,index) of wrapAsTagList(fieldValue,optionsUsing)">
           <el-tag
               v-if="item.label"
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     wrapAsTagList,
-    isNullUndefeind(v){
+    isNullUndefined(v){
       return jsb.isUndefined(v) || jsb.isNull(v)
     }
   },
