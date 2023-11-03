@@ -25,14 +25,25 @@ export function RemoveFieldNotInSchema(schema,row) {
     return row
 }
 
-// CleanDataForStorage 为数据存储清理数据，如移除虚拟字段，移除控制字段，字段数据的格式化等
-export function CleanDataForStorage(schema,row,removeVirtual=false,removeCtrl=true) {
+function cleanRowForStorage(schema,row,removeVirtual=false,removeCtrl=true){
     let ret = jsb.clone(row)
     formatterForUpdate(schema,ret,removeVirtual)
     if (removeCtrl){
         ret = removeCtrlData(ret)
     }
     return ret
+}
+
+// CleanDataForStorage 为数据存储清理数据，如移除虚拟字段，移除控制字段，字段数据的格式化等
+export function CleanDataForStorage(schema,rowOrTable,removeVirtual=false,removeCtrl=true) {
+    if(jsb.isArray(rowOrTable)){
+        const ret= []
+        jsb.each(rowOrTable,row=>{
+            ret.push(cleanRowForStorage(schema,row,removeVirtual,removeCtrl))
+        })
+        return ret
+    }
+    return cleanRowForStorage(schema,rowOrTable,removeVirtual,removeCtrl)
 }
 
 
