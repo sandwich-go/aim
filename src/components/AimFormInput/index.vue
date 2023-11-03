@@ -149,7 +149,7 @@ import ColumnHeader from "@/components/AimTable/Column/ColumnHeader.vue";
 import Loading from "vue-loading-overlay";
 import 'vue-loading-overlay/dist/vue-loading.css';
 import {isVirtualField} from "@/components/AimTable/virtual_field";
-import {CleanRowForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
+import {CleanRowForStorage} from "@/components/AimTable/formatterForUpdate";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 export default {

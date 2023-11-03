@@ -1,6 +1,6 @@
 import jsb from "@sandwich-go/jsb";
 import {mustCtrlData, xidRow} from "./table";
-import {CleanRowForStorage, CleanTableForStorage} from "@/components/AimTable/formatterForUpdate";
+import {CleanTableForStorage} from "./formatterForUpdate";
 
 // newLocalDataProxyWithFieldName 本地数据代理,form表单内使用
 export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {

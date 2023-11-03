@@ -4,7 +4,7 @@ import {aimTableError} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
 import {cleanDataForTable} from "@/components/AimTable/clean";
-import {CleanRowForStorage, RemoveFieldNotInSchema} from "@/components/AimTable/formatterForUpdate";
+import {CleanRowForStorage} from "@/components/AimTable/formatterForUpdate";
 import {localFilter} from "@/components/AimTable/filter";
 
 const jsb = require("@sandwich-go/jsb")
