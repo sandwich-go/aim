@@ -46,11 +46,11 @@ export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {
         query:query,
         delete({row,aimTableSchema}) {
             jsb.remove(parent[fieldName], item => xidRow(item) === xidRow(row))
-            afterTableDataChanged(parent[fieldName],aimTableSchema)
+            return afterTableDataChanged(parent[fieldName],aimTableSchema)
         },
         deleteRows({rows,aimTableSchema}) {
             jsb.remove(parent[fieldName], item => jsb.find(rows, v => xidRow(v) === xidRow(item)))
-            afterTableDataChanged(parent[fieldName],aimTableSchema)
+            return afterTableDataChanged(parent[fieldName],aimTableSchema)
         },
         // inPlace模式下不会调用该接口，只是通过query返回的数据直接push，push的时候数据中带着ctrl数据
         save: ({row,aimTableSchema}) => {
@@ -60,11 +60,11 @@ export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {
             } else {
                 parent[fieldName][index] = row
             }
-            afterTableDataChanged(parent[fieldName],aimTableSchema)
+            return afterTableDataChanged(parent[fieldName],aimTableSchema)
         },
         saveTableData: ({tableData,aimTableSchema}) => {
             parent[fieldName] = tableData
-            afterTableDataChanged(parent[fieldName],aimTableSchema)
+            return afterTableDataChanged(parent[fieldName],aimTableSchema)
         },
     }
 }
