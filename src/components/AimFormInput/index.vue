@@ -165,8 +165,6 @@ export default {
       handler: function () {
         this.processSchema()
       },
-      deep:true,
-      immediate: true
     },
   },
   computed: {
@@ -183,7 +181,7 @@ export default {
   props: {
     height:Number,
     schema: Array, // 行schema信息
-    data: Object,  // 当前行数据
+    data: [Object,Function,Promise],  // 当前行数据
     mode: String,   // 编辑模式
     alertInfo: {
       type: [Object, String],
@@ -209,17 +207,29 @@ export default {
       type:Boolean,
       default:false,
     },
-    proxy:Object,
   },
-  created() {
-    if(this.rules){
+  async created() {
+    let dataGot = this.data
+    if (typeof this.data === 'function') {
+      // 如果 options 是一个函数，则调用它并等待它的返回值
+      dataGot = this.data();
+      if (dataGot instanceof Promise) {
+        dataGot = await dataGot;
+      }
+    } else if (this.data instanceof Promise) {
+      // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
+      dataGot = await this.data;
+    }
+    this.dataRef = dataGot
+    this.processSchema()
+
+    if (this.rules) {
       this.rulesRef = this.rules
-    }else{
+    } else {
       this.rulesRef = FormRulesFromSchema(this.schema)
     }
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
-    this.proxyQueryData()
   },
   data() {
     return {
@@ -229,7 +239,7 @@ export default {
       //fixme 需要table打入rules,独立使用AimFormInput的时候需要根据schema更新rules
       rulesRef: {},
       fieldsCommon: [],
-      dataRef: this.data,
+      dataRef: {},
       inLoading:false,
       // inline显示的字段
       fieldSorted:[],
@@ -242,15 +252,6 @@ export default {
     this.cleanFieldWatcher()
   },
   methods: {
-    proxyQueryData(){
-      const query = jsb.pathGet(this.proxy,'query')
-      if(!query) {
-        return
-      }
-      Promise.resolve(query).then((rsp) => {
-        this.dataRef = rsp || {}
-      })
-    },
     groupLabelWidth(gs){
       const groupSquash = jsb.pathGet(gs.setting,'squash',false)
       if(groupSquash) {
