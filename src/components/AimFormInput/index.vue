@@ -165,6 +165,7 @@ export default {
       handler: function () {
         this.processSchema()
       },
+      deep:true
     },
   },
   computed: {
