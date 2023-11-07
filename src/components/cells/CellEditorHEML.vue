@@ -1,6 +1,7 @@
 <template>
   <aim-tinymce
       v-model="dataRef[fieldName]"
+      width="99%"
   />
 </template>
 
