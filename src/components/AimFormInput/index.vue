@@ -209,6 +209,7 @@ export default {
       type:Boolean,
       default:false,
     },
+    proxy:Object,
   },
   created() {
     if(this.rules){
@@ -218,6 +219,7 @@ export default {
     }
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
+    this.proxyQueryData()
   },
   data() {
     return {
@@ -240,6 +242,15 @@ export default {
     this.cleanFieldWatcher()
   },
   methods: {
+    proxyQueryData(){
+      const query = jsb.pathGet(this.proxy,'query')
+      if(!query) {
+        return
+      }
+      Promise.resolve(query).then((rsp) => {
+        this.dataRef = rsp || {}
+      })
+    },
     groupLabelWidth(gs){
       const groupSquash = jsb.pathGet(gs.setting,'squash',false)
       if(groupSquash) {
