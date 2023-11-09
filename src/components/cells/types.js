@@ -174,6 +174,14 @@ export const typeDefaults = {
         default:'',
         label:'HTML',
         placeholderSupport:false,
+    },
+    html_popup:{
+        table:'CellViewHTMLPopup',
+        table_inplace:'CellViewHTML',
+        form:'CellEditorHEML',
+        default:'',
+        label:'HTML',
+        placeholderSupport:false,
     }
 }
 
