@@ -577,7 +577,7 @@ export default {
           align: 'center',
           tips: '当前玩家是否在线',
           readOnly: true,
-          default: false,
+          default: true,
           cellForm: 'CellSwitch',
         },
         {

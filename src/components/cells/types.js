@@ -250,7 +250,7 @@ export function formatValue(fieldType,fieldValue) {
     if(fieldType === 'input_number') {
         return numberProcess({value:fieldValue})
     }
-    if(fieldType === 'switch') {
+    if(fieldType === 'switch' || fieldType === 'checkbox') {
         return boolProcess({value:fieldValue})
     }
     if(jsb.isString(fieldValue)){
