@@ -17,7 +17,7 @@ export function localFilter(data,conditions,filterMode) {
         jsb.each(conditions,(v,k)=>{
             v = v.trim()
             const rowVal = String(row[k] ||'')
-            const mode = jsb.pathGet(filterMode,k,FilterModeStartWith)
+            const mode = jsb.pathGet(filterMode,k,FilterModeIncludes)
             if(!valid){
                 return
             }
