@@ -10,7 +10,7 @@ import AimTinymce from "@/components/AimTinymce/index.vue";
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
 export default {
-  name: 'CellEditorHEML',
+  name: 'CellEditorHTML',
   mixins: [MixinCellEditorConfig],
   components: {AimTinymce},
 }

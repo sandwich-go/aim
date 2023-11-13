@@ -18,7 +18,7 @@ import toolbar from './toolbar'
 import load from './dynamicLoadScript'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const tinymceCDN = 'https://cdn.staticfile.org/tinymce/4.9.3/tinymce.min.js'
 
 export default {
   name: 'AimTinymce',
@@ -49,7 +49,7 @@ export default {
     height: {
       type: [Number, String],
       required: false,
-      default: 360
+      default: null
     },
     width: {
       type: [Number, String],
@@ -133,7 +133,9 @@ export default {
         imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
         default_link_target: '_blank',
         link_title: false,
-        autoresize_overflow_padding: 10,
+        autoresize_overflow_padding: 3,
+        autoresize_bottom_margin:10,
+        autoresize_on_init: true,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
           if (_this.value) {

@@ -170,7 +170,7 @@ export const typeDefaults = {
     html:{
         table:'CellViewHTML',
         table_inplace:'CellViewHTML',
-        form:'CellEditorHEML',
+        form:'CellEditorHTML',
         default:'',
         label:'HTML',
         placeholderSupport:false,
@@ -178,7 +178,7 @@ export const typeDefaults = {
     html_popup:{
         table:'CellViewHTMLPopup',
         table_inplace:'CellViewHTML',
-        form:'CellEditorHEML',
+        form:'CellEditorHTML',
         default:'',
         label:'HTML',
         placeholderSupport:false,
