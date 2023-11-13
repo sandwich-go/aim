@@ -133,9 +133,8 @@ export default {
         imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
         default_link_target: '_blank',
         link_title: false,
-        autoresize_overflow_padding: 3,
+        autoresize_overflow_padding: 10,
         autoresize_bottom_margin:10,
-        autoresize_on_init: true,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
           if (_this.value) {
