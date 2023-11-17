@@ -4,7 +4,6 @@
       <span v-html="fieldValue"></span>
       <el-button slot="reference" size="mini"><i class="el-icon-document"/></el-button>
     </el-popover>
-    <span v-html="fieldValue"></span>
   </div>
 </template>
 
