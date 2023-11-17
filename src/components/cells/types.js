@@ -180,7 +180,7 @@ export const typeDefaults = {
         table_inplace:'CellViewHTML',
         form:'CellEditorHTML',
         default:'',
-        label:'HTML',
+        label:'HTMLPopup',
         placeholderSupport:false,
     }
 }
