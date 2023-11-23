@@ -385,7 +385,6 @@ export default {
           tips_show_icon: true,
           summary: true,
           errorMessage:"test",
-          readOnly: true,
           fixed: "left",
           filter: {
             placeholder: '请输入ID',

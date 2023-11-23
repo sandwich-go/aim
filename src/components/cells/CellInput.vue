@@ -74,7 +74,7 @@ export default {
       }
       // 通过文件后缀判断是否是图像
       const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-      const extension = url.split('.').pop().toLowerCase();
+      const extension = String(url).split('.').pop().toLowerCase();
       return imageExtensions.includes(extension);
     },
   }
