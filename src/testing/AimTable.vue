@@ -379,6 +379,7 @@ export default {
           show: true,
           //min_width: 180,
           sortable: true,
+          insertOnly:true,
           locked: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
@@ -502,7 +503,7 @@ export default {
               },
             },
             {field: 'UseSystemSSH', name: '系统SSH秘钥', cellForm: 'CellSwitch', cell: 'CellSwitch', width: 160,   },
-            {field: 'UserName', name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder',       commentSlot: 'commentSlot2'
+            {field: 'UserName',insertOnly:true, name: 'UserName', type:'select_input' , width: 300,'placeholder':'placeholder',       commentSlot: 'commentSlot2'
               ,options:[{"label":"user1",value:"user1"},{"label":"user2",value:"user2"}]},
             {field: 'UserKey', name: 'UserKey',type:'select_input' , width: 300,'placeholder':'placeholder'
               ,options:[{"label":"key1",value:"key1"},{"label":"key2",value:"key2"}]}

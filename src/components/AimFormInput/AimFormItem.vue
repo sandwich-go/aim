@@ -91,6 +91,7 @@
           :row-top="getRow()"
           :label-width="getSubFormLabelWidth(fs)"
           :parent-key="fs.field"
+          :mode="mode"
           :table-data-getter="tableDataGetter"
           :key="fieldComponentKey(fs)"
           :group-config="fs['groupConfig'] || []"
@@ -115,6 +116,7 @@
             :label-width="getSubFormLabelWidth(fs)"
             :parent-key="fs.field"
             :key="fieldComponentKey(fs)"
+            :mode="mode"
             :group-config="fs['groupConfig'] || []"
             :read-only="privateShouldCellDisable({fieldSchema:fs,cell:cellConfig ||{}})"
             :should-cell-disable="shouldCellDisable"
@@ -168,6 +170,7 @@ export default {
   props: {
     tableDataGetter:Function,
     getRow: Function,
+    mode: String,   // 编辑模式
     fs: Object,
     privateShouldCellDisable: Function,
     shouldCellDisable: Function,
