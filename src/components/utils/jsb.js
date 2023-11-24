@@ -20,7 +20,8 @@ function  tag(item){
     return Object.assign({
         type: item.type || item.tagType|| 'info',
         effect: item.effect || item.tagEffect || 'light',
-        label: item.label
+        label: item.label,
+        tooltip:item.tooltip
     }, jsb.pathGet(item, 'asTag', {}))
 }
 

@@ -590,7 +590,7 @@ export default {
           summary: true,
           cellForm: 'CellSelectInput',
           options: [
-            {label: "g1", value: "g1"}, {label: "g2", value: "g2"}
+            {label: "g1", value: "g1",tooltip:"tooltip"}, {label: "g2", value: "g2",tooltip:"tooltip g2"}
           ]
         },
 
