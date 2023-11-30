@@ -101,14 +101,13 @@
               </column-header>
             </template>
             <template slot-scope="scope">
-              <div
-                  :style="{ 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}">
+              <div :style="columnStyle(fs)">
                 <column-shortcuts :row="scope.row" :field-schema="fs"/>
                 <template v-if="cellName(fs,scope.row)">
                   <!-- CellList列表组件单独处理 -->
                   <template v-if="cellName(fs,scope.row)==='CellList'">
                     <cell-list
-                        :style="{ 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}"
+                        :style="columnStyle(fs)"
                         :cells="cellConfig(fs,scope.row)"
                         :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
                         :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
@@ -437,6 +436,7 @@ export default {
       visitSettingDrawerVisible: false,
     }
   },
+
   destroyed() {
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.off(this.onEventDoLayout, this.doLayoutByEvent)
@@ -501,6 +501,11 @@ export default {
     getProxySlotName,
     getProxyTipSlotName,
     getProxyCommentSlotName,
+    columnStyle(field){
+      const defaultStyle = { 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}
+      const fieldColumnStyle = jsb.pathGet(field,'columnStyle',{})
+      return Object.assign(defaultStyle,fieldColumnStyle)
+    },
     rowRemoveDisable(row) {
       if (this.readOnly) {
         return true
