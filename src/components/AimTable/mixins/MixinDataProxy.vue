@@ -197,6 +197,20 @@ export default {
           this.proxyConfigRef.submitRemoveFieldNotInSchema,
           this.proxyConfigRef.row2Item)
 
+      const saveValidate = jsb.pathGet(this.proxyConfigRef,'saveValidate')
+      if(saveValidate){
+        const validORMessage = saveValidate({row: toSave})
+        if(jsb.isBoolean(validORMessage)){
+          if(!validORMessage){
+            return
+          }
+        }else if(jsb.isString(validORMessage) && validORMessage !==""){
+          this.toastWarning(validORMessage)
+          done && done({validORMessage})
+          return
+        }
+      }
+
       this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){
           this.doLayout(true)
