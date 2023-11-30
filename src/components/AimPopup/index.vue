@@ -17,7 +17,7 @@
         @close="close"
         :direction="configData.direction">
       <slot name="aim-popup-body"></slot>
-      <div v-if="configData.footer" class="aim-drawer-footer" style="padding-right: 6px">
+      <div v-if="configData.footer" class="aim-drawer-footer" :style="configData.footerStyle">
         <slot name="aim-popup-footer"></slot>
       </div>
     </el-drawer>
@@ -35,7 +35,7 @@
         @close="close"
         :visible.sync="isShowPopup">
       <slot name="aim-popup-body"></slot>
-      <div v-if="configData.footer" slot="footer" class="dialog-footer" style="padding-right: 6px">
+      <div v-if="configData.footer" slot="footer" class="dialog-footer" :style="configData.footerStyle">
         <slot name="aim-popup-footer"></slot>
       </div>
     </el-dialog>
@@ -130,6 +130,7 @@ export default {
   font-weight: 700;
 }
 
+
 .aim-popup >>> .el-drawer__header > :first-child {
   flex: 1
 }
@@ -150,6 +151,11 @@ export default {
 }
 
 .aim-popup >>> .el-drawer__body {
+  overflow: auto;
+  padding: 3px;
+}
+
+.aim-popup >>> .el-dialog__body {
   overflow: auto;
   padding: 3px;
 }
