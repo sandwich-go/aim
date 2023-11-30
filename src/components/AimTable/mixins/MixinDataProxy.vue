@@ -202,11 +202,12 @@ export default {
         const validORMessage = saveValidate({row: toSave})
         if(jsb.isBoolean(validORMessage)){
           if(!validORMessage){
+            done && done({error:true})
             return
           }
         }else if(jsb.isString(validORMessage) && validORMessage !==""){
           this.toastWarning(validORMessage)
-          done && done({validORMessage})
+          done && done({error:true})
           return
         }
       }
