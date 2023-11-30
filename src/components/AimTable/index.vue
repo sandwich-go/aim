@@ -504,6 +504,15 @@ export default {
     columnStyle(field){
       const defaultStyle = { 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}
       const fieldColumnStyle = jsb.pathGet(field,'columnStyle',{})
+      if(field.align === 'center'){
+        defaultStyle['justify-content'] = 'center'
+      }
+      if(field.align === 'left' || field.align === 'start'){
+        defaultStyle['justify-content'] = 'flex-start'
+      }
+      if(field.align === 'right' || field.align === 'end'){
+        defaultStyle['justify-content'] = 'flex-end'
+      }
       return Object.assign(defaultStyle,fieldColumnStyle)
     },
     rowRemoveDisable(row) {
