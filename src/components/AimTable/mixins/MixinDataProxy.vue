@@ -106,6 +106,7 @@ export default {
         okToast && !this.proxyConfigRef.isLocalData && this.toastSuccess(okToast)
         done && done({resp})
       }).catch(error => {
+        this.inLoading = false
         aimTableError(`tryPromise ${funcName} err:${error.toString()}`,error.stack)
         done && done({error})
         let needToast = true
