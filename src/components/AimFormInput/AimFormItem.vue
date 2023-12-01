@@ -7,7 +7,22 @@
         </template>
       </column-header>
   </span>
-    <template v-if="registeredComponentMap[cellName]">
+    <slot
+        v-if="fs['slotForm']"
+        :name="fs['slotForm']"
+        :is="registeredComponentMap[cellName]"
+        :data="dataRef"
+        :field-name="fs.field"
+        :options="fs.options || []"
+        :style-base="{width:'100%'}"
+        :cell-config="cellConfig"
+        :field-schema="fs"
+        :table-data-getter="tableDataGetter"
+        :get-row="getRow"
+        :formatter="fs['formatterForm']"
+        :disabled="shouldDisable()"
+    ></slot>
+    <template v-else-if="registeredComponentMap[cellName]">
         <component
             v-if="!fs['formButton'] && !fs['formLink']"
             :is="registeredComponentMap[cellName]"

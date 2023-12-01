@@ -394,7 +394,7 @@ export default {
             }
           }
         },
-        {field: 'Slider', name: 'Slider', type: 'slider',
+        {field: 'Slider', name: 'Slider', type: 'slider',slotForm:'commentSlot',
           cellFormConfig: {
             min:0,max:1,step:0.1, labelSlot:true,showInput:true,
           },
