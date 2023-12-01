@@ -437,7 +437,7 @@ export default {
     }
   },
 
-  destroyed() {
+  beforeDestroy() {
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.off(this.onEventDoLayout, this.doLayoutByEvent)
     }
