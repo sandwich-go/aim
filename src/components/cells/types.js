@@ -11,7 +11,13 @@ export const typeDefaults = {
         placeholderSupport:true,
         valueTypeSupport:true, // 无法区分是字符串或者数字
     },
-
+    slider:{
+        table:'CellViewLabel',
+        form:'CellSlider',
+        default:0,
+        label:'Slider',
+        placeholderSupport:false,
+    },
     input_number:{
         table:'CellViewLabel',
         form:'CellInputNumber',

@@ -3,6 +3,7 @@ import AimFormInput from './AimFormInput/index.vue'
 import AimPopup from './AimPopup/index.vue'
 import AimTinymce from "@/components/AimTinymce/index.vue";
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
+import AimSliderInput from "@/components/AimSliderInput/index.vue";
 
 const components = [
     AimTable,
@@ -10,6 +11,7 @@ const components = [
     AimPopup,
     AimTinymce,
     AimCodeMirror,
+    AimSliderInput,
 ]
 
 const install = (Vue) => {
