@@ -396,7 +396,7 @@ export default {
         },
         {field: 'Slider', name: 'Slider', type: 'slider',
           cellFormConfig: {
-            min:0,max:1,step:0.1, marks:[0,1], labelSlot:true,showInput:true,
+            min:0,max:1,step:0.1, labelSlot:true,showInput:true,
           },
           sortable: true, align: 'center',default:0},
         {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable: true, align: 'center',default:0},
