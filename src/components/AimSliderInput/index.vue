@@ -74,7 +74,7 @@
               <slot :name="getMarkSlopNameByLabel(label)"></slot>
             </div>
           </template>
-          <div v-else :class="['vue-slider-mark-label', { active }]">{{ label }}</div>
+          <div v-else :class="['vue-slider-mark-label', { active }]"><span v-html="label"></span></div>
         </template>
       </vue-slider>
       <el-input-number v-if="showInput" v-model="sliderValue" :min="min" :max="max" :step="step||1"

@@ -394,9 +394,19 @@ export default {
             }
           }
         },
-        {field: 'Slider', name: 'Slider', type: 'slider',slotForm:'commentSlot',
+        {field: 'Slider', name: 'Slider', type: 'slider',
           cellFormConfig: {
             min:0,max:1,step:0.1, labelSlot:true,showInput:true,
+            marks:{
+              1:{
+                label: '<span>结果更优</span>、延迟更大、费用更高',
+                labelStyle: {
+                  color: 'red',
+                  'padding-right':'190px',
+                  "font-weight":'bold',
+                },
+              }
+            },
           },
           sortable: true, align: 'center',default:0},
         {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable: true, align: 'center',default:0},
