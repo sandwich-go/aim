@@ -34,7 +34,7 @@
               <slot :name="getMarkSlopNameByLabel(label)"></slot>
             </div>
           </template>
-          <div v-else :class="['vue-slider-mark-label', { active }]">{{ label }}</div>
+          <div v-else :class="['vue-slider-mark-label', { active }]"><span v-html="label"></span></div>
         </template>
         <template v-if="rangeTooltip" v-slot:process="{ style, index }">
           <div class="vue-slider-process" :style="style">
