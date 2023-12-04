@@ -375,6 +375,7 @@ export default {
       schema: [
         {
           field: 'id', name: 'ID',
+          showTemplate:false,
           type: 'input',
           show: true,
           //min_width: 180,

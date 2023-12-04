@@ -13,6 +13,7 @@ export const CodeButtonTableSetting = "btnTableSetting"
 export const CodeButtonSaveTableData = "btnSaveTableData" // 整表数据提交
 export const CodeButtonFilterSearch = "btnFilterSearch"
 
+export const CodeButtonRowTemplate = "btnRowTemplate"
 export const CodeButtonRowCopy = "btnRowCopy"
 export const CodeButtonRowSave = "btnRowSave"
 export const CodeButtonRowHistory = "btnRowHistory"
@@ -49,10 +50,11 @@ code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primar
 code2OptionsMapping[CodeButtonPrint] = {icon: 'el-icon-printer', type: 'primary', circle: true, label: '导出'}
 code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-s-grid', type: 'primary', circle: true, label: '配置'}
 code2OptionsMapping[CodeButtonExpandAll] = {icon: 'el-icon-more', type: 'primary', circle: true, label: '展开所有'}
-code2OptionsMapping[CodeButtonTableSetting] = {icon: 'el-icon-setting',type: 'primary', circle: true, label: '表格设定'}
+
 code2OptionsMapping[CodeButtonSaveTableData] = {icon: 'el-icon-check', type: 'primary', circle: true, label: '保存全表'}
 code2OptionsMapping[CodeButtonFilterSearch] = {icon: 'el-icon-search', type: 'primary', circle: true,plain:true}
 
+code2OptionsMapping[CodeButtonTableSetting] = {icon: 'el-icon-setting',type: 'primary', circle: true, label: '表格设定'}
 
 code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true,plain:true}
 code2OptionsMapping[CodeButtonRowCopy] = {icon: 'el-icon-copy-document', label: '拷贝', type: 'primary', circle: true,plain:true}

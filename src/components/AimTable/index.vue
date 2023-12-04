@@ -263,13 +263,19 @@
     </aim-popup>
     <aim-popup :drawer="true" :is-show.sync="visitSettingDrawerVisible" :config="{appendToBody:popupAppendToBody}">
       <template v-slot:aim-popup-body>
-        <aim-table-editor
-            editor-table-key="aim-table-editor"
-            :editor-group-options="editorGroupOptions"
-            :editor-user-options="editorUserOptions"
-            :editor-proxy-config="editorProxyConfig"
-            :schema="cloneSchema()">
-        </aim-table-editor>
+        <aim-table-setting
+            :schema="schema"
+            :group-config="groupConfig"
+            :proxy="proxyConfigRef"
+        >
+        </aim-table-setting>
+<!--        <aim-table-editor-->
+<!--            editor-table-key="aim-table-editor"-->
+<!--            :editor-group-options="editorGroupOptions"-->
+<!--            :editor-user-options="editorUserOptions"-->
+<!--            :editor-proxy-config="editorProxyConfig"-->
+<!--            :schema="cloneSchema()">-->
+<!--        </aim-table-editor>-->
       </template>
     </aim-popup>
   </div>
@@ -350,6 +356,7 @@ import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 import AimPopup from "@/components/AimPopup/index.vue";
 import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
 import MixinFilter from "@/components/AimTable/mixins/MixinFilter.vue";
+import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -387,6 +394,7 @@ export default {
     MixinFilter,
   ],
   components: {
+    AimTableSetting,
     ColumnShortcuts,
     AimPopup,
     AimFormInput,
@@ -760,15 +768,16 @@ export default {
       }
       return this.shouldCellDisable({table: this.tableData, code, cell, row, fieldSchema})
     },
-    cloneSchema() {
-      return jsb.clone(this.schema)
-    },
+
     doLayout(freshAutoWidth = false) {
       if (freshAutoWidth && this.tablePropertyRef.autoWidth) {
         flexColumnWidth(this.schema, this.tableData)
       }
       this.debug && this.setDebugMessage(`call doLayout`)
       this.$refs.table && this.$refs.table.doLayout()
+    },
+    saveTableSetting(){
+
     },
     privateShouldCellHide({code, cell, row, fieldSchema}) {
       if (!cell) {

@@ -4,6 +4,7 @@ export const AimFormInputInsert = "AimFormInputInsert"
 export const AimFormInputEdit = "AimFormInputEdit"
 export const AimFormInputCopy = "AimFormInputCopy"
 export const AimFormInputView = "AimFormInputView"
+export const AimFormInputTemplate = "AimFormInputTemplate"
 
 export const AimFormInputMode2Title = {}
 
@@ -11,6 +12,7 @@ AimFormInputMode2Title[AimFormInputInsert] = '新建'
 AimFormInputMode2Title[AimFormInputEdit] = '编辑'
 AimFormInputMode2Title[AimFormInputCopy] = '复制'
 AimFormInputMode2Title[AimFormInputView] = '查看'
+AimFormInputMode2Title[AimFormInputTemplate] = '模版编辑'
 
 export function calcLabelWidth(schema) {
     let nameList = schema.map(function (element) {
