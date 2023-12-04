@@ -466,6 +466,7 @@ export default {
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
     this.tipSlotName()
+    this.queryTableSetting()
 
     let dragCallback = null
     if (this.sortConfigRef.sortIdxField) {
@@ -497,7 +498,7 @@ export default {
     })
   },
   methods: {
-    querySetting(){
+    queryTableSetting(){
       const querySetting = jsb.pathGet(this.proxyConfigRef, 'querySetting')
       if (!querySetting) {
         return
@@ -788,9 +789,6 @@ export default {
       }
       this.debug && this.setDebugMessage(`call doLayout`)
       this.$refs.table && this.$refs.table.doLayout()
-    },
-    saveTableSetting(){
-
     },
     privateShouldCellHide({code, cell, row, fieldSchema}) {
       if (!cell) {
