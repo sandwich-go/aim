@@ -447,16 +447,21 @@ export default {
     formLabel(si) {
       return jsb.pathGet(si, 'nameForm', si['name'])
     },
+    // 获取数据，不进行validate
+    getDataForStorage(data=undefined){
+      data = data || this.dataRef
+      return CleanRowForStorage(this.schema,data,
+          true,
+          true,
+          this.submitRemoveFieldNotInSchema,
+          this.row2Storage)
+    },
     // validate 逻辑层主动调用，单独使用AimFormInput的场景
     validate(validCallback,notValidCallback=null,onValidCallbackRunError=(e)=>{jsb.cc.toastWarning(e)}) {
       const _this = this
       this.__validatePrivate(validCallback,notValidCallback,onValidCallbackRunError,(v)=>{
         // 移除虚拟字段、移除控制字段
-        return CleanRowForStorage(_this.schema,v,
-            true,
-            true,
-            this.submitRemoveFieldNotInSchema,
-            this.row2Storage)
+        return _this.getDataForStorage(v)
       })
     },
     // __validatePrivate 外部不要直接调用

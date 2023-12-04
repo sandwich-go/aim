@@ -4,11 +4,11 @@
       <el-tab-pane name="row_template">
         <span slot="label"><i class="el-icon-tickets" style="padding-right: 3px"/>模版</span>
         <aim-form-input
+            ref="rowTemplate"
             style="padding-right: 9px"
-            ref="aimFormInput"
-            :schema="cleanField()"
+            :schema="schemaCleaned"
             :group-config="groupConfig"
-            :data="data.template"
+            :data="rowTemplate"
             :mode="AimFormInputTemplate"
             :enable-watcher="true"
             :submit-remove-field-not-in-schema="true"
@@ -51,6 +51,8 @@ import {
 } from "@/components/AimTable/slot";
 
 import jsb from "@sandwich-go/jsb";
+
+const defaultData = {template:{}}
 export default {
   name:'AimTableSetting',
   components: {
@@ -69,21 +71,15 @@ export default {
   data(){
     return{
       AimFormInputTemplate:AimFormInputTemplate,
+      schemaCleaned:[],
       activeTabName:'row_template',
-      data:{
-        template:{},
-      },
+      data:defaultData,
+      rowTemplate:{}
     }
   },
   created() {
-    const querySetting = jsb.pathGet(this.proxy,'querySetting')
-    if(!querySetting){
-      jsb.cc.toastWarning("querySetting not found")
-      return
-    }
-    Promise.resolve(querySetting).then((resp) => {
-      this.data = resp || {}
-    })
+    this.schemaCleaned = this.cleanSchema()
+    this.query()
   },
   methods:{
     tipSlotName:tipSlotName,
@@ -91,6 +87,17 @@ export default {
     getProxyCommentSlotNameWithName:getProxyCommentSlotNameWithName,
     tabChange(){
       jsb.cc.emitter.emit('aim_table_layout')
+    },
+    query(){
+      const querySetting = jsb.pathGet(this.proxy,'querySetting')
+      if(!querySetting){
+        jsb.cc.toastWarning("querySetting not found")
+        return
+      }
+      Promise.resolve(querySetting()).then((resp) => {
+        this.data = resp || jsb.clone(defaultData)
+        this.rowTemplate = jsb.pathGet(this.data,'template',{})
+      })
     },
     save(){
       const saveSetting = jsb.pathGet(this.proxy,'saveSetting')
@@ -104,15 +111,16 @@ export default {
       if(!row2ItemSetting){
         row2ItemSetting = jsb.pathGet(this.proxy,'row2Item',(v)=>{return v})
       }
-      this.data.template = row2ItemSetting(this.data.template)
-      Promise.resolve(saveSetting({setting:this.data})).then(
-          jsb.cc.toastSuccess("更新成功")
+      this.data.template = row2ItemSetting(this.$refs.rowTemplate.getDataForStorage())
+      Promise.resolve(saveSetting({setting:this.data})).then(()=>{
+        jsb.cc.toastSuccess("更新成功")
+        return true}
       )
     },
     cloneSchema() {
       return jsb.clone(this.schema)
     },
-    cleanField(){
+    cleanSchema(){
       let schemaValid = []
       jsb.each(filterVirtualField(this.schema), function (fieldSchema) {
         if(jsb.pathGet(fieldSchema,'showTemplate',true)){

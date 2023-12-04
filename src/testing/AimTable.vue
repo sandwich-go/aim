@@ -122,6 +122,7 @@ export default {
   data() {
     const _this = this
     return {
+      setting:{},
       cascader: [{
         value: 'zhinan',
         label: '指南',
@@ -683,6 +684,17 @@ export default {
         }
       },
       proxyConfig: {
+        querySetting(){
+          console.log("querySetting", _this.setting)
+          return new Promise((resolve) => {
+            resolve(_this.setting)
+          })
+        },
+        saveSetting({setting}){
+          _this.setting = setting
+          console.log("saveSetting",setting)
+          return true
+        },
         query({params}) {
           const dataRet = jsb.clone(_this.tableData)
           if (params && params.id) {
