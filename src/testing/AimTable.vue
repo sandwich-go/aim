@@ -122,7 +122,11 @@ export default {
   data() {
     const _this = this
     return {
-      setting:{},
+      setting:{
+        template:{
+          "html":"1112323232323232"
+        }
+      },
       cascader: [{
         value: 'zhinan',
         label: '指南',
@@ -687,7 +691,7 @@ export default {
         querySetting(){
           console.log("querySetting", _this.setting)
           return new Promise((resolve) => {
-            resolve(_this.setting)
+            resolve(jsb.clone(_this.setting))
           })
         },
         saveSetting({setting}){

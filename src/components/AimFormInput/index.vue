@@ -214,6 +214,7 @@ export default {
     },
   },
   async created() {
+    console.log("aimforminput data ",this.data)
     let dataGot = this.data
     if (typeof this.data === 'function') {
       // 如果 options 是一个函数，则调用它并等待它的返回值
@@ -226,6 +227,7 @@ export default {
       dataGot = await this.data;
     }
     this.dataRef = dataGot
+    console.log("aimforminput dataRef ",this.dataRef)
     this.processSchema()
 
     if (this.rules) {

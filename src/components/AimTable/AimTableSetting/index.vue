@@ -4,6 +4,7 @@
       <el-tab-pane name="row_template">
         <span slot="label"><i class="el-icon-tickets" style="padding-right: 3px"/>模版</span>
         <aim-form-input
+            v-if="rowTemplate"
             ref="rowTemplate"
             style="padding-right: 9px"
             :schema="schemaCleaned"
@@ -74,7 +75,7 @@ export default {
       schemaCleaned:[],
       activeTabName:'row_template',
       data:defaultData,
-      rowTemplate:{}
+      rowTemplate:null
     }
   },
   created() {
@@ -88,15 +89,15 @@ export default {
     tabChange(){
       jsb.cc.emitter.emit('aim_table_layout')
     },
-    query(){
-      const querySetting = jsb.pathGet(this.proxy,'querySetting')
-      if(!querySetting){
+    query() {
+      const querySetting = jsb.pathGet(this.proxy, 'querySetting')
+      if (!querySetting) {
         jsb.cc.toastWarning("querySetting not found")
         return
       }
       Promise.resolve(querySetting()).then((resp) => {
         this.data = resp || jsb.clone(defaultData)
-        this.rowTemplate = jsb.pathGet(this.data,'template',{})
+        this.rowTemplate = jsb.pathGet(this.data, 'template', {})
       })
     },
     save(){
@@ -105,7 +106,6 @@ export default {
         jsb.cc.toastWarning("saveSetting not found")
         return
       }
-
       // 不进行form级别的验证
       let row2ItemSetting  = jsb.pathGet(this.proxy,'row2ItemSetting')
       if(!row2ItemSetting){
