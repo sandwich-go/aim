@@ -442,6 +442,7 @@ export default {
       flexEndStyle,
       radioRow: null,
       visitSettingDrawerVisible: false,
+      tableSetting:{},
     }
   },
 
@@ -496,6 +497,15 @@ export default {
     })
   },
   methods: {
+    querySetting(){
+      const querySetting = jsb.pathGet(this.proxyConfigRef, 'querySetting')
+      if (!querySetting) {
+        return
+      }
+      Promise.resolve(querySetting()).then((resp) => {
+        this.tableSetting = resp
+      })
+    },
     commentSlotName,
     getProxyCommentSlotNameWithName,
     rowFormEditorTitle,
@@ -663,7 +673,10 @@ export default {
           jsb.clipCopy(fieldValue, jsEvent)
           break
         case CodeButtonAdd:
-          this.addRow()
+          this.addRow({
+                initRow:jsb.pathGet(this.tableSetting,'template',{})
+              }
+          )
           break
         case CodeButtonFilterSearch:
         case CodeLinkFilterSearch:
