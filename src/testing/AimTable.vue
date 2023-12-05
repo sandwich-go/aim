@@ -111,7 +111,7 @@ import {
   CodeLinkFieldCopy,
 } from "@/components/cells/const";
 import AimPopup from "@/components/AimPopup/index.vue";
-
+import Cookies from "js-cookie";
 const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'TestingAimTable',
@@ -401,6 +401,7 @@ export default {
           }
         },
         {field: 'Slider', name: 'Slider', type: 'slider',
+          show:false,
           cellFormConfig: {
             min:0,max:1,step:0.1, labelSlot:true,showInput:true,
             marks:{
@@ -435,6 +436,7 @@ export default {
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
+          show:false,
           placeholder: "xxx.xx",
           shortcuts: {
             copy: true, jump: true, filter: true, edit: {
@@ -689,12 +691,14 @@ export default {
       },
       proxyConfig: {
         querySetting(){
+          const got = Cookies.get('tableSetting')
+          const setting = got?JSON.parse(got):{}
           return new Promise((resolve) => {
-            resolve(jsb.clone(_this.setting))
+            resolve(jsb.clone(setting))
           })
         },
         saveSetting({setting}){
-          _this.setting = setting
+          Cookies.set('tableSetting',JSON.stringify(setting))
           console.log("saveSetting",setting)
           return true
         },

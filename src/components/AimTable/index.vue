@@ -453,7 +453,6 @@ export default {
     this.getProxyCommentSlotName()
     this.tipSlotName()
 
-
     let dragCallback = null
     if (this.sortConfigRef.sortIdxField) {
       this.dragConfigRef.row = true
@@ -508,8 +507,18 @@ export default {
         fs.max_width = jsb.pathGet(tmp,'max_width',fs.max_width)
         fs.show  = jsb.pathGet(tmp,'show',fs.show)
         fs.tipsHTML  = jsb.pathGet(tmp,'tips',fs.tipsHTML)
-        this.doLayoutByEvent(true)
+
+        if(!fs.width){
+          delete fs.width
+        }
+        if(!fs.min_width){
+          delete fs.min_width
+        }
+        if(!fs.max_width){
+          delete fs.max_width
+        }
       })
+      this.doLayoutByEvent(true)
     },
     commentSlotName,
     getProxyCommentSlotNameWithName,
