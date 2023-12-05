@@ -508,6 +508,7 @@ export default {
         fs.max_width = jsb.pathGet(tmp,'max_width',fs.max_width)
         fs.show  = jsb.pathGet(tmp,'show',fs.show)
         fs.tipsHTML  = jsb.pathGet(tmp,'tips',fs.tipsHTML)
+        this.doLayoutByEvent(true)
       })
     },
     commentSlotName,
@@ -548,12 +549,12 @@ export default {
       }
       return false
     },
-    doLayoutByEvent() {
+    doLayoutByEvent(freshAutoWidth = false) {
       const _this = this
       _this.$nextTick(() => {
-        _this.doLayout()
+        _this.doLayout(freshAutoWidth)
         setTimeout(function () {
-          _this.doLayout()
+          _this.doLayout(freshAutoWidth)
         }, 50)
       })
     },
