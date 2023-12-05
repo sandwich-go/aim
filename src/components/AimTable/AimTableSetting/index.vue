@@ -23,15 +23,17 @@
           </template>
         </aim-form-input>
       </el-tab-pane>
-      <el-tab-pane  name="setting" disabled>
+      <el-tab-pane  name="setting">
         <span slot="label"><i class="el-icon-setting" style="padding-right: 3px"/>显示控制</span>
-<!--        <aim-table-editor-->
-<!--            editor-table-key="aim-table-editor"-->
-<!--            :editor-group-options="editorGroupOptions"-->
-<!--            :editor-user-options="editorUserOptions"-->
-<!--            :editor-proxy-config="editorProxyConfig"-->
-<!--            :schema="cloneSchema()">-->
-<!--        </aim-table-editor>-->
+        <aim-table
+            v-if="fields"
+            :schema="fieldSettingSchema()"
+            :proxy-config="newLocalDataProxyWithFieldName(thisTarget(),'fields')"
+            :table-property="{autoWidth:false}"
+            :popup-append-to-body="true"
+            :drag-config="{icon:true}"
+            :edit-config="{}"
+        ></aim-table>
       </el-tab-pane>
     </el-tabs>
     <div class="aim-popup aim-drawer-footer" style="background-color: #b3e6c8">
@@ -52,12 +54,15 @@ import {
 } from "@/components/AimTable/slot";
 
 import jsb from "@sandwich-go/jsb";
+import {fieldSetting, fieldSettingSchema} from "@/components/AimTable/AimTableSetting/setting";
+import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
+import {CleanTableForStorage} from "@/components/AimTable/formatterForUpdate";
 
-const defaultData = {template:{}}
 export default {
   name:'AimTableSetting',
   components: {
-    AimFormInput
+    AimFormInput,
+    AimTable: () => import("@/components/AimTable"),
   },
   props:{
     schema:Array,
@@ -69,13 +74,13 @@ export default {
       return allSlotName(this.schema, 'commentSlot')
     }
   },
-  data(){
-    return{
-      AimFormInputTemplate:AimFormInputTemplate,
-      schemaCleaned:[],
-      activeTabName:'row_template',
-      data:defaultData,
-      rowTemplate:null
+  data() {
+    return {
+      AimFormInputTemplate: AimFormInputTemplate,
+      schemaCleaned: [],
+      activeTabName: 'row_template',
+      rowTemplate: null,
+      fields: null,
     }
   },
   created() {
@@ -83,6 +88,13 @@ export default {
     this.query()
   },
   methods:{
+    newLocalDataProxyWithFieldName,
+    thisTarget(){
+      return this
+    },
+    fieldSettingSchema() {
+      return fieldSettingSchema
+    },
     tipSlotName:tipSlotName,
     getProxyTipSlotName:getProxyTipSlotName,
     getProxyCommentSlotNameWithName:getProxyCommentSlotNameWithName,
@@ -96,8 +108,8 @@ export default {
         return
       }
       Promise.resolve(querySetting()).then((resp) => {
-        this.data = resp || jsb.clone(defaultData)
-        this.rowTemplate = jsb.pathGet(this.data, 'template', {})
+        this.rowTemplate = jsb.pathGet(resp, 'template', {})
+        this.fields= fieldSetting(this.schemaCleaned,jsb.pathGet(resp, 'fields', []))
       })
     },
     save(){
@@ -111,14 +123,14 @@ export default {
       if(!row2ItemSetting){
         row2ItemSetting = jsb.pathGet(this.proxy,'row2Item',(v)=>{return v})
       }
-      this.data.template = row2ItemSetting(this.$refs.rowTemplate.getDataForStorage())
-      Promise.resolve(saveSetting({setting:this.data})).then(()=>{
+      const data = {}
+      data.template = row2ItemSetting(this.$refs.rowTemplate.getDataForStorage())
+      data.fields = CleanTableForStorage(fieldSettingSchema,this.fields,true,true,true)
+
+      Promise.resolve(saveSetting({setting:data})).then(()=>{
         jsb.cc.toastSuccess("更新成功")
         return true}
       )
-    },
-    cloneSchema() {
-      return jsb.clone(this.schema)
     },
     cleanSchema(){
       let schemaValid = []

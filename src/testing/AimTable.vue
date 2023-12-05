@@ -689,7 +689,6 @@ export default {
       },
       proxyConfig: {
         querySetting(){
-          console.log("querySetting", _this.setting)
           return new Promise((resolve) => {
             resolve(jsb.clone(_this.setting))
           })

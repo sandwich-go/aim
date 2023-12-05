@@ -267,15 +267,7 @@
             :schema="schema"
             :group-config="groupConfig"
             :proxy="proxyConfigRef"
-        >
-        </aim-table-setting>
-<!--        <aim-table-editor-->
-<!--            editor-table-key="aim-table-editor"-->
-<!--            :editor-group-options="editorGroupOptions"-->
-<!--            :editor-user-options="editorUserOptions"-->
-<!--            :editor-proxy-config="editorProxyConfig"-->
-<!--            :schema="cloneSchema()">-->
-<!--        </aim-table-editor>-->
+        />
       </template>
     </aim-popup>
   </div>
@@ -330,10 +322,7 @@ import MixinHeader from "@/components/AimTable/mixins/MixinHeader.vue";
 import MixinFooter from "@/components/AimTable/mixins/MixinFooter.vue";
 import MixinRighter from "@/components/AimTable/mixins/MixinRighter.vue";
 import MixinState from "@/components/AimTable/mixins/MixinState.vue";
-import MixinTableEditorConfig from "@/components/AimTable/mixins/MixinTableEditorConfig.vue";
-import MixinVisitor from "@/components/AimTable/mixins/MixinVisitor.vue";
 import CellList from "@/components/cells/CellList.vue";
-import AimTableEditor from "@/components/AimTable/AimTableEditor/index.vue";
 import {
   cellConfigForTable,
   cellShowWhenLostForTable,
@@ -388,8 +377,6 @@ export default {
     MixinHeader,
     MixinFooter,
     MixinRighter,
-    MixinTableEditorConfig,
-    MixinVisitor,
     MixinSort,
     MixinFilter,
   ],
@@ -398,7 +385,6 @@ export default {
     ColumnShortcuts,
     AimPopup,
     AimFormInput,
-    AimTableEditor,
     CellList,
     ColumnExpand, ColumnHeader,
     Loading
@@ -459,14 +445,14 @@ export default {
     if (this.autoQuery) {
       this.proxyQueryData()
     }
-    this.schemaApplyVisitorData()
+    this.queryTableSetting()
     this.processSchemaFilter()
     // 占位
     this.getProxySlotName()
     this.getProxyTipSlotName()
     this.getProxyCommentSlotName()
     this.tipSlotName()
-    this.queryTableSetting()
+
 
     let dragCallback = null
     if (this.sortConfigRef.sortIdxField) {
@@ -505,6 +491,23 @@ export default {
       }
       Promise.resolve(querySetting()).then((resp) => {
         this.tableSetting = resp
+        this.schemaApplyVisitorData(jsb.pathGet(resp,'fields',[]))
+      })
+    },
+    schemaApplyVisitorData(settingFields){
+      if(!settingFields || settingFields.length === 0){
+        return
+      }
+      jsb.each(this.schema,(fs)=>{
+        const tmp = jsb.find(settingFields,v=>v.field === fs.field)
+        if(!tmp) {
+          return
+        }
+        fs.width = jsb.pathGet(tmp,'width',fs.width)
+        fs.min_width = jsb.pathGet(tmp,'min_width',fs.min_width)
+        fs.max_width = jsb.pathGet(tmp,'max_width',fs.max_width)
+        fs.show  = jsb.pathGet(tmp,'show',fs.show)
+        fs.tipsHTML  = jsb.pathGet(tmp,'tips',fs.tipsHTML)
       })
     },
     commentSlotName,
