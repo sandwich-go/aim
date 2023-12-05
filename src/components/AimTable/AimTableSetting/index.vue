@@ -1,8 +1,13 @@
 <template>
   <div class="aim-table-setting">
-    <el-tabs v-model="activeTabName" @tab-click="tabChange">
+    <el-tabs v-model="activeTabName" @tab-click="tabChange" class="aim-table-setting-tabs">
       <el-tab-pane name="row_template">
-        <span slot="label"><i class="el-icon-tickets" style="padding-right: 3px"/>模版</span>
+        <el-tooltip
+            slot="label"
+            effect="light"
+            content="默认值将作为新建条目时的默认数据存在"
+        ><span><i class="el-icon-tickets" style="padding-right: 3px"/>默认值</span>
+        </el-tooltip>
         <aim-form-input
             v-if="rowTemplate"
             ref="rowTemplate"
@@ -24,12 +29,17 @@
         </aim-form-input>
       </el-tab-pane>
       <el-tab-pane  name="setting">
-        <span slot="label"><i class="el-icon-setting" style="padding-right: 3px"/>显示控制</span>
+        <el-tooltip
+            slot="label"
+            effect="light"
+            content="自定义字段显示与否、宽度、字段级授权"
+        ><span><i class="el-icon-setting" style="padding-right: 3px"/>字段控制</span>
+        </el-tooltip>
         <aim-table
             v-if="fields"
             :schema="fieldSettingSchema()"
             :proxy-config="newLocalDataProxyWithFieldName(thisTarget(),'fields')"
-            :table-property="{autoWidth:false}"
+            :table-property="{autoWidth:false,heightSubVH:160}"
             :popup-append-to-body="true"
             :drag-config="{icon:true}"
             :edit-config="{}"
@@ -149,3 +159,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.aim-table-setting-tabs.el-tabs {
+  ::v-deep .el-tabs--card {
+    height: calc(100vh - 160px);
+  }
+
+  ::v-deep .el-tab-pane {
+    height: calc(100vh - 160px);
+    overflow-y: auto;
+  }
+}
+</style>
