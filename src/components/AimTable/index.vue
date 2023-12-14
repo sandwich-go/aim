@@ -407,9 +407,9 @@ export default {
     radio: Boolean,// 是否支持radio选择
     formPopupUsingDrawer: {type: Boolean, default: true},
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true，当设定为true时，启用dialog编辑
-    onSelectionChang:Function,
-    onRadioChang:Function,
-    onCurrentChang:Function,
+    onSelectionChange:Function,
+    onRadioChange:Function,
+    onCurrentChange:Function,
     shouldFieldDisable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
@@ -603,8 +603,8 @@ export default {
       jsb.each(this.tableData, v => {
         setRowSelected(v, selected.includes(xidRow(v)))
       })
-      if(this.onSelectionChang){
-        this.onSelectionChang({rows:selectedRows})
+      if(this.onSelectionChange){
+        this.onSelectionChange({rows:selectedRows})
       }
     },
     radioRowChanged(val,row) {
@@ -614,8 +614,8 @@ export default {
       })
       this.radioRow = val?row:null
       setRowSelected(row,val)
-      if(this.onRadioChang){
-        this.onRadioChang({row:this.radioRow})
+      if(this.onRadioChange){
+        this.onRadioChange({row:this.radioRow})
       }
       this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row),)
     },
@@ -639,8 +639,8 @@ export default {
       // this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
-      if(this.onCurrentChang){
-        this.onCurrentChang({row})
+      if(this.onCurrentChange){
+        this.onCurrentChange({row})
       }
     },
     // eslint-disable-next-line no-unused-vars
