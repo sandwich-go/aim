@@ -409,6 +409,7 @@ export default {
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true，当设定为true时，启用dialog编辑
     onSelectionChang:Function,
     onRadioChang:Function,
+    onCurrentChang:Function,
     shouldFieldDisable: {
       type: Function,
       // eslint-disable-next-line no-unused-vars
@@ -603,7 +604,7 @@ export default {
         setRowSelected(v, selected.includes(xidRow(v)))
       })
       if(this.onSelectionChang){
-        this.onSelectionChang(selectedRows)
+        this.onSelectionChang({rows:selectedRows})
       }
     },
     radioRowChanged(val,row) {
@@ -614,7 +615,7 @@ export default {
       this.radioRow = val?row:null
       setRowSelected(row,val)
       if(this.onRadioChang){
-        this.onRadioChang(this.radioRow)
+        this.onRadioChang({row:this.radioRow})
       }
       this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row),)
     },
@@ -638,6 +639,9 @@ export default {
       // this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
+      if(this.onCurrentChang){
+        this.onCurrentChang({row})
+      }
     },
     // eslint-disable-next-line no-unused-vars
     privateCellClickForRow({code, row, jsEvent, fromForm}) {
