@@ -35,8 +35,11 @@
                     :should-cell-disable="shouldCellDisable"
                     :private-should-cell-disable="privateShouldCellDisable"
                 >
-                  <template v-slot:[tipSlotName(fs)]="{}">
-                    <slot :name="getProxyTipSlotName(fs)"></slot>
+                  <template v-slot:[tipSlotName(fss)]="{}">
+                    <slot :name="getProxyTipSlotName(fss)"></slot>
+                  </template>
+                  <template v-slot:[formSlotName(fss)]="{row}">
+                    <slot :name="getProxyFormSlotName(fss)" :row="row"></slot>
                   </template>
                   <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
                     <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
@@ -64,6 +67,9 @@
                 >
                   <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
+                  </template>
+                  <template v-slot:[formSlotName(fs)]="{row}">
+                    <slot :name="getProxyFormSlotName(fs)" :row="row"></slot>
                   </template>
                   <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
                     <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
@@ -99,6 +105,9 @@
                   <template v-slot:[tipSlotName(fs)]="{}">
                     <slot :name="getProxyTipSlotName(fs)"></slot>
                   </template>
+                  <template v-slot:[formSlotName(fs)]="{row}">
+                    <slot :name="getProxyFormSlotName(fs)" :row="row"></slot>
+                  </template>
                   <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
                     <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
                   </template>
@@ -123,6 +132,9 @@
           <template v-slot:[tipSlotName(fs)]="{}">
             <slot :name="getProxyTipSlotName(fs)"></slot>
           </template>
+          <template v-slot:[formSlotName(fs)]="{row}">
+            <slot :name="getProxyFormSlotName(fs)" :row="row"></slot>
+          </template>
           <template v-for="name in allCommentSlotName" v-slot:[name]="{fieldSchema,row}">
             <slot :name="getProxyCommentSlotNameWithName(name)" :field-chema="fieldSchema" :row="row"></slot>
           </template>
@@ -144,8 +156,8 @@ import CellViewAlert from "@/components/cells/CellViewAlert.vue";
 import AimFormItem from "@/components/AimFormInput/AimFormItem.vue";
 import {
   allSlotName,
-  commentSlotName,
-  getProxyCommentSlotName, getProxyCommentSlotNameWithName,
+  commentSlotName, formSlotName,
+  getProxyCommentSlotName, getProxyCommentSlotNameWithName, getProxyFormSlotName,
   getProxyTipSlotName,
   tipSlotName
 } from "@/components/AimTable/slot";
@@ -270,8 +282,10 @@ export default {
     getProxyCommentSlotNameWithName,
     commentSlotName,
     tipSlotName,
+    formSlotName,
     isString,
     getProxyTipSlotName,
+    getProxyFormSlotName,
     getProxyCommentSlotName,
     cleanFieldWatcher(){
       this.fieldWatcher.forEach((watcher) => watcher());

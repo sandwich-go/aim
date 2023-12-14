@@ -8,8 +8,8 @@
       </column-header>
   </span>
     <slot
-        v-if="fs['slotForm']"
-        :name="fs['slotForm']"
+        v-if="fs['formSlot']"
+        :name="fs['formSlot']"
         :is="registeredComponentMap[cellName]"
         :data="dataRef"
         :field-name="fs.field"

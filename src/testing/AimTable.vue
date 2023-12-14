@@ -27,6 +27,26 @@
         :visitor-config="tableVisitorData"
         :pager-config="{}"
         :proxy-config="proxyConfig">
+      <template v-slot:formSlotTesting>
+        <el-table
+            :data="[]"
+            style="width: 100%">
+          <el-table-column
+              prop="date"
+              label="日期"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="name"
+              label="姓名"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="address"
+              label="地址">
+          </el-table-column>
+        </el-table>
+      </template>
       <template v-slot:SlotOptionsUseDefineSlot="{cellConfig}">
         <el-select v-model="toolbarOptionServer" size="mini" @change="cellConfig.change">
           <el-option
@@ -372,7 +392,7 @@ export default {
         cells: [CodeButtonAdd, CodeButtonRowSelectedMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
       },
       groupConfig: [
-        {type: 'inline', fields: ['id', 'name'], after: '@start'},
+        {type: 'inline', fields: ['name'], after: '@start'},
         {type: 'inline', fields: ['Checkbox', 'Color','SortIdx'], after: '@start'},
         {type: 'tab', fields: ['AuthInfo'],squash:false},
         {type: 'divider', 'content-position': "left", label: '分割线', after: 'Link'}
@@ -382,6 +402,7 @@ export default {
           field: 'id', name: 'ID',
           showTemplate:false,
           type: 'input',
+          formSlot:'formSlotTesting',
           show: true,
           //min_width: 180,
           sortable: true,

@@ -236,6 +236,9 @@
           <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
             <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
           </template>
+          <template v-for="fs in schema" v-slot:[getProxyFormSlotName(fs)]="{row}">
+            <slot v-if="formSlotName(fs)" :name="formSlotName(fs)" :field-schema="fs" :row="row"/>
+          </template>
           <template v-for="name in allCommentSlotName"
                     v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
             <slot :name="name" :field-schema="fieldSchema" :row="row"/>
@@ -331,8 +334,8 @@ import {
 } from "@/components/AimTable/cell";
 import {
   allSlotName,
-  commentSlotName,
-  getProxyCommentSlotName, getProxyCommentSlotNameWithName,
+  commentSlotName, formSlotName,
+  getProxyCommentSlotName, getProxyCommentSlotNameWithName, getProxyFormSlotName,
   getProxySlotName,
   getProxyTipSlotName,
   tipSlotName
@@ -533,6 +536,8 @@ export default {
     validSchema: filterVirtualField,
     xidRow,
     tipSlotName,
+    formSlotName,
+    getProxyFormSlotName,
     getProxySlotName,
     getProxyTipSlotName,
     getProxyCommentSlotName,
