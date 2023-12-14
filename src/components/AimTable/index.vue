@@ -45,7 +45,7 @@
           @selection-change="selectionChange"
       >
         <el-table-column v-if="expandConfig" type="expand" key="aim-table-column-expand" width="30"
-                         clas`s-name="aim-column-fixed-width" :fixed="inSortIndexEdit?false:'left'">
+                         class-name="aim-column-fixed-width" :fixed="inSortIndexEdit?false:'left'">
           <template slot-scope="scope">
             <column-expand :expand-config-data="expandConfigRef" :key="xidRow(scope.row)"
                            :row="scope.row"></column-expand>
