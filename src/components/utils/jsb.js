@@ -21,7 +21,8 @@ function  tag(item){
         type: item.type || item.tagType|| 'info',
         effect: item.effect || item.tagEffect || 'light',
         label: item.label,
-        tooltip:item.tooltip
+        tooltip:item.tooltip,
+        style:item.style,
     }, jsb.pathGet(item, 'asTag', {}))
 }
 
