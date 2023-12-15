@@ -7,7 +7,7 @@
                 <div slot="content" v-html="item['tooltip']"></div>
                 <el-tag
                     size="mini"
-                    :style="cc.style"
+                    :style="item.style || cc.style"
                     @click.native="function(){ item.click && item.click()}"
                     :type="item.type || item.tagType || 'info'"
                     :effect="item.effect|| item.tagEffect || 'light'">
@@ -18,7 +18,7 @@
                 v-else
                 size="mini"
                 :key="index"
-                :style="cc.style"
+                :style="item.style || cc.style"
                 @click.native="function(){ item.click && item.click()}"
                 :type="item.type || item.tagType || 'info'"
                 :effect="item.effect|| item.tagEffect || 'light'">
