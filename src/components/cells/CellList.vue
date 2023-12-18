@@ -2,36 +2,37 @@
   <div style="display: inline">
     <template v-for="(cell,index) of cellsRef">
       <div :key="index" :style="divStyle">
-        <template v-if="cell.cell && registeredComponentMap[cell.cell]">
-          <component
-              v-if="!shouldCellHide({cell:cell,code:cell.code ||''})"
-              :is="registeredComponentMap[cell.cell]"
-              :key="`toolbar_component_${index}`"
-              :cell-config="cell"
-              :data="cell.data || cell"
-              :field-name="cell.field || 'value'"
-              :options="cell.options || []"
-              :disabled="shouldCellDisable({cell:cell,code:cell.code ||''})"
-              @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+        <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
+          <template v-if="cell.cell && registeredComponentMap[cell.cell]">
+            <component
+                :is="registeredComponentMap[cell.cell]"
+                :key="`toolbar_component_${index}`"
+                :cell-config="cell"
+                :data="cell.data || cell"
+                :field-name="cell.field || 'value'"
+                :options="cell.options || []"
+                :disabled="shouldCellDisable({cell:cell,code:cell.code ||'',row:row})"
+                @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+            />
+          </template>
+          <!-- 使用逻辑层实现的slot组件 -->
+          <slot v-else-if="cell.slot"
+                :name="getProxySlotName(cell.slot)"
+                :cell-config="cell"
+                :data="cell.data || cell"
+                :field-name="cell.field || 'value'"
+                :options="cell.options || []"
+                :disabled="shouldCellDisable({cell:cell,code:cell.code ||'',row:row})"
+                @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
           />
-        </template>
-        <!-- 使用逻辑层实现的slot组件 -->
-        <slot v-else-if="cell.slot"
-              :name="getProxySlotName(cell.slot)"
-              :cell-config="cell"
-              :data="cell.data || cell"
-              :field-name="cell.field || 'value'"
-              :options="cell.options || []"
-              :disabled="shouldCellDisable({cell:cell,code:cell.code ||''})"
-              @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
-        />
-        <template v-else-if="!cell.cell">
-          <el-divider v-if="isDivider(cell)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
-          <span v-if="isPaddingLeft(cell)" :key="`toolbar_item_gap_${index}`" :style="{'padding-left':parseWidthToPixelString(cell.paddingLeft)}"/>
-          <span v-if="isPaddingRight(cell)" :key="`toolbar_item_gap_${index}`" :style="{'padding-right':parseWidthToPixelString(cell.paddingRight)}"/>
-        </template>
-        <template v-else>
-          {{`${cell.cell} not supported.`}}
+          <template v-else-if="!cell.cell">
+            <el-divider v-if="isDivider(cell)" :key="`toolbar_item_divider_${index}`" direction="vertical"/>
+            <span v-if="isPaddingLeft(cell)" :key="`toolbar_item_gap_${index}`" :style="{'padding-left':parseWidthToPixelString(cell.paddingLeft)}"/>
+            <span v-if="isPaddingRight(cell)" :key="`toolbar_item_gap_${index}`" :style="{'padding-right':parseWidthToPixelString(cell.paddingRight)}"/>
+          </template>
+          <template v-else>
+            {{`${cell.cell} not supported.`}}
+          </template>
         </template>
       </div>
     </template>
@@ -55,6 +56,7 @@ export default {
     divStyle:Object,
     shortcutButtonOptions:Object,
     cellReplace:Function,
+    row:Object,
   },
   data(){
     return {

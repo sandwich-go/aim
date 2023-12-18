@@ -221,8 +221,12 @@
         :title="rowFormEditorTitle(rowEditState)"
         :drawer="formPopupUsingDrawer"
         :is-show.sync="rowFormEditorVisible"
-        :config="{appendToBody:popupAppendToBody,close:rowFormEditorClose,footer: true,}">
+        :config="{appendToBody:popupAppendToBody,close:rowFormEditorClose,footer: true,destroyOnClose:true}">
       <template v-slot:aim-popup-body>
+        <slot v-if="editConfigRef.formHeaderSlot"
+              :name="editConfigRef.formHeaderSlot"
+              :row="rowInEditForm"
+        />
         <aim-form-input
             style="padding-right: 9px"
             ref="aimFormInput"
@@ -258,6 +262,7 @@
         </template>
         <template v-else>
           <cell-list
+              :row="rowInEditForm"
               :style="flexEndStyle"
               :shortcut-button-options="{circle:false}"
               :cells="editConfigRef.formEditorCells({row:rowInEditForm})"

@@ -55,7 +55,9 @@ export default {
       // eslint-disable-next-line no-unused-vars
       formEditorCells: function ({row}) {
         return [CodeButtonRowSave, CodeButtonRowDelete]
-      }
+      },
+      // eslint-disable-next-line no-unused-vars
+      formHeaderSlot:'',
     })
     this.debug && this.setDebugMessage("editConfig",JSON.stringify(this.editConfigRef))
   },
