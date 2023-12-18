@@ -102,7 +102,7 @@
               <el-link
                   v-for="(link,index) in fs['headerLinkList']"
                   :key="index"
-                  @click="link.click"
+                  @click="link.click({tableData:tableData})"
                   v-bind="link">
                 <span v-if="link.label">{{link.label}}</span>
               </el-link>
