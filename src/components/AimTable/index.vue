@@ -99,6 +99,13 @@
                   <slot :name="tipSlotName(fs)" :field-schema="fs"/>
                 </template>
               </column-header>
+              <el-link
+                  v-for="(link,index) in fs['headerLinkList']"
+                  :key="index"
+                  @click="link.click"
+                  v-bind="link">
+                <span v-if="link.label">{{link.label}}</span>
+              </el-link>
             </template>
             <template slot-scope="scope">
               <div :style="columnStyle(fs)">

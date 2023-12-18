@@ -400,6 +400,9 @@ export default {
       schema: [
         {
           field: 'id', name: 'ID',
+          headerLinkList:[
+            {icon:'el-icon-magic-stick',click:()=>{jsb.cc.toastWarning('toast')}}
+          ],
           showTemplate:false,
           type: 'input',
           formSlot:'formSlotTesting',
