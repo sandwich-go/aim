@@ -314,6 +314,9 @@ export default {
     setInLoading(v){
       this.inLoading = v
     },
+    setLoading(v){
+      this.inLoading = v
+    },
     // 刷新当前表内local proxy 的aim表数据
     reloadLocalProxyAimTableData(field){
       const refs = this.$refs['aimFormItem']

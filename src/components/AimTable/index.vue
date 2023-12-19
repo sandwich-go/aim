@@ -27,6 +27,7 @@
       <el-table
           ref="table"
           :height="tableHeight()"
+          :max-height="tablePropertyRef.maxHeight"
           :data="tableDataFiltered ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
           :stripe="tablePropertyRef.stripe"

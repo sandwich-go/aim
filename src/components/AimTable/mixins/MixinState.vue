@@ -75,7 +75,16 @@ export default {
     eachSelected(visitor,clean=false){
       jsb.each(this.getSelectionRows(clean),visitor)
     },
-    setLoading(inLoading){this.inLoading = inLoading},
+    setInLoading(inLoading){
+      if(this.rowFormEditorVisible && this.$refs.aimFormInput){
+        this.$refs.aimFormInput.setInLoading(inLoading)
+      }else{
+        this.inLoading = inLoading
+      }
+    },
+    setLoading(inLoading){
+      this.setInLoading(inLoading)
+    },
     summaryRow(row) {
       let info = [`xid(${xidRow(row)})`]
       jsb.each(this.schema, function (fieldSchema) {
