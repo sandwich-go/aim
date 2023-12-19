@@ -16,6 +16,9 @@
         :custom-class="configData.customClass"
         @close="close"
         :direction="configData.direction">
+      <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
+        <slot name="aim-popup-header"></slot>
+      </div>
       <slot name="aim-popup-body"></slot>
       <div v-if="configData.footer" class="aim-drawer-footer" :style="configData.footerStyle">
         <slot name="aim-popup-footer"></slot>
@@ -34,6 +37,9 @@
         :destroy-on-close="configData.destroyOnClose"
         @close="close"
         :visible.sync="isShowPopup">
+      <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
+        <slot name="aim-popup-header"></slot>
+      </div>
       <slot name="aim-popup-body"></slot>
       <div v-if="configData.footer" slot="footer" class="dialog-footer" :style="configData.footerStyle">
         <slot name="aim-popup-footer"></slot>
@@ -89,12 +95,14 @@ export default {
       size: '85%',
       direction: "rtl",
       footer: true,
+      header:false,
       beforeClose: null,
       appendToBody: false,
       close: null,
       customClass: '',
       triggerEventWhenShow:"aim_table_layout",
-      footerStyle:{'padding-right':'6px','padding-top':'9px'}
+      footerStyle:{'padding-right':'6px','padding-top':'9px'},
+      headerStyle:{'padding-right':'6px','padding-bottom':'9px'}
     })
     if(this.title) {
       this.configData.withHeader = true
@@ -110,6 +118,15 @@ export default {
   overflow: hidden;
   position: sticky;
   bottom: 6px;
+  z-index: 100;
+}
+.aim-popup >>> .aim-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  position: sticky;
+  top: 6px;
   z-index: 100;
 }
 

@@ -221,12 +221,15 @@
         :title="rowFormEditorTitle(rowEditState)"
         :drawer="formPopupUsingDrawer"
         :is-show.sync="rowFormEditorVisible"
-        :config="{appendToBody:popupAppendToBody,close:rowFormEditorClose,footer: true,destroyOnClose:true}">
-      <template v-slot:aim-popup-body>
+        :config="{appendToBody:popupAppendToBody,close:rowFormEditorClose,footer: true,header:editConfigRef.formHeaderSlot,destroyOnClose:true}">
+
+      <template v-slot:aim-popup-header v-if="rowInEditForm && rowFormEditorVisible">
         <slot v-if="editConfigRef.formHeaderSlot"
               :name="editConfigRef.formHeaderSlot"
               :row="rowInEditForm"
         />
+      </template>
+      <template v-slot:aim-popup-body>
         <aim-form-input
             style="padding-right: 9px"
             ref="aimFormInput"
