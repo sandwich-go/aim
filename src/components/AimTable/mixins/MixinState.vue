@@ -76,14 +76,10 @@ export default {
       jsb.each(this.getSelectionRows(clean),visitor)
     },
     setInLoading(inLoading){
-      if(this.rowFormEditorVisible && this.$refs.aimFormInput){
-        this.$refs.aimFormInput.setInLoading(inLoading)
-      }else{
-        this.inLoading = inLoading
-      }
+      this.inLoading = inLoading
     },
     setLoading(inLoading){
-      this.setInLoading(inLoading)
+      this.inLoading = inLoading
     },
     summaryRow(row) {
       let info = [`xid(${xidRow(row)})`]
