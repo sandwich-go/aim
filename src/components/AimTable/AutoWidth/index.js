@@ -54,7 +54,13 @@ export function flexColumnWidth(schema,tableData) {
             headerExtraWidth = headerExtraWidth + 40
         }
         // 两侧padding
-        let headerTextWidth = jsb.textWidth(fieldSchema.name) + 20
+        let headerTextWidth = 0
+        if(schema.type==="html" || schema.cell==="CellViewHTML"){
+            headerTextWidth = jsb.htmlWidth(fieldSchema.name) + 20
+        }else{
+            headerTextWidth = jsb.textWidth(fieldSchema.name) + 20
+        }
+
         const  headerWidth =  headerTextWidth + headerExtraWidth
 
         const minWidth = minWidthTableColumn(fieldSchema.type)
