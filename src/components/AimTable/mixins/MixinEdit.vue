@@ -9,7 +9,8 @@ import {
 import {CodeButtonRowDelete, CodeButtonRowSave} from "@/components/cells/const";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {
-  AimFormInputEdit,
+  AimFormInputCopy,
+  AimFormInputEdit, AimFormInputInsert,
   AimFormInputView
 } from "@/components/AimFormInput";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
@@ -53,7 +54,10 @@ export default {
         return row
       },
       // eslint-disable-next-line no-unused-vars
-      formEditorCells: function ({row}) {
+      formEditorCells: function ({row,mode}) {
+        if(mode === AimFormInputInsert || mode === AimFormInputCopy) {
+          return [CodeButtonRowSave]
+        }
         return [CodeButtonRowSave, CodeButtonRowDelete]
       },
       // eslint-disable-next-line no-unused-vars
@@ -93,7 +97,7 @@ export default {
         // active默认为true, 如为true则进入edit状态
         // 可根据需求定制返回alert的样式
         if (jsb.pathGet(triggerRet, 'active', true)) {
-          this.rowEditState = AimFormInputEdit
+          this.rowEditState = jsb.pathGet(triggerRet, 'mode', AimFormInputEdit)
         }
         this.rowEditorAlert = jsb.pathGet(triggerRet, 'alert')
       } else if (!triggerRet) {

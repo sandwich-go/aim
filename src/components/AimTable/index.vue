@@ -257,7 +257,7 @@
         </aim-form-input>
       </template>
       <template v-slot:aim-popup-footer>
-        <template v-if="rowEditState=== AimFormInputView">
+        <template v-if="formFooterEditState=== AimFormInputView">
           <el-button size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
         </template>
         <template v-else>
@@ -265,7 +265,7 @@
               :row="rowInEditForm"
               :style="flexEndStyle"
               :shortcut-button-options="{circle:false}"
-              :cells="editConfigRef.formEditorCells({row:rowInEditForm})"
+              :cells="editConfigRef.formEditorCells({row:rowInEditForm,mode:formFooterEditState})"
               :should-cell-hide="privateShouldCellHide"
               :should-cell-disable="privateShouldCellDisable"
               @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:rowInEditForm,code,jsEvent,fromForm:true})">
@@ -379,6 +379,9 @@ export default {
     },
     allCommentSlotName() {
       return allSlotName(this.schema, 'commentSlot')
+    },
+    formFooterEditState(){
+      return this.rowEditState
     }
   },
   mixins: [
@@ -500,7 +503,11 @@ export default {
       }
     })
   },
+
   methods: {
+    updateFormMode(mode) {
+      this.rowEditState = mode
+    },
     queryTableSetting(){
       const querySetting = jsb.pathGet(this.proxyConfigRef, 'querySetting')
       if (!querySetting) {

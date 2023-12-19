@@ -1,5 +1,7 @@
 <template>
-  <el-button :disabled="disabled" v-bind="cc" size="mini" @click="click($event)"
+  <el-button :disabled="disabled"
+             v-bind="cc"
+             size="mini" @click="click($event)"
              :icon="stateSwitch?(cc.iconTrue||cc.icon):cc.icon"
              :type="stateSwitch?(cc.typeTrue||cc.type):cc.type"
   >
