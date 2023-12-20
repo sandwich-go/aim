@@ -2,7 +2,7 @@
   <div v-if="fieldValue">
     <span v-if="isPlain()" v-html="content()"></span>
     <el-popover v-else trigger="hover">
-      <span v-html="fieldValue"></span>
+      <span v-html="content()"></span>
       <el-button slot="reference" size="mini"><i class="el-icon-document"/></el-button>
     </el-popover>
   </div>
