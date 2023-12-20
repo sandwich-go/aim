@@ -13,7 +13,7 @@ export default {
     }
   },
   created() {
-    this.headerConfigRef = initToolbarConfig(this.headerConfigRef, {})
+    this.headerConfigRef = initToolbarConfig(this.headerConfigRef, {'align-items':'center'})
   }
 }
 </script>

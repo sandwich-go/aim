@@ -861,7 +861,7 @@ export default {
     toolbarConfig() {
       const _this = this
       return {
-        style:{'background':'red'},
+        style:{'background':'red','height':'60px'},
         leftSpan: 21,
         leftCells: [
           "filter",
