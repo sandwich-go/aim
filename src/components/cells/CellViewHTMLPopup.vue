@@ -1,8 +1,8 @@
 <template>
-  <div v-if="fieldValue">
-    <span v-if="isPlain()" v-html="content()"></span>
+  <div v-if="htmlContent">
+    <span v-if="isPlainHTML" v-html="htmlContent"></span>
     <el-popover v-else trigger="hover">
-      <span v-html="content()"></span>
+      <span v-html="htmlContent"></span>
       <el-button slot="reference" size="mini"><i class="el-icon-document"/></el-button>
     </el-popover>
   </div>
@@ -14,19 +14,19 @@ import jsb from "@sandwich-go/jsb";
 export default {
   name: "CellViewHTMLPopup",
   mixins: [MixinCellViewConfig],
-  methods:{
-    isPlain(){
-      if(jsb.isObjectOrMap(this.fieldValue)){
-        return jsb.pathGet(this.fieldValue,'plain',true)
-      }
-      return false
-    },
-    content(){
+  computed:{
+    htmlContent(){
       if(jsb.isObjectOrMap(this.fieldValue)){
         return jsb.pathGet(this.fieldValue,'content',this.fieldValue)
       }
       return this.fieldValue
+    },
+    isPlainHTML(){
+      if(jsb.isObjectOrMap(this.fieldValue)){
+        return jsb.pathGet(this.fieldValue,'plain',true)
+      }
+      return false
     }
-  }
+  },
 }
 </script>
