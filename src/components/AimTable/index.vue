@@ -23,7 +23,7 @@
         </cell-list>
       </el-col>
     </el-row>
-    <el-row class="aim-component-flex-end" style="align-items: start;gap: 3px">
+    <el-row class="aim-component-flex-end" style="align-items: start;gap: 3px;padding-top: 3px">
       <el-table
           ref="table"
           :height="tableHeight()"

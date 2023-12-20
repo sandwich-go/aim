@@ -13,7 +13,7 @@ export default {
     }
   },
   created() {
-    this.headerConfigRef = initToolbarConfig(this.headerConfigRef, {'padding-bottom': '9px'})
+    this.headerConfigRef = initToolbarConfig(this.headerConfigRef, {})
   }
 }
 </script>

@@ -861,6 +861,7 @@ export default {
     toolbarConfig() {
       const _this = this
       return {
+        style:{'background':'red'},
         leftSpan: 21,
         leftCells: [
           "filter",
@@ -908,7 +909,6 @@ export default {
           {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
         ],
         rightCells: [CodeButtonSaveTableData, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint, CodeButtonExpandAll, CodeButtonTableSetting, CodeButtonDebug],
-        style: {}
       }
     }
   }
