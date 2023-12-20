@@ -261,6 +261,10 @@
         </aim-form-input>
       </template>
       <template v-slot:aim-popup-footer>
+        <slot v-if="editConfigRef.formFooterSlot"
+              :name="editConfigRef.formFooterSlot"
+              :row="rowInEditForm"
+        />
         <template v-if="formFooterEditState=== AimFormInputView">
           <el-button size="mini" type="info" @click="()=>rowFormEditorVisible=false">关闭</el-button>
         </template>

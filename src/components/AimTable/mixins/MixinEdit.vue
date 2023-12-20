@@ -62,6 +62,7 @@ export default {
       },
       // eslint-disable-next-line no-unused-vars
       formHeaderSlot:'',
+      formFooterSlot:'',
     })
     this.debug && this.setDebugMessage("editConfig",JSON.stringify(this.editConfigRef))
   },
