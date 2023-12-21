@@ -3,7 +3,7 @@
 import {headerBackgroundColor, headerColor} from "@/components/AimTable/style";
 
 const jsb = require("@sandwich-go/jsb")
-import {removeCtrlData} from "@/components/AimTable/table";
+import {removeCtrlData, xidRow} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {AimTableAutoWidthClass} from "@/components/AimTable/AutoWidth";
 
@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       tablePropertyRef: this.tableProperty||{},
+      privateRowClassNameSlice:[],
     }
   },
   created() {
@@ -61,8 +62,38 @@ export default {
       this.tablePropertyRef.class.push(AimTableAutoWidthClass)
     }
     this.debug && this.setDebugMessage("tableProperty",JSON.stringify(this.tablePropertyRef))
+
+    const _this = this
+    jsb.each(this.schema,fs=>{
+      if(fs.uniq) {
+        _this.privateRowClassNameSlice.push((row)=>{
+          const exist = jsb.find(_this.tableData,v=>v[fs.field] === row[fs.field] && xidRow(row)!==xidRow(v))
+          return exist?'aim-warning-row':''
+        })
+      }
+    })
   },
   methods: {
+    privateRowClassName ({row}){
+      const ret = []
+      jsb.each(this.privateRowClassNameSlice,v=>{
+        const className = v(row)
+        if(className){
+          ret.push(className)
+        }
+      })
+      if(this.rowClassName){
+        if(jsb.isString(this.rowClassName)){
+          ret.push(this.rowClassName)
+        }else{
+          const className = this.rowClassName(row)
+          if(className){
+            ret.push(className)
+          }
+        }
+      }
+      return ret.join(" ")
+    },
     // getSelectionRowList 获取选中行，包含__xx_tmp数据
     getSelectionRows(clean=false) {
       if(this.radio){

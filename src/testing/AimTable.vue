@@ -460,7 +460,6 @@ export default {
         },
         {
           field: 'name', name: 'Name', sortable: true, uniq: true,
-          show:false,
           placeholder: "xxx.xx",
           shortcuts: {
             copy: true, jump: true, filter: true, edit: {
@@ -510,11 +509,11 @@ export default {
           },
           cellFormConfig: {
             tableProperty: {autoWidth: false},
-            editConfig: {mode: EditModeFormInput, trigger: EditTriggerManualAndDBLClick, name: "testing"},
+            editConfig: {trigger:'inplaceNoTrigger', name: "testing"},
           },
           fields: [
             {field: 'UseSystemSSH', name: '系统SSH秘钥', type: 'switch', cellForm: 'CellSwitch', width: 160,},
-            {field: 'UserName', name: 'UserName', type: 'input', cellForm: 'CellInput', width: 300},
+            {field: 'UserName', name: 'UserName', type: 'input', cellForm: 'CellInput', width: 300,uniq:true},
             {field: 'Password', name: 'Password', type: 'input', cellForm: 'CellInput',}
           ],
         },

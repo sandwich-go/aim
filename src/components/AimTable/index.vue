@@ -38,7 +38,7 @@
           :highlight-current-row="tablePropertyRef.highlightCurrentRow"
           :cell-style="cellStyleWrapper"
           :row-style="tablePropertyRef.rowStyle"
-          :row-class-name="tablePropertyRef.rowClassName"
+          :row-class-name="privateRowClassName"
           @current-change="currentChange"
           @row-dblclick="rowDblClick"
           @row-click="rowClick"
@@ -921,5 +921,19 @@ export default {
   opacity: .8 !important;
   color: #fff !important;
   background: #42b983 !important;
+}
+
+.el-table .aim-success-row {
+  background:#dcf5e7;
+}
+.el-table .aim-running-row {
+  background:#fff1de;
+}
+.el-table .aim-warning-row {
+  background:#fff1de;
+}
+
+.el-table .aim-danger-row {
+  background:#fbe5e1;
 }
 </style>
