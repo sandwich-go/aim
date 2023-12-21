@@ -103,7 +103,7 @@
               <el-link
                   v-for="(link,index) in fs['headerLinkList']"
                   :key="index"
-                  @click="()=>{
+                  @click="(event)=>{
                     event.stopPropagation();
                     link.click({tableData:tableData,event:event})
                   }"
