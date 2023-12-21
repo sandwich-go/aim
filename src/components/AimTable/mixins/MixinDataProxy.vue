@@ -88,7 +88,7 @@ export default {
       let toastContent = toastContentDefault
       let needToast = !this.proxyConfigRef.isLocalData
       let toastID = this.proxyConfigRef.toastID
-      let toastInfo = {}
+      let toastInfo = {id : toastID}
       if(jsb.isPlainObject(info)){
         const aimToast = jsb.pathGet(info,'aim_toast')
         if(aimToast){
@@ -96,9 +96,9 @@ export default {
           // 逻辑层明确指定
           needToast = toastContent!==''
         }
-        toastInfo = aimToast
-        if(jsb.isNull(toastInfo) || jsb.isUndefined(toastInfo)){
-          toastInfo = {id:toastID}
+        toastInfo = aimToast || {}
+        if(!toastInfo['id']){
+          toastInfo.id = toastID
         }
       }
       if(needToast && toastContent){
