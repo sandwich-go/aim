@@ -31,6 +31,7 @@ export default {
   created() {
     jsb.objectAssignNX(this.proxyConfigRef, {
       isLocalData:false,
+      toastID:"aimTable",
       // 数据提交时是否移除非schema中的字段
       submitRemoveFieldNotInSchema:false,
       item2Row(item) {
@@ -83,6 +84,27 @@ export default {
     })
   },
   methods:{
+    tryToast(toastFunc,info,toastContentDefault){
+      let toastContent = toastContentDefault
+      let needToast = !this.proxyConfigRef.isLocalData
+      let toastID = this.proxyConfigRef.toastID
+      let toastInfo = {}
+      if(jsb.isPlainObject(info)){
+        const aimToast = jsb.pathGet(info,'aim_toast')
+        if(aimToast){
+          toastContent = jsb.pathGet(aimToast,'content','')
+          // 逻辑层明确指定
+          needToast = toastContent!==''
+        }
+        toastInfo = aimToast
+        if(jsb.isNull(toastInfo) || jsb.isUndefined(toastInfo)){
+          toastInfo = {id:toastID}
+        }
+      }
+      if(needToast && toastContent){
+        toastFunc(toastContent,toastInfo)
+      }
+    },
     // eslint-disable-next-line no-unused-vars
     tryPromise(funcName,params,done=null,okToast='') {
       params = params || {}
@@ -103,19 +125,13 @@ export default {
       params['aimTableSchema'] = this.schema
 
       Promise.resolve(funcToCall(params)).then((resp) => {
-        okToast && !this.proxyConfigRef.isLocalData && this.toastSuccess(okToast)
+        this.tryToast(this.toastSuccess,resp,okToast)
         done && done({resp})
       }).catch(error => {
         this.inLoading = false
         aimTableError(`tryPromise ${funcName} err:${error.toString()}`,error.stack)
         done && done({error})
-        let needToast = true
-        if(jsb.isPlainObject(error)){
-          needToast = jsb.pathGet(error,'toast',false)
-        }
-        if(needToast){
-          !this.proxyConfigRef.isLocalData && this.toastError(error.toString())
-        }
+        this.tryToast(this.toastError,error,error.toString())
       }).finally(() => {
         this.inLoading = false
       })
