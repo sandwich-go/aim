@@ -52,6 +52,10 @@ export default {
           reject("save not implemented")
         })
       },
+      // save操作为async模式，不主动刷新数据
+      saveAsync:false,
+      // delete操作为async模式，不主动刷新数据
+      deleteAsync:false,
       // eslint-disable-next-line no-unused-vars
       delete: function ({row}) {
         return new Promise((resolve, reject) => {
@@ -187,7 +191,9 @@ export default {
       const confirmDoneFunc = ()=>{
         _this.tryPromise(funcName,{row,rows},function ({error}){
           if(!error){
-            _this.proxyQueryData()
+            if(!_this.proxyConfigRef.deleteAsync){
+              _this.proxyQueryData()
+            }
           }
           done && done({error})
         },'数据已删除')

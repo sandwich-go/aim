@@ -703,7 +703,10 @@ export default {
         if (!error && fromForm) {
           this.rowFormEditorVisible = false
           // form表单编辑完后重新拉取数据
-          this.proxyQueryData()
+          // save操作为async模式，不主动刷新数据
+          if(!this.proxyConfigRef.saveAsync){
+            this.proxyQueryData()
+          }
         }
       }
       switch (code) {
