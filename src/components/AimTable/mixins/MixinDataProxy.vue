@@ -88,7 +88,7 @@ export default {
     })
   },
   methods:{
-    tryToast(toastFunc,info,toastContentDefault){
+    tryToast(toastType,info,toastContentDefault){
       let toastContent = toastContentDefault
       let needToast = !this.proxyConfigRef.isLocalData
       let toastID = this.proxyConfigRef.toastID
@@ -97,6 +97,7 @@ export default {
         const aimToast = jsb.pathGet(info,'aim_toast')
         if(aimToast){
           toastContent = jsb.pathGet(aimToast,'content','')
+          toastType = jsb.pathGet(aimToast,'type',toastType)
           // 逻辑层明确指定
           needToast = toastContent!==''
         }
@@ -106,7 +107,7 @@ export default {
         }
       }
       if(needToast && toastContent){
-        toastFunc(toastContent,toastInfo)
+        jsb.cc.toast(toastType,toastContent,toastInfo)
       }
     },
     // eslint-disable-next-line no-unused-vars
@@ -129,13 +130,13 @@ export default {
       params['aimTableSchema'] = this.schema
 
       Promise.resolve(funcToCall(params)).then((resp) => {
-        this.tryToast(this.toastSuccess,resp,okToast)
+        this.tryToast('success',resp,okToast)
         done && done({resp})
       }).catch(error => {
         this.inLoading = false
         aimTableError(`tryPromise ${funcName} err:${error.toString()}`,error.stack)
         done && done({error})
-        this.tryToast(this.toastError,error,error.toString())
+        this.tryToast('error',error,error.toString())
       }).finally(() => {
         this.inLoading = false
       })
