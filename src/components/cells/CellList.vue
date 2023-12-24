@@ -4,14 +4,27 @@
       <div :key="index" :style="divStyle">
         <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
           <template v-if="cell.cell && registeredComponentMap[cell.cell]">
+            <el-tooltip v-if="disableTooltip(cell,row).tooltip" :content="disableTooltip(cell,row).tooltip">
+              <component
+                  :is="registeredComponentMap[cell.cell]"
+                  :key="`toolbar_component_${index}`"
+                  :cell-config="cell"
+                  :data="cell.data || cell"
+                  :field-name="cell.field || 'value'"
+                  :options="cell.options || []"
+                  :disabled="disableTooltip(cell,row).disable"
+                  @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+              />
+            </el-tooltip>
             <component
+                v-else
                 :is="registeredComponentMap[cell.cell]"
                 :key="`toolbar_component_${index}`"
                 :cell-config="cell"
                 :data="cell.data || cell"
                 :field-name="cell.field || 'value'"
                 :options="cell.options || []"
-                :disabled="shouldCellDisable({cell:cell,code:cell.code ||'',row:row})"
+                :disabled="disableTooltip(cell,row).disable"
                 @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
             />
           </template>
@@ -22,7 +35,7 @@
                 :data="cell.data || cell"
                 :field-name="cell.field || 'value'"
                 :options="cell.options || []"
-                :disabled="shouldCellDisable({cell:cell,code:cell.code ||'',row:row})"
+                :disabled="disableTooltip(cell,row).disable"
                 @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
           />
           <template v-else-if="!cell.cell">
@@ -66,6 +79,13 @@ export default {
   methods: {
     parseWidthToPixelString,
     getProxySlotName,
+    disableTooltip(cell,row){
+      const ret = this.shouldCellDisable({cell:cell,code:cell.code ||'',row:row})
+      if(jsb.isString(ret)) {
+        return {disable:true,tooltip:ret}
+      }
+      return {disable: ret}
+    },
     isDivider(item) {
       return jsb.isEmpty(item)
     },

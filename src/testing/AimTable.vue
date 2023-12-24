@@ -841,7 +841,7 @@ export default {
     },
     shouldCellDisable({code, row, fieldSchema}) {
       if (row && code === CodeButtonRowDelete) {
-        return row.Online
+        return true
       }
       if (row && fieldSchema) {
         return fieldSchema.field === 'name' && row[fieldSchema.field] < 2000
