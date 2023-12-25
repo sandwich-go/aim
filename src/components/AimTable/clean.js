@@ -1,6 +1,6 @@
 import jsb from "@sandwich-go/jsb";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
-import {mustCtrlData} from "@/components/AimTable/table";
+import {mustCtrlData, mustCtrlRemote} from "@/components/AimTable/table";
 
 function autoOption(parent, fieldVal) {
     if (!parent.options) {
@@ -27,6 +27,8 @@ export function cleanDataForTable(data, schema, item2Row) {
     jsb.each(data, function (item, index) {
         // 检查数据的ctrl字段，填充组件需要的控制性数据
         let row = mustCtrlData(item2Row ? item2Row(item) : item)
+        // 标记为远端查询的数据，非本地临时新增
+        row = mustCtrlRemote(row)
         row = FillDefaultDataWithSchema(schema, row)
         jsb.each(schema, function (fieldSchema) {
             // 自动为filter准备option

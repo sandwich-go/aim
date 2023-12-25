@@ -1,6 +1,6 @@
 <script>
 import {deleteConfirmConfig} from "@/components/AimTable/confirm";
-import {aimTableError} from "@/components/AimTable/table";
+import {aimTableError, isCtrlRemote, xidRow} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {formatValue} from "@/components/cells/types";
 import {cleanDataForTable} from "@/components/AimTable/clean";
@@ -175,15 +175,31 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     tryProxyDelete(row, {done} = {}) {
+      if(!isCtrlRemote(row)){
+        // 非远端数据，直接删除
+        jsb.remove(this.tableData, item => xidRow(item) === xidRow(row))
+        done && done()
+        return
+      }
       this.deleteAsking('delete',{row},{done})
     },
     // eslint-disable-next-line no-unused-vars
     tryProxyDeleteRows(rows, {done} = {}) {
-      if(rows.length === 0){
+      const leftRows = []
+      jsb.each(rows,row=>{
+        if(!isCtrlRemote(row)){
+          // 非远端数据，直接删除
+          jsb.remove(this.tableData, item => xidRow(item) === xidRow(row))
+          return
+        }else{
+          leftRows.push(row)
+        }
+      })
+      if(leftRows.length === 0){
         done && done()
         return
       }
-      this.deleteAsking('deleteRows',{rows},{done})
+      this.deleteAsking('deleteRows',{leftRows},{done})
     },
     // eslint-disable-next-line no-unused-vars
     deleteAsking(funcName,{row,rows}, {done} = {}) {

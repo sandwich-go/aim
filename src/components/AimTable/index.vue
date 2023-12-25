@@ -699,7 +699,7 @@ export default {
     // 默认的code处理逻辑
     defaultCellClick({code, row, fieldValue, jsEvent, fromForm}) {
       const _this = this
-      const editDone = ({error}) => {
+      const editDone = ({error}={}) => {
         if (!error && fromForm) {
           this.rowFormEditorVisible = false
           // form表单编辑完后重新拉取数据

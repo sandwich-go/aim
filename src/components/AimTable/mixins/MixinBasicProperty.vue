@@ -102,7 +102,11 @@ export default {
         }
         return [clean?removeCtrlData(jsb.clone(this.radioRow)):this.radioRow]
       }
-      return clean?removeCtrlData(jsb.clone(this.getTableRef().selection)):this.getTableRef().selection
+      const ref = this.getTableRef()
+      if(!ref){
+        return 0
+      }
+      return clean?removeCtrlData(jsb.clone(ref.selection)):ref.selection
     },
     // 每一个cell的属性
     cellStyleWrapper({row, column}) {

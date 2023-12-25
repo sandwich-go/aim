@@ -53,6 +53,14 @@ export function mustCtrlData(row) {
     return row
 }
 
+export function mustCtrlRemote(row) {
+    row[CtrlDataInRowData].remote = true
+    return row
+}
+export function isCtrlRemote(row) {
+    return jsb.pathGet(row,`${CtrlDataInRowData}.remote`,false)
+}
+
 export function setRowSelected(row,selected){
     row = mustCtrlData(row)
     row[CtrlDataInRowData].selected =selected

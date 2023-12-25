@@ -366,7 +366,7 @@ export default {
         autoWidth: true
       },
       editConfig: {
-        mode: EditModeFormInput,
+        mode: 'inplaceNoTrigger',
         trigger: EditTriggerManualAndDBLClick,
         triggerRowFunc: ({row}) => {
           if (row.Online) {
