@@ -1,6 +1,6 @@
 {
   "name": "@sandwich-go/aim",
-  "version": "0.1.572",
+  "version": "0.1.573",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -30,7 +30,7 @@
     "vue-loading-overlay": "3.4.2",
     "vue-select-image": "^1.9.0",
     "vue-slider-component": "^3.2.24",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
