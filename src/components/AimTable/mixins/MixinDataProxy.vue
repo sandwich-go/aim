@@ -199,7 +199,7 @@ export default {
         done && done()
         return
       }
-      this.deleteAsking('deleteRows',{leftRows},{done})
+      this.deleteAsking('deleteRows',{rows:leftRows},{done})
     },
     // eslint-disable-next-line no-unused-vars
     deleteAsking(funcName,{row,rows}, {done} = {}) {
