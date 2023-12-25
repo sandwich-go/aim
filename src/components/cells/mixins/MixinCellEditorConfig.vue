@@ -173,6 +173,9 @@ export default {
       if (this.cc.change) {
         this.cc.change(newVal)
       }
+      if (this.cc['changeEx']) {
+        this.cc['changeEx']({value:newVal,parent:this.data})
+      }
     },
     emitClick(jsEvent) {
       this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})
