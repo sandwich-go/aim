@@ -8,6 +8,7 @@ export const CodeButtonRefresh = "btnRefresh"
 export const CodeButtonCustom = "btnCustom"
 export const CodeButtonPrint = "btnPrint"
 export const CodeButtonAdd = "btnAdd"
+export const CodeButtonExportToExcel = "btnExportToExcel"
 export const CodeButtonExpandAll = "btnExpandAll"
 export const CodeButtonTableSetting = "btnTableSetting"
 export const CodeButtonSaveTableData = "btnSaveTableData" // 整表数据提交
@@ -45,6 +46,7 @@ code2OptionsMapping[CodeButtonSortIndex] = {
     typeTrue:'success'
 }
 
+code2OptionsMapping[CodeButtonExportToExcel] = {icon: 'el-icon-download', type: 'primary', circle: true, label: '导出Excel'}
 code2OptionsMapping[CodeButtonAdd] = {icon: 'el-icon-plus', type: 'primary', circle: true, label: '新建'}
 code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primary', circle: true, label: '刷新'}
 code2OptionsMapping[CodeButtonPrint] = {icon: 'el-icon-printer', type: 'primary', circle: true, label: '导出'}

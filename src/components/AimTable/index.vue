@@ -321,7 +321,7 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 
 import {
   CodeButtonAdd, CodeButtonDebug,
-  CodeButtonExpandAll, CodeButtonFilterSearch,
+  CodeButtonExpandAll, CodeButtonExportToExcel, CodeButtonFilterSearch,
   CodeButtonRefresh,
   CodeButtonRowClose,
   CodeButtonRowCopy,
@@ -372,6 +372,7 @@ import AimPopup from "@/components/AimPopup/index.vue";
 import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
 import MixinFilter from "@/components/AimTable/mixins/MixinFilter.vue";
 import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
+import {exportTable2Excel} from "@/components/AimTable/export/excel";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -736,6 +737,9 @@ export default {
         case CodeLinkFieldCopy:
           jsb.clipCopy(fieldValue, jsEvent)
           break
+        case CodeButtonExportToExcel:
+          this.export2Excel()
+          break;
         case CodeButtonAdd:
           this.addRow({
                 initRow:jsb.pathGet(this.tableSetting,'template',{})
@@ -814,6 +818,9 @@ export default {
     },
     rowFormEditorClose() {
       // this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
+    },
+    export2Excel() {
+      exportTable2Excel(this.schema,this.tableData)
     },
     privateShouldCellDisable({code, cell, row, fieldSchema}) {
       if (this.readOnly) {
