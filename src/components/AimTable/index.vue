@@ -452,7 +452,7 @@ export default {
         return true
       },
     },
-    rowDblclick:Function,
+    rowDbClick:Function,
     rowClick:Function,
     rowRemoveShortcut: {type: Boolean, default: false},// 是否显示当行删除快捷方式
     autoQuery: {type: Boolean, default: true},

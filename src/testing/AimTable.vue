@@ -26,6 +26,7 @@
         :righter-config="rightBarConfig"
         :visitor-config="tableVisitorData"
         :pager-config="{}"
+        :row-db-click="onRowDbClick"
         :proxy-config="proxyConfig">
       <template v-slot:formSlotTesting>
         <el-table
@@ -856,6 +857,9 @@ export default {
     },
     editAimForm(){
       this.aimFormEditorShow = true
+    },
+    onRowDbClick({row}){
+      this.alertTitle = `onRowDbClick ${xidRow(row)}`
     },
     toolbarConfig() {
       const _this = this

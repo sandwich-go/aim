@@ -132,9 +132,9 @@ export default {
       return isModeInplace(this.editConfigRef.mode)
     },
     privateRowDblClick(row) {
-      if(this.rowDblclick){
+      if(this.rowDbClick){
         // 逻辑层拦截
-        const ret = this.rowDblclick({row})
+        const ret = this.rowDbClick({row})
         if (ret){
           return
         }
