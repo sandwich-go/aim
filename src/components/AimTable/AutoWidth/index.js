@@ -61,7 +61,7 @@ export function flexColumnWidth(schema,tableData) {
         jsb.remove(arr,item => jsb.isEmpty(item))
 
         let contentWidth = 0
-        if(schema.type==="html" || schema.cell==="CellViewHTML"){
+        if(fieldSchema.type==="html" || fieldSchema.cell==="CellViewHTML"){
             contentWidth = jsb.longestHTMLWidth(arr)
         }else{
             contentWidth = jsb.longestTextWidth(arr)
