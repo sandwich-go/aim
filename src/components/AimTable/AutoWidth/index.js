@@ -54,26 +54,25 @@ export function flexColumnWidth(schema,tableData) {
             headerExtraWidth = headerExtraWidth + 40
         }
         // 两侧padding
-        let headerTextWidth = 0
-        if(schema.type==="html" || schema.cell==="CellViewHTML"){
-            headerTextWidth = jsb.htmlWidth(fieldSchema.name) + 20
-        }else{
-            headerTextWidth = jsb.textWidth(fieldSchema.name) + 20
-        }
-
+        let headerTextWidth =  jsb.textWidth(fieldSchema.name) + 20
         const  headerWidth =  headerTextWidth + headerExtraWidth
-
         const minWidth = minWidthTableColumn(fieldSchema.type)
         const arr = tableData.map(x => x[fieldSchema.field])
         jsb.remove(arr,item => jsb.isEmpty(item))
-        let width = jsb.longestTextWidth(arr)
-        if(width < minWidth){
-            width = minWidth
+
+        let contentWidth = 0
+        if(schema.type==="html" || schema.cell==="CellViewHTML"){
+            contentWidth = jsb.longestHTMLWidth(arr)
+        }else{
+            contentWidth = jsb.longestTextWidth(arr)
         }
-        if(width < headerWidth) {
-            width = headerWidth
+        if(contentWidth < minWidth){
+            contentWidth = minWidth
+        }
+        if(contentWidth < headerWidth) {
+            contentWidth = headerWidth
         }
         // shortcut 14宽度+ 3 padding
-        fieldSchema.min_width_dynamic = width + jsb.size(fieldSchema.shortcuts || {})*20
+        fieldSchema.min_width_dynamic = contentWidth + jsb.size(fieldSchema.shortcuts || {})*20
     })
 }

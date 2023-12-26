@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@sandwich-go/aim": "0.1.479",
-    "@sandwich-go/jsb": "0.1.123",
+    "@sandwich-go/jsb": "0.1.126",
     "codemirror": "^5.41.0",
     "core-js": "^3.8.3",
     "element-ui": "2.12.0",
