@@ -135,6 +135,13 @@ export default {
       this.rowClickWithTriggerName(row, EditTriggerDBLClick)
     },
     rowClick(row) {
+      if(this.rowDblClick){
+        // 逻辑层拦截
+        const ret = this.rowDblClick({row})
+        if (ret){
+          return
+        }
+      }
       this.rowClickWithTriggerName(row, EditTriggerClick)
     },
     // isTriggerAccepted triggerName是否符合设定的编辑策略
