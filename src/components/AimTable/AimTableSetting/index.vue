@@ -1,50 +1,52 @@
 <template>
   <div class="aim-table-setting">
     <el-tabs v-model="activeTabName" @tab-click="tabChange" class="aim-table-setting-tabs">
-      <el-tab-pane name="row_template">
-        <el-tooltip
-            slot="label"
-            effect="light"
-            content="默认值将作为新建条目时的默认数据存在"
-        ><span><i class="el-icon-tickets" style="padding-right: 3px"/>默认值</span>
-        </el-tooltip>
-        <aim-form-input
-            v-if="rowTemplate"
-            ref="rowTemplate"
-            style="padding-right: 9px"
-            :schema="schemaCleaned"
-            :group-config="groupConfig"
-            :data="rowTemplate"
-            :mode="AimFormInputTemplate"
-            :enable-watcher="true"
-            :submit-remove-field-not-in-schema="true"
-        >
-          <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
-            <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
-          </template>
-          <template v-for="name in allCommentSlotName"
-                    v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
-            <slot :name="name" :field-schema="fieldSchema" :row="row"/>
-          </template>
-        </aim-form-input>
-      </el-tab-pane>
-      <el-tab-pane  name="setting">
-        <el-tooltip
-            slot="label"
-            effect="light"
-            content="自定义字段显示与否、宽度、字段级授权"
-        ><span><i class="el-icon-setting" style="padding-right: 3px"/>字段控制</span>
-        </el-tooltip>
-        <aim-table
-            v-if="fields"
-            :schema="fieldSettingSchema()"
-            :proxy-config="newLocalDataProxyWithFieldName(thisTarget(),'fields')"
-            :table-property="{autoWidth:false,heightSubVH:160}"
-            :popup-append-to-body="true"
-            :drag-config="{icon:true}"
-            :edit-config="{}"
-        ></aim-table>
-      </el-tab-pane>
+      <template v-for="key in tableSettingTabList">
+        <el-tab-pane v-if="key==='row_template'" name="row_template" :key="key">
+          <el-tooltip
+              slot="label"
+              effect="light"
+              content="默认值将作为新建条目时的默认数据存在"
+          ><span><i class="el-icon-tickets" style="padding-right: 3px"/>默认值</span>
+          </el-tooltip>
+          <aim-form-input
+              v-if="rowTemplate"
+              ref="rowTemplate"
+              style="padding-right: 9px"
+              :schema="schemaCleaned"
+              :group-config="groupConfig"
+              :data="rowTemplate"
+              :mode="AimFormInputTemplate"
+              :enable-watcher="true"
+              :submit-remove-field-not-in-schema="true"
+          >
+            <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
+              <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
+            </template>
+            <template v-for="name in allCommentSlotName"
+                      v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+              <slot :name="name" :field-schema="fieldSchema" :row="row"/>
+            </template>
+          </aim-form-input>
+        </el-tab-pane>
+        <el-tab-pane v-if="key==='setting'"   name="setting" :key="key">
+          <el-tooltip
+              slot="label"
+              effect="light"
+              content="自定义字段显示与否、宽度、字段级授权"
+          ><span><i class="el-icon-setting" style="padding-right: 3px"/>字段控制</span>
+          </el-tooltip>
+          <aim-table
+              v-if="fields"
+              :schema="fieldSettingSchema()"
+              :proxy-config="newLocalDataProxyWithFieldName(thisTarget(),'fields')"
+              :table-property="{autoWidth:false,heightSubVH:160}"
+              :popup-append-to-body="true"
+              :drag-config="{icon:true}"
+              :edit-config="{}"
+          ></aim-table>
+        </el-tab-pane>
+      </template>
     </el-tabs>
     <div class="aim-popup aim-drawer-footer" style="background-color: #b3e6c8">
       <el-button size="mini" type="primary" @click="save">保存</el-button>
@@ -82,13 +84,16 @@ export default {
   computed:{
     allCommentSlotName() {
       return allSlotName(this.schema, 'commentSlot')
+    },
+    tableSettingTabList(){
+      return jsb.pathGet(this.proxy,'tableSettingTab',['row_template','setting'])
     }
   },
   data() {
     return {
       AimFormInputTemplate: AimFormInputTemplate,
       schemaCleaned: [],
-      activeTabName: 'row_template',
+      activeTabName: 'setting',
       rowTemplate: null,
       fields: null,
     }

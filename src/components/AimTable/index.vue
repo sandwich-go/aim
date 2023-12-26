@@ -26,7 +26,7 @@
     <el-row class="aim-component-flex-end" style="align-items: start;gap: 3px;padding-top: 3px">
       <el-table
           ref="table"
-          :height="tableHeight()"
+          :height="tableHeight"
           :max-height="tablePropertyRef.maxHeight"
           :data="tableDataFiltered ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
@@ -394,7 +394,27 @@ export default {
     },
     formFooterEditState(){
       return this.rowEditState
-    }
+    },
+    tableHeight() {
+      if (!this.tablePropertyRef.heightSubVH) {
+        // null或者0根据内容自适应高度
+        if (jsb.isNull(this.tablePropertyRef.height) || parseInt(this.tablePropertyRef.height) === 0) {
+          return null
+        }
+        if (!jsb.isEmpty(this.tablePropertyRef.height)) {
+          return this.tablePropertyRef.height
+        }
+      }
+      // 强制触发tableHeight更新
+      let tableHeightRefreshKey = this.tableHeightRefreshKey
+      if (tableHeightRefreshKey){
+        tableHeightRefreshKey =  this.tableHeightRefreshKey
+      }
+      let sub = 70 + this.tablePropertyRef.heightSubVH
+      sub += this.headerConfigRef.enable ? 40 : 0
+      sub += this.pagerConfigRef.enable ? 40 : 0
+      return `${jsb.clientHeight(sub)}px`
+    },
   },
   mixins: [
     MixinState,
@@ -462,6 +482,7 @@ export default {
       radioRow: null,
       visitSettingDrawerVisible: false,
       tableSetting:{},
+      tableHeightRefreshKey: 0,
     }
   },
 
@@ -517,8 +538,18 @@ export default {
   },
 
   methods: {
+    // updateFormMode 外部使用更新编辑状态，如对接redsource lock
     updateFormMode(mode) {
       this.rowEditState = mode
+    },
+    forceFreshTableHeight({height,heightSubVH}={}) {
+      if(height){
+        this.tablePropertyRef.height = height
+      }
+      if(heightSubVH){
+        this.tablePropertyRef.heightSubVH = heightSubVH
+      }
+      this.tableHeightRefreshKey++
     },
     queryTableSetting(){
       const querySetting = jsb.pathGet(this.proxyConfigRef, 'querySetting')
@@ -654,21 +685,6 @@ export default {
         this.onRadioChange({row:this.radioRow})
       }
       this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row),)
-    },
-    tableHeight() {
-      if (!this.tablePropertyRef.heightSubVH) {
-        // null或者0根据内容自适应高度
-        if (jsb.isNull(this.tablePropertyRef.height) || parseInt(this.tablePropertyRef.height) === 0) {
-          return null
-        }
-        if (!jsb.isEmpty(this.tablePropertyRef.height)) {
-          return this.tablePropertyRef.height
-        }
-      }
-      let sub = 70 + this.tablePropertyRef.heightSubVH
-      sub += this.headerConfigRef.enable ? 40 : 0
-      sub += this.pagerConfigRef.enable ? 40 : 0
-      return `${jsb.clientHeight(sub)}px`
     },
     // current-change 回调
     currentChange(row) {

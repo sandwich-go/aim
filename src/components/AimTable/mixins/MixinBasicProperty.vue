@@ -58,6 +58,7 @@ export default {
       height: null,
       heightSubVH: 0,
     })
+
     if(this.tablePropertyRef.autoWidth){
       this.tablePropertyRef.class.push(AimTableAutoWidthClass)
     }
