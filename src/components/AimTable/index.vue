@@ -415,6 +415,9 @@ export default {
           return null
         }
         if (!jsb.isEmpty(this.tablePropertyRef.height)) {
+          if(this.tablePropertyRef.heightCookieKey){
+            Cookies.set(this.tablePropertyRef.heightCookieKey,`${this.tablePropertyRef.height}`)
+          }
           return this.tablePropertyRef.height
         }
       }

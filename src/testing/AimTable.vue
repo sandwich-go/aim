@@ -860,6 +860,7 @@ export default {
     },
     onRowDbClick({row}){
       this.alertTitle = `onRowDbClick ${xidRow(row)}`
+      this.$refs.table.forceFreshTableHeight({height:200})
     },
     toolbarConfig() {
       const _this = this
