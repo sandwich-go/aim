@@ -40,8 +40,8 @@
           :row-style="tablePropertyRef.rowStyle"
           :row-class-name="privateRowClassName"
           @current-change="currentChange"
-          @row-dblclick="rowDblClick"
-          @row-click="rowClick"
+          @row-dblclick="privateRowDblClick"
+          @row-click="privateRowClick"
           :row-key="xidRow"
           @selection-change="selectionChange"
       >
@@ -452,8 +452,8 @@ export default {
         return true
       },
     },
-    // 当db click不被作为编辑命令处理时
     rowDblclick:Function,
+    rowClick:Function,
     rowRemoveShortcut: {type: Boolean, default: false},// 是否显示当行删除快捷方式
     autoQuery: {type: Boolean, default: true},
     radio: Boolean,// 是否支持radio选择

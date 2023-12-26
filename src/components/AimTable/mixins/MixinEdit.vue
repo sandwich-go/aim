@@ -131,13 +131,20 @@ export default {
     isModeInplace() {
       return isModeInplace(this.editConfigRef.mode)
     },
-    rowDblClick(row) {
+    privateRowDblClick(row) {
+      if(this.rowDblclick){
+        // 逻辑层拦截
+        const ret = this.rowDblclick({row})
+        if (ret){
+          return
+        }
+      }
       this.rowClickWithTriggerName(row, EditTriggerDBLClick)
     },
-    rowClick(row) {
-      if(this.rowDblClick){
+    privateRowClick(row) {
+      if(this.rowClick){
         // 逻辑层拦截
-        const ret = this.rowDblClick({row})
+        const ret = this.rowClick({row})
         if (ret){
           return
         }
