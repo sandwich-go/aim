@@ -35,44 +35,47 @@ export function forceAdjustColumnWidth(tableEL, bindingValue) {
 }
 
 const jsb = require("@sandwich-go/jsb")
+
+
 export function flexColumnWidth(schema,tableData) {
-    jsb.each(schema,(fieldSchema)=>{
-        if(fieldSchema.width || fieldSchema.min_width || fieldSchema.min_width_dynamic){
+    jsb.each(schema,async (fieldSchema) => {
+        if (fieldSchema.width || fieldSchema.min_width || fieldSchema.min_width_dynamic) {
             return
         }
         let headerExtraWidth = 0
-        if(fieldSchema.required){
+        if (fieldSchema.required) {
             headerExtraWidth = headerExtraWidth + 40
         }
-        if(jsb.pathGet(fieldSchema,'sortable',true)){
+        if (jsb.pathGet(fieldSchema, 'sortable', true)) {
             headerExtraWidth = headerExtraWidth + 40
         }
-        if(fieldSchema.lock){
+        if (fieldSchema.lock) {
             headerExtraWidth = headerExtraWidth + 40
         }
-        if(fieldSchema.tips){
+        if (fieldSchema.tips) {
             headerExtraWidth = headerExtraWidth + 40
         }
         // 两侧padding
-        let headerTextWidth =  jsb.textWidth(fieldSchema.name) + 20
-        const  headerWidth =  headerTextWidth + headerExtraWidth
+        let headerTextWidth = jsb.textWidth(fieldSchema.name) + 20
+        const headerWidth = headerTextWidth + headerExtraWidth
         const minWidth = minWidthTableColumn(fieldSchema.type)
         const arr = tableData.map(x => x[fieldSchema.field])
-        jsb.remove(arr,item => jsb.isEmpty(item))
+        jsb.remove(arr, item => jsb.isEmpty(item))
 
         let contentWidth = 0
-        if(fieldSchema.type==="html" || fieldSchema.cell==="CellViewHTML"){
-            contentWidth = jsb.longestHTMLWidth(arr)
-        }else{
+        if (fieldSchema.type === "html" || fieldSchema.cell === "CellViewHTML") {
+            // 页面创建过程中，浏览器可能还没有完成对 HTML 内容的渲染和布局，无法获取html宽度
+            contentWidth = await jsb.longestHTMLWidth(arr)
+        } else {
             contentWidth = jsb.longestTextWidth(arr)
         }
-        if(contentWidth < minWidth){
+        if (contentWidth < minWidth) {
             contentWidth = minWidth
         }
-        if(contentWidth < headerWidth) {
+        if (contentWidth < headerWidth) {
             contentWidth = headerWidth
         }
         // shortcut 14宽度+ 3 padding
-        fieldSchema.min_width_dynamic = contentWidth + jsb.size(fieldSchema.shortcuts || {})*20
+        fieldSchema.min_width_dynamic = contentWidth + jsb.size(fieldSchema.shortcuts || {}) * 20
     })
 }
