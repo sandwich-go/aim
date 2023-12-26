@@ -373,6 +373,7 @@ import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
 import MixinFilter from "@/components/AimTable/mixins/MixinFilter.vue";
 import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 import {exportTable2Excel} from "@/components/AimTable/export/excel";
+import Cookies from "js-cookie";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -396,6 +397,18 @@ export default {
       return this.rowEditState
     },
     tableHeight() {
+      // 强制触发tableHeight更新
+      let tableHeightRefreshKey = this.tableHeightRefreshKey
+      if (tableHeightRefreshKey){
+        tableHeightRefreshKey =  this.tableHeightRefreshKey
+      }
+      // 第一次由cookie获取
+      if(tableHeightRefreshKey === 0 && this.tablePropertyRef.heightCookieKey){
+        const initHeightStr = Cookies.get(this.tablePropertyRef.heightCookieKey)
+        if (initHeightStr) {
+          return `${initHeightStr}px`
+        }
+      }
       if (!this.tablePropertyRef.heightSubVH) {
         // null或者0根据内容自适应高度
         if (jsb.isNull(this.tablePropertyRef.height) || parseInt(this.tablePropertyRef.height) === 0) {
@@ -405,15 +418,14 @@ export default {
           return this.tablePropertyRef.height
         }
       }
-      // 强制触发tableHeight更新
-      let tableHeightRefreshKey = this.tableHeightRefreshKey
-      if (tableHeightRefreshKey){
-        tableHeightRefreshKey =  this.tableHeightRefreshKey
-      }
       let sub = 70 + this.tablePropertyRef.heightSubVH
       sub += this.headerConfigRef.enable ? 40 : 0
       sub += this.pagerConfigRef.enable ? 40 : 0
-      return `${jsb.clientHeight(sub)}px`
+      const finallyHeight = jsb.clientHeight(sub)
+      if(this.tablePropertyRef.heightCookieKey){
+        Cookies.set(this.tablePropertyRef.heightCookieKey,`${finallyHeight}`)
+      }
+      return `${finallyHeight}px`
     },
   },
   mixins: [

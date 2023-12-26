@@ -57,6 +57,7 @@ export default {
       emptyText: '',
       height: null,
       heightSubVH: 0,
+      heightCookieKey:''
     })
 
     if(this.tablePropertyRef.autoWidth){
