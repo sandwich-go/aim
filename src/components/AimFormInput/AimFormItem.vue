@@ -27,6 +27,7 @@
             v-if="!fs['formButton'] && !fs['formLink']"
             :is="registeredComponentMap[cellName]"
             :data="dataRef"
+            :row="dataRef"
             :field-name="fs.field"
             :options="fs.options || []"
             :style-base="{width:'100%'}"
