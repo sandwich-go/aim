@@ -26,6 +26,7 @@ export default {
     return {
       proxyConfigRef: this.proxyConfig || {},
       rowWatcher:[],
+      queryCount:-1,
     }
   },
   created() {
@@ -286,7 +287,8 @@ export default {
       }
       params = this.addRemoteSortParams(params)
 
-      this.tryPromise('query',{params:params},({resp,error})=>{
+      this.queryCount += 1
+      this.tryPromise('query',{params:params,queryCount:this.queryCount},({resp,error})=>{
         if(resp){
           // 不能直接赋值，vue检测array元素变化存在一些问题
           if(this.isModeInplace()){
