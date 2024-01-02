@@ -51,6 +51,9 @@ function parseOptions(options,strList) {
         if (v.startsWith("t_") || v.startsWith("type_")) {
             options.type = v.substr([v.indexOf('_')+1])
         }
+        if (v.startsWith("e_") || v.startsWith("effect_")) {
+            options.plain = v.substr([v.indexOf('_')+1])==='plain'
+        }
         if (v === "p" || v === "plain") {
             options.plain = true
         }
