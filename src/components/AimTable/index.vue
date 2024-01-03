@@ -888,7 +888,7 @@ export default {
 
     doLayout(freshAutoWidth = false) {
       if (freshAutoWidth && this.tablePropertyRef.autoWidth) {
-        flexColumnWidth(this.schema, this.tableData)
+        flexColumnWidth(this.schema, this.tableData || [])
       }
       this.debug && this.setDebugMessage(`call doLayout`)
       this.$refs.table && this.$refs.table.doLayout()
