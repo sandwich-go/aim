@@ -252,7 +252,7 @@ export default {
     return {
       CodeButtonAdd,
       CodeButtonRowSelectedMinus,
-      labelWidthPixel: this.labelWidth || calcLabelWidth(this.schema),
+      labelWidthPixel: this.labelWidth || calcLabelWidth(this.schema ||[]),
       //fixme 需要table打入rules,独立使用AimFormInput的时候需要根据schema更新rules
       rulesRef: {},
       fieldsCommon: [],
