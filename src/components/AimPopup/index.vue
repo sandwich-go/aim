@@ -126,6 +126,7 @@ export default {
   justify-content: flex-end;
   overflow: hidden;
   position: sticky;
+  top: 0;
   z-index: 100;
 }
 
