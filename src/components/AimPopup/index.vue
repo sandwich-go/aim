@@ -101,8 +101,8 @@ export default {
       close: null,
       customClass: '',
       triggerEventWhenShow:"aim_table_layout",
-      footerStyle:{'padding-right':'6px','padding-top':'9px'},
-      headerStyle:{'padding-right':'6px','padding-bottom':'9px'}
+      footerStyle:{},
+      headerStyle:{}
     })
     if(this.title) {
       this.configData.withHeader = true
@@ -117,7 +117,7 @@ export default {
   justify-content: flex-end;
   overflow: hidden;
   position: sticky;
-  bottom: 6px;
+  bottom: 0;
   z-index: 100;
 }
 .aim-popup >>> .aim-drawer-header {
