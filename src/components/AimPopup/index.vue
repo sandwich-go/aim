@@ -90,7 +90,7 @@ export default {
     this.configData = jsb.objectAssignNX(this.configData, {
       showClose: true,
       withHeader: false,
-      destroyOnClose: false,
+      destroyOnClose: true,
       closeOnPressEscape: true,
       size: '85%',
       direction: "rtl",
