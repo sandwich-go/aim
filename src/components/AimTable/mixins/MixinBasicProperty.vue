@@ -114,6 +114,9 @@ export default {
     cellStyleWrapper({row, column}) {
       const fs = jsb.find(this.schema, fs => fs.field === column.property)
       if (fs && fs['columnStyle']) {
+        if(jsb.isFunction(fs['columnStyle'])){
+          return fs['columnStyle']({row, column, fieldSchema: fs})
+        }
         return fs['columnStyle']
       }
       if (fs && fs['backgroundAsHeader']) {
