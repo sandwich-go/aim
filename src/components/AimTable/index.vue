@@ -374,6 +374,7 @@ import MixinFilter from "@/components/AimTable/mixins/MixinFilter.vue";
 import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 import {exportTable2Excel} from "@/components/AimTable/export/excel";
 import Cookies from "js-cookie";
+import current from "element-ui/packages/table/src/store/current";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -472,6 +473,8 @@ export default {
     rowRemoveShortcut: {type: Boolean, default: false},// 是否显示当行删除快捷方式
     autoQuery: {type: Boolean, default: true},
     radio: Boolean,// 是否支持radio选择
+    radioSyncCurrent: Boolean,
+    selectionSyncCurrent: Boolean,
     formPopupUsingDrawer: {type: Boolean, default: true},
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true，当设定为true时，启用dialog编辑
     onSelectionChange:Function,
@@ -710,6 +713,12 @@ export default {
       this.$emit(EventCurrentRowChange, {row})
       if(this.onCurrentChange){
         this.onCurrentChange({row})
+      }
+      if(this.radioSyncCurrent) {
+        this.radioRowChanged(true,row)
+      }
+      if(this.selectionSyncCurrent) {
+        this.$refs.table.toggleRowSelection(row,!isRowSelected(row))
       }
     },
     // eslint-disable-next-line no-unused-vars

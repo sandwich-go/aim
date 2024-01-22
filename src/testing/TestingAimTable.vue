@@ -414,7 +414,6 @@ export default {
           locked: true,
           placeholder: "xxx.xx",
           tips: "用户名不要携带@centurygame.com后缀",
-          tips_show_icon: true,
           summary: true,
           errorMessage:"test",
           fixed: "left",
