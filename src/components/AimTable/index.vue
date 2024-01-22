@@ -374,7 +374,6 @@ import MixinFilter from "@/components/AimTable/mixins/MixinFilter.vue";
 import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 import {exportTable2Excel} from "@/components/AimTable/export/excel";
 import Cookies from "js-cookie";
-import current from "element-ui/packages/table/src/store/current";
 
 const jsb = require("@sandwich-go/jsb")
 
