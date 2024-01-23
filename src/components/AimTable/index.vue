@@ -647,7 +647,7 @@ export default {
       }
       return false
     },
-    doLayoutByEvent(freshAutoWidth = false) {
+    doLayoutByEvent(freshAutoWidth = true) {
       const _this = this
       _this.$nextTick(() => {
         _this.doLayout(freshAutoWidth)
