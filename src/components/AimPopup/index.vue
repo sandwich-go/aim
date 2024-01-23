@@ -19,7 +19,9 @@
       <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
         <slot name="aim-popup-header"></slot>
       </div>
-      <slot name="aim-popup-body" :style="configData.bodyStyle"></slot>
+      <div :style="configData.bodyStyle">
+        <slot name="aim-popup-body" ></slot>
+      </div>
       <div v-if="configData.footer" class="aim-drawer-footer" :style="configData.footerStyle">
         <slot name="aim-popup-footer"></slot>
       </div>
