@@ -708,6 +708,9 @@ export default {
     // current-change 回调
     currentChange(row) {
       // this.debug && this.setDebugMessage(`currentChange row ${this.summaryRow(row)}`)
+      if(this.currentRow === row){
+        return
+      }
       this.currentRow = row;
       this.$emit(EventCurrentRowChange, {row})
       if(this.onCurrentChange){

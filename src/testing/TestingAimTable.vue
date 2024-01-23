@@ -17,6 +17,7 @@
         :header-config="toolbarConfig()"
         :radio="true"
         :selection="true"
+        :radio-sync-current="true"
         :expand-config="{}"
         :editor-proxy-config="editorProxyConfig"
         :edit-config="editConfig"

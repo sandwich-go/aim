@@ -69,6 +69,9 @@ export default {
     thisTarget() {
       return this
     },
+    getData(){
+      return this.tableData
+    },
     each(visitor){
       jsb.each(this.tableData || [],visitor)
     },
