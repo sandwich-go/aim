@@ -61,6 +61,11 @@
           </template>
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
+        <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="50" align="center">
+          <template slot-scope="scope">
+            <i v-if="scope.row===currentRow" :class="currentIcon"/>
+          </template>
+        </el-table-column>
         <el-table-column v-if="selection"
                          :selectable="selectionEnable"
                          :fixed="inSortIndexEdit?false:'left'"
@@ -371,12 +376,16 @@ import MixinFilter from "@/components/AimTable/mixins/MixinFilter.vue";
 import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 import {exportTable2Excel} from "@/components/AimTable/export/excel";
 import Cookies from "js-cookie";
+import row from "element-ui/packages/row";
 
 const jsb = require("@sandwich-go/jsb")
 
 export default {
   name: "AimTable",
   computed: {
+    row() {
+      return row
+    },
     cellName() {
       return (fs, row) => {
         return cellNameForTable(fs, row, isModeInplace(this.editConfigRef.mode))
@@ -469,6 +478,7 @@ export default {
     rowRemoveShortcut: {type: Boolean, default: false},// 是否显示当行删除快捷方式
     autoQuery: {type: Boolean, default: true},
     radio: Boolean,// 是否支持radio选择
+    currentIcon:String,
     radioSyncCurrent: Boolean,
     selectionSyncCurrent: Boolean,
     formPopupUsingDrawer: {type: Boolean, default: true},
