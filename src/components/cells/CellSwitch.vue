@@ -12,10 +12,12 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import {boolProcess} from "@/components/cells/types";
 export default {
   name: 'CellSwitch',
   mixins: [MixinCellEditorConfig],
   created() {
+    this.data[this.fieldName] = boolProcess(this.data[this.fieldName])
     this.ccConfigMerge({
       activeColor: '#13ce66',
       inactiveColor: '#ff4949',

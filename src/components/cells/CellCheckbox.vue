@@ -13,10 +13,12 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import {boolProcess} from "@/components/cells/types";
 export default {
   name: 'CellCheckbox',
   mixins: [MixinCellEditorConfig],
   created() {
+    this.data[this.fieldName] = boolProcess(this.data[this.fieldName])
     this.ccConfigMerge({
           border: false,
           style: {

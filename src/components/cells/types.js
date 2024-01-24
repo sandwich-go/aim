@@ -248,6 +248,9 @@ export function stringProcess({value}) {
     return  String(value).trim().replace(/^\s+|\s+$/g, '')
 }
 export function boolProcess({value}) {
+    if(jsb.isBoolean(value)){
+        return value
+    }
     const strVal = String(value).toLowerCase()
     return !(value === false || strVal === "false" || strVal === "0" || strVal === "null" || strVal === "undefined" ||jsb.isEmpty(value));
 }
