@@ -73,7 +73,7 @@
           <template slot-scope="scope">
 <!--            <el-checkbox v-model="scope.row[CtrlDataInRowData].selected" @change="(val)=>{radioRowChanged(val,scope.row)}"></el-checkbox>-->
             <el-checkbox :value="scope.row === radioRow"
-                         @change="(val)=>{radioRowChanged(val,scope.row)}"></el-checkbox>
+                         @change="(val)=>{radioRowChanged(scope.row,val)}"></el-checkbox>
           </template>
         </el-table-column>
         <template v-for="(fs,fieldIndex) in schema">
@@ -693,17 +693,19 @@ export default {
         this.onSelectionChange({rows:selectedRows})
       }
     },
-    radioRowChanged(val,row) {
+    radioRowChanged(row,checked=true) {
       this.radioRow = null
       jsb.each(this.tableData,v=>{
         setRowSelected(v,false)
       })
-      this.radioRow = val?row:null
-      setRowSelected(row,val)
+      this.radioRow = checked?row:null
+      if(this.radioRow){
+        setRowSelected(row,checked)
+        this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row),)
+      }
       if(this.onRadioChange){
         this.onRadioChange({row:this.radioRow})
       }
-      this.debug && this.setDebugMessage(`rowSelectionChanged row ${this.summaryRow(row)}`,isRowSelected(row),)
     },
     // current-change 回调
     currentChange(row) {
@@ -717,7 +719,7 @@ export default {
         this.onCurrentChange({row})
       }
       if(this.radioSyncCurrent) {
-        this.radioRowChanged(true,row)
+        this.radioRowChanged(row,true)
       }
       if(this.selectionSyncCurrent) {
         this.$refs.table.toggleRowSelection(row,!isRowSelected(row))

@@ -42,7 +42,9 @@
       <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
         <slot name="aim-popup-header"></slot>
       </div>
-      <slot name="aim-popup-body"></slot>
+      <div :style="configData.bodyStyle">
+        <slot name="aim-popup-body" ></slot>
+      </div>
       <div v-if="configData.footer" slot="footer" class="dialog-footer" :style="configData.footerStyle">
         <slot name="aim-popup-footer"></slot>
       </div>
@@ -104,7 +106,8 @@ export default {
       customClass: '',
       triggerEventWhenShow:"aim_table_layout",
       footerStyle:{},
-      headerStyle:{}
+      headerStyle:{},
+      bodyStyle:{},
     })
     if(this.title) {
       this.configData.withHeader = true
