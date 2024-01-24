@@ -838,7 +838,7 @@ export default {
           this.toastWarning(`code ${code} no handler`)
       }
     },
-    addRow({initRow, isCopy} = {initRow: {}, isCopy: false}) {
+    addRow({initRow, isCopy,editor} = {initRow: {}, isCopy: false,editor:true}) {
       if (jsb.eqNull(this.tableData)) {
         this.tableData = []
       }
@@ -851,12 +851,16 @@ export default {
       this.currentRow = newRow
       this.updateRowInEdit(newRow)
 
-      if (this.isModeInplace()) {
-        // inplace编辑模式
+      if(editor){
+        if (this.isModeInplace()) {
+          // inplace编辑模式
+          this.tableData.push(newRow)
+        } else {
+          // form 表单编辑逻辑
+          this.showFormEditorForRow(newRow)
+        }
+      }else{
         this.tableData.push(newRow)
-      } else {
-        // form 表单编辑逻辑
-        this.showFormEditorForRow(newRow)
       }
     },
     rowFormEditorClose() {
