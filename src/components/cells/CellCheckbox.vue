@@ -18,7 +18,7 @@ export default {
   name: 'CellCheckbox',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.data[this.fieldName] = boolProcess(this.data[this.fieldName])
+    this.data[this.fieldName] = boolProcess({value:this.data[this.fieldName]})
     this.ccConfigMerge({
           border: false,
           style: {

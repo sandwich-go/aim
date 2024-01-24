@@ -17,7 +17,7 @@ export default {
   name: 'CellSwitch',
   mixins: [MixinCellEditorConfig],
   created() {
-    this.data[this.fieldName] = boolProcess(this.data[this.fieldName])
+    this.data[this.fieldName] = boolProcess({value:this.data[this.fieldName]})
     this.ccConfigMerge({
       activeColor: '#13ce66',
       inactiveColor: '#ff4949',
