@@ -10,7 +10,7 @@
         :value-key="optionValueKey"
         default-first-option
         :disabled="disabled"
-        clearable
+        :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
         @change="change">
       <el-option v-for="val in optionsUsing"
                  :value="val.value"

@@ -4,7 +4,7 @@
         :style="cc.style"
         v-model="dataRef[fieldName]"
         :disabled="disabled"
-        clearable
+        :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
         :loading="inOptionLoading"
         size="mini"
         :value-key="optionValueKey"

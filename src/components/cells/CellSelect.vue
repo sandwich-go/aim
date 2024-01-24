@@ -12,7 +12,7 @@
           :loading="inOptionLoading"
           :value-key="optionValueKey"
           size="mini"
-          clearable
+          :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
           @change="change">
         <el-option
             v-for="option in optionsUsing"
