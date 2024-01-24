@@ -103,10 +103,7 @@
               <el-link
                   v-for="(link,index) in fs['headerLinkList']"
                   :key="index"
-                  @click="(event)=>{
-                    event.stopPropagation();
-                    link.click({tableData:tableData,event:event})
-                  }"
+                  @click="(event)=>headerLinkClick(event,link,fs)"
                   v-bind="link">
                 <span v-if="link.label">{{link.label}}</span>
               </el-link>
@@ -898,7 +895,23 @@ export default {
       }
       return this.shouldCellDisable({table: this.tableData, code, cell, row, fieldSchema})
     },
-
+    headerLinkClick(event,link,fs){
+      event.stopPropagation();
+      if(jsb.isString(link.click)){
+        if(link.click.toUpperCase() === 'CASE_SWITCH') {
+          const firstKey = String(jsb.pathGet(this.tableData, `0.${fs.field}`, ""))
+          const isUpper = firstKey === firstKey.toUpperCase()
+          jsb.each(this.tableData, v => {
+            if(v[fs.field]){
+              v[fs.field] = isUpper ? String(v[fs.field]).toLowerCase() : String(v[fs.field]).toUpperCase()
+            }
+          })
+        }
+        this.toastWarning(`click code ${link.click} not supported`)
+        return
+      }
+      link.click({tableData:this.tableData,event:event})
+    },
     doLayout(freshAutoWidth = false) {
       if (freshAutoWidth && this.tablePropertyRef.autoWidth) {
         flexColumnWidth(this.schema, this.tableData || [])
