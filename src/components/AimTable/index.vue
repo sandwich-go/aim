@@ -906,6 +906,7 @@ export default {
               v[fs.field] = isUpper ? String(v[fs.field]).toLowerCase() : String(v[fs.field]).toUpperCase()
             }
           })
+          return
         }
         this.toastWarning(`click code ${link.click} not supported`)
         return
