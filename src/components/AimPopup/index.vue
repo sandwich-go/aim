@@ -4,7 +4,6 @@
         v-if="drawer"
         modal
         ref="aimPopupDrawer"
-        :title="title"
         :show-close="configData.showClose"
         :with-header="configData.withHeader"
         :destroy-on-close="configData.destroyOnClose"
@@ -16,6 +15,9 @@
         :custom-class="configData.customClass"
         @close="close"
         :direction="configData.direction">
+      <template v-slot:title>
+        <div v-if="title" v-html="title"></div>
+      </template>
       <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
         <slot name="aim-popup-header"></slot>
       </div>
@@ -30,7 +32,6 @@
         v-else
         modal
         ref="aimPopupDialog"
-        :title="title"
         :before-close="configData.beforeClose"
         :custom-class="configData.customClass"
         :width="configData.width || configData.size"
@@ -39,6 +40,9 @@
         :destroy-on-close="configData.destroyOnClose"
         @close="close"
         :visible.sync="isShowPopup">
+      <template v-slot:title>
+        <div v-if="title" v-html="title"></div>
+      </template>
       <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
         <slot name="aim-popup-header"></slot>
       </div>
