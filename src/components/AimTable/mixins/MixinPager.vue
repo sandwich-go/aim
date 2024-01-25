@@ -12,7 +12,7 @@ export default {
       pagerConfigRef: this.pagerConfig ||{enable:false},
       PagerTotal: 0,
       PagerAutoGenPage: 0,
-      PagerAutoGenSize: 30,
+      PagerAutoGenSize: jsb.ccPath('aimTablePagerSize', 20),
       PagerFreshFunc: null,
     }
   },
