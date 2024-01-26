@@ -1,18 +1,20 @@
 <template>
-  <aim-table-ex
+  <aim-table
       v-if="tableDataProxy"
+      ref="aimTable"
       :proxy-config="tableDataProxy"
       :header-config="{rightCells:['btnAdd']}"
+      :code-item-click="aimHandler"
       :schema="schema"/>
 </template>
 <script>
 import {getEvnVarsField} from "@/testing/testing";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
-import AimTableEx from "@/testing/AimTableEx.vue";
+import AimTable from "@/components/AimTable/index.vue";
 
 export default {
   name:'TestingEnvTable',
-  components: {AimTableEx},
+  components: {AimTable},
   data(){
     return {
       newEnvTable:false,
@@ -27,6 +29,13 @@ export default {
   created() {
     this.tableDataProxy = newLocalDataProxyWithFieldName(this,'tableData')
   },
-  methods:{}
+  methods:{
+    aimHandler(){
+      this.$refs.aimTable.setInLoading(true,true)
+      setTimeout(()=>{
+        this.$refs.aimTable.setInLoading(false,true)
+      },1000)
+    }
+  }
 }
 </script>

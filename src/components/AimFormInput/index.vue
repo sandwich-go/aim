@@ -353,10 +353,10 @@ export default {
 
         const itemType = _this.fieldType(fs)
         // 如果是object类型，在传递进 FormInput 组件前需要给默认值
-        if (itemType === 'object' && jsb.isEmpty(_this.dataRef[fs.field])) {
+        if (itemType === 'object' && ((jsb.isNull(_this.dataRef[fs.field])) || jsb.isUndefined(_this.dataRef[fs.field]))) {
           _this.dataRef[fs.field] = {}
         }
-        if ((itemType === 'table' && jsb.isEmpty(_this.dataRef[fs.field]))) {
+        if (itemType === 'table' && ((jsb.isNull(_this.dataRef[fs.field])) || jsb.isUndefined(_this.dataRef[fs.field]))) {
           _this.dataRef[fs.field] = []
         }
         const watch = jsb.pathGet(fs,'watch')
