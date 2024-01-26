@@ -82,14 +82,14 @@ export default {
       if(inLoading){
         if(tryForm && this.$refs.aimFormInput){
           // tryForm时如果 form 存在则只设定 form
-          // this.$refs.aimFormInput.setInLoading(inLoading)
-          // return
+          this.$refs.aimFormInput.setInLoading(inLoading)
+          return
         }
         this.inLoading = inLoading
       }else{
         // 设定为 false 时都尝试一次
         this.inLoading = false
-        // this.$refs.aimFormInput && this.$refs.aimFormInput.setInLoading(false)
+        this.$refs.aimFormInput && this.$refs.aimFormInput.setInLoading(false)
       }
     },
     setLoading(inLoading,tryForm=false){
