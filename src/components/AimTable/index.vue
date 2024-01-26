@@ -237,9 +237,9 @@
       </template>
       <template v-slot:aim-popup-body>
         <aim-form-input
+            v-if="rowInEditForm && rowFormEditorVisible"
             style="padding-right: 9px"
             ref="aimFormInput"
-            v-if="rowInEditForm && rowFormEditorVisible"
             :key="xidRow(rowInEditForm)"
             :schema="validSchema(schema)"
             :group-config="groupConfig"

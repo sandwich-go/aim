@@ -78,11 +78,22 @@ export default {
     eachSelected(visitor,clean=false){
       jsb.each(this.getSelectionRows(clean),visitor)
     },
-    setInLoading(inLoading){
-      this.inLoading = inLoading
+    setInLoading(inLoading,tryForm=false){
+      if(inLoading){
+        if(tryForm && this.$refs.aimFormInput){
+          // tryForm时如果 form 存在则只设定 form
+          this.$refs.aimFormInput.setInLoading(inLoading)
+          return
+        }
+        this.inLoading = inLoading
+      }else{
+        // 设定为 false 时都尝试一次
+        this.inLoading = false
+        this.$refs.aimFormInput && this.$refs.aimFormInput.setInLoading(false)
+      }
     },
-    setLoading(inLoading){
-      this.inLoading = inLoading
+    setLoading(inLoading,tryForm=false){
+      this.setInLoading(inLoading,tryForm)
     },
     summaryRow(row) {
       let info = [`xid(${xidRow(row)})`]

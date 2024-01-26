@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import TestingAimFormInput from "@/testing/TestingAimFormInput.vue";
-import TestingAimTable from "@/testing/TestingAimTable.vue";
 import TestingEnvTable from "@/testing/TestingEnvTable.vue";
+import TestingAimTable from "@/testing/TestingAimTable.vue";
+import TestingAimFormInput from "@/testing/TestingAimFormInput.vue";
 export default {
   name: "TestingEntry",
-  components: {TestingEnvTable, TestingAimTable, TestingAimFormInput},
+  components: {TestingAimFormInput, TestingAimTable, TestingEnvTable},
   data(){
     return {
-      activeName:'AimTable',
+      activeName:'BugEnvTable',
     }
   }
 }
