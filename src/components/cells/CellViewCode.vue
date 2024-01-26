@@ -17,7 +17,7 @@ import jsb from "@sandwich-go/jsb";
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
 
 export default {
-  name: "CellViewHTML",
+  name: "CellViewCode",
   components: {AimCodeMirror},
   mixins: [MixinCellViewConfig],
   created() {
