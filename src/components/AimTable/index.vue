@@ -848,7 +848,10 @@ export default {
           this.toastWarning(`code ${code} no handler`)
       }
     },
-    addRow({initRow, isCopy,editor} = {initRow: {}, isCopy: false,editor:true}) {
+    addRow({initRow, isCopy,editor} = {}) {
+      initRow = initRow || {}
+      isCopy = jsb.isUndefined(isCopy)?false:isCopy
+      editor = editor || true
       if (jsb.eqNull(this.tableData)) {
         this.tableData = []
       }
