@@ -19,7 +19,7 @@
     <div style="position: relative">
       <template v-if="codeLatest">
         <el-button
-            v-if="lintSupport()"
+            v-if="lintSupport() && !disableLint"
             icon="el-icon-magic-stick"
             type="info"
             plain
@@ -27,6 +27,7 @@
             size="mini" @click="formatCode()">
         </el-button>
         <el-button
+            v-if="!disableCopy"
             icon="el-icon-document-copy"
             type="info"
             plain
@@ -169,6 +170,8 @@ export default {
     infoConfig: Object,
     code: String,
     proxyConfig: Object,
+    disableCopy:Boolean,
+    disableLint:Boolean,
     codeChange: {
       type: Function,
       // eslint-disable-next-line no-unused-vars

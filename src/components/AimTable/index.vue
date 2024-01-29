@@ -925,6 +925,15 @@ export default {
           })
           return
         }
+        if(link.click.toUpperCase() === 'TYPE_SWITCH') {
+          jsb.each(jsb.pathGet(link,'types',[fs.type]),v=>{
+            if(v===fs.type){
+              return
+            }
+            fs.type = v
+          })
+          return
+        }
         this.toastWarning(`click code ${link.click} not supported`)
         return
       }
