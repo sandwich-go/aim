@@ -46,6 +46,9 @@ export default {
           // Detail see : https://github.com/RubaXa/Sortable/issues/1012
           dataTransfer.setData('Text', '')
         },
+        onMove: function() {
+          return true
+        },
         onEnd: evt => {
           const targetRow = _this.tableData.splice(evt.oldIndex, 1)[0]
           _this.tableData.splice(evt.newIndex, 0, targetRow)
@@ -56,3 +59,6 @@ export default {
   }
 }
 </script>
+
+
+

@@ -932,6 +932,12 @@ export default {
             }
             fs.type = v
           })
+          const onTypeChange = jsb.pathGet(link,'onTypeChange')
+          if (onTypeChange){
+            onTypeChange(fs.type)
+          }
+          // 刷新类型后占用的高度可能发生变化
+          this.doLayoutByEvent(true)
           return
         }
         this.toastWarning(`click code ${link.click} not supported`)
