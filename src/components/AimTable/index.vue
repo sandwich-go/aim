@@ -947,7 +947,7 @@ export default {
           // 变化后设定 cookie
           const typeCookieKey = jsb.pathGet(link,'typeCookieKey')
           if(typeCookieKey) {
-            Cookies.set('typeCookieKey',fs.type)
+            Cookies.set(typeCookieKey,fs.type)
           }
           // 变化后通知逻辑层
           const onTypeChange = jsb.pathGet(link,'onTypeChange')
