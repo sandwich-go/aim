@@ -29,8 +29,8 @@ function  tag(item){
 export function wrapAsTagList(val, options) {
     let tagList = []
     for (const v of jsb.wrapArray(val)) {
-        if (jsb.isPlainObject(val)) {
-            tagList.push(val)
+        if (jsb.isPlainObject(v)) {
+            tagList.push(v)
             continue
         }
         let found = false
