@@ -303,17 +303,20 @@
 
 <script>
 import {
+  aimTableError,
+  aimTableLog,
+  aimTableWarn,
+  copyRow,
+  CtrlDataInRowData,
+  EditModeInplace,
   EditTriggerManual,
   EventCurrentRowChange,
-  xidRow,
   isModeInplace,
-  EditModeInplace,
-  copyRow,
-  aimTableWarn,
-  aimTableLog,
+  isRowSelected,
+  mustCtrlData,
   rowFormEditorTitle,
-  aimTableError,
-  mustCtrlData, setRowSelected, CtrlDataInRowData, isRowSelected
+  setRowSelected,
+  xidRow
 } from "@/components/AimTable/table";
 import {filterVirtualField,} from "@/components/AimTable/virtual_field";
 import MixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
@@ -322,20 +325,27 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
 import {
-  CodeButtonAdd, CodeButtonDebug,
-  CodeButtonExpandAll, CodeButtonExportToExcel, CodeButtonFilterSearch,
+  CodeButtonAdd,
+  CodeButtonDebug,
+  CodeButtonExpandAll,
+  CodeButtonExportToExcel,
+  CodeButtonFilterSearch,
   CodeButtonRefresh,
   CodeButtonRowClose,
   CodeButtonRowCopy,
   CodeButtonRowDelete,
   CodeButtonRowEdit,
-  CodeButtonRowMinus, CodeButtonRowSave,
+  CodeButtonRowMinus,
+  CodeButtonRowSave,
   CodeButtonRowSelectedClose,
   CodeButtonRowSelectedDelete,
   CodeButtonRowSelectedMinus,
-  CodeButtonSaveTableData, CodeButtonSortIndex,
+  CodeButtonSaveTableData,
+  CodeButtonSortIndex,
   CodeButtonTableSetting,
-  CodeLinkFieldCopy, CodeLinkFilterSearch, CodeLinkFilterSearchClose
+  CodeLinkFieldCopy,
+  CodeLinkFilterSearch,
+  CodeLinkFilterSearchClose
 } from "@/components/cells/const";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {directionToolbarSpan} from "@/components/AimTable/toolbar";
@@ -353,14 +363,17 @@ import MixinState from "@/components/AimTable/mixins/MixinState.vue";
 import CellList from "@/components/cells/CellList.vue";
 import {
   cellConfigForTable,
-  cellShowWhenLostForTable,
   cellNameForTable,
+  cellShowWhenLostForTable,
   formatterFunction
 } from "@/components/AimTable/cell";
 import {
   allSlotName,
-  commentSlotName, formSlotName,
-  getProxyCommentSlotName, getProxyCommentSlotNameWithName, getProxyFormSlotName,
+  commentSlotName,
+  formSlotName,
+  getProxyCommentSlotName,
+  getProxyCommentSlotNameWithName,
+  getProxyFormSlotName,
   getProxySlotName,
   getProxyTipSlotName,
   tipSlotName
@@ -926,12 +939,17 @@ export default {
           return
         }
         if(link.click.toUpperCase() === 'TYPE_SWITCH') {
-          jsb.each(jsb.pathGet(link,'types',[fs.type]),v=>{
-            if(v===fs.type){
-              return
-            }
-            fs.type = v
-          })
+          const oldType = fs.type
+          fs.type = jsb.find(jsb.pathGet(link, 'types', [fs.type]), v => v !== fs.type)
+          if(!fs.type){
+            fs.type = oldType
+          }
+          // 变化后设定 cookie
+          const typeCookieKey = jsb.pathGet(link,'typeCacheKey')
+          if(typeCookieKey) {
+            Cookies.set('typeCookieKey',fs.type)
+          }
+          // 变化后通知逻辑层
           const onTypeChange = jsb.pathGet(link,'onTypeChange')
           if (onTypeChange){
             onTypeChange(fs.type)
@@ -1038,4 +1056,4 @@ export default {
 .el-table .aim-danger-row {
   background:#fbe5e1;
 }
-</style>
+  </style>

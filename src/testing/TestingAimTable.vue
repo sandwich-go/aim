@@ -404,7 +404,14 @@ export default {
         {
           field: 'id', name: 'ID',
           headerLinkList:[
-            {icon:'el-icon-magic-stick',click:()=>{jsb.cc.toastWarning('toast')}}
+            {icon:'el-icon-magic-stick',click:()=>{jsb.cc.toastWarning('toast')}},
+            {
+              'icon': 'el-icon-more',
+              'style': {'padding-left': '9px'},
+              underline: false,
+              click:'TYPE_SWITCH',
+              types:['html_popup','html'],
+            }
           ],
           showTemplate:false,
           type: 'input',
