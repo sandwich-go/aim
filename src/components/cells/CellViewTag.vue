@@ -11,7 +11,8 @@
                     @click.native="function(){ item.click && item.click()}"
                     :type="item.type || item.tagType || 'info'"
                     :effect="item.effect|| item.tagEffect || 'light'">
-                    {{ item.label }}
+                  <span v-if="item.isHTML || cc.isHTML" v-html="item.label"/>
+                  <span v-else>{{ item.label }}</span>
                 </el-tag>
             </el-tooltip>
             <el-tag
@@ -22,7 +23,8 @@
                 @click.native="function(){ item.click && item.click()}"
                 :type="item.type || item.tagType || 'info'"
                 :effect="item.effect|| item.tagEffect || 'light'">
-                {{ item.label }}
+              <span v-if="item.isHTML || cc.isHTML" v-html="item.label"/>
+              <span v-else>{{ item.label }}</span>
             </el-tag>
           </template>
         </template>
