@@ -945,7 +945,7 @@ export default {
             fs.type = oldType
           }
           // 变化后设定 cookie
-          const typeCookieKey = jsb.pathGet(link,'typeCacheKey')
+          const typeCookieKey = jsb.pathGet(link,'typeCookieKey')
           if(typeCookieKey) {
             Cookies.set('typeCookieKey',fs.type)
           }
