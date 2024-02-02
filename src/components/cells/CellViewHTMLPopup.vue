@@ -3,7 +3,7 @@
     <span v-if="isPlainHTML" v-html="htmlContent"></span>
     <el-popover v-else trigger="hover">
       <span v-html="htmlContent"></span>
-      <el-button slot="reference" size="mini"><i class="el-icon-document"/></el-button>
+      <el-link slot="reference" size="mini" icon="el-icon-document"></el-link>
     </el-popover>
   </div>
 </template>

@@ -6,7 +6,7 @@
           :popup-append-to-body="true"
           v-bind="cc.codeMirror"
       ></aim-code-mirror>
-      <el-button slot="reference" size="mini"><i class="el-icon-document"/></el-button>
+      <el-link slot="reference" size="mini" icon="el-icon-document"></el-link>
     </el-popover>
   </div>
 </template>

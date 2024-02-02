@@ -639,14 +639,12 @@ export default {
           field: 'Tag',
           //min_width: 180,
           name: 'Tag',
-          type: 'select',
           sortable: true,
           align: 'center',
           summary: true,
           cellForm: 'CellSelectInput',
-          options: [
-            {label: "g1", value: "g1",tooltip:"tooltip"}, {label: "g2", value: "g2",tooltip:"tooltip g2"}
-          ]
+          cell:'CellViewTag',
+          formatter:()=>{return "test"}
         },
 
         {
