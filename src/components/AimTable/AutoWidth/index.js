@@ -85,7 +85,8 @@ export function flexColumnWidth(schema,tableData) {
         // shortcut 14宽度+ 3 padding
         fieldSchema.min_width_dynamic = contentWidth + jsb.size(fieldSchema.shortcuts || {}) * 20
         if(fieldSchema.max_width && fieldSchema.min_width_dynamic > fieldSchema.max_width){
-            fieldSchema.min_width_dynamic = fieldSchema.max_width
+            // 如果设定了最大宽度且当前计算的动态宽度已大于最大宽度则限定 width
+            fieldSchema.width = fieldSchema.max_width
         }
     })
 }
