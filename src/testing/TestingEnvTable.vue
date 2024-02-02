@@ -3,6 +3,7 @@
       v-if="tableDataProxy"
       ref="aimTable"
       :proxy-config="tableDataProxy"
+      :table-property="{autoWidth:true}"
       :header-config="{rightCells:['btnAdd']}"
       :code-item-click="aimHandler"
       :schema="schema"/>
@@ -18,10 +19,11 @@ export default {
   data(){
     return {
       newEnvTable:false,
-      tableData:[],
+      tableData:[{name:"test",val:['btn@btnRowEdit@l_编辑','btn@btnRowDelete@l_删除', 'btn@btnRowHistory@l_历史@t_success@i_el-icon-date','btn@btnRowEdit@l_编辑','btn@btnRowDelete@l_删除', 'btn@btnRowHistory@l_历史@t_success@i_el-icon-date']}],
       tableDataProxy:null,
       schema:[
         {field:"name",name:'Name'},
+        {field:"val",name:'Value',type:'select_multiple'},
         getEvnVarsField(),
       ]
     }
