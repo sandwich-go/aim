@@ -59,11 +59,18 @@ export function flexColumnWidth(schema,tableData) {
         let headerTextWidth = jsb.textWidth(fieldSchema.name) + 20
         const headerWidth = headerTextWidth + headerExtraWidth
         const minWidth = minWidthTableColumn(fieldSchema.type)
-        const arr = tableData.map(x => x[fieldSchema.field])
-        jsb.remove(arr, item => jsb.isEmpty(item))
 
+        const valueToString = fieldSchema['valueToString']
+        const arr = tableData.map(x =>{
+            if(valueToString){
+                return valueToString(x[fieldSchema.field])
+            }
+            return String(x[fieldSchema.field])
+        })
+        const isHTML = fieldSchema.type === "html" || fieldSchema.cell === "CellViewHTML"
+        jsb.remove(arr, item => jsb.isEmpty(item))
         let contentWidth = 0
-        if (fieldSchema.type === "html" || fieldSchema.cell === "CellViewHTML") {
+        if (isHTML) {
             // 页面创建过程中，浏览器可能还没有完成对 HTML 内容的渲染和布局，无法获取html宽度
             contentWidth = await jsb.longestHTMLWidth(arr)
         } else {
