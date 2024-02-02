@@ -88,7 +88,7 @@
               :prop="fs.field"
               :class-name="columnClass(fs)"
               :width="fs.width"
-              :min-width="fs.min_width"
+              :min-width="fs.min_width || fs.min_width_dynamic"
               :show-overflow-tooltip="fs.showOverflowTooltip"
               :label="fs.name"
               :fixed="inSortIndexEdit?false:fs.fixed"
