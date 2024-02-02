@@ -526,12 +526,12 @@ export default {
 
   beforeDestroy() {
     if (this.onEventDoLayout && jsb.cc.emitter) {
-      jsb.cc.emitter.off(this.onEventDoLayout, this.doLayoutByEvent)
+      jsb.cc.emitter.off(this.onEventDoLayout, this.doLayoutNextTick)
     }
   },
   created() {
     if (this.onEventDoLayout && jsb.cc.emitter) {
-      jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutByEvent)
+      jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutNextTick)
     }
     this.tableData = this.processTableData(this.tableData)
     if (this.autoQuery) {
@@ -624,7 +624,7 @@ export default {
           delete fs.max_width
         }
       })
-      this.doLayoutByEvent(true)
+      this.doLayoutNextTick(true)
     },
     commentSlotName,
     getProxyCommentSlotNameWithName,
@@ -666,7 +666,7 @@ export default {
       }
       return false
     },
-    doLayoutByEvent(freshAutoWidth = true) {
+    doLayoutNextTick(freshAutoWidth = true) {
       const _this = this
       _this.$nextTick(() => {
         _this.doLayout(freshAutoWidth)
@@ -954,7 +954,7 @@ export default {
             onTypeChange(fs.type)
           }
           // 刷新类型后占用的高度可能发生变化
-          this.doLayoutByEvent(true)
+          this.doLayoutNextTick(true)
           return
         }
         this.toastWarning(`click code ${link.click} not supported`)

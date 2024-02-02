@@ -1215,10 +1215,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@sandwich-go/jsb@0.1.129":
-  version "0.1.129"
-  resolved "https://registry.yarnpkg.com/@sandwich-go/jsb/-/jsb-0.1.129.tgz#57d535cba66fe9dfdf5d30b5ed79a288f10a0ba6"
-  integrity sha512-JNWLHml0iFoTrxjACnX2mgqHkFagcIgsmMnGMwxptsRXfGp82vjmBvd+oznV6j5o++OWtyEvRhS1kfmztcbhZQ==
+"@sandwich-go/jsb@0.1.131":
+  version "0.1.131"
+  resolved "https://registry.yarnpkg.com/@sandwich-go/jsb/-/jsb-0.1.131.tgz#a347cd1aa52794c78e2a71bd8dd4de98bfd62561"
+  integrity sha512-RzPdUP/W4CJImnxY+jFdBGhNi75tmE9x9WKcOEsrXECIMDnvtLG+Whjs1D6tW8+DiZ1t7bjbHDYCgNo5pMfieA==
   dependencies:
     buffer "^6.0.3"
     clipboard "^2.0.11"

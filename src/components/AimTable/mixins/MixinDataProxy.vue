@@ -309,7 +309,7 @@ export default {
           if(!hasFilter && !this.pagerConfigRef.enable && this.PagerTotal > this.tableData.length){
             this.toastWarning(`未激活分页模式，获取到 ${this.tableData.length} 行数据，总数据行数 ${this.PagerTotal}`)
           }
-          this.doLayout(true)
+          this.doLayoutNextTick(true)
         }
         done && done({error})
       })
