@@ -45,6 +45,17 @@
           :row-key="xidRow"
           @selection-change="selectionChange"
       >
+
+        <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="40" align="center" fixed="left">
+          <template v-if="currentIconHeaderIcon" slot="header">
+            <i :class="currentIconHeaderIcon"/>
+          </template>
+          <template slot-scope="scope">
+            <i v-if="scope.row===currentRow" :class="currentIcon"/>
+          </template>
+        </el-table-column>
+
+
         <el-table-column v-if="expandConfig" type="expand" key="aim-table-column-expand" width="30"
                          class-name="aim-column-fixed-width" :fixed="inSortIndexEdit?false:'left'">
           <template slot-scope="scope">
@@ -52,6 +63,7 @@
                            :row="scope.row"></column-expand>
           </template>
         </el-table-column>
+
         <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:'left'" align="center" width="40"
                          class-name="aim-column-fixed-width">
           <template slot-scope="{}" slot="header">
@@ -62,23 +74,22 @@
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
 
-        <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="40" align="center">
+        <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="40" align="center"
+                         class-name="aim-column-fixed-width" fixed="left">
+          <template v-if="rowTooltipHeaderIcon" slot="header">
+            <i :class="rowTooltipHeaderIcon"/>
+          </template>
           <template slot-scope="scope">
             <div style="display:none;">{{rowTooltipVal = getRowTooltip(scope.row)}}</div>
-            <el-tooltip v-if="rowTooltipVal" effect="light" placement="top-start">
+            <el-tooltip v-if="rowTooltipVal" v-bind="rowTooltipVal.tooltip">
               <template slot="content">
-                <span v-html='rowTooltipVal.tooltip'></span>
+                <span v-html='rowTooltipVal.content'></span>
               </template>
               <i v-bind="rowTooltipVal.icon"/>
             </el-tooltip>
           </template>
         </el-table-column>
 
-        <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="40" align="center">
-          <template slot-scope="scope">
-            <i v-if="scope.row===currentRow" :class="currentIcon"/>
-          </template>
-        </el-table-column>
         <el-table-column v-if="selection"
                          :selectable="selectionEnable"
                          :fixed="inSortIndexEdit?false:'left'"
@@ -101,7 +112,7 @@
               :prop="fs.field"
               :class-name="columnClass(fs)"
               :width="fs.width"
-              :min-width="fs.min_width || fs.min_width_dynamic"
+              :min-width="fs.min_width_dynamic ||fs.min_width"
               :show-overflow-tooltip="fs.showOverflowTooltip"
               :label="fs.name"
               :fixed="inSortIndexEdit?false:fs.fixed"
@@ -504,6 +515,8 @@ export default {
     autoQuery: {type: Boolean, default: true},
     radio: Boolean,// 是否支持radio选择
     currentIcon:String,
+    currentIconHeaderIcon:String,
+    rowTooltipHeaderIcon:String,
     rowTooltip:Function,
     radioSyncCurrent: Boolean,
     selectionSyncCurrent: Boolean,
@@ -707,8 +720,8 @@ export default {
       if(jsb.isString(ret)){
         ret = {tooltip:ret}
       }
-      if(jsb.isString(ret.tooltip)){
-        ret.tooltip = {content:ret.tooltip,placement:'top-start',effect:'light'}
+      if(jsb.isString(ret.content)){
+        ret.tooltip = {content:ret.content,placement:'top-start',effect:'light'}
       }
       ret.icon = ret.icon || {class:'el-icon-info'}
       return ret
