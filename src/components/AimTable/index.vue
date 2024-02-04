@@ -697,12 +697,12 @@ export default {
       }
       return false
     },
-    doLayoutNextTick(freshAutoWidth = true) {
+    doLayoutNextTick(forceFreshAutoWidth = false) {
       const _this = this
       _this.$nextTick(() => {
-        _this.doLayout(freshAutoWidth)
+        _this.doLayout(forceFreshAutoWidth)
         setTimeout(function () {
-          _this.doLayout(freshAutoWidth)
+          _this.doLayout(forceFreshAutoWidth)
         }, 50)
       })
     },
@@ -1010,9 +1010,9 @@ export default {
       }
       link.click({tableData:this.tableData,event:event})
     },
-    doLayout(freshAutoWidth = false) {
-      if (freshAutoWidth && this.tablePropertyRef.autoWidth) {
-        flexColumnWidth(this.schema, this.tableData || [])
+    doLayout(forceFreshAutoWidth = false) {
+      if (this.tablePropertyRef.autoWidth) {
+        flexColumnWidth(this.schema, this.tableData || [],forceFreshAutoWidth)
       }
       this.debug && this.setDebugMessage(`call doLayout`)
       this.$refs.table && this.$refs.table.doLayout()
