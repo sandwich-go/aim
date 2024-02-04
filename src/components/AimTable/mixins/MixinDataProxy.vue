@@ -297,8 +297,9 @@ export default {
             this.processTableData(this.tableData)
           }else{
             this.tableData = []
+            const _this = this
             jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')),(item)=>{
-              this.tableData.push(item)
+              _this.tableData.push(item)
             })
           }
           this.PagerTotal = jsb.pathGet(resp, 'PagerTotal')
