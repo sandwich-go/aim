@@ -65,8 +65,11 @@
         <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="40" align="center">
           <template slot-scope="scope">
             <div style="display:none;">{{rowTooltipVal = getRowTooltip(scope.row)}}</div>
-            <el-tooltip v-if="rowTooltipVal" effect="light" :content="rowTooltipVal.tooltip" placement="top-start">
-              <i :class="rowTooltipVal.icon"/>
+            <el-tooltip v-if="rowTooltipVal" effect="light" placement="top-start">
+              <template slot="content">
+                <span v-html='rowTooltipVal.tooltip'></span>
+              </template>
+              <i v-bind="rowTooltipVal.icon"/>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -697,14 +700,17 @@ export default {
       if(!this.rowTooltip){
         return null
       }
-      const ret = this.rowTooltip(row)
+      let ret = this.rowTooltip(row)
       if(!ret){
         return null
       }
       if(jsb.isString(ret)){
-        return {tooltip:ret,icon:'el-icon-info'}
+        ret = {tooltip:ret}
       }
-      ret.icon = ret.icon || 'el-icon-info'
+      if(jsb.isString(ret.tooltip)){
+        ret.tooltip = {content:ret.tooltip,placement:'top-start',effect:'light'}
+      }
+      ret.icon = ret.icon || {class:'el-icon-info'}
       return ret
     },
     fieldShow(fs) {
