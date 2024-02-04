@@ -16,6 +16,7 @@
         :should-cell-hide="shouldCellHide"
         :header-config="toolbarConfig()"
         :radio="true"
+        :row-tooltip="()=>{return '1111'}"
         :selection="true"
         current-icon="el-icon-right"
         :radio-sync-current="true"

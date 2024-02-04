@@ -52,7 +52,7 @@
                            :row="scope.row"></column-expand>
           </template>
         </el-table-column>
-        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:'left'" align="center" width="50"
+        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:'left'" align="center" width="40"
                          class-name="aim-column-fixed-width">
           <template slot-scope="{}" slot="header">
             <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
@@ -61,7 +61,17 @@
           </template>
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
-        <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="50" align="center">
+
+        <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="40" align="center">
+          <template slot-scope="scope">
+            <div style="display:none;">{{rowTooltipVal = getRowTooltip(scope.row)}}</div>
+            <el-tooltip v-if="rowTooltipVal" effect="light" :content="rowTooltipVal.tooltip" placement="top-start">
+              <i :class="rowTooltipVal.icon"/>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
+        <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="40" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row===currentRow" :class="currentIcon"/>
           </template>
@@ -74,7 +84,7 @@
                          type="selection"
                          align="center"
         />
-        <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="50" align="center">
+        <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="40" align="center">
           <template slot-scope="scope">
 <!--            <el-checkbox v-model="scope.row[CtrlDataInRowData].selected" @change="(val)=>{radioRowChanged(val,scope.row)}"></el-checkbox>-->
             <el-checkbox :value="scope.row === radioRow"
@@ -491,6 +501,7 @@ export default {
     autoQuery: {type: Boolean, default: true},
     radio: Boolean,// 是否支持radio选择
     currentIcon:String,
+    rowTooltip:Function,
     radioSyncCurrent: Boolean,
     selectionSyncCurrent: Boolean,
     formPopupUsingDrawer: {type: Boolean, default: true},
@@ -681,6 +692,20 @@ export default {
     },
     setDebugMessage(title, msg = '') {
       aimTableLog(title, msg)
+    },
+    getRowTooltip(row){
+      if(!this.rowTooltip){
+        return null
+      }
+      const ret = this.rowTooltip(row)
+      if(!ret){
+        return null
+      }
+      if(jsb.isString(ret)){
+        return {tooltip:ret,icon:'el-icon-info'}
+      }
+      ret.icon = ret.icon || 'el-icon-info'
+      return ret
     },
     fieldShow(fs) {
       const show = jsb.pathGet(fs, 'show', true)
