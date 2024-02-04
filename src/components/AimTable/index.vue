@@ -653,6 +653,10 @@ export default {
       if(field.align === 'right' || field.align === 'end'){
         defaultStyle['justify-content'] = 'flex-end'
       }
+      // 设定了 max_width 且开启了 autoWidth
+      if(field['whiteSpace'] || (this.tablePropertyRef.autoWidth && field.max_width && field.width === field.max_width)) {
+        defaultStyle['white-space'] = field['whiteSpace'] || 'pre-wrap'
+      }
       return Object.assign(defaultStyle,fieldColumnStyle)
     },
     rowRemoveDisable(row) {
