@@ -738,7 +738,7 @@ export default {
       return show
     },
     pathGet(data, fieldPath, defaultVal = undefined) {
-      return jsb.pathGet(data, defaultVal, true)
+      return jsb.pathGet(data, fieldPath, defaultVal)
     },
     columnClass(fs) {
       if (fs.width || fs.min_width || fs.max_width) {
