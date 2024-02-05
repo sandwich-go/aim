@@ -116,9 +116,13 @@
               :show-overflow-tooltip="fs.showOverflowTooltip"
               :label="fs.name"
               :fixed="inSortIndexEdit?false:fs.fixed"
-              :sortable="fs.sortable||fs.sortable===undefined"
+              :sortable="pathGet(fs,'sortable',false)"
+              :resizable="pathGet(fs,'resizable',true)"
+              :sort-method="fs.sortMethod"
+              :header-align="fs.headerAlign"
               :align="fs.align || 'left'"
               :fied-schema="fs"
+
           >
             <template slot="header">
               <column-header :field-schema="fs" :name="fs['name']" :show-static-help="true"
