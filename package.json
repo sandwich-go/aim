@@ -12,7 +12,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@sandwich-go/jsb": "0.1.140",
+    "@sandwich-go/jsb": "0.1.142",
     "codemirror": "^5.41.0",
     "core-js": "^3.8.3",
     "element-ui": "2.12.0",
