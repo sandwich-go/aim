@@ -1129,6 +1129,9 @@ export default {
   background:#fbe5e1;
 }
 
+</style>
+
+<style lang="scss" scoped>
 ::v-deep .aim-table-tree  {
   .el-icon-arrow-right:before {
     content: "+";
@@ -1150,5 +1153,4 @@ export default {
     margin-left: 20px;
   }
 }
-
 </style>
