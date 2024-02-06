@@ -63,13 +63,21 @@ export function flexColumnWidth(schema,tableData,force=false) {
         const headerWidth = headerTextWidth + headerExtraWidth
         const minWidth = minWidthTableColumn(fieldSchema.type)
 
+        const isHTML = fieldSchema.type === 'html'
+            || fieldSchema.type === 'html_popup'
+            || fieldSchema.cell==='CellViewHTML'
+            || fieldSchema.cell==='CellViewHTMLPopup'
         const valueToString = fieldSchema['valueToString']
         const arr = tableData.map(x =>{
             if(valueToString){
                 return valueToString(x[fieldSchema.field])
             }
+            if(isHTML){
+                return jsb.extractTextFromHTML(String(x[fieldSchema.field]))
+            }
             return String(x[fieldSchema.field])
         })
+
         jsb.remove(arr, item => jsb.isEmpty(item))
         let contentWidth = jsb.longestTextWidth(arr)
         if (contentWidth < minWidth) {
