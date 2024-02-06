@@ -124,6 +124,7 @@
               :header-align="fs.headerAlign"
               :align="fs.align || 'left'"
               :fied-schema="fs"
+              :type="fs['columnType']"
 
           >
             <template slot="header">
@@ -751,7 +752,7 @@ export default {
         defaultStyle['justify-content'] = 'flex-end'
       }
       // 设定了 max_width 且开启了 autoWidth
-      if(fs['whiteSpace'] || (this.tablePropertyRef.autoWidth && fs.max_width && fs.width === fs.max_width)) {
+      if(fs['whiteSpace'] || (this.tablePropertyRef.autoWidth && (fs.max_width && fs.width === fs.max_width || fs['width_fit']))) {
         defaultStyle['white-space'] = fs['whiteSpace'] || 'pre-wrap'
       }
       return Object.assign(defaultStyle,fieldColumnStyle)
