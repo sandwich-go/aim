@@ -561,7 +561,7 @@ export default {
     treeProps:{
       type:Object,
       default:()=>{
-        return {children: 'children',enable:true}
+        return {children: 'children',enable:false}
       }
     },
     rowDbClick:Function,
