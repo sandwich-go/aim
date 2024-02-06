@@ -27,7 +27,6 @@ export default {
       proxyConfigRef: this.proxyConfig || {},
       rowWatcher:[],
       queryCount:-1,
-      treeProps:{},
     }
   },
   created() {
@@ -311,8 +310,8 @@ export default {
             this.toastWarning(`未激活分页模式，获取到 ${this.tableData.length} 行数据，总数据行数 ${this.PagerTotal}`)
           }
 
-          this.treeProps = jsb.pathGet(resp, 'treeProps')
-          if(this.treeProps && jsb.pathGet(this.treeProps,'transfer')){
+          this.treeProps = Object.assign(this.treeProps,jsb.pathGet(resp, 'treeProps'))
+          if(this.treeProps.enable && jsb.pathGet(this.treeProps,'transfer')){
             // 转换为树形数据
             this.tableData = jsb.arrayToTree(this.tableData,this.treeProps)
           }

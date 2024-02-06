@@ -27,7 +27,7 @@
       <el-table
           ref="table"
           :height="tableHeight"
-          :tree-props="pathGet(treeProps,'enable',false)?treeProps:{}"
+          :tree-props="pathGet(treeProps,'enable',false) && treeEnable?treeProps:{}"
           :max-height="tablePropertyRef.maxHeight"
           :data="tableDataFiltered ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
@@ -423,6 +423,29 @@ const jsb = require("@sandwich-go/jsb")
 
 export default {
   name: "AimTable",
+  watch:{
+    'treeProps.enable'(newVal) {
+      this.treeEnable = false
+      if(jsb.pathGet(this.treeProps,'transfer')){
+        let currentData = this.tableData
+        this.tableData = []
+        if(newVal){
+          jsb.each(currentData,v=>{
+            v[CtrlDataInRowData].xid = jsb.xid()
+          })
+          currentData= jsb.arrayToTree(currentData,this.treeProps)
+        }else{
+          currentData= jsb.treeToArray(currentData,this.treeProps)
+          jsb.each(currentData,v=>{
+            v[CtrlDataInRowData].xid = jsb.xid()
+            delete v[this.treeProps.children]
+          })
+        }
+        this.tableData = currentData
+        this.doLayoutNextTick(true)
+      }
+    }
+  },
   computed: {
     row() {
       return row
@@ -524,6 +547,12 @@ export default {
         return true
       },
     },
+    treeProps:{
+      type:Object,
+      default:()=>{
+        return {children: 'children',enable:true}
+      }
+    },
     rowDbClick:Function,
     rowClick:Function,
     rowRemoveShortcut: {type: Boolean, default: false},// 是否显示当行删除快捷方式
@@ -563,6 +592,7 @@ export default {
       visitSettingDrawerVisible: false,
       tableSetting:{},
       tableHeightRefreshKey: 0,
+      treeEnable:true
     }
   },
 
@@ -688,9 +718,14 @@ export default {
       // 对于树形显示，第一个列需要加入树图标支持，需要换算未 inline-block
       if(this.treeProps &&  this.treeProps.enable) {
         const _this = this
-        const firstShow = jsb.find(this.schema,v=>{
-          return _this.fieldShow(v)
+        let firstShow = jsb.find(this.schema,v=>{
+          return v.fixed === "left" && _this.fieldShow(v)
         })
+        if(!firstShow){
+          firstShow = jsb.find(this.schema,v=>{
+            return _this.fieldShow(v)
+          })
+        }
         if(firstShow.field === fs.field){
           defaultStyle.display = 'inline-block'
         }

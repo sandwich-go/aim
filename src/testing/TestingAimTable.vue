@@ -16,6 +16,7 @@
         :should-cell-hide="shouldCellHide"
         :header-config="toolbarConfig()"
         :radio="true"
+        :tree-props="treeProps"
         :row-tooltip="()=>{return '1111'}"
         :selection="true"
         current-icon="el-icon-right"
@@ -395,6 +396,7 @@ export default {
       rightBarConfig: {
         cells: [CodeButtonAdd, CodeButtonRowSelectedMinus, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint],
       },
+      treeProps:{children: 'children',transfer:true,enable:false,parentKey:'pid'},
       groupConfig: [
         {type: 'inline', fields: ['name'], after: '@start'},
         {type: 'inline', fields: ['Checkbox', 'Color','SortIdx'], after: '@start'},
@@ -827,6 +829,7 @@ export default {
         },
         {
           id: 6,
+          pid:5,
           name: 'name6',
           Link: "http://sample.pmt.centurygame.io/pmt#/dashboard",
           Icon: '',
@@ -912,7 +915,10 @@ export default {
             change: (val) => this.toolbarAlert('SlotOptionsUseDefineSlot', val)
           },
           {},
-          {cell: 'CellCheckbox', label: "Checkbox", change: (val) => this.toolbarAlert('CellCheckbox', val)},
+          {cell: 'CellCheckbox', label: "Checkbox", change: (val) => {
+              this.toolbarAlert('CellCheckbox', val)
+              this.treeProps.enable = val
+            }},
           'btn@myImport@label_导入@icon_el-icon-check',
           {label: "导出", code: 'btn@myExport', icon: 'el-icon-check', show: false},
           {label: "新建", code: 'btn@myNew', icon: 'el-icon-check'},
