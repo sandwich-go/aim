@@ -1202,34 +1202,35 @@ export default {
   .el-table__row:is([class*="el-table__row--level-1"]) {
     td:first-child {
       background:
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 20px 50%/15px 1px no-repeat;
+          //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 20px 50%/15px 1px no-repeat
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat;
     }
   }
   .el-table__row:is([class*="el-table__row--level-2"]) {
     td:first-child {
       background:
+          //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 40px 50%/15px 1px no-repeat
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 40px 50%/15px 1px no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat;
     }
   }
   .el-table__row:is([class*="el-table__row--level-3"]) {
     td:first-child {
       background:
+          //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 60px 50%/15px 1px no-repeat
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 60px 50%/15px 1px no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat;
     }
   }
   .el-table__row:is([class*="el-table__row--level-4"]) {
     td:first-child {
-      background: repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-      repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
-      repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat,
-      repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 80px 0px/1px 100% no-repeat,
-      repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 80px 50%/15px 1px no-repeat;
+      background:
+          //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 80px 50%/15px 1px no-repeat
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 80px 0px/1px 100% no-repeat;
     }
   }
 }
