@@ -50,7 +50,7 @@ export default {
       autoWidth: false,
       border: true,
       stripe: true,
-      class:jsb.ccPath('aimTableClass', ['aim-table-mini-padding',]),
+      class:jsb.clone(jsb.ccPath('aimTableClass', ['aim-table-mini-padding'])),
       showHeader: true,
       highlightCurrentRow: true,
       headerCellStyle: {textAlign: 'center', padding: '0', color: headerColor, background: headerBackgroundColor},
