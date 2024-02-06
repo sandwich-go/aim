@@ -27,6 +27,7 @@ export default {
       proxyConfigRef: this.proxyConfig || {},
       rowWatcher:[],
       queryCount:-1,
+      treeProps:{},
     }
   },
   created() {
@@ -191,7 +192,6 @@ export default {
         if(!isCtrlRemote(row)){
           // 非远端数据，直接删除
           jsb.remove(this.tableData, item => xidRow(item) === xidRow(row))
-          return
         }else{
           leftRows.push(row)
         }
@@ -309,6 +309,12 @@ export default {
           // 没有filter 且没有激活pager的情况下检测数据长度
           if(!hasFilter && !this.pagerConfigRef.enable && this.PagerTotal > this.tableData.length){
             this.toastWarning(`未激活分页模式，获取到 ${this.tableData.length} 行数据，总数据行数 ${this.PagerTotal}`)
+          }
+
+          this.treeProps = jsb.pathGet(resp, 'treeProps')
+          if(this.treeProps && jsb.pathGet(this.treeProps,'transfer')){
+            // 转换为树形数据
+            this.tableData = jsb.arrayToTree(this.tableData,this.treeProps)
           }
           this.doLayoutNextTick(true)
         }

@@ -27,11 +27,12 @@
       <el-table
           ref="table"
           :height="tableHeight"
+          :tree-props="pathGet(treeProps,'enable',false)?treeProps:{}"
           :max-height="tablePropertyRef.maxHeight"
           :data="tableDataFiltered ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
           :stripe="tablePropertyRef.stripe"
-          :class="tablePropertyRef.class"
+          :class="tableClass"
           :show-header="tablePropertyRef.showHeader"
           :empty-text="tablePropertyRef.emptyText"
           :header-cell-style="tablePropertyRef.headerCellStyle"
@@ -426,6 +427,16 @@ export default {
     row() {
       return row
     },
+    tableClass(){
+      const ret = this.tablePropertyRef.class
+      if(jsb.pathGet(this.treeProps,'enable',false)) {
+        const treeClass = jsb.pathGet(this.treeProps,'class','aim-table-tree')
+        if(!jsb.find(this.tablePropertyRef.class,v=>v===treeClass)){
+          ret.push(treeClass)
+        }
+      }
+      return ret
+    },
     cellName() {
       return (fs, row) => {
         return cellNameForTable(fs, row, isModeInplace(this.editConfigRef.mode))
@@ -672,21 +683,31 @@ export default {
     getProxySlotName,
     getProxyTipSlotName,
     getProxyCommentSlotName,
-    columnStyle(field){
+    columnStyle(fs){
       const defaultStyle = { 'justify-content': 'flex-start', 'display': 'flex', 'align-items': 'center', 'gap': '3px'}
-      const fieldColumnStyle = jsb.pathGet(field,'columnStyle',{})
-      if(field.align === 'center'){
+      // 对于树形显示，第一个列需要加入树图标支持，需要换算未 inline-block
+      if(this.treeProps &&  this.treeProps.enable) {
+        const _this = this
+        const firstShow = jsb.find(this.schema,v=>{
+          return _this.fieldShow(v)
+        })
+        if(firstShow.field === fs.field){
+          defaultStyle.display = 'inline-block'
+        }
+      }
+      const fieldColumnStyle = jsb.pathGet(fs,'columnStyle',{})
+      if(fs.align === 'center'){
         defaultStyle['justify-content'] = 'center'
       }
-      if(field.align === 'left' || field.align === 'start'){
+      if(fs.align === 'left' || fs.align === 'start'){
         defaultStyle['justify-content'] = 'flex-start'
       }
-      if(field.align === 'right' || field.align === 'end'){
+      if(fs.align === 'right' || fs.align === 'end'){
         defaultStyle['justify-content'] = 'flex-end'
       }
       // 设定了 max_width 且开启了 autoWidth
-      if(field['whiteSpace'] || (this.tablePropertyRef.autoWidth && field.max_width && field.width === field.max_width)) {
-        defaultStyle['white-space'] = field['whiteSpace'] || 'pre-wrap'
+      if(fs['whiteSpace'] || (this.tablePropertyRef.autoWidth && fs.max_width && fs.width === fs.max_width)) {
+        defaultStyle['white-space'] = fs['whiteSpace'] || 'pre-wrap'
       }
       return Object.assign(defaultStyle,fieldColumnStyle)
     },
@@ -1107,4 +1128,27 @@ export default {
 .el-table .aim-danger-row {
   background:#fbe5e1;
 }
-  </style>
+
+::v-deep .aim-table-tree  {
+  .el-icon-arrow-right:before {
+    content: "+";
+    color: #1890ff;
+    font-size: 20px;
+    font-weight: 700
+  }
+  .el-table__row:not([class*="el-table__row--level-"]) { td:first-child { padding-left: 24px !important; } }
+  .el-table__expand-icon .el-icon-arrow-right:before {
+    content: "+";
+  }
+  [class*="el-table__row--level"] .el-table__expand-icon {
+    transform: rotate(0);
+  }
+  .el-table__expand-icon--expanded .el-icon-arrow-right:before {
+    content: "-";
+  }
+  .el-table__placeholder::before {
+    margin-left: 20px;
+  }
+}
+
+</style>
