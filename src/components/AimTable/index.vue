@@ -442,7 +442,7 @@ export default {
           })
         }
         this.tableData = currentData
-        this.inLoading = true
+        this.inLoading = false
         this.$emit("aim-event-tree-view-switch",{tree:newVal})
         this.doLayoutNextTick(true)
       }
