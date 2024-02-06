@@ -461,10 +461,12 @@ export default {
     tableClass(){
       const ret = this.tablePropertyRef.class
       if(jsb.pathGet(this.treeProps,'enable',false)) {
-        const treeClass = jsb.pathGet(this.treeProps,'class','aim-table-tree')
-        if(!jsb.find(this.tablePropertyRef.class,v=>v===treeClass)){
-          ret.push(treeClass)
-        }
+        const treeClass = jsb.pathGet(this.treeProps,'class',['aim-table-tree','aim-table-tree-line'])
+        jsb.each(jsb.wrapArray(treeClass),classNow=>{
+          if(!jsb.find(this.tablePropertyRef.class,v=>v===classNow)){
+            ret.push(classNow)
+          }
+        })
       }
       return ret
     },
@@ -1194,6 +1196,41 @@ export default {
   }
   .el-table__placeholder::before {
     margin-left: 20px;
+  }
+}
+::v-deep .aim-table-tree-line  {
+  .el-table__row:is([class*="el-table__row--level-1"]) {
+    td:first-child {
+      background:
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 20px 50%/15px 1px no-repeat;
+    }
+  }
+  .el-table__row:is([class*="el-table__row--level-2"]) {
+    td:first-child {
+      background:
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 40px 50%/15px 1px no-repeat;
+    }
+  }
+  .el-table__row:is([class*="el-table__row--level-3"]) {
+    td:first-child {
+      background:
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 60px 50%/15px 1px no-repeat;
+    }
+  }
+  .el-table__row:is([class*="el-table__row--level-4"]) {
+    td:first-child {
+      background: repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
+      repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
+      repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat,
+      repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 80px 0px/1px 100% no-repeat,
+      repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 80px 50%/15px 1px no-repeat;
+    }
   }
 }
 </style>
