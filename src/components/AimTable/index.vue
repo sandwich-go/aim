@@ -27,7 +27,7 @@
       <el-table
           ref="table"
           :height="tableHeight"
-          :tree-props="pathGet(treeProps,'enable',false)?treeProps:{}"
+          :tree-props="pathGet(treeProps,'enable',false)?treeProps:{children:''}"
           :max-height="tablePropertyRef.maxHeight"
           :data="tableDataFiltered ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
@@ -38,6 +38,7 @@
           :header-cell-style="tablePropertyRef.headerCellStyle"
           :highlight-current-row="tablePropertyRef.highlightCurrentRow"
           :cell-style="cellStyleWrapper"
+          :default-expand-all="defaultExpandAll"
           :row-style="tablePropertyRef.rowStyle"
           :row-class-name="privateRowClassName"
           @current-change="currentChange"
@@ -554,6 +555,7 @@ export default {
         return true
       },
     },
+    defaultExpandAll:Boolean,
     treeProps:{
       type:Object,
       default:()=>{
