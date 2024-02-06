@@ -1211,7 +1211,7 @@ export default {
       background:
           //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 40px 50%/15px 1px no-repeat
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat;
     }
   }
   .el-table__row:is([class*="el-table__row--level-3"]) {
@@ -1219,8 +1219,8 @@ export default {
       background:
           //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 60px 50%/15px 1px no-repeat
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 53px 0px/1px 100% no-repeat;
     }
   }
   .el-table__row:is([class*="el-table__row--level-4"]) {
@@ -1228,9 +1228,20 @@ export default {
       background:
           //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 80px 50%/15px 1px no-repeat
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 40px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 60px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 80px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 53px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 68px 0px/1px 100% no-repeat;
+    }
+  }
+  .el-table__row:is([class*="el-table__row--level-5"]) {
+    td:first-child {
+      background:
+          //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 80px 50%/15px 1px no-repeat
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 53px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 68px 0px/1px 100% no-repeat,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 83px 0px/1px 100% no-repeat;
     }
   }
 }
