@@ -27,7 +27,7 @@
       <el-table
           ref="table"
           :height="tableHeight"
-          :tree-props="pathGet(treeProps,'enable',false)?treeProps:{children:''}"
+          :tree-props="pathGet(treeProps,'enable',false)?treeProps:{}"
           :max-height="tablePropertyRef.maxHeight"
           :data="tableDataFiltered ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
