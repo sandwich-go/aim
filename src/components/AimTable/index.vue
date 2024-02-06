@@ -424,7 +424,10 @@ const jsb = require("@sandwich-go/jsb")
 export default {
   name: "AimTable",
   watch:{
-    'treeProps.enable'(newVal) {
+    'treeProps.enable'(newVal,oldVal) {
+      if(oldVal === newVal){
+        return
+      }
       if(jsb.pathGet(this.treeProps,'transfer')){
         this.inLoading = true
         let currentData = this.tableData
