@@ -27,7 +27,7 @@
       <el-table
           ref="table"
           :height="tableHeight"
-          :tree-props="pathGet(treeProps,'enable',false) && treeEnable?treeProps:{}"
+          :tree-props="pathGet(treeProps,'enable',false)?treeProps:{}"
           :max-height="tablePropertyRef.maxHeight"
           :data="tableDataFiltered ? tableDataFiltered : tableData"
           :border="tablePropertyRef.border"
@@ -425,8 +425,8 @@ export default {
   name: "AimTable",
   watch:{
     'treeProps.enable'(newVal) {
-      this.treeEnable = false
       if(jsb.pathGet(this.treeProps,'transfer')){
+        this.inLoading = true
         let currentData = this.tableData
         this.tableData = []
         if(newVal){
@@ -442,6 +442,7 @@ export default {
           })
         }
         this.tableData = currentData
+        this.inLoading = false
         this.doLayoutNextTick(true)
       }
     }
@@ -592,7 +593,6 @@ export default {
       visitSettingDrawerVisible: false,
       tableSetting:{},
       tableHeightRefreshKey: 0,
-      treeEnable:true
     }
   },
 
