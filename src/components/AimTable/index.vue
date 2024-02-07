@@ -48,7 +48,7 @@
           @selection-change="selectionChange"
       >
 
-        <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="40" align="center" fixed="left">
+        <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="40" align="center" :fixed="columnCurrentFixed">
           <template v-if="currentIconHeaderIcon" slot="header">
             <i :class="currentIconHeaderIcon"/>
           </template>
@@ -57,16 +57,15 @@
           </template>
         </el-table-column>
 
-
         <el-table-column v-if="expandConfig" type="expand" key="aim-table-column-expand" width="30"
-                         class-name="aim-column-fixed-width" :fixed="inSortIndexEdit?false:'left'">
+                         class-name="aim-column-fixed-width" :fixed="inSortIndexEdit?false:columnExpandFixed">
           <template slot-scope="scope">
             <column-expand :expand-config-data="expandConfigRef" :key="xidRow(scope.row)"
                            :row="scope.row"></column-expand>
           </template>
         </el-table-column>
 
-        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:'left'" align="center" width="40"
+        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:columnDragFixed" align="center" width="40"
                          class-name="aim-column-fixed-width">
           <template slot-scope="{}" slot="header">
             <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
@@ -77,7 +76,7 @@
         </el-table-column>
 
         <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="40" align="center"
-                         class-name="aim-column-fixed-width" fixed="left">
+                         class-name="aim-column-fixed-width" :fixed="columnTooltipFixed">
           <template v-if="rowTooltipHeaderIcon" slot="header">
             <i :class="rowTooltipHeaderIcon"/>
           </template>
@@ -91,10 +90,9 @@
             </el-tooltip>
           </template>
         </el-table-column>
-
         <el-table-column v-if="selection"
                          :selectable="selectionEnable"
-                         :fixed="inSortIndexEdit?false:'left'"
+                         :fixed="inSortIndexEdit?false:columnRadioFixed"
                          class-name="aim-column-fixed-width"
                          key="aim_table_auto_column_selection" width="50"
                          type="selection"
@@ -102,7 +100,6 @@
         />
         <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="40" align="center">
           <template slot-scope="scope">
-<!--            <el-checkbox v-model="scope.row[CtrlDataInRowData].selected" @change="(val)=>{radioRowChanged(val,scope.row)}"></el-checkbox>-->
             <el-checkbox :value="scope.row === radioRow"
                          @change="(val)=>{radioRowChanged(scope.row,val)}"></el-checkbox>
           </template>
@@ -551,7 +548,15 @@ export default {
       type: String,
       default: 'aim_table_layout'
     },
+    columnDragFixed:{
+      type:String,
+      default:"left"
+    },
     selection: Boolean,// 是否支持选择
+    columnSelectionFixed:{
+      type:String,
+      default:"left"
+    },
     // eslint-disable-next-line no-unused-vars
     selectionEnable: {
       type: Function, default: () => {
@@ -570,10 +575,26 @@ export default {
     rowRemoveShortcut: {type: Boolean, default: false},// 是否显示当行删除快捷方式
     autoQuery: {type: Boolean, default: true},
     radio: Boolean,// 是否支持radio选择
+    columnRadioFixed:{
+      type:String,
+      default:"left"
+    },
     currentIcon:String,
+    columnExpandFixed:{
+      type:String,
+      default:"left"
+    },
+    columnCurrentFixed:{
+      type:String,
+      default:"left"
+    },
     currentIconHeaderIcon:String,
     rowTooltipHeaderIcon:String,
     rowTooltip:Function,
+    columnTooltipFixed:{
+      type:String,
+      default:"left"
+    },
     radioSyncCurrent: Boolean,
     selectionSyncCurrent: Boolean,
     formPopupUsingDrawer: {type: Boolean, default: true},
@@ -1204,7 +1225,7 @@ export default {
     td:first-child {
       background:
           //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 20px 50%/15px 1px no-repeat
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat !important;
     }
   }
   .el-table__row:is([class*="el-table__row--level-2"]) {
@@ -1212,7 +1233,7 @@ export default {
       background:
           //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 40px 50%/15px 1px no-repeat
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat  !important;
     }
   }
   .el-table__row:is([class*="el-table__row--level-3"]) {
@@ -1220,8 +1241,8 @@ export default {
       background:
           //repeating-linear-gradient( 90deg, #999 0 1px,transparent 0px 2px) 60px 50%/15px 1px no-repeat
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 53px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat ,
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 53px 0px/1px 100% no-repeat  !important;
     }
   }
   .el-table__row:is([class*="el-table__row--level-4"]) {
@@ -1231,7 +1252,7 @@ export default {
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 20px 0px/1px 100% no-repeat,
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat,
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 53px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 68px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 68px 0px/1px 100% no-repeat  !important;;
     }
   }
   .el-table__row:is([class*="el-table__row--level-5"]) {
@@ -1242,7 +1263,7 @@ export default {
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 37px 0px/1px 100% no-repeat,
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 53px 0px/1px 100% no-repeat,
           repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 68px 0px/1px 100% no-repeat,
-          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 83px 0px/1px 100% no-repeat;
+          repeating-linear-gradient( #999 0 1px,transparent 0px 2px) 83px 0px/1px 100% no-repeat  !important;;
     }
   }
 }
