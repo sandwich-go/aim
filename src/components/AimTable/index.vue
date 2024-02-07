@@ -92,7 +92,7 @@
         </el-table-column>
         <el-table-column v-if="selection"
                          :selectable="selectionEnable"
-                         :fixed="inSortIndexEdit?false:columnRadioFixed"
+                         :fixed="inSortIndexEdit?false:columnSelectionFixed"
                          class-name="aim-column-fixed-width"
                          key="aim_table_auto_column_selection" width="50"
                          type="selection"
