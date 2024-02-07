@@ -46,6 +46,8 @@
           @row-click="privateRowClick"
           :row-key="xidRow"
           @selection-change="selectionChange"
+          @select="handleSelect"
+          @select-all="handleSelectAll"
       >
 
         <el-table-column v-if="currentIcon" key="aim_table_auto_column_current_icon" width="40" align="center" :fixed="columnCurrentFixed">
@@ -1126,6 +1128,38 @@ export default {
         })
       }
       return this.shouldCellHide({code, cell, row, fieldSchema})
+    },
+    // 处理单选
+    handleSelect(selection, row) {
+      // 子节点
+      if (row[this.treeProps.children]) {
+        let isSelected = this.$refs.table.store.states.selection.some(item => xidRow(item) ===xidRow(row))
+        this.changeSelectStatus([row], isSelected)
+      }
+
+      // 寻找父节点
+      let parentRow= this.tableData.reduce((p, c) => {
+        if (c[this.treeProps.children] && c[this.treeProps.children].some(item => xidRow(item) ===xidRow(row))) {
+          p = c
+        }
+        return p
+      }, {})
+      if(parentRow){
+        // 是否每一个都处于选中状态
+        let bool = parentRow[this.treeProps.children].every(item => selection.some(s => xidRow(s) === xidRow(item)))
+        this.$refs.table.toggleRowSelection(parentRow, bool)
+      }
+    },
+    handleSelectAll() {
+      this.changeSelectStatus(this.tableData, this.$refs.table.store.states.isAllSelected)
+    },
+    changeSelectStatus(data, selected) {
+      data.forEach(row => {
+        this.$refs.table.toggleRowSelection(row, selected)
+        if (row.children) {
+          this.changeSelectStatus(row.children, selected)
+        }
+      })
     },
   }
 }
