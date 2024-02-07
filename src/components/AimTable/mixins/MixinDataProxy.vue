@@ -311,9 +311,18 @@ export default {
           }
 
           this.treeProps = Object.assign(this.treeProps,jsb.pathGet(resp, 'treeProps'))
-          if(this.treeProps.enable && jsb.pathGet(this.treeProps,'transfer')){
-            // 转换为树形数据
-            this.tableData = jsb.arrayToTree(this.tableData,this.treeProps)
+          if(this.treeProps.enable){
+            if(jsb.pathGet(this.treeProps,'transfer')){
+              // 转换为树形数据
+              this.tableData = jsb.arrayToTree(this.tableData,this.treeProps)
+            }else{
+              // 无需转行的行处理添加控制信息，如 xid
+              jsb.eachTree(this.tableData,v=>{
+                if(v[this.treeProps.children]){
+                  this.processTableData(v[this.treeProps.children])
+                }
+              })
+            }
           }
           this.doLayoutNextTick(true)
         }
