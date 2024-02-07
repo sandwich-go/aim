@@ -1137,14 +1137,14 @@ export default {
         this.changeSelectStatus([row], isSelected)
       }
 
-      // 寻找父节点
+      // 寻找父节点,找不到时返回的是一个空 {}
       let parentRow= this.tableData.reduce((p, c) => {
         if (c[this.treeProps.children] && c[this.treeProps.children].some(item => xidRow(item) ===xidRow(row))) {
           p = c
         }
         return p
       }, {})
-      if(parentRow){
+      if(!jsb.isEmpty(parentRow)){
         // 是否每一个都处于选中状态
         let bool = parentRow[this.treeProps.children].every(item => selection.some(s => xidRow(s) === xidRow(item)))
         this.$refs.table.toggleRowSelection(parentRow, bool)
