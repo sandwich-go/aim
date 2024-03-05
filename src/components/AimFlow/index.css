@@ -126,6 +126,7 @@
     line-height: 32px;
     position: absolute;
     right: 5px;
+    bottom: 24px;
     color: #84CF65;
     cursor: default;
 }
