@@ -21,6 +21,7 @@
     "js-cookie": "^3.0.5",
     "js-yaml": "4.1.0",
     "jsonlint-mod": "1.7.6",
+    "lodash": "^4.17.21",
     "sass": "^1.62.0",
     "sass-loader": "^13.2.2",
     "sortablejs": "^1.15.0",
@@ -29,6 +30,7 @@
     "vue-loading-overlay": "3.4.2",
     "vue-select-image": "^1.9.0",
     "vue-slider-component": "^3.2.24",
+    "vuedraggable": "^2.24.3",
     "xlsx": "^0.17.0"
   },
   "devDependencies": {

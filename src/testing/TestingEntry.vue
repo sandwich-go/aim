@@ -9,6 +9,11 @@
     <el-tab-pane label="BugEnvTable" name="BugEnvTable">
       <testing-env-table/>
     </el-tab-pane>
+
+    <el-tab-pane label="AimFlow" name="AimFlow">
+      <aim-flow-panel/>
+    </el-tab-pane>
+
   </el-tabs>
 </template>
 
@@ -16,12 +21,14 @@
 import TestingEnvTable from "@/testing/TestingEnvTable.vue";
 import TestingAimTable from "@/testing/TestingAimTable.vue";
 import TestingAimFormInput from "@/testing/TestingAimFormInput.vue";
+import AimFlowPanel from "@/components/AimFlow/AimFlowPanel.vue";
+import '@/components/AimFlow/index.css'
 export default {
   name: "TestingEntry",
-  components: {TestingAimFormInput, TestingAimTable, TestingEnvTable},
+  components: {AimFlowPanel, TestingAimFormInput, TestingAimTable, TestingEnvTable},
   data(){
     return {
-      activeName:'BugEnvTable',
+      activeName:'AimFlow',
     }
   }
 }

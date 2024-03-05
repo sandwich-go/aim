@@ -151,8 +151,6 @@
     <div v-else>{{ cellName }} not supported</div>
     <span v-if="fs.staticHelp" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),dataRef,fs,'staticHelp')"></span>
     <span v-if="fs.comment" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),dataRef,fs,'comment')"></span>
-
-
     <span v-if="fs.commentHTML" class="aim-form-item-comment" :style="commentStyle" v-html="comment(getRow(),dataRef,fs,'commentHTML')"></span>
     <slot v-if="commentSlotName(fs)" :name="commentSlotName(fs)" :field-schema="fs" :row="getRow()"/>
   </el-form-item>
