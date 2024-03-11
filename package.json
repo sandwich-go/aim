@@ -1,6 +1,6 @@
 {
   "name": "@sandwich-go/aim",
-  "version": "0.1.711",
+  "version": "0.1.712",
   "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
