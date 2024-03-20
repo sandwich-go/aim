@@ -22,7 +22,8 @@
         </div>
       </el-col>
     </el-row>
-    <div style="display: flex;height: calc(100% - 47px);">
+    <div style="display: flex;height: calc(100% - 147px);">
+      <!-- 左侧 menu-->
       <div style="width: 230px;border-right: 1px solid #dce3e8;">
         <node-menu @addNode="addNode" ref="nodeMenu"></node-menu>
       </div>
@@ -55,6 +56,7 @@
 </template>
 
 <script>
+import jsb from "@sandwich-go/jsb";
 import { jsPlumb } from './jsplumb'
 import { easyFlowMixin } from './mixins'
 import flowNode from './FlowNode.vue'
@@ -367,6 +369,7 @@ export default {
       }
       var node = {
         id: nodeId,
+        template_id:nodeMenu.id,
         name: nodeName,
         type: nodeMenu.type,
         left: left + 'px',
@@ -422,7 +425,9 @@ export default {
     clickNode(nodeId) {
       this.activeElement.type = 'node'
       this.activeElement.nodeId = nodeId
-      this.$refs.nodeForm.nodeInit(this.data, nodeId)
+      const node = jsb.find(this.data.nodeList,node=>node.id ===nodeId)
+      const nodeTemplate = this.$refs.nodeMenu.getMenuByTemplateID(node.template_id)
+      this.$refs.nodeForm.nodeInit(this.data, node,nodeTemplate)
     },
     // 是否具有该线
     hasLine(from, to) {

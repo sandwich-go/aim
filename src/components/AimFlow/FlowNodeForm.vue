@@ -1,36 +1,59 @@
 <template>
   <div>
-    <div class="ef-node-form">
+    <div class="ef-node-form" id="nod">
       <div class="ef-node-form-header">
         编辑
       </div>
       <div class="ef-node-form-body">
-        <el-form :model="node" ref="dataForm" label-width="80px" v-show="type === 'node'">
-          <el-form-item label="类型">
-            <el-input v-model="node.type" :disabled="true"></el-input>
-          </el-form-item>
+        <el-form :model="node" ref="dataForm" label-width="auto" v-show="type === 'node'" size="mini">
+<!--          基础信息不允许编辑调整-->
+<!--          <el-form-item label="类型">-->
+<!--            <el-input v-model="node.type" :disabled="true"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="left坐标">-->
+<!--            <el-input v-model="node.left" :disabled="true"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="top坐标">-->
+<!--            <el-input v-model="node.top" :disabled="true"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="图标">-->
+<!--            <el-input v-model="node.ico"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="状态">-->
+<!--            <el-select v-model="node.state" placeholder="请选择">-->
+<!--              <el-option-->
+<!--                  v-for="item in stateList"-->
+<!--                  :key="item.state"-->
+<!--                  :label="item.label"-->
+<!--                  :value="item.state">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
           <el-form-item label="名称">
             <el-input v-model="node.name"></el-input>
           </el-form-item>
-          <el-form-item label="left坐标">
-            <el-input v-model="node.left" :disabled="true"></el-input>
-          </el-form-item>
-          <el-form-item label="top坐标">
-            <el-input v-model="node.top" :disabled="true"></el-input>
-          </el-form-item>
-          <el-form-item label="ico图标">
-            <el-input v-model="node.ico"></el-input>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="node.state" placeholder="请选择">
-              <el-option
-                  v-for="item in stateList"
-                  :key="item.state"
-                  :label="item.label"
-                  :value="item.state">
-              </el-option>
+          <el-form-item label="版本" >
+            <el-select v-model="node.version" style="width: 100%">
+              <el-option value="1.0.3"></el-option>
+              <el-option value="1.0.2"></el-option>
+              <el-option value="1.0.1"></el-option>
             </el-select>
           </el-form-item>
+
+          <el-form-item label="输入参数" >
+            <aim-form-input
+                v-if="nodeID"
+                :key="nodeID"
+                :schema="inputSchema"
+                :data="node.data_input"
+            />
+          </el-form-item>
+
+          <el-form-item label="执行失败时">
+            <el-radio v-model="node['failTo']" label="suspend">挂起</el-radio>
+            <el-radio v-model="node['failTo']" label="ignore">忽略</el-radio>
+          </el-form-item>
+
           <el-form-item>
             <el-button icon="el-icon-close">重置</el-button>
             <el-button type="primary" icon="el-icon-check" @click="save">保存</el-button>
@@ -55,14 +78,26 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-
+import jsb from "@sandwich-go/jsb";
+import AimFormInput from "@/components/AimFormInput/index.vue";
+import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 export default {
+  components: {AimFormInput},
+  computed:{
+    inputSchema(){
+      return jsb.pathGet(this.nodeTemplate,'input.schema',[])
+    },
+    nodeID(){
+      return jsb.pathGet(this.node,'id')
+    },
+  },
   data() {
     return {
       visible: true,
       // node 或 line
       type: 'node',
       node: {},
+      nodeTemplate: {},
       line: {},
       data: {},
       stateList: [{
@@ -81,19 +116,14 @@ export default {
     }
   },
   methods: {
-    /**
-     * 表单修改，这里可以根据传入的ID进行业务信息获取
-     * @param data
-     * @param id
-     */
-    nodeInit(data, id) {
+    // 表单修改，这里可以根据传入的ID进行业务信息获取
+    nodeInit(data, node,nodeTemplate) {
       this.type = 'node'
       this.data = data
-      data.nodeList.filter((node) => {
-        if (node.id === id) {
-          this.node = cloneDeep(node)
-        }
-      })
+
+      this.node = cloneDeep(node)
+      this.node.data_input =  FillDefaultDataWithSchema(this.inputSchema,this.node.data_input)
+      this.nodeTemplate = nodeTemplate
     },
     lineInit(line) {
       this.type = 'line'

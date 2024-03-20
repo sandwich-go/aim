@@ -4,8 +4,8 @@
       <span class="ef-node-pmenu" @click="menu.open = !menu.open"><i :class="{'el-icon-caret-bottom': menu.open,'el-icon-caret-right': !menu.open}"></i>&nbsp;{{menu.name}}</span>
       <ul v-show="menu.open" class="ef-node-menu-ul">
         <draggable @end="end" @start="move" v-model="menu.children" :options="draggableOptions">
-          <li v-for="subMenu in menu.children" class="ef-node-menu-li" :key="subMenu.id" :type="subMenu.type">
-            <i :class="subMenu.ico"></i> {{subMenu.name}}
+          <li v-for="subMenu in menu.children" class="ef-node-menu-li" :key="subMenu.id" :id="subMenu.id">
+            <i :class="subMenu.ico" :style="subMenu.style"></i> {{subMenu.name}}
           </li>
         </draggable>
       </ul>
@@ -41,24 +41,43 @@ export default {
         {
           id: '1',
           type: 'group',
-          name: '开始节点',
+          name: '触发器',
           ico: 'el-icon-video-play',
           open: true,
           children: [
             {
-              id: '11',
+              id: '10001',
               type: 'timer',
               name: '数据接入',
               ico: 'el-icon-time',
               // 自定义覆盖样式
               style: {}
-            }, {
-              id: '12',
+            },
+            {
+              id: '10002',
               type: 'task',
               name: '接口调用',
               ico: 'el-icon-odometer',
               // 自定义覆盖样式
-              style: {}
+              style: {},
+              // 输入参数
+              input:{
+                schema:[
+                  {field:'field1',name:'字段1',type:'input',valType:'string'},
+                  {field:'field2',name:'字段2',type:'select',valType:'string'},
+                  {field:'field3',name:'字段3',type:'checkbox',valType:'boolean'},
+                ],
+              },
+              // 输出参数
+              output:{},
+            },
+            {
+              id: '10003',
+              type: 'cron',
+              name: '周期调用',
+              ico: 'el-icon-timer',
+              // 自定义覆盖样式
+              style: {},
             }
           ]
         },
@@ -70,14 +89,14 @@ export default {
           open: true,
           children: [
             {
-              id: '21',
+              id: '10004',
               type: 'end',
               name: '流程结束',
               ico: 'el-icon-caret-right',
               // 自定义覆盖样式
               style: {}
             }, {
-              id: '22',
+              id: '10005',
               type: 'over',
               name: '数据清理',
               ico: 'el-icon-shopping-cart-full',
@@ -110,11 +129,11 @@ export default {
   },
   methods: {
     // 根据类型获取左侧菜单对象
-    getMenuByType(type) {
+    getMenuByTemplateID(templateID) {
       for (let i = 0; i < this.menuList.length; i++) {
         let children = this.menuList[i].children;
         for (let j = 0; j < children.length; j++) {
-          if (children[j].type === type) {
+          if (children[j].id === templateID) {
             return children[j]
           }
         }
@@ -123,8 +142,8 @@ export default {
     // 拖拽开始时触发
     // eslint-disable-next-line no-unused-vars
     move(evt, a, b, c) {
-      var type = evt.item.attributes.type.nodeValue
-      this.nodeMenu = this.getMenuByType(type)
+      const templateID = evt.item.attributes.id.nodeValue;
+      this.nodeMenu = this.getMenuByTemplateID(templateID)
     },
     // 拖拽结束时触发
     // eslint-disable-next-line no-unused-vars

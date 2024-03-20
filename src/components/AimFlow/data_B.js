@@ -4,16 +4,21 @@ let dataB = {
         {
             id: 'nodeA',
             name: '节点A-不可拖拽',
-            type: 'task',
+            template_id: '10002',
             left: '18px',
             top: '223px',
             ico: 'el-icon-user-solid',
             state: 'success',
-            viewOnly: true
+            viewOnly: true,
+            data_input:{
+                'field1':'test1',
+                'field2':'test2',
+                'field3':true
+            }
         },
         {
             id: 'nodeB',
-            type: 'task',
+            template_id: '10002',
             name: '流程B-节点B',
             left: '351px',
             top: '96px',
@@ -23,7 +28,7 @@ let dataB = {
         {
             id: 'nodeC',
             name: '流程B-节点C',
-            type: 'task',
+            template_id: '10002',
             left: '354px',
             top: '351px',
             ico: 'el-icon-present',
@@ -31,7 +36,7 @@ let dataB = {
         }, {
             id: 'nodeD',
             name: '流程B-节点D',
-            type: 'task',
+            template_id: '10002',
             left: '723px',
             top: '215px',
             ico: 'el-icon-present',
