@@ -67,7 +67,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:columnDragFixed" align="center" width="40"
+        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:columnDragFixed" align="center" width="50"
                          class-name="aim-column-fixed-width">
           <template slot-scope="{}" slot="header">
             <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
@@ -77,7 +77,7 @@
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
 
-        <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="40" align="center"
+        <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="50" align="center"
                          class-name="aim-column-fixed-width" :fixed="columnTooltipFixed">
           <template v-if="rowTooltipHeaderIcon" slot="header">
             <i :class="rowTooltipHeaderIcon"/>
@@ -97,11 +97,11 @@
                          :fixed="inSortIndexEdit?false:columnSelectionFixed"
                          class-name="aim-column-fixed-width"
                          key="aim_table_auto_column_selection"
-                         width="40"
+                         width="50"
                          type="selection"
                          align="center"
         />
-        <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="40" align="center">
+        <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
             <el-checkbox :value="scope.row === radioRow"
                          @change="(val)=>{radioRowChanged(scope.row,val)}"></el-checkbox>
@@ -205,7 +205,7 @@
             </template>
           </el-table-column>
         </template>
-        <el-table-column key="shortcut_row_remove" v-if="rowRemoveShortcut" width="40" align="center">
+        <el-table-column key="shortcut_row_remove" v-if="rowRemoveShortcut" width="50" align="center">
           <template slot-scope="{row}">
             <el-link :disabled="rowRemoveDisable(row)" @click="tryProxyDelete(row)"><i class="el-icon-close"></i>
             </el-link>
