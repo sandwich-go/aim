@@ -128,7 +128,7 @@ export const typeDefaults = {
         label:'单选状态开关'
     },
     radio_group: {
-        table:'CellViewLabel',
+        table:'CellViewTag',
         form:'CellRadioGroup',
         default:'',
         label:'RadioGroup'
