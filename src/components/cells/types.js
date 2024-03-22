@@ -127,6 +127,12 @@ export const typeDefaults = {
         default:false,
         label:'单选状态开关'
     },
+    radio_group: {
+        table:'CellViewLabel',
+        form:'CellRadioGroup',
+        default:'',
+        label:'RadioGroup'
+    },
     // 复杂类型
     table: {
         table:'CellTriggerTable',
