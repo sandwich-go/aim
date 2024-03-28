@@ -132,7 +132,7 @@ import {
   CodeButtonRowDelete,
   CodeButtonRowEdit,
   CodeButtonRowHistory, CodeButtonRowSave,
-  CodeButtonRowSelectedMinus, CodeButtonSaveTableData, CodeButtonTableSetting,
+  CodeButtonRowSelectedMinus, CodeButtonSaveTableData, CodeButtonTableGroupView, CodeButtonTableSetting,
   CodeLinkFieldCopy,
 } from "@/components/cells/const";
 import AimPopup from "@/components/AimPopup/index.vue";
@@ -723,6 +723,15 @@ export default {
         }
       },
       proxyConfig: {
+        treeConfigQuery(){
+          return Cookies.get('treeConfigQuery')
+        },
+        treeConfigSave(data){
+          Cookies.set('treeConfigQuery',data)
+          return new Promise((resolve) => {
+            resolve()
+          })
+        },
         querySetting(){
           const got = Cookies.get('tableSetting')
           const setting = got?JSON.parse(got):{}
@@ -732,8 +741,9 @@ export default {
         },
         saveSetting({setting}){
           Cookies.set('tableSetting',JSON.stringify(setting))
-          console.log("saveSetting",setting)
-          return true
+          return new Promise((resolve) => {
+            resolve()
+          })
         },
         query({params}) {
           const dataRet = jsb.clone(_this.tableData)
@@ -925,7 +935,7 @@ export default {
           {},
           {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
         ],
-        rightCells: [CodeButtonSaveTableData, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint, CodeButtonExpandAll, CodeButtonTableSetting, CodeButtonDebug],
+        rightCells: [CodeButtonSaveTableData, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint, CodeButtonExpandAll, CodeButtonTableSetting,CodeButtonTableGroupView, CodeButtonDebug],
       }
     }
   }

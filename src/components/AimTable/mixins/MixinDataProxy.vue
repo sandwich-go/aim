@@ -86,6 +86,16 @@ export default {
       deleteConfirmConfig: ({row}) => {
         return {}
       },
+      treeConfigQuery:() => {
+        return new Promise((resolve, reject) => {
+          reject("should implement treeConfigQuery")
+        })
+      },
+      treeConfigSave:() => {
+        return new Promise((resolve, reject) => {
+          reject("should implement treeConfigSave")
+        })
+      },
     })
   },
   methods:{

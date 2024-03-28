@@ -328,6 +328,18 @@
         />
       </template>
     </aim-popup>
+
+    <aim-popup :drawer="true" :is-show.sync="groupViewDrawerVisible">
+      <template v-slot:aim-popup-body>
+        <aim-tree
+            :tree-config-query="proxyConfigRef.treeConfigQuery"
+            :tree-config-save="proxyConfigRef.treeConfigSave"
+            :tree-data-query="()=>{return tableData}"
+            :tree-data-row-save="proxyConfigRef.save"
+            :app-schema="schema"
+            :group-by="['group1','group2']"/>
+      </template>
+    </aim-popup>
   </div>
 </template>
 
@@ -371,7 +383,7 @@ import {
   CodeButtonRowSelectedDelete,
   CodeButtonRowSelectedMinus,
   CodeButtonSaveTableData,
-  CodeButtonSortIndex,
+  CodeButtonSortIndex, CodeButtonTableGroupView,
   CodeButtonTableSetting,
   CodeLinkFieldCopy,
   CodeLinkFilterSearch,
@@ -420,6 +432,7 @@ import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 import {exportTable2Excel} from "@/components/AimTable/export/excel";
 import Cookies from "js-cookie";
 import row from "element-ui/packages/row";
+import AimTree from "@/components/AimTree/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -537,6 +550,7 @@ export default {
     MixinFilter,
   ],
   components: {
+    AimTree,
     AimTableSetting,
     ColumnShortcuts,
     AimPopup,
@@ -626,8 +640,10 @@ export default {
       flexEndStyle,
       radioRow: null,
       visitSettingDrawerVisible: false,
+      groupViewDrawerVisible: false,
       tableSetting:{},
       tableHeightRefreshKey: 0,
+      configContent:'[]',
     }
   },
 
@@ -985,6 +1001,9 @@ export default {
           break
         case CodeButtonTableSetting:
           this.visitSettingDrawerVisible = true
+          break
+        case CodeButtonTableGroupView:
+          this.groupViewDrawerVisible = true
           break
         case CodeButtonExpandAll:
           this.expandAll(this.tableData, this.$refs.table)

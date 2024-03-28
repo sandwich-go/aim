@@ -5743,6 +5743,11 @@ spdy@^4.0.2:
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
 
+splitpanes@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/splitpanes/-/splitpanes-2.4.1.tgz#c165db8b1ed307b81831e890ce96912670cb6d02"
+  integrity sha512-kpEo1WuMXuc6QfdQdO2V/fl/trONlkUKp+pputsLTiW9RMtwEvjb4/aYGm2m3+KAzjmb+zLwr4A4SYZu74+pgQ==
+
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
@@ -6164,6 +6169,11 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
+
+vue-jstree@2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/vue-jstree/-/vue-jstree-2.1.6.tgz#44827ad72953ed77da6590ce4e8f37f7787f8653"
+  integrity sha512-vtUmhLbfE2JvcnYNRXauJPkNJSRO/f9BTsbxV+ESXP/mMQPVUIYI4EkSHKSEOxVDHTU7SfLp/AxplmaAl6ctcg==
 
 vue-loader@^17.0.0:
   version "17.0.1"

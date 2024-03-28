@@ -191,6 +191,9 @@ export default {
       })
     },
     destroyTinymce() {
+      if(!window.tinymce){
+        return
+      }
       const tinymce = window.tinymce.get(this.tinymceId)
       if (this.fullscreen) {
         tinymce.execCommand('mceFullScreen')
