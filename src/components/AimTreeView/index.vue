@@ -371,7 +371,7 @@ export default {
       this.saveTreeConfig(false)
     },
     splitPaneStyle() {
-      return {height: `900px`}
+      return {height:`${jsb.clientHeight(140)}`}
     },
     currentTreeConfigJSON(group) {
       let groupCopy = jsb.clone(group)
