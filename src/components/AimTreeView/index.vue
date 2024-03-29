@@ -74,18 +74,20 @@
               <el-switch :disabled="!editingNode" v-model="editingItem.opened"/>
             </el-form-item>
 
-            <el-button :disabled="!editingNode" type="primary" size="mini" @click="saveTreeConfig()">保存分组视图</el-button>
+            <el-button :disabled="!editingNode" type="primary" size="mini" icon='el-icon-check' @click="saveTreeConfig()">保存分组视图</el-button>
             <el-divider direction="vertical"></el-divider>
-            <el-button :disabled="!editingNode" plain size="mini" type="primary" @click="addChildNode">添加子节点
+            <el-button :disabled="!editingNode" plain size="mini" icon="el-icon-bottom-right" type="primary"
+                       @click="addChildNode">添加子节点
             </el-button>
-            <el-button v-if="showBtnAddBrotherNode(editingItem)" :disabled="!editingNode" plain size="mini"
+            <el-button v-if="showBtnAddBrotherNode(editingItem)" icon="el-icon-bottom"
+                       :disabled="!editingNode" plain size="mini"
                        type="primary" @click="addAfterNode">添加平级节点
             </el-button>
-            <el-button :disabled="!editingNode" plain size="mini" type="success" @click="addChildApp">添加叶子节点
+            <el-button :disabled="!editingNode" icon="el-icon-s-grid" plain size="mini" type="success" @click="addChildApp">添加叶子节点
             </el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button v-if="showBtnRemove(editingItem)" :disabled="!editingNode || !couldRemove(editingItem)"
-                       size="mini" type="danger" @click="removeNode">移除当前节点
+                       size="mini" type="danger" icon='el-icon-delete' @click="removeNode">移除当前节点
             </el-button>
           </el-form>
           <el-alert class="small-padding" type="success" show-icon style="margin-top: 10px">
