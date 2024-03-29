@@ -409,7 +409,7 @@ export default {
       this.inLoading = true
       const duplicated = treeNodeMapping(this.treeData, {})
       if (duplicated) {
-        jsb.toastError(`数结构存在冲突id :${duplicated}`)
+        jsb.cc.toastError(`数结构存在冲突id :${duplicated}`)
         return
       }
       const _this = this
@@ -440,7 +440,7 @@ export default {
 
 <style lang="scss">
 .container-for-height{
-  height: calc(100vh - 80px);
+  height: calc(100vh - 120px);
   overflow: auto;
 }
 .folder-underline{
