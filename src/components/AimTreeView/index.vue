@@ -291,8 +291,13 @@ export default {
       this.draggedItem = draggedItem
     },
     itemDrop (node, item) {
-      if(!this.draggedItem || !groupItemIsApp(this.draggedItem)) {
+      if(!this.draggedItem) {
         return
+      }
+      if(!groupItemIsApp(this.draggedItem)){
+        // 树结构变动
+        this.saveTreeConfig(false)
+        return;
       }
       // 如果是app
       let app = this.appMapping[this.draggedItem.value]
@@ -311,6 +316,8 @@ export default {
     addAfterNode: function () {
       if (this.editingItem.id) {
         this.editingItem.addAfter(this.newChild(), this.editingNode)
+        // 树结构变动
+        this.saveTreeConfig(false)
       }
     },
     couldRemove(item) {
@@ -349,11 +356,15 @@ export default {
         this.editingNode.parentItem.splice(this.editingNode.parentItem.indexOf(this.editingItem), 1)
       }
       this.resetTreeCurrentState()
+      // 树结构变动
+      this.saveTreeConfig(false)
     },
     addChildNode: function () {
       if (this.editingItem.id) {
         this.editingItem.addChild(this.newChild())
       }
+      // 树结构变动
+      this.saveTreeConfig(false)
     },
     splitPaneStyle() {
       return {height: `900px`}
@@ -394,7 +405,7 @@ export default {
         }
       })
     },
-    saveTreeConfig() {
+    saveTreeConfig(fetchData=true) {
       this.inLoading = true
       const duplicated = treeNodeMapping(this.treeData, {})
       if (duplicated) {
@@ -404,7 +415,9 @@ export default {
       const _this = this
       this.treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
       this.treeConfigSave(JSON.stringify(this.treeConfigObject, null, 2)).then(() => {
-        _this.fetchData()
+        if(fetchData){
+          _this.fetchData()
+        }
       })
     },
     // 移除不需要的字段,只保留树的基础结构
