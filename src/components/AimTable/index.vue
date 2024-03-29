@@ -340,6 +340,7 @@
           <template v-slot:app="{app,isEdit}">
             <aim-form-input
                 style="padding-right: 9px"
+                ref="aimFormInputInTreeView"
                 :schema="validSchema(schema)"
                 :group-config="groupConfig"
                 :data="app"
@@ -1055,7 +1056,11 @@ export default {
           break
         case CodeButtonRowSave:
           if (fromForm) {
-            this.$refs.aimFormInput.__validateFromAimTable(() => {
+            let form = this.$refs.aimFormInput
+            if(!form){
+              form = this.$refs.aimFormInputInTreeView
+            }
+            form.__validateFromAimTable(() => {
               this.tryProxySaveRow(row, {done: editDone})
             })
           } else {
