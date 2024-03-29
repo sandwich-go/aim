@@ -276,7 +276,6 @@
             :data="rowInEditForm"
             :table-data-getter="()=>{return tableData}"
             :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
-            :alert-info="rowEditorAlert"
             :mode="rowEditState"
             :rules="FormRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
             :row-top="rowInEditForm"
@@ -331,13 +330,56 @@
 
     <aim-popup :drawer="true" :is-show.sync="groupViewDrawerVisible">
       <template v-slot:aim-popup-body>
-        <aim-tree
+        <aim-tree-view
             :tree-config-query="proxyConfigRef.treeConfigQuery"
             :tree-config-save="proxyConfigRef.treeConfigSave"
             :tree-data-query="()=>{return tableData}"
             :tree-data-row-save="proxyConfigRef.save"
             :app-schema="schema"
-            :group-by="['group1','group2']"/>
+            :default-app-data="FillDefaultDataWithSchema(schema)"
+            :group-by="proxyConfigRef.groupBy || 'pid'">
+          <template v-slot:app="{app,isEdit}">
+            <aim-form-input
+                style="padding-right: 9px"
+                :schema="validSchema(schema)"
+                :group-config="groupConfig"
+                :data="app"
+                :table-data-getter="()=>{return tableData}"
+                :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
+                :alert-info="rowEditorAlert"
+                :mode="isEdit?AimFormInputEdit:AimFormInputInsert"
+                :rules="FormRulesFromSchema(schema,{row:app,data:tableData})"
+                :row-top="app"
+                :enable-watcher="true"
+                :submit-remove-field-not-in-schema="submitRemoveFieldNotInSchema"
+            >
+              <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
+                <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
+              </template>
+              <template v-for="fs in schema" v-slot:[getProxyFormSlotName(fs)]="{row}">
+                <slot v-if="formSlotName(fs)" :name="formSlotName(fs)" :field-schema="fs" :row="row"/>
+              </template>
+              <template v-for="name in allCommentSlotName"
+                        v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+                <slot :name="name" :field-schema="fieldSchema" :row="row"/>
+              </template>
+            </aim-form-input>
+          </template>
+          <template v-slot:action="{app,isEdit}">
+            <cell-list
+                :row="app"
+                :style="flexEndStyle"
+                :shortcut-button-options="{circle:false}"
+                :cells="editConfigRef.formEditorCells({row:app,mode:isEdit?AimFormInputEdit:AimFormInputInsert})"
+                :should-cell-hide="privateShouldCellHide"
+                :should-cell-disable="privateShouldCellDisable"
+                @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:app,code,jsEvent,fromForm:true})">
+              <template v-for="item in editConfigRef.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
+                <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
+              </template>
+            </cell-list>
+          </template>
+        </aim-tree-view>
       </template>
     </aim-popup>
   </div>
@@ -423,7 +465,7 @@ import {
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
-import {AimFormInputCopy, AimFormInputInsert, AimFormInputView} from "@/components/AimFormInput";
+import {AimFormInputCopy, AimFormInputEdit, AimFormInputInsert, AimFormInputView} from "@/components/AimFormInput";
 import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 import AimPopup from "@/components/AimPopup/index.vue";
 import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
@@ -432,7 +474,8 @@ import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 import {exportTable2Excel} from "@/components/AimTable/export/excel";
 import Cookies from "js-cookie";
 import row from "element-ui/packages/row";
-import AimTree from "@/components/AimTree/index.vue";
+import AimTreeView from "@/components/AimTreeView/index.vue";
+import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -550,7 +593,7 @@ export default {
     MixinFilter,
   ],
   components: {
-    AimTree,
+    AimTreeView,
     AimTableSetting,
     ColumnShortcuts,
     AimPopup,
@@ -635,6 +678,8 @@ export default {
   },
   data() {
     return {
+      AimFormInputEdit:AimFormInputEdit,
+      AimFormInputInsert:AimFormInputInsert,
       CtrlDataInRowData:CtrlDataInRowData,
       AimFormInputView,
       flexEndStyle,
@@ -699,6 +744,7 @@ export default {
   },
 
   methods: {
+    FillDefaultDataWithSchema,
     // updateFormMode 外部使用更新编辑状态，如对接redsource lock
     updateFormMode(mode) {
       this.rowEditState = mode

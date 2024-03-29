@@ -36,12 +36,18 @@
       </pane>
       <pane max-size="100" class="container-for-height" style="padding-left: 3px">
         <template v-for="(app,key) of appMapping">
-          <aim-form-input
-              v-if="app[appIdField] === currentAppID"
-              :schema="appSchema"
-              :data="app"
-              :key="key"
-          ></aim-form-input>
+          <div v-if="app[appIdField] === currentAppID" :key="key">
+            <aim-form-input
+                v-if="appSchema"
+                :schema="appSchema"
+                :data="app"
+                v-bind="aimFormInput"
+            ></aim-form-input>
+            <slot name="app" :app="app"></slot>
+            <div class="aim-drawer-footer">
+              <slot name="action" :app="app" :isEdit="true"></slot>
+            </div>
+          </div>
         </template>
         <div v-show="!currentAppID">
           <el-divider content-position="left">当前视图结构</el-divider>
@@ -49,13 +55,13 @@
                     :autosize="{minRows:5,maxRows:10}"></el-input>
           <el-divider content-position="left">当前节点</el-divider>
           <el-form label-position="right" size="mini">
-            <el-form-item label="标题" label-width="80px">
+            <el-form-item v-if="!isRoot" label="标题" label-width="80px">
               <el-input :disabled="!editingNode" v-model="editingItem.label"/>
             </el-form-item>
-            <el-form-item label="节点别名" label-width="80px">
+            <el-form-item v-if="!isRoot" label="节点别名" label-width="80px">
               <el-input :disabled="!editingNode" v-model="editingItem.alias"/>
             </el-form-item>
-            <el-form-item label="图标" label-width="80px">
+            <el-form-item v-if="!isRoot"  label="图标" label-width="80px">
               <icon-select-wrapper width="700px" :disabled="!editingNode"
                                  :element="true"
                                  :icon-name="editingItem.icon"
@@ -92,12 +98,19 @@
         </div>
       </pane>
     </splitpanes>
-    <aim-popup :drawer="true" :is-show.sync="visibleNewAppDialog" :config="{appendToBody:true}">
+    <!-- 弹出新建逻辑 -->
+    <aim-popup v-if="visibleNewAppDialog" :drawer="false" :is-show.sync="visibleNewAppDialog" :config="{appendToBody:true}">
       <template v-slot:aim-popup-body>
         <aim-form-input
+            v-if="appSchema"
             :schema="appSchema"
             :data="newAppData"
+            v-bind="aimFormInput"
         ></aim-form-input>
+        <slot v-else name="app" :app="newAppData" :isEdit="false"></slot>
+      </template>
+      <template v-slot:aim-popup-footer>
+        <slot name="action" :app="newAppData" :isEdit="false"></slot>
       </template>
     </aim-popup>
   </div>
@@ -107,15 +120,19 @@ import VJstree from 'vue-jstree'
 import {Splitpanes, Pane} from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 import jsb from "@sandwich-go/jsb";
-import {groupID2Path, groupItemIsApp, groupTreeDataAppendApp, treeNodeMapping} from "@/components/AimTree/tree";
+import {
+  groupID2Path,
+  groupItemIsApp,
+  groupTreeDataAppendApp,
+  treeNodeMapping
+} from "@/components/AimTreeView/tree";
 import AimPopup from "@/components/AimPopup/index.vue";
 import AimFormInput from "@/components/AimFormInput/index.vue";
-import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 import Loading from "vue-loading-overlay";
-import IconSelectWrapper from "@/components/AimTree/IconSelectWrapper.vue";
+import IconSelectWrapper from "@/components/AimTreeView/IconSelectWrapper.vue";
 
 export default {
-  name: "AimTree",
+  name: "AimTreeView",
   components: {
     IconSelectWrapper,
     Loading,
@@ -174,13 +191,21 @@ export default {
       type: String,
       default: 'id'
     },
+    appLabelField: {
+      type: String,
+      default: 'name'
+    },
     levelLimit:{
       type:Number,
       default:0,
     },
+    aimFormInput: {
+      type: Object,
+      default:()=>{return null}
+    },
     appSchema: {
       type: Array,
-      required: true
+      default:()=>{return null}
     },
     viewHeight: {
       type: Number,
@@ -188,10 +213,19 @@ export default {
         return jsb.clientHeight(80)
       }
     },
+    defaultAppData:{
+      type:Object,
+      default:()=>{return {}}
+    },
   },
   watch: {
     treeData: function () {
       this.$refs.jsTree.initializeData(this.treeData);
+    }
+  },
+  computed:{
+    isRoot(){
+      return jsb.pathGet(this.editingItem,'id') === this.treeRootID
     }
   },
   data() {
@@ -207,16 +241,20 @@ export default {
       groupByNow: '',
       groupID2PathMap: {},
       appMapping: {},
-      newAppData: {},
+      newAppData: jsb.clone(this.defaultAppData),
       visibleNewAppDialog: false,
     }
   },
   created() {
     this.groupByNow = this.groupValue(this.groupByArray[0])
+    this.initNewAppData()
     this.fetchData()
   },
   methods: {
     groupItemIsApp,
+    initNewAppData(){
+      this.newAppData = jsb.clone(this.defaultAppData)
+    },
     groupLabel(group) {
       if (jsb.isString(group)) {
         return group
@@ -224,9 +262,8 @@ export default {
       return jsb.pathGet(group, 'label', 'no-label')
     },
     addChildApp() {
-      this.newAppData = {}
+      this.initNewAppData()
       this.newAppData[this.groupByNow] = this.editingItem.id
-      FillDefaultDataWithSchema(this.appSchema, this.newAppData)
       this.visibleNewAppDialog = true
     },
     groupValue(group) {
@@ -253,7 +290,6 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     itemClick(node) {
-      console.log("node ",node)
       this.toNewItem(node,true)
     },
     itemDropBefore(node, item, draggedItem){
@@ -346,7 +382,7 @@ export default {
           this.treeConfigObject = {}
         }
         const treeConfigNow = jsb.pathGet(this.treeConfigObject,this.groupByNow,[])
-        let data = groupTreeDataAppendApp(treeConfigNow, appList,this.appIdField,this.groupByNow)
+        let data = groupTreeDataAppendApp(treeConfigNow, appList,this.appIdField,this.appLabelField,this.groupByNow)
         _this.treeData = data['tree']
         _this.appMapping = data['appMap']
         groupID2Path("", treeConfigNow, _this.groupID2PathMap)

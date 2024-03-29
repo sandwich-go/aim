@@ -21,9 +21,10 @@ export function treeNodeMapping(group, mapping) {
 export function groupItemIsApp(item) {
     return item['isApp']
 }
-function app2TreeItem(app,idField='id',labelField='name') {
-    const id = app[idField]
-    const name = app[labelField]
+
+export function app2TreeItem(app,appIDField,appLabelField) {
+    const id = app[appIDField]
+    const name = app[appLabelField]
     return {
         id: id,
         label: name,
@@ -35,13 +36,13 @@ function app2TreeItem(app,idField='id',labelField='name') {
     }
 }
 
-function appendAppToTreeNode(mapping, nodeID, appList,treeRootID) {
+function appendAppToTreeNode(mapping, nodeID, appList,treeRootID,appIDField,appLabelField) {
     let node = mapping[nodeID] || mapping[treeRootID]
     if (!node.children) {
         node.children = []
     }
     for (const app of appList) {
-        const treeItem = app2TreeItem(app)
+        const treeItem = app2TreeItem(app,appIDField,appLabelField)
         node.children.push(treeItem)
     }
 }
@@ -53,7 +54,7 @@ export function groupID2Path(path, group, dst) {
     }
 }
 
-export function groupTreeDataAppendApp(treeData, appList,appIDField='id',groupIDField='group_id',treeRootID='root') {
+export function groupTreeDataAppendApp(treeData, appList,appIDField='id',appLabelField='name',groupIDField='group_id',treeRootID='root') {
     treeData = tryFixTree(treeData,treeRootID)
     let groupXid2AppMapping = {}
     let appMapping = {}
@@ -71,7 +72,7 @@ export function groupTreeDataAppendApp(treeData, appList,appIDField='id',groupID
     treeNodeMapping(treeData, mapping)
     // 填充节点元素
     for (const nodeID in groupXid2AppMapping) {
-        appendAppToTreeNode(mapping, nodeID, groupXid2AppMapping[nodeID],treeRootID)
+        appendAppToTreeNode(mapping, nodeID, groupXid2AppMapping[nodeID],treeRootID,appIDField,appLabelField)
     }
     const fixedTree = tryFixTree(treeData,treeRootID)
     return {'tree': fixedTree, 'appMap': appMapping}
