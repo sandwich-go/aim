@@ -43,7 +43,7 @@
                 :data="app"
                 v-bind="aimFormInput"
             ></aim-form-input>
-            <slot name="app" :app="app"></slot>
+            <slot v-else name="app" :app="app"></slot>
             <div class="aim-drawer-footer">
               <slot name="action" :app="app" :isEdit="true"></slot>
             </div>

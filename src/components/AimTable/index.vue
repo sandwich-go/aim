@@ -335,7 +335,6 @@
             :tree-config-save="proxyConfigRef.treeConfigSave"
             :tree-data-query="()=>{return tableData}"
             :tree-data-row-save="proxyConfigRef.tryProxySaveRow"
-            :app-schema="schema"
             :default-app-data="FillDefaultDataWithSchema(schema)"
             :group-by="proxyConfigRef.groupBy || 'pid'">
           <template v-slot:app="{app,isEdit}">
