@@ -20,9 +20,9 @@
                     :allow-batch="false"
                     :size="!treeItemSize?null:treeItemSize"
                     text-field-name="label"
+                    @item-drop-before = "itemDropBefore"
                     @item-click="itemClick"
-                    @item-drop-before="itemDropBefore"
-                    @item-drag-end="itemDropEnd">
+                    @item-drop="itemDrop">
             <template slot-scope="_">
               <div v-bind:style="bindTreeItemStyle(_.model)">
                 <i :class="_.vm.themeIconClasses" role="presentation"></i>
@@ -230,12 +230,12 @@ export default {
       currentAppID: '',
       editingNode: null,
       editingItem: {},
-      draggedItem: null,
       treeData: [],
       groupByArray: jsb.wrapArray(this.groupBy),
       groupByNow: '',
       groupID2PathMap: {},
       appMapping: {},
+      draggedItem:null,
       newAppData: jsb.clone(this.defaultAppData),
       visibleNewAppDialog: false,
     }
@@ -290,18 +290,25 @@ export default {
     itemDropBefore(node, item, draggedItem){
       this.draggedItem = draggedItem
     },
-    itemDropEnd(node, item){
+    itemDrop(node, item){
+      if(!this.draggedItem) {
+        return
+      }
       if(!groupItemIsApp(this.draggedItem)){
-        // 树结构变动
-        this.saveTreeConfig(false)
+        // 目录调整此时保存数据会出现duplicated
+        this.$nextTick(()=>{
+          this.saveTreeConfig(false)
+        })
         return;
       }
-      // 如果是app
+      // 如果目标是 folder
       let app = this.appMapping[this.draggedItem.value]
-      app[this.groupByNow] = item.id
+      if(app){
+        app[this.groupByNow] = item.id
+        this.treeDataRowSave(app).finally(()=>{this.inLoading = false})
+      }
       this.draggedItem = null
       this.inLoading = true
-      this.treeDataRowSave(app).finally(()=>{this.inLoading = false})
     },
     bindTreeItemStyle(item) {
       let style = {display: "inherit"}
@@ -406,6 +413,7 @@ export default {
       this.inLoading = true
       const duplicated = treeNodeMapping(this.treeData, {})
       if (duplicated) {
+        this.inLoading = false
         jsb.cc.toastError(`数结构存在冲突id :${duplicated}`)
         return
       }

@@ -19,6 +19,9 @@ export function treeNodeMapping(group, mapping) {
     return ''
 }
 export function groupItemIsApp(item) {
+    if(!item){
+        return false
+    }
     return item['isApp']
 }
 
