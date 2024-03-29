@@ -144,7 +144,7 @@ export default {
     treeDataRowSave:{
       type:Function,
       // eslint-disable-next-line no-unused-vars
-      default:({row}) => {
+      default:(row) => {
         return new Promise((resolve, reject) => {
           reject("should implement treeDataRowSave")
         })
@@ -301,7 +301,7 @@ export default {
       app[this.groupByNow] = item.id
       this.draggedItem = null
       this.inLoading = true
-      this.treeDataRowSave({row:app}).finally(()=>{this.inLoading = false})
+      this.treeDataRowSave(app).finally(()=>{this.inLoading = false})
     },
     bindTreeItemStyle(item) {
       let style = {display: "inherit"}
