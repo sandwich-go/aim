@@ -4,7 +4,7 @@
       show-alpha
       :style="cc.style"
       size="mini"
-      :predefine="cc.predefine"
+      :predefine="colorPredefined"
       :disabled="disabled">
   </el-color-picker>
 </template>
@@ -22,5 +22,10 @@ export default {
       predefine:jsb.ccPath('predefine',ReservedColorList)
     })
   },
+  computed:{
+    colorPredefined(){
+      return this.cc.predefine || jsb.cc.colorPredefined
+    }
+  }
 }
 </script>

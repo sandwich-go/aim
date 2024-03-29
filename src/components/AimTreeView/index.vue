@@ -24,10 +24,9 @@
                     @item-click="itemClick"
                     @item-drop="itemDrop">
             <template slot-scope="_">
+              <i :class="_.vm.themeIconClasses" role="presentation"></i>
               <div v-bind:style="bindTreeItemStyle(_.model)">
-                <i :class="_.vm.themeIconClasses" role="presentation"></i>
-                <template v-if="groupItemIsApp(_.model)">{{_.model.label}}</template>
-                <span v-else class="folder-underline">{{_.model.label}}</span>
+                <span>{{_.model.label}}</span>
                 <i v-if="_.model.systemLock" class="el-icon-lock"></i>
               </div>
             </template>
@@ -58,8 +57,12 @@
             <el-form-item v-if="!isRoot" label="标题" label-width="80px">
               <el-input :disabled="!editingNode" v-model="editingItem.label"/>
             </el-form-item>
+            <el-form-item v-if="!isRoot"  label="标题颜色" label-width="80px">
+              <el-color-picker v-model="editingItem.color" show-alpha size="mini" :predefine="colorPredefined" :disabled="!editingNode"/>
+            </el-form-item>
             <el-form-item v-if="!isRoot" label="节点别名" label-width="80px">
               <el-input :disabled="!editingNode" v-model="editingItem.alias"/>
+              <span class="aim-form-item-comment" :style="commentStyle">分组视图内保证唯一，便于通过该字段索引下属节点数据</span>
             </el-form-item>
             <el-form-item v-if="!isRoot"  label="图标" label-width="80px">
               <icon-select-wrapper width="700px" :disabled="!editingNode"
@@ -86,8 +89,7 @@
           </el-form>
           <el-alert class="small-padding" type="success" show-icon style="margin-top: 10px">
             <template slot='title'>拽节点以快速调整从属关系，
-              <el-tag size="mini" type="warning">叶子节点</el-tag>
-              不允许添加子节点， <span class="folder-underline">xxx</span> 为目录节点。
+              <el-tag size="mini" type="warning">叶子节点</el-tag>不允许添加子节点。
             </template>
           </el-alert>
         </div>
@@ -225,6 +227,7 @@ export default {
   },
   data() {
     return {
+      colorPredefined:jsb.cc.colorPredefined,
       treeConfigObject:{},
       inLoading:false,
       currentAppID: '',
@@ -238,6 +241,7 @@ export default {
       draggedItem:null,
       newAppData: jsb.clone(this.defaultAppData),
       visibleNewAppDialog: false,
+      commentStyle :jsb.cc.aimFormCommentStyle
     }
   },
   created() {
@@ -315,6 +319,10 @@ export default {
       if (item.color) {
         style['color'] = item.color
       }
+      if(!groupItemIsApp(item)){
+        style['font-weight'] = 'bold'
+        style['color'] = style['color'] || '#1f78d1'
+      }
       return style
     },
     addAfterNode: function () {
@@ -346,7 +354,7 @@ export default {
       return {
         id: jsb.xid(),
         icon: 'el-icon-folder',
-        label: "newNode",
+        label: jsb.timestamp(),
         opened: true,
       }
     },
