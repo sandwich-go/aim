@@ -335,7 +335,6 @@ export default {
       // 创建视图的时候根据schema填充默认数值，防止由于数值缺失导致的访问undefined
       // 但是只有传入的data完全空的时候才设定 fillBySchemaDefault 为true
       this.dataRef = FillDefaultDataWithSchema(this.schema,this.dataRef,this.mode===AimFormInputInsert)
-      console.log("this.dataRef ",this.dataRef)
 
       this.cleanFieldWatcher()
       _this.groupMaxFieldNumber = 0

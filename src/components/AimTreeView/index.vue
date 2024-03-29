@@ -21,8 +21,8 @@
                     :size="!treeItemSize?null:treeItemSize"
                     text-field-name="label"
                     @item-click="itemClick"
-                    @item-drop="itemDrop"
-                    @item-drop-before="itemDropBefore">
+                    @item-drop-before="itemDropBefore"
+                    @item-drag-end="itemDropEnd">
             <template slot-scope="_">
               <div v-bind:style="bindTreeItemStyle(_.model)">
                 <i :class="_.vm.themeIconClasses" role="presentation"></i>
@@ -290,10 +290,7 @@ export default {
     itemDropBefore(node, item, draggedItem){
       this.draggedItem = draggedItem
     },
-    itemDrop (node, item) {
-      if(!this.draggedItem) {
-        return
-      }
+    itemDropEnd(node, item){
       if(!groupItemIsApp(this.draggedItem)){
         // 树结构变动
         this.saveTreeConfig(false)
