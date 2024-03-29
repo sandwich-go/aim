@@ -411,7 +411,7 @@ export default {
       }
       const _this = this
       this.treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
-      this.treeConfigSave(JSON.stringify(this.treeConfigObject, null, 2)).then(() => {
+      this.treeConfigSave(JSON.stringify(this.treeConfigObject)).then(() => {
         if(fetchData){
           _this.fetchData()
         }
