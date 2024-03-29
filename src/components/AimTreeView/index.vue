@@ -81,19 +81,14 @@
             </el-button>
             <el-button :disabled="!editingNode" type="primary" size="mini" @click="saveTreeConfig()">保存</el-button>
             <el-divider direction="vertical"></el-divider>
-            <el-button :disabled="!editingNode" plain size="mini" type="success" @click="addChildApp">添加应用
+            <el-button :disabled="!editingNode" plain size="mini" type="success" @click="addChildApp">添加叶子节点
             </el-button>
           </el-form>
           <el-alert class="small-padding" type="success" show-icon style="margin-top: 10px">
             <template slot='title'>拽节点以快速调整从属关系，
-              <el-tag size="mini" type="warning">应用</el-tag>
-              或
-              <el-tag size="mini" type="warning">全局配置块</el-tag>
+              <el-tag size="mini" type="warning">叶子节点</el-tag>
               不允许添加子节点， <span class="folder-underline">xxx</span> 为目录节点。
             </template>
-          </el-alert>
-          <el-alert class="small-padding" type="info" show-icon style="margin-top: 10px">
-            <template slot='title'>xxx <i class="el-icon-lock"/> 节点 : 系统内置节点，不允许删除。</template>
           </el-alert>
         </div>
       </pane>
