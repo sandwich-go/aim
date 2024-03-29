@@ -331,6 +331,7 @@
     <aim-popup :drawer="true" :is-show.sync="groupViewDrawerVisible">
       <template v-slot:aim-popup-body>
         <aim-tree-view
+            ref="aimTreeView"
             :tree-config-query="proxyConfigRef.treeConfigQuery"
             :tree-config-save="proxyConfigRef.treeConfigSave"
             :tree-data-query="()=>{return tableData}"
@@ -698,6 +699,11 @@ export default {
     }
   },
   created() {
+    this.afterQueryData = ()=>{
+      if(this.$refs.aimTreeView){
+        this.$refs.aimTreeView.fetchData()
+      }
+    }
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutNextTick)
     }

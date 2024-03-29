@@ -27,6 +27,7 @@ export default {
       proxyConfigRef: this.proxyConfig || {},
       rowWatcher:[],
       queryCount:-1,
+      afterQueryData:null
     }
   },
   created() {
@@ -335,6 +336,9 @@ export default {
             }
           }
           this.doLayoutNextTick(true)
+          if(this.afterQueryData){
+            this.afterQueryData()
+          }
         }
         done && done({error})
       })
