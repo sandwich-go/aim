@@ -74,7 +74,7 @@
               <el-switch :disabled="!editingNode" v-model="editingItem.opened"/>
             </el-form-item>
 
-            <el-button :disabled="!editingNode" type="primary" size="mini" icon='el-icon-check' @click="saveTreeConfig()">保存分组视图</el-button>
+            <el-button :disabled="!editingNode" type="primary" size="mini" icon='el-icon-check' @click="saveTreeConfig(true,true)">保存分组视图</el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button :disabled="!editingNode" plain size="mini" icon="el-icon-bottom-right" type="primary"
                        @click="addChildNode">添加子节点
