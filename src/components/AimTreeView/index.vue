@@ -415,6 +415,8 @@ export default {
         if(fetchData){
           _this.fetchData()
         }
+      }).final(()=>{
+        this.inLoading = false
       })
     },
     // 移除不需要的字段,只保留树的基础结构
