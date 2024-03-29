@@ -420,7 +420,7 @@ export default {
         }
       })
     },
-    saveTreeConfig(fetchData=true) {
+    saveTreeConfig(fetchData=true,tipSuccess=false) {
       this.inLoading = true
       const duplicated = checkDuplicated(this.treeData,'id')
       if (duplicated) {
@@ -438,6 +438,9 @@ export default {
       const _this = this
       this.treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
       this.treeConfigSave(JSON.stringify(this.treeConfigObject)).then(() => {
+        if(tipSuccess){
+          jsb.cc.toastSuccess("保存成功")
+        }
         if(fetchData){
           _this.fetchData()
         }
