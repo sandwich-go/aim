@@ -121,7 +121,7 @@ import {
   groupID2Path,
   groupItemIsApp,
   groupTreeDataAppendApp,
-  treeNodeMapping
+  checkDuplicated
 } from "@/components/AimTreeView/tree";
 import AimPopup from "@/components/AimPopup/index.vue";
 import AimFormInput from "@/components/AimFormInput/index.vue";
@@ -419,12 +419,19 @@ export default {
     },
     saveTreeConfig(fetchData=true) {
       this.inLoading = true
-      const duplicated = treeNodeMapping(this.treeData, {})
+      const duplicated = checkDuplicated(this.treeData,'id')
       if (duplicated) {
         this.inLoading = false
-        jsb.cc.toastError(`数结构存在冲突id :${duplicated}`)
+        jsb.cc.toastError(`分组数据存在同 id 分组 :${duplicated}`)
         return
       }
+      const duplicatedAlias = checkDuplicated(this.treeData,'alias')
+      if (duplicatedAlias) {
+        this.inLoading = false
+        jsb.cc.toastError(`分组数据存在同别名分组 :${duplicatedAlias}`)
+        return
+      }
+
       const _this = this
       this.treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
       this.treeConfigSave(JSON.stringify(this.treeConfigObject)).then(() => {

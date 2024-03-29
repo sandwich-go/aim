@@ -1,17 +1,20 @@
 import jsb from "@sandwich-go/jsb";
 
-export function treeNodeMapping(group, mapping) {
+export function checkDuplicated(group,fieldName='id',ignoreEmpty=true,mapping={}) {
     group = group || []
     for (const item of group) {
-        if (mapping[item.id]) {
-            console.log(`duplicate tree id with ${item.id}`)
-            return item.id
+        if(!item[fieldName] && ignoreEmpty){
+            continue
+        }
+        if (mapping[item[fieldName]]) {
+            console.log(`duplicate tree id with ${item[fieldName]}`)
+            return item[fieldName]
         } else {
-            mapping[item.id] = item
+            mapping[item[fieldName]] = item
         }
     }
     for (let index in group) {
-        const duplicated = treeNodeMapping(group[index]['children'], mapping)
+        const duplicated = checkDuplicated(group[index]['children'],fieldName,ignoreEmpty,mapping)
         if (duplicated) {
             return duplicated
         }
@@ -72,7 +75,7 @@ export function groupTreeDataAppendApp(treeData, appList,appIDField='id',appLabe
     }
     // 构建节点映射
     let mapping = {}
-    treeNodeMapping(treeData, mapping)
+    checkDuplicated(treeData,'id',true, mapping)
     // 填充节点元素
     for (const nodeID in groupXid2AppMapping) {
         appendAppToTreeNode(mapping, nodeID, groupXid2AppMapping[nodeID],treeRootID,appIDField,appLabelField)
