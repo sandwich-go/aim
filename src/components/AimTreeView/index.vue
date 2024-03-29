@@ -415,7 +415,7 @@ export default {
         if(fetchData){
           _this.fetchData()
         }
-      }).final(()=>{
+      }).finally(()=>{
         this.inLoading = false
       })
     },
