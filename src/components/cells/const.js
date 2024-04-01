@@ -11,6 +11,7 @@ export const CodeButtonAdd = "btnAdd"
 export const CodeButtonExportToExcel = "btnExportToExcel"
 export const CodeButtonExpandAll = "btnExpandAll"
 export const CodeButtonTableSetting = "btnTableSetting"
+export const CodeButtonTableGroupView = "btnTableGroupView"
 export const CodeButtonSaveTableData = "btnSaveTableData" // 整表数据提交
 export const CodeButtonFilterSearch = "btnFilterSearch"
 
@@ -57,6 +58,7 @@ code2OptionsMapping[CodeButtonSaveTableData] = {icon: 'el-icon-check', type: 'pr
 code2OptionsMapping[CodeButtonFilterSearch] = {icon: 'el-icon-search', type: 'primary', circle: true,plain:true}
 
 code2OptionsMapping[CodeButtonTableSetting] = {icon: 'el-icon-setting',type: 'primary', circle: true, label: '表格设定'}
+code2OptionsMapping[CodeButtonTableGroupView] = {icon: 'el-icon-s-unfold',type: 'primary', circle: true, label: '分组视图'}
 
 code2OptionsMapping[CodeButtonRowEdit] = {icon: 'el-icon-edit', label: '编辑', type: 'warning', circle: true,plain:true}
 code2OptionsMapping[CodeButtonRowCopy] = {icon: 'el-icon-copy-document', label: '拷贝', type: 'primary', circle: true,plain:true}

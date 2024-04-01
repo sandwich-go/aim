@@ -27,6 +27,7 @@ export default {
       proxyConfigRef: this.proxyConfig || {},
       rowWatcher:[],
       queryCount:-1,
+      afterQueryData:null
     }
   },
   created() {
@@ -86,6 +87,16 @@ export default {
       deleteConfirmConfig: ({row}) => {
         return {}
       },
+      treeConfigQuery:() => {
+        return new Promise((resolve, reject) => {
+          reject("should implement treeConfigQuery")
+        })
+      },
+      treeConfigSave:() => {
+        return new Promise((resolve, reject) => {
+          reject("should implement treeConfigSave")
+        })
+      },
     })
   },
   methods:{
@@ -130,7 +141,7 @@ export default {
       })
       params['aimTableSchema'] = this.schema
 
-      Promise.resolve(funcToCall(params)).then((resp) => {
+      return Promise.resolve(funcToCall(params)).then((resp) => {
         this.tryToast('success',resp,okToast)
         done && done({resp})
       }).catch(error => {
@@ -151,7 +162,7 @@ export default {
           this.proxyConfigRef.submitRemoveFieldNotInSchema,
           this.proxyConfigRef.row2Item
       )
-      this.tryPromise('saveField',{
+      return this.tryPromise('saveField',{
         tableData:toSave,
         field},({error})=>{
         done && done({error})
@@ -167,7 +178,7 @@ export default {
           this.proxyConfigRef.submitRemoveFieldNotInSchema,
           this.proxyConfigRef.row2Item
       )
-      this.tryPromise('saveTableData',{tableData:toSave},({error})=>{
+      return this.tryPromise('saveTableData',{tableData:toSave},({error})=>{
         if(!error){
           this.doLayout(true)
         }
@@ -251,7 +262,7 @@ export default {
         }
       }
 
-      this.tryPromise('save',{row: toSave},({error})=>{
+      return this.tryPromise('save',{row: toSave},({error})=>{
         if(!error){
           this.doLayout(true)
         }
@@ -287,7 +298,7 @@ export default {
       params = this.addRemoteSortParams(params)
 
       this.queryCount += 1
-      this.tryPromise('query',{params:params,queryCount:this.queryCount},({resp,error})=>{
+      return this.tryPromise('query',{params:params,queryCount:this.queryCount},({resp,error})=>{
         if(resp){
           // 不能直接赋值，vue检测array元素变化存在一些问题
           if(this.isModeInplace()){
@@ -325,6 +336,9 @@ export default {
             }
           }
           this.doLayoutNextTick(true)
+          if(this.afterQueryData){
+            this.afterQueryData()
+          }
         }
         done && done({error})
       })

@@ -16,6 +16,8 @@ export function FillDefaultDataWithSchema(schema, row={},fillBySchemaDefault=tru
         }
         const fieldName = fieldSchema.field
 
+        const filedTypeUsing = fieldSchema.type || 'input'
+
         let noValue = jsb.isUndefined(row[fieldName]) || jsb.isNull(row[fieldName])
         if (noValue && fillBySchemaDefault) {
             // 如果不存在值，调用默认的default初始化
@@ -27,7 +29,7 @@ export function FillDefaultDataWithSchema(schema, row={},fillBySchemaDefault=tru
         }
         if(noValue){
             // 调用类型对应的默认赋值逻辑
-            const vByType = type2DefaultVal[fieldSchema.type]
+            const vByType = type2DefaultVal[filedTypeUsing]
             if(jsb.isFunction(vByType)){
                 row[fieldName] = vByType(fieldSchema)
             }else{
@@ -35,11 +37,11 @@ export function FillDefaultDataWithSchema(schema, row={},fillBySchemaDefault=tru
             }
         }
         // object类型防止由于{}无法给子字段赋值
-        if(jsb.isObjectOrMap(row[fieldName]) && fieldSchema.type==='object' && fieldSchema.fields){
+        if(jsb.isObjectOrMap(row[fieldName]) && filedTypeUsing==='object' && fieldSchema.fields){
             row[fieldName] = FillDefaultDataWithSchema(fieldSchema.fields,row[fieldName],fillBySchemaDefault)
         }
         // array嵌套数组类型
-        if(jsb.isArray(row[fieldName]) && fieldSchema.type==='table' && fieldSchema.fields){
+        if(jsb.isArray(row[fieldName]) && filedTypeUsing==='table' && fieldSchema.fields){
             jsb.each(row[fieldName],(v,index)=>{
                 row[fieldName][index] = FillDefaultDataWithSchema(fieldSchema.fields,v,fillBySchemaDefault)
             })

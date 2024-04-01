@@ -67,7 +67,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:columnDragFixed" align="center" width="40"
+        <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:columnDragFixed" align="center" width="50"
                          class-name="aim-column-fixed-width">
           <template slot-scope="{}" slot="header">
             <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
@@ -77,7 +77,7 @@
           <template slot-scope="{}"><i class="el-icon-menu"></i></template>
         </el-table-column>
 
-        <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="40" align="center"
+        <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="50" align="center"
                          class-name="aim-column-fixed-width" :fixed="columnTooltipFixed">
           <template v-if="rowTooltipHeaderIcon" slot="header">
             <i :class="rowTooltipHeaderIcon"/>
@@ -97,11 +97,11 @@
                          :fixed="inSortIndexEdit?false:columnSelectionFixed"
                          class-name="aim-column-fixed-width"
                          key="aim_table_auto_column_selection"
-                         width="40"
+                         width="50"
                          type="selection"
                          align="center"
         />
-        <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="40" align="center">
+        <el-table-column v-if="radio" key="aim_table_auto_column_radio" width="50" align="center">
           <template slot-scope="scope">
             <el-checkbox :value="scope.row === radioRow"
                          @change="(val)=>{radioRowChanged(scope.row,val)}"></el-checkbox>
@@ -214,7 +214,7 @@
             </template>
           </el-table-column>
         </template>
-        <el-table-column key="shortcut_row_remove" v-if="rowRemoveShortcut" width="40" align="center">
+        <el-table-column key="shortcut_row_remove" v-if="rowRemoveShortcut" width="50" align="center">
           <template slot-scope="{row}">
             <el-link :disabled="rowRemoveDisable(row)" @click="tryProxyDelete(row)"><i class="el-icon-close"></i>
             </el-link>
@@ -285,7 +285,6 @@
             :data="rowInEditForm"
             :table-data-getter="()=>{return tableData}"
             :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
-            :alert-info="rowEditorAlert"
             :mode="rowEditState"
             :rules="FormRulesFromSchema(schema,{row:rowInEditForm,data:tableData})"
             :row-top="rowInEditForm"
@@ -337,6 +336,62 @@
         />
       </template>
     </aim-popup>
+
+    <aim-popup :drawer="true" :is-show.sync="groupViewDrawerVisible">
+      <template v-slot:aim-popup-body>
+        <aim-tree-view
+            ref="aimTreeView"
+            :tree-config-query="proxyConfigRef.treeConfigQuery"
+            :tree-config-save="proxyConfigRef.treeConfigSave"
+            :tree-data-query="()=>{return tableData}"
+            :tree-data-row-save="tryProxySaveRow"
+            :default-app-data="FillDefaultDataWithSchema(schema)"
+            :group-by="proxyConfigRef.groupBy || 'pid'">
+          <template v-slot:app="{app,isEdit}">
+            <aim-form-input
+                style="padding-right: 9px"
+                ref="aimFormInputInTreeView"
+                :schema="validSchema(schema)"
+                :group-config="groupConfig"
+                :data="app"
+                :table-data-getter="()=>{return tableData}"
+                :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
+                :alert-info="rowEditorAlert"
+                :mode="isEdit?AimFormInputEdit:AimFormInputInsert"
+                :rules="FormRulesFromSchema(schema,{row:app,data:tableData})"
+                :row-top="app"
+                :enable-watcher="true"
+                :submit-remove-field-not-in-schema="submitRemoveFieldNotInSchema"
+            >
+              <template v-for="fs in schema" v-slot:[getProxyTipSlotName(fs)]="{}">
+                <slot v-if="tipSlotName(fs)" :name="tipSlotName(fs)" :field-schema="fs"/>
+              </template>
+              <template v-for="fs in schema" v-slot:[getProxyFormSlotName(fs)]="{row}">
+                <slot v-if="formSlotName(fs)" :name="formSlotName(fs)" :field-schema="fs" :row="row"/>
+              </template>
+              <template v-for="name in allCommentSlotName"
+                        v-slot:[getProxyCommentSlotNameWithName(name)]="{fieldSchema,row}">
+                <slot :name="name" :field-schema="fieldSchema" :row="row"/>
+              </template>
+            </aim-form-input>
+          </template>
+          <template v-slot:action="{app,isEdit}">
+            <cell-list
+                :row="app"
+                :style="flexEndStyle"
+                :shortcut-button-options="{circle:false}"
+                :cells="editConfigRef.formEditorCells({row:app,mode:isEdit?AimFormInputEdit:AimFormInputInsert})"
+                :should-cell-hide="privateShouldCellHide"
+                :should-cell-disable="privateShouldCellDisable"
+                @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:app,code,jsEvent,fromForm:true})">
+              <template v-for="item in editConfigRef.formEditorCells" v-slot:[getProxySlotName(item.cell)]="{}">
+                <slot v-if="item.cell" :name="item.cell" :item="item"></slot>
+              </template>
+            </cell-list>
+          </template>
+        </aim-tree-view>
+      </template>
+    </aim-popup>
   </div>
 </template>
 
@@ -380,7 +435,7 @@ import {
   CodeButtonRowSelectedDelete,
   CodeButtonRowSelectedMinus,
   CodeButtonSaveTableData,
-  CodeButtonSortIndex,
+  CodeButtonSortIndex, CodeButtonTableGroupView,
   CodeButtonTableSetting,
   CodeLinkFieldCopy,
   CodeLinkFilterSearch,
@@ -420,7 +475,7 @@ import {
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import {flexEndStyle} from "@/components/AimTable/style";
 import MixinSort from "@/components/AimTable/mixins/MixinSort.vue";
-import {AimFormInputCopy, AimFormInputInsert, AimFormInputView} from "@/components/AimFormInput";
+import {AimFormInputCopy, AimFormInputEdit, AimFormInputInsert, AimFormInputView} from "@/components/AimFormInput";
 import {flexColumnWidth} from "@/components/AimTable/AutoWidth";
 import AimPopup from "@/components/AimPopup/index.vue";
 import ColumnShortcuts from "@/components/AimTable/Column/ColumnShortcuts.vue";
@@ -430,6 +485,8 @@ import {exportTable2Excel} from "@/components/AimTable/export/excel";
 import Cookies from "js-cookie";
 import row from "element-ui/packages/row";
 import CellDropdown from "@/components/cells/CellDropdown.vue";
+import AimTreeView from "@/components/AimTreeView/index.vue";
+import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -548,6 +605,7 @@ export default {
   ],
   components: {
     CellDropdown,
+    AimTreeView,
     AimTableSetting,
     ColumnShortcuts,
     AimPopup,
@@ -632,13 +690,17 @@ export default {
   },
   data() {
     return {
+      AimFormInputEdit:AimFormInputEdit,
+      AimFormInputInsert:AimFormInputInsert,
       CtrlDataInRowData:CtrlDataInRowData,
       AimFormInputView,
       flexEndStyle,
       radioRow: null,
       visitSettingDrawerVisible: false,
+      groupViewDrawerVisible: false,
       tableSetting:{},
       tableHeightRefreshKey: 0,
+      configContent:'[]',
     }
   },
 
@@ -648,6 +710,11 @@ export default {
     }
   },
   created() {
+    this.afterQueryData = ()=>{
+      if(this.$refs.aimTreeView){
+        this.$refs.aimTreeView.fetchData()
+      }
+    }
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutNextTick)
     }
@@ -694,6 +761,7 @@ export default {
   },
 
   methods: {
+    FillDefaultDataWithSchema,
     // updateFormMode 外部使用更新编辑状态，如对接redsource lock
     updateFormMode(mode) {
       this.rowEditState = mode
@@ -997,12 +1065,19 @@ export default {
         case CodeButtonTableSetting:
           this.visitSettingDrawerVisible = true
           break
+        case CodeButtonTableGroupView:
+          this.groupViewDrawerVisible = true
+          break
         case CodeButtonExpandAll:
           this.expandAll(this.tableData, this.$refs.table)
           break
         case CodeButtonRowSave:
           if (fromForm) {
-            this.$refs.aimFormInput.__validateFromAimTable(() => {
+            let form = this.$refs.aimFormInput
+            if(!form){
+              form = this.$refs.aimFormInputInTreeView
+            }
+            form.__validateFromAimTable(() => {
               this.tryProxySaveRow(row, {done: editDone})
             })
           } else {
