@@ -58,7 +58,7 @@ export default {
         if(mode === AimFormInputInsert || mode === AimFormInputCopy) {
           return [CodeButtonRowSave]
         }
-        return [CodeButtonRowSave, CodeButtonRowDelete]
+        return [CodeButtonRowDelete, CodeButtonRowSave]
       },
       // eslint-disable-next-line no-unused-vars
       formHeaderSlot:'',

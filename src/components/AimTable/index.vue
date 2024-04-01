@@ -157,6 +157,15 @@
                         @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
                     ></cell-list>
                   </template>
+                  <template v-if="cellName(fs,scope.row)==='CellDropdown'">
+                    <cell-dropdown
+                        :style="columnStyle(fs)"
+                        :cells="cellConfig(fs,scope.row)"
+                        :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
+                        :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
+                        @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
+                    ></cell-dropdown>
+                  </template>
                   <template v-else-if="fs.slot">
                     <slot
                         v-if="!privateShouldCellHide({
@@ -420,6 +429,7 @@ import AimTableSetting from "@/components/AimTable/AimTableSetting/index.vue";
 import {exportTable2Excel} from "@/components/AimTable/export/excel";
 import Cookies from "js-cookie";
 import row from "element-ui/packages/row";
+import CellDropdown from "@/components/cells/CellDropdown.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -537,6 +547,7 @@ export default {
     MixinFilter,
   ],
   components: {
+    CellDropdown,
     AimTableSetting,
     ColumnShortcuts,
     AimPopup,

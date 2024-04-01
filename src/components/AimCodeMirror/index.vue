@@ -443,7 +443,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.codemirror-wrapper >>> .CodeMirror {
+.codemirror-wrapper .CodeMirror {
   font-size: var(--font-size) !important;
   line-height: var(--line-height) !important;
 }
