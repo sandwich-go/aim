@@ -69,6 +69,9 @@ export default {
     thisTarget() {
       return this
     },
+    fresh({done,params}={}){
+      this.proxyQueryData({done,params})
+    },
     getData(){
       return this.tableData
     },
