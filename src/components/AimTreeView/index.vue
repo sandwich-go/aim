@@ -4,7 +4,7 @@
     <splitpanes vertical v-bind:style="splitPaneStyle()" :first-splitter="false">
       <pane max-size="30" size="20">
         <template v-if="groupByArray.length > 1">
-          <el-radio-group  v-model="groupByNow" size="mini" @change="groupByNowChanged">
+          <el-radio-group v-model="groupByNow" size="mini" @change="groupByNowChanged">
             <el-radio-button v-for="(group,index) in groupByArray"
                              :label="groupValue(group)"
                              :key="index">{{ groupLabel(group) }}
@@ -20,13 +20,19 @@
                     :allow-batch="false"
                     :size="!treeItemSize?null:treeItemSize"
                     text-field-name="label"
-                    @item-drop-before = "itemDropBefore"
+                    @item-drop-before="itemDropBefore"
                     @item-click="itemClick"
                     @item-drop="itemDrop">
             <template slot-scope="_">
+              <template v-if="showMoveUpDown(_.model)">
+                <a style="border: 0; background-color: transparent; cursor: pointer;"
+                   @click="moveUp(_.vm, _.model, $event)"><i class="el-icon-top"></i></a>
+                <a style="border: 0; background-color: transparent; cursor: pointer;"
+                   @click="moveDown(_.vm, _.model, $event)"><i class="el-icon-bottom"></i></a>
+              </template>
               <i :class="_.vm.themeIconClasses" role="presentation"></i>
               <div v-bind:style="bindTreeItemStyle(_.model)">
-                <span>{{_.model.label}}</span>
+                <span>{{ _.model.label }}</span>
                 <i v-if="_.model.systemLock" class="el-icon-lock"></i>
               </div>
             </template>
@@ -50,57 +56,61 @@
         </template>
         <div v-show="!currentAppID">
           <el-divider content-position="left">
-            <el-link type="primary" @click="saveTreeConfig(true,true)" icon="el-icon-check">保存分组视图</el-link> </el-divider>
+            <el-link type="primary" @click="saveTreeConfig(true,true)" icon="el-icon-check">保存分组视图</el-link>
+          </el-divider>
           <el-input type="textarea" disabled :value="JSON.stringify(currentTreeConfigJSON(treeData))"
                     :autosize="{minRows:5,maxRows:10}"></el-input>
-          <el-divider  v-if="editingNode" content-position="left">当前节点</el-divider>
+          <el-divider v-if="editingNode" content-position="left">当前节点</el-divider>
           <el-form v-if="editingNode" label-position="right" size="mini">
             <el-form-item v-if="!isRoot" label="ID" label-width="80px" required>
-              <el-input :disabled="!editingNode || (editingItem.children && editingItem.children.length>0)" v-model="editingItem.id"/>
-              <span class="aim-form-item-comment" :style="commentStyle">分组视图内保证唯一，含叶子节点的分组不允许修改 ID</span>
+              <el-input :disabled="editingItem.children && editingItem.children.length>0" v-model="editingItem.id"/>
+              <span class="aim-form-item-comment"
+                    :style="commentStyle">分组视图内保证唯一，含叶子节点的分组不允许修改 ID</span>
             </el-form-item>
             <el-form-item v-if="!isRoot" label="名称" label-width="80px" required>
-              <el-input :disabled="!editingNode" v-model="editingItem.label"/>
+              <el-input v-model="editingItem.label"/>
             </el-form-item>
             <el-form-item v-if="!isRoot" label="说明信息" label-width="80px">
-              <el-input :disabled="!editingNode" v-model="editingItem.comment"/>
+              <el-input v-model="editingItem.comment"/>
             </el-form-item>
-            <el-form-item v-if="!isRoot"  label="标题颜色" label-width="80px">
-              <el-color-picker v-model="editingItem.color" show-alpha size="mini" :predefine="colorPredefined" :disabled="!editingNode"/>
+            <el-form-item v-if="!isRoot" label="标题颜色" label-width="80px">
+              <el-color-picker v-model="editingItem.color" show-alpha size="mini" :predefine="colorPredefined"/>
             </el-form-item>
-            <el-form-item v-if="!isRoot"  label="图标" label-width="80px">
-              <icon-select-wrapper width="700px" :disabled="!editingNode"
-                                 :element="true"
-                                 :icon-name="editingItem.icon"
-                                 :icon-changed="function(name) {editingItem.icon = name}"/>
+            <el-form-item v-if="!isRoot" label="图标" label-width="80px">
+              <icon-select-wrapper width="700px"
+                                   :element="true"
+                                   :icon-name="editingItem.icon"
+                                   :icon-changed="function(name) {editingItem.icon = name}"/>
             </el-form-item>
             <el-form-item label="默认打开" label-width="80px">
-              <el-switch :disabled="!editingNode" v-model="editingItem.opened"/>
+              <el-switch v-model="editingItem.opened"/>
             </el-form-item>
-            <el-button :disabled="!editingNode" plain size="mini" icon="el-icon-bottom-right" type="primary"
+            <el-button plain size="mini" icon="el-icon-bottom-right" type="primary"
                        @click="addChildNode">添加子节点
             </el-button>
             <el-button v-if="showBtnAddBrotherNode(editingItem)" icon="el-icon-bottom"
-                       :disabled="!editingNode" plain size="mini"
+                       plain size="mini"
                        type="primary" @click="addAfterNode">添加平级节点
             </el-button>
-            <el-button :disabled="!editingNode" icon="el-icon-s-grid" plain size="mini" type="success" @click="addChildApp">添加叶子节点
+            <el-button icon="el-icon-s-grid" plain size="mini" type="success" @click="addChildApp">添加叶子节点
             </el-button>
             <el-divider direction="vertical"></el-divider>
-            <el-button v-if="showBtnRemove(editingItem)" :disabled="!editingNode || !couldRemove(editingItem)"
+            <el-button v-if="showBtnRemove(editingItem)" :disabled="!couldRemove(editingItem)"
                        size="mini" type="danger" icon='el-icon-delete' @click="removeNode">移除当前节点
             </el-button>
           </el-form>
           <el-alert class="small-padding" type="success" show-icon style="margin-top: 10px">
             <template slot='title'>拽节点以快速调整从属关系，
-              <el-tag size="mini" type="warning">叶子节点</el-tag>不允许添加子节点。
+              <el-tag size="mini" type="warning">叶子节点</el-tag>
+              不允许添加子节点。
             </template>
           </el-alert>
         </div>
       </pane>
     </splitpanes>
     <!-- 弹出新建逻辑 -->
-    <aim-popup v-if="visibleNewAppDialog" :drawer="false" :is-show.sync="visibleNewAppDialog" :config="{appendToBody:true}">
+    <aim-popup v-if="visibleNewAppDialog" :drawer="false" :is-show.sync="visibleNewAppDialog"
+               :config="{appendToBody:true}">
       <template v-slot:aim-popup-body>
         <aim-form-input
             v-if="appSchema"
@@ -147,34 +157,34 @@ export default {
       type: [String, Array],
       required: true
     },
-    treeDataRowSave:{
-      type:Function,
+    treeDataRowSave: {
+      type: Function,
       // eslint-disable-next-line no-unused-vars
-      default:(row) => {
+      default: (row) => {
         return new Promise((resolve, reject) => {
           reject("should implement treeDataRowSave")
         })
       },
     },
-    treeDataQuery:{
-      type:Function,
-      default:() => {
+    treeDataQuery: {
+      type: Function,
+      default: () => {
         return new Promise((resolve, reject) => {
           reject("should implement treeDataQuery")
         })
       },
     },
-    treeConfigQuery:{
-      type:Function,
-      default:() => {
+    treeConfigQuery: {
+      type: Function,
+      default: () => {
         return new Promise((resolve, reject) => {
           reject("should implement treeConfigQuery")
         })
       },
     },
-    treeConfigSave:{
-      type:Function,
-      default:() => {
+    treeConfigSave: {
+      type: Function,
+      default: () => {
         return new Promise((resolve, reject) => {
           reject("should implement treeConfigSave")
         })
@@ -196,17 +206,21 @@ export default {
       type: String,
       default: 'name'
     },
-    levelLimit:{
-      type:Number,
-      default:0,
+    levelLimit: {
+      type: Number,
+      default: 0,
     },
     aimFormInput: {
       type: Object,
-      default:()=>{return null}
+      default: () => {
+        return null
+      }
     },
     appSchema: {
       type: Array,
-      default:()=>{return null}
+      default: () => {
+        return null
+      }
     },
     viewHeight: {
       type: Number,
@@ -214,9 +228,11 @@ export default {
         return jsb.clientHeight(80)
       }
     },
-    defaultAppData:{
-      type:Object,
-      default:()=>{return {}}
+    defaultAppData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
   },
   watch: {
@@ -224,17 +240,17 @@ export default {
       this.$refs.jsTree.initializeData(this.treeData);
     }
   },
-  computed:{
-    isRoot(){
-      return jsb.pathGet(this.editingItem,'id') === this.treeRootID
+  computed: {
+    isRoot() {
+      return jsb.pathGet(this.editingItem, 'id') === this.treeRootID
     },
   },
   data() {
     return {
-      colorPredefined:jsb.cc.colorPredefined,
-      treeConfigObject:{},
-      treeConfigJSONBackup:'',
-      inLoading:false,
+      colorPredefined: jsb.cc.colorPredefined,
+      treeConfigObject: {},
+      treeConfigJSONBackup: '',
+      inLoading: false,
       currentAppID: '',
       editingNode: null,
       editingItem: {},
@@ -243,10 +259,10 @@ export default {
       groupByNow: '',
       groupID2PathMap: {},
       appMapping: {},
-      draggedItem:null,
+      draggedItem: null,
       newAppData: jsb.clone(this.defaultAppData),
       visibleNewAppDialog: false,
-      commentStyle :jsb.cc.aimFormCommentStyle,
+      commentStyle: jsb.cc.aimFormCommentStyle,
     }
   },
   created() {
@@ -255,12 +271,33 @@ export default {
     this.fetchData()
   },
   methods: {
-    changed(){
+    showMoveUpDown(model){
+      if(jsb.pathGet(model, 'id') === this.treeRootID) {
+        return false
+      }
+      return !model.isApp;
+    },
+    moveUp(vm, model) {
+      const index = vm.parentItem.indexOf(model);
+      if (index > 0) {
+        const newIndex = index - 1;
+        vm.parentItem.splice(newIndex, 0, vm.parentItem.splice(index, 1)[0]);
+      }
+    },
+    moveDown(vm, model) {
+      const index = vm.parentItem.indexOf(model);
+      if (index < vm.parentItem.length - 1 && index !== -1) {
+        const newIndex = index + 1;
+        vm.parentItem.splice(newIndex, 0, vm.parentItem.splice(index, 1)[0]);
+      }
+    },
+    changed() {
       const treeConfigObject = jsb.clone(this.treeConfigObject)
       treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
+      jsb.eachTree(treeConfigObject, v => v.selected = false)
       return this.treeConfigJSONBackup !== JSON.stringify(treeConfigObject)
     },
-    initNewAppData(){
+    initNewAppData() {
       this.newAppData = jsb.clone(this.defaultAppData)
     },
     groupLabel(group) {
@@ -280,8 +317,8 @@ export default {
       }
       return jsb.pathGet(group, 'value', 'no-value')
     },
-    toNewItem(node,shouldContinue){
-      if(shouldContinue){
+    toNewItem(node, shouldContinue) {
+      if (shouldContinue) {
         this.editingNode = node
         this.editingItem = node.model
         if (groupItemIsApp(this.editingItem)) {
@@ -289,36 +326,38 @@ export default {
         } else {
           this.currentAppID = 0
         }
-      }else{
+      } else {
         node.model.selected = false
-        if(this.editingItem) {
+        if (this.editingItem) {
           this.editingItem.selected = true
         }
       }
     },
     // eslint-disable-next-line no-unused-vars
     itemClick(node) {
-      this.toNewItem(node,true)
+      this.toNewItem(node, true)
     },
-    itemDropBefore(node, item, draggedItem){
+    itemDropBefore(node, item, draggedItem) {
       this.draggedItem = draggedItem
     },
-    itemDrop(node, item){
-      if(!this.draggedItem) {
+    itemDrop(node, item) {
+      if (!this.draggedItem) {
         return
       }
-      if(!groupItemIsApp(this.draggedItem)){
+      if (!groupItemIsApp(this.draggedItem)) {
         // 目录调整此时保存数据会出现duplicated
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.saveTreeConfig(false)
         })
         return;
       }
       // 如果目标是 folder
       let app = this.appMapping[this.draggedItem.value]
-      if(app){
+      if (app) {
         app[this.groupByNow] = item.id
-        this.treeDataRowSave(app).finally(()=>{this.inLoading = false})
+        this.treeDataRowSave(app).finally(() => {
+          this.inLoading = false
+        })
       }
       this.draggedItem = null
       this.inLoading = true
@@ -328,7 +367,7 @@ export default {
       if (item.color) {
         style['color'] = item.color
       }
-      if(!groupItemIsApp(item)){
+      if (!groupItemIsApp(item)) {
         style['font-weight'] = 'bold'
         style['color'] = style['color'] || '#1f78d1'
       }
@@ -388,16 +427,16 @@ export default {
       this.saveTreeConfig(false)
     },
     splitPaneStyle() {
-      return {height:`${jsb.clientHeight(140)}`}
+      return {height: `${jsb.clientHeight(140)}`}
     },
     currentTreeConfigJSON(group) {
       let groupCopy = jsb.clone(group)
       return this.groupClean(groupCopy)
     },
-    groupByNowChanged(){
+    groupByNowChanged() {
       this.fetchData(true)
     },
-    fetchData(cleanState=false) {
+    fetchData(cleanState = false) {
       this.inLoading = true
       const _this = this
       Promise.all([this.treeConfigQuery(), this.treeDataQuery()]).then(rest => {
@@ -405,13 +444,13 @@ export default {
         try {
           this.treeConfigObject = JSON.parse(rest[0])
           // eslint-disable-next-line no-empty
-        }catch (_){
+        } catch (_) {
           this.treeConfigObject = {}
         }
         this.treeConfigJSONBackup = JSON.stringify(this.treeConfigObject)
         // 避免直接操作treeConfigObject的数据
-        const treeConfigNow = jsb.clone(jsb.pathGet(this.treeConfigObject,this.groupByNow,[]))
-        let data = groupTreeDataAppendApp(treeConfigNow, appList,this.appIdField,this.appLabelField,this.groupByNow)
+        const treeConfigNow = jsb.clone(jsb.pathGet(this.treeConfigObject, this.groupByNow, []))
+        let data = groupTreeDataAppendApp(treeConfigNow, appList, this.appIdField, this.appLabelField, this.groupByNow)
         _this.treeData = data['tree']
         _this.appMapping = data['appMap']
         groupID2Path("", treeConfigNow, _this.groupID2PathMap)
@@ -421,16 +460,16 @@ export default {
           }
         }
         return data
-      }).finally(()=>{
+      }).finally(() => {
         this.inLoading = false
-        if(cleanState){
+        if (cleanState) {
           this.resetTreeCurrentState()
         }
       })
     },
-    saveTreeConfig(fetchData=true,tipSuccess=false) {
+    saveTreeConfig(fetchData = true, tipSuccess = false) {
       this.inLoading = true
-      const duplicated = checkDuplicated(this.treeData,'id')
+      const duplicated = checkDuplicated(this.treeData, 'id')
       if (duplicated) {
         this.inLoading = false
         jsb.cc.toastError(`分组数据存在同 id 分组 :${duplicated}`)
@@ -439,13 +478,13 @@ export default {
       const _this = this
       this.treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
       return this.treeConfigSave(JSON.stringify(this.treeConfigObject)).then(() => {
-        if(tipSuccess){
+        if (tipSuccess) {
           jsb.cc.toastSuccess("保存成功")
         }
-        if(fetchData){
+        if (fetchData) {
           _this.fetchData()
         }
-      }).finally(()=>{
+      }).finally(() => {
         this.inLoading = false
       })
     },
@@ -458,6 +497,7 @@ export default {
         delete group[index]['value']
         delete group[index]['disabled']
         delete group[index]['loading']
+        delete group[index]['selected']
         group[index]['children'] = this.groupClean(group[index]['children'])
       }
       return group
@@ -468,12 +508,13 @@ export default {
 
 
 <style lang="scss">
-.container-for-height{
+.container-for-height {
   height: calc(100vh - 120px);
   overflow: auto;
 }
-.folder-underline{
-  text-decoration:none;
-  border-bottom:1px solid gray;
+
+.folder-underline {
+  text-decoration: none;
+  border-bottom: 1px solid gray;
 }
 </style>
