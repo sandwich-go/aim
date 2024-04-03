@@ -50,7 +50,7 @@
         </template>
         <div v-show="!currentAppID">
           <el-divider content-position="left">
-            <el-link type="primary" @click="saveTreeConfig(true,true)">保存分组视图</el-link> </el-divider>
+            <el-link type="primary" @click="saveTreeConfig(true,true)" icon="el-icon-check">保存分组视图</el-link> </el-divider>
           <el-input type="textarea" disabled :value="JSON.stringify(currentTreeConfigJSON(treeData))"
                     :autosize="{minRows:5,maxRows:10}"></el-input>
           <el-divider  v-if="editingNode" content-position="left">当前节点</el-divider>
@@ -256,7 +256,9 @@ export default {
   },
   methods: {
     changed(){
-      return this.treeConfigJSONBackup !== JSON.stringify(this.treeConfigObject)
+      const treeConfigObject = jsb.clone(this.treeConfigObject)
+      treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
+      return this.treeConfigJSONBackup !== JSON.stringify(treeConfigObject)
     },
     initNewAppData(){
       this.newAppData = jsb.clone(this.defaultAppData)
@@ -407,7 +409,8 @@ export default {
           this.treeConfigObject = {}
         }
         this.treeConfigJSONBackup = JSON.stringify(this.treeConfigObject)
-        const treeConfigNow = jsb.pathGet(this.treeConfigObject,this.groupByNow,[])
+        // 避免直接操作treeConfigObject的数据
+        const treeConfigNow = jsb.clone(jsb.pathGet(this.treeConfigObject,this.groupByNow,[]))
         let data = groupTreeDataAppendApp(treeConfigNow, appList,this.appIdField,this.appLabelField,this.groupByNow)
         _this.treeData = data['tree']
         _this.appMapping = data['appMap']

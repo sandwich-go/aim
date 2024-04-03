@@ -1248,19 +1248,20 @@ export default {
       })
     },
     beforeTreeViewClose(done){
-      if(this.$refs.aimTreeView.changed()){
-        jsb.cc.confirm(this,{
-          message:'分组视图有变更未保存',
-          confirmButtonText:'继续编辑',
-          cancelButtonText:'丢弃变更',
-          doneFunc:()=>{
-          },
-          cancelFunc:()=>{
-            done()
-          },
-        })
-
+      if(!this.$refs.aimTreeView.changed()){
+        done()
+        return
       }
+      jsb.cc.confirm(this,{
+        message:'分组视图有变更未保存',
+        confirmButtonText:'继续编辑',
+        cancelButtonText:'丢弃变更',
+        doneFunc:()=>{
+        },
+        cancelFunc:()=>{
+          done()
+        },
+      })
     }
   }
 }
