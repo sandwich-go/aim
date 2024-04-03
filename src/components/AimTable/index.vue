@@ -337,7 +337,7 @@
       </template>
     </aim-popup>
 
-    <aim-popup :drawer="true" :is-show.sync="groupViewDrawerVisible">
+    <aim-popup :drawer="true" :is-show.sync="groupViewDrawerVisible" :config="{beforeClose:beforeTreeViewClose}">
       <template v-slot:aim-popup-body>
         <aim-tree-view
             ref="aimTreeView"
@@ -346,7 +346,7 @@
             :tree-data-query="()=>{return tableData}"
             :tree-data-row-save="tryProxySaveRow"
             :default-app-data="FillDefaultDataWithSchema(schema)"
-            :group-by="proxyConfigRef.groupBy || 'pid'">
+            :group-by="proxyConfigRef.groupBy || ['pid','pid2']">
           <template v-slot:app="{app,isEdit}">
             <aim-form-input
                 style="padding-right: 9px"
@@ -1247,6 +1247,21 @@ export default {
         }
       })
     },
+    beforeTreeViewClose(done){
+      if(this.$refs.aimTreeView.changed()){
+        jsb.cc.confirm(this,{
+          message:'分组视图有变更未保存',
+          confirmButtonText:'继续编辑',
+          cancelButtonText:'丢弃变更',
+          doneFunc:()=>{
+          },
+          cancelFunc:()=>{
+            done()
+          },
+        })
+
+      }
+    }
   }
 }
 </script>

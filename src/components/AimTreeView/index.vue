@@ -49,20 +49,24 @@
           </div>
         </template>
         <div v-show="!currentAppID">
-          <el-divider content-position="left">当前视图结构</el-divider>
+          <el-divider content-position="left">
+            <el-link type="primary" @click="saveTreeConfig(true,true)">保存分组视图</el-link> </el-divider>
           <el-input type="textarea" disabled :value="JSON.stringify(currentTreeConfigJSON(treeData))"
                     :autosize="{minRows:5,maxRows:10}"></el-input>
-          <el-divider content-position="left">当前节点</el-divider>
-          <el-form label-position="right" size="mini">
-            <el-form-item v-if="!isRoot" label="标题" label-width="80px">
+          <el-divider  v-if="editingNode" content-position="left">当前节点</el-divider>
+          <el-form v-if="editingNode" label-position="right" size="mini">
+            <el-form-item v-if="!isRoot" label="ID" label-width="80px" required>
+              <el-input :disabled="!editingNode || (editingItem.children && editingItem.children.length>0)" v-model="editingItem.id"/>
+              <span class="aim-form-item-comment" :style="commentStyle">分组视图内保证唯一，含叶子节点的分组不允许修改 ID</span>
+            </el-form-item>
+            <el-form-item v-if="!isRoot" label="名称" label-width="80px" required>
               <el-input :disabled="!editingNode" v-model="editingItem.label"/>
+            </el-form-item>
+            <el-form-item v-if="!isRoot" label="说明信息" label-width="80px">
+              <el-input :disabled="!editingNode" v-model="editingItem.comment"/>
             </el-form-item>
             <el-form-item v-if="!isRoot"  label="标题颜色" label-width="80px">
               <el-color-picker v-model="editingItem.color" show-alpha size="mini" :predefine="colorPredefined" :disabled="!editingNode"/>
-            </el-form-item>
-            <el-form-item v-if="!isRoot" label="节点别名" label-width="80px">
-              <el-input :disabled="!editingNode" v-model="editingItem.alias"/>
-              <span class="aim-form-item-comment" :style="commentStyle">分组视图内保证唯一，便于通过该字段索引下属节点数据</span>
             </el-form-item>
             <el-form-item v-if="!isRoot"  label="图标" label-width="80px">
               <icon-select-wrapper width="700px" :disabled="!editingNode"
@@ -73,9 +77,6 @@
             <el-form-item label="默认打开" label-width="80px">
               <el-switch :disabled="!editingNode" v-model="editingItem.opened"/>
             </el-form-item>
-
-            <el-button :disabled="!editingNode" type="primary" size="mini" icon='el-icon-check' @click="saveTreeConfig(true,true)">保存分组视图</el-button>
-            <el-divider direction="vertical"></el-divider>
             <el-button :disabled="!editingNode" plain size="mini" icon="el-icon-bottom-right" type="primary"
                        @click="addChildNode">添加子节点
             </el-button>
@@ -226,12 +227,13 @@ export default {
   computed:{
     isRoot(){
       return jsb.pathGet(this.editingItem,'id') === this.treeRootID
-    }
+    },
   },
   data() {
     return {
       colorPredefined:jsb.cc.colorPredefined,
       treeConfigObject:{},
+      treeConfigJSONBackup:'',
       inLoading:false,
       currentAppID: '',
       editingNode: null,
@@ -244,7 +246,7 @@ export default {
       draggedItem:null,
       newAppData: jsb.clone(this.defaultAppData),
       visibleNewAppDialog: false,
-      commentStyle :jsb.cc.aimFormCommentStyle
+      commentStyle :jsb.cc.aimFormCommentStyle,
     }
   },
   created() {
@@ -253,7 +255,9 @@ export default {
     this.fetchData()
   },
   methods: {
-    groupItemIsApp,
+    changed(){
+      return this.treeConfigJSONBackup !== JSON.stringify(this.treeConfigObject)
+    },
     initNewAppData(){
       this.newAppData = jsb.clone(this.defaultAppData)
     },
@@ -402,6 +406,7 @@ export default {
         }catch (_){
           this.treeConfigObject = {}
         }
+        this.treeConfigJSONBackup = JSON.stringify(this.treeConfigObject)
         const treeConfigNow = jsb.pathGet(this.treeConfigObject,this.groupByNow,[])
         let data = groupTreeDataAppendApp(treeConfigNow, appList,this.appIdField,this.appLabelField,this.groupByNow)
         _this.treeData = data['tree']
@@ -437,7 +442,7 @@ export default {
 
       const _this = this
       this.treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
-      this.treeConfigSave(JSON.stringify(this.treeConfigObject)).then(() => {
+      return this.treeConfigSave(JSON.stringify(this.treeConfigObject)).then(() => {
         if(tipSuccess){
           jsb.cc.toastSuccess("保存成功")
         }
