@@ -433,13 +433,6 @@ export default {
         jsb.cc.toastError(`分组数据存在同 id 分组 :${duplicated}`)
         return
       }
-      const duplicatedAlias = checkDuplicated(this.treeData,'alias')
-      if (duplicatedAlias) {
-        this.inLoading = false
-        jsb.cc.toastError(`分组数据存在同别名分组 :${duplicatedAlias}`)
-        return
-      }
-
       const _this = this
       this.treeConfigObject[this.groupByNow] = this.currentTreeConfigJSON(this.treeData)
       return this.treeConfigSave(JSON.stringify(this.treeConfigObject)).then(() => {
