@@ -70,6 +70,17 @@
             <el-form-item v-if="!isRoot" label="名称" label-width="80px" required>
               <el-input v-model="editingItem.label"/>
             </el-form-item>
+
+            <el-form-item v-if="!isRoot" label="扩展信息" label-width="80px">
+              <aim-code-mirror
+                  :code="editingItem['props']"
+                  :popup-append-to-body="true"
+                  :info-config="{mode:'json'}"
+                  :code-change="(code)=>{editingItem['props']=code}"
+              ></aim-code-mirror>
+            </el-form-item>
+
+
             <el-form-item v-if="!isRoot" label="说明信息" label-width="80px">
               <el-input v-model="editingItem.comment"/>
             </el-form-item>
@@ -141,10 +152,12 @@ import AimPopup from "@/components/AimPopup/index.vue";
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import Loading from "vue-loading-overlay";
 import IconSelectWrapper from "@/components/AimTreeView/IconSelectWrapper.vue";
+import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
 
 export default {
   name: "AimTreeView",
   components: {
+    AimCodeMirror,
     IconSelectWrapper,
     Loading,
     AimFormInput,
