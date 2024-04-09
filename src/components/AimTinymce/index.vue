@@ -1,5 +1,6 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
+    <loading :active.sync="inLoading" loader="bars" :is-full-page="false"/>
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div v-if="editorImage" class="editor-custom-btn-container">
       <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
@@ -16,13 +17,14 @@ import editorImage from './components/EditorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
+import Loading from "vue-loading-overlay";
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN = 'https://cdn.staticfile.org/tinymce/4.9.3/tinymce.min.js'
+const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.5/tinymce.min.js'
 
 export default {
   name: 'AimTinymce',
-  components: { editorImage },
+  components: {Loading, editorImage },
   props: {
     editorImage:Boolean,
     id: {
@@ -59,6 +61,7 @@ export default {
   },
   data() {
     return {
+      inLoading:false,
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
@@ -104,6 +107,7 @@ export default {
   },
   methods: {
     init() {
+      this.inLoading = true
       // dynamic load tinymce from cdn
       load(tinymceCDN, (err) => {
         if (err) {
@@ -111,13 +115,15 @@ export default {
           return
         }
         this.initTinymce()
+        this.inLoading = false
       })
     },
     initTinymce() {
       const _this = this
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
-        language: this.languageTypeList['en'],
+        language: "zh_CN", // select language
+        language_url: "https://cdn.jsdelivr.net/npm/tinymce-lang/langs/zh_CN.js",
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
