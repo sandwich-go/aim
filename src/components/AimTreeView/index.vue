@@ -496,6 +496,15 @@ export default {
         if (cleanState) {
           this.resetTreeCurrentState()
         }
+        const lastEditingItem = this.editingItem
+        if(lastEditingItem){
+          const now = jsb.findTree(_this.treeData, item => item['id'] === lastEditingItem.id)
+          if(now){
+            this.editingNode = now
+            this.editingItem = now.item
+            now.item.selected = true
+          }
+        }
       })
     },
     saveTreeConfig(fetchData = true, tipSuccess = false) {
