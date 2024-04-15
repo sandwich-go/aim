@@ -1,5 +1,13 @@
 import jsb from "@sandwich-go/jsb";
 
+// tree 组件树形，提供快速的 group 树形编辑支持
+export const TreeNodeSchema= [
+    {field:'id',name:'id',uniq:true},
+    {field:'label',name:'label',uniq:true},
+    {field:'icon',name:'icon',type:'element_icon'},
+    {field:'id',name:'id',uniq:true},
+]
+
 export function checkDuplicated(group,fieldName='id',ignoreEmpty=true,mapping={}) {
     group = group || []
     for (const item of group) {

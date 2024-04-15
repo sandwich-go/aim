@@ -55,13 +55,15 @@
           </div>
         </template>
         <div v-show="!currentAppID">
-          <el-divider content-position="left">
-            <el-link type="primary" @click="saveTreeConfig(true,true)" icon="el-icon-check">保存分组视图</el-link>
-          </el-divider>
-          <el-input type="textarea" disabled :value="JSON.stringify(currentTreeConfigJSON(treeData))"
+          <el-input v-if="rootNode && rootNode['showRaw']" type="textarea" disabled :value="JSON.stringify(currentTreeConfigJSON(treeData))"
                     :autosize="{minRows:5,maxRows:10}"></el-input>
-          <el-divider v-if="editingNode" content-position="left">当前节点</el-divider>
+          <el-divider v-if="editingNode" content-position="left">
+            <el-link type="primary" @click="saveTreeConfig(true,true)" icon="el-icon-check">保存</el-link>
+          </el-divider>
           <el-form v-if="editingNode" label-position="right" size="mini">
+            <el-form-item v-if="isRoot" label="调试" label-width="80px" required>
+              <el-switch v-model="rootNode['showRaw']"/>
+            </el-form-item>
             <el-form-item v-if="!isRoot" label="ID" label-width="80px" required>
               <el-input :disabled="editingItem.children && editingItem.children.length>0" v-model="editingItem.id"/>
               <span class="aim-form-item-comment"
@@ -135,6 +137,16 @@
         <slot name="action" :app="newAppData" :isEdit="false"></slot>
       </template>
     </aim-popup>
+
+    <!-- 弹出group 维护逻辑 -->
+    <aim-popup v-if="visibleGroups" :drawer="false" :is-show.sync="visibleGroups"
+               :config="{appendToBody:true}">
+      <template v-slot:aim-popup-body>
+      </template>
+      <template v-slot:aim-popup-footer>
+        <slot name="action" :app="newAppData" :isEdit="false"></slot>
+      </template>
+    </aim-popup>
   </div>
 </template>
 <script>
@@ -146,7 +158,7 @@ import {
   groupID2Path,
   groupItemIsApp,
   groupTreeDataAppendApp,
-  checkDuplicated
+  checkDuplicated, TreeNodeSchema
 } from "@/components/AimTreeView/tree";
 import AimPopup from "@/components/AimPopup/index.vue";
 import AimFormInput from "@/components/AimFormInput/index.vue";
@@ -250,8 +262,10 @@ export default {
   },
   watch: {
     treeData: function () {
-      this.$refs.jsTree.initializeData(this.treeData);
-    }
+      if(this.$refs.jsTree){
+        this.$refs.jsTree.initializeData(this.treeData);
+      }
+    },
   },
   computed: {
     isRoot() {
@@ -260,6 +274,7 @@ export default {
   },
   data() {
     return {
+      TreeNodeSchema:TreeNodeSchema,
       colorPredefined: jsb.cc.colorPredefined,
       treeConfigObject: {},
       treeConfigJSONBackup: '',
@@ -268,6 +283,7 @@ export default {
       editingNode: null,
       editingItem: {},
       treeData: [],
+      rootNode:null,
       groupByArray: jsb.wrapArray(this.groupBy),
       groupByNow: '',
       groupID2PathMap: {},
@@ -276,6 +292,7 @@ export default {
       newAppData: jsb.clone(this.defaultAppData),
       visibleNewAppDialog: false,
       commentStyle: jsb.cc.aimFormCommentStyle,
+      visibleGroups: false,
     }
   },
   created() {
@@ -466,6 +483,7 @@ export default {
         let data = groupTreeDataAppendApp(treeConfigNow, appList, this.appIdField, this.appLabelField, this.groupByNow)
         _this.treeData = data['tree']
         _this.appMapping = data['appMap']
+        _this.rootNode = jsb.find(this.treeData,item=>item.id === this.treeRootID)
         groupID2Path("", treeConfigNow, _this.groupID2PathMap)
         for (const treeNode of this.treeData) {
           if (treeNode.id === this.treeRootID) {
