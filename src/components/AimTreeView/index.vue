@@ -429,10 +429,11 @@ export default {
       return !jsb.pathGet(item, 'systemLock', false)
     },
     newChild() {
+      const xid = jsb.xid()
       return {
-        id: jsb.xid(),
+        id: xid,
         icon: 'el-icon-folder',
-        label: jsb.timestamp(),
+        label: xid,
         opened: true,
       }
     },
