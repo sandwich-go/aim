@@ -72,3 +72,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.el-dropdown:hover, .el-dropdown:focus {
+  color: #409EFF !important;
+}
+</style>
