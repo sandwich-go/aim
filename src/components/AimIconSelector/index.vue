@@ -16,9 +16,8 @@
 </template>
 
 <script>
-const svgIcons = []
+import jsb from "@sandwich-go/jsb";
 import elementIcons from './element-icons'
-
 export default {
   name: 'AimIconSelector',
   props: {
@@ -35,7 +34,7 @@ export default {
   },
   methods: {
     sourceIconList() {
-      return this.element ? elementIcons : svgIcons
+      return this.element ? elementIcons : jsb.ccPath('svgIconList',[])
     },
     selectedIcon(name) {
       this.$emit('selected', this.element ? 'el-icon-' + name : name)
