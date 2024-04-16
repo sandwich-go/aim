@@ -12,6 +12,7 @@
           :loading="inOptionLoading"
           :value-key="optionValueKey"
           size="mini"
+          :allow-create="allowCreate"
           :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
           @change="change">
         <el-option
@@ -37,6 +38,11 @@ export default {
   name: 'CellSelect',
   components: {CellSelectGroup},
   mixins: [MixinCellEditorConfig],
+  props:{
+    allowCreate:{
+      type:Boolean,
+    },
+  },
   created() {
     this.ccConfigMerge()
     this.calcWidthPixString("100%")
