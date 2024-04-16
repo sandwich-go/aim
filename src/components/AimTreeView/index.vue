@@ -30,7 +30,7 @@
                 <a style="border: 0; background-color: transparent; cursor: pointer;"
                    @click="moveDown(_.vm, _.model, $event)"><i class="el-icon-bottom"></i></a>
               </template>
-              <svg-icon v-if="svgIcon" slot="prefix" :icon-class="_.model.icon"/>
+              <aim-svg-icon v-if="svgIcon" slot="prefix" :icon-class="_.model.icon"/>
               <i v-else :class="_.vm.themeIconClasses" role="presentation"></i>
               <div v-bind:style="bindTreeItemStyle(_.model)">
                 <span>{{ _.model.label }}</span>
@@ -166,10 +166,12 @@ import AimFormInput from "@/components/AimFormInput/index.vue";
 import Loading from "vue-loading-overlay";
 import IconSelectWrapper from "@/components/AimTreeView/IconSelectWrapper.vue";
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
+import AimSvgIcon from "@/components/AimSvgIcon/index.vue";
 
 export default {
   name: "AimTreeView",
   components: {
+    AimSvgIcon,
     AimCodeMirror,
     IconSelectWrapper,
     Loading,

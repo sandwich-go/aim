@@ -8,16 +8,18 @@
     <el-input slot="reference" v-model="model" readonly v-bind="$attrs">
       <i v-if="!model" slot="prefix" class="el-icon-search el-input__icon"/>
       <i v-else-if="element" slot="prefix" :class="model" class="el-input__icon" style="height: 32px;width: 16px;" />
-      <svg-icon v-else slot="prefix" :icon-class="model" class="el-input__icon" style="height: 32px;width: 16px;" />
+      <aim-svg-icon v-else slot="prefix" :icon-class="model" class="el-input__icon" style="height: 32px;width: 16px;" />
     </el-input>
   </el-popover>
 </template>
 
 <script>
 import AimIconSelector from '@/components/AimIconSelector'
+import AimSvgIcon from "@/components/AimSvgIcon/index.vue";
 export default {
   name: 'IconSelectWrapper',
   components: {
+    AimSvgIcon,
     AimIconSelector
   },
   props: {

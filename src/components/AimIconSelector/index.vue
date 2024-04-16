@@ -2,7 +2,7 @@
   <div class="icon-body">
     <div v-if="!element" class="icon-list">
       <div v-for="(item, index) in iconList" :key="index" @click="selectedIcon(item)">
-        <svg-icon :icon-class="item" style="height: 30px;width: 16px;"/>
+        <aim-svg-icon :icon-class="item" style="height: 30px;width: 16px;"/>
         <span class="svn-icon">{{ item }}</span>
       </div>
     </div>
@@ -18,8 +18,10 @@
 <script>
 import jsb from "@sandwich-go/jsb";
 import elementIcons from './element-icons'
+import AimSvgIcon from "@/components/AimSvgIcon/index.vue";
 export default {
   name: 'AimIconSelector',
+  components: {AimSvgIcon},
   props: {
     element: {
       type: Boolean,

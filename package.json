@@ -26,7 +26,6 @@
     "sass-loader": "^13.2.2",
     "sortablejs": "^1.15.0",
     "splitpanes": "2.4.1",
-    "svgo": "^3.2.0",
     "vue": "^2.6.10",
     "vue-codemirror": "^4.0.6",
     "vue-jstree": "2.1.6",
