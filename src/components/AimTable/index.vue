@@ -346,6 +346,7 @@
             :tree-data-query="()=>{return tableData}"
             :tree-data-row-save="tryProxySaveRow"
             :default-app-data="FillDefaultDataWithSchema(schema)"
+            :svg-icon="!!proxyConfigRef.svgIcon"
             :group-by="proxyConfigRef.groupBy || ['pid','pid2']">
           <template v-slot:app="{app,isEdit}">
             <aim-form-input

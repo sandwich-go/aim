@@ -30,7 +30,8 @@
                 <a style="border: 0; background-color: transparent; cursor: pointer;"
                    @click="moveDown(_.vm, _.model, $event)"><i class="el-icon-bottom"></i></a>
               </template>
-              <i :class="_.vm.themeIconClasses" role="presentation"></i>
+              <svg-icon v-if="svgIcon" slot="prefix" :icon-class="_.vm.themeIconClasses"/>
+              <i v-else :class="_.vm.themeIconClasses" role="presentation"></i>
               <div v-bind:style="bindTreeItemStyle(_.model)">
                 <span>{{ _.model.label }}</span>
                 <i v-if="_.model.systemLock" class="el-icon-lock"></i>
@@ -91,7 +92,7 @@
             </el-form-item>
             <el-form-item v-if="!isRoot" label="图标" label-width="80px">
               <icon-select-wrapper width="700px"
-                                   :element="true"
+                                   :element="!svgIcon"
                                    :icon-name="editingItem.icon"
                                    :icon-changed="function(name) {editingItem.icon = name}"/>
             </el-form-item>
@@ -178,6 +179,9 @@ export default {
     Splitpanes, Pane
   },
   props: {
+    svgIcon:{
+      type:Boolean
+    },
     groupBy: {
       type: [String, Array],
       required: true
