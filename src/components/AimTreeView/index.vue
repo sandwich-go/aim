@@ -30,7 +30,7 @@
                 <a style="border: 0; background-color: transparent; cursor: pointer;"
                    @click="moveDown(_.vm, _.model, $event)"><i class="el-icon-bottom"></i></a>
               </template>
-              <svg-icon v-if="svgIcon" slot="prefix" :icon-class="_.vm.themeIconClasses"/>
+              <svg-icon v-if="svgIcon" slot="prefix" :icon-class="_.model.icon"/>
               <i v-else :class="_.vm.themeIconClasses" role="presentation"></i>
               <div v-bind:style="bindTreeItemStyle(_.model)">
                 <span>{{ _.model.label }}</span>
