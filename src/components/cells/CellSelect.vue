@@ -15,6 +15,7 @@
           filterable
           default-first-option
           :allow-create="allowCreate"
+          :placeholder="placeholder"
           :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
           @change="change">
         <el-option
@@ -48,6 +49,14 @@ export default {
   created() {
     this.ccConfigMerge()
     this.calcWidthPixString("100%")
+  },
+  computed:{
+    placeholder(){
+      if(this.cc.placeholder){
+        return this.cc.placeholder
+      }
+      return this.allowCreate?'请选择或者输入':'请选择'
+    }
   },
   methods:{
     optionKey(option){

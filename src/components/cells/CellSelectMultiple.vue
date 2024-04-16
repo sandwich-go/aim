@@ -10,6 +10,7 @@
         :value-key="optionValueKey"
         default-first-option
         :disabled="disabled"
+        :placeholder="placeholder"
         :allow-create="allowCreate"
         :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
         @change="change">
@@ -43,6 +44,14 @@ export default {
     allowCreate:{
       type:Boolean,
     },
+  },
+  computed:{
+    placeholder(){
+      if(this.cc.placeholder){
+        return this.cc.placeholder
+      }
+      return this.allowCreate?'请选择或者输入':'请选择'
+    }
   },
   created() {
     this.ccConfigMerge({
