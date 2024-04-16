@@ -166,12 +166,10 @@ import AimFormInput from "@/components/AimFormInput/index.vue";
 import Loading from "vue-loading-overlay";
 import IconSelectWrapper from "@/components/AimTreeView/IconSelectWrapper.vue";
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
-import AimSvgIcon from "@/components/AimSvgIcon/index.vue";
 
 export default {
   name: "AimTreeView",
   components: {
-    AimSvgIcon,
     AimCodeMirror,
     IconSelectWrapper,
     Loading,
