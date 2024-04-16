@@ -12,6 +12,8 @@
           :loading="inOptionLoading"
           :value-key="optionValueKey"
           size="mini"
+          filterable
+          default-first-option
           :allow-create="allowCreate"
           :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
           @change="change">

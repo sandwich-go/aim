@@ -7,22 +7,28 @@
         :cell-config="cellConfig"
         :style-base="styleBase"
         :style-override="styleOverride"
-        style="width: 50%"
+        filterable
+        default-first-option
+        :allow-create="allowCreate"
         :disabled="disabled"/>
-    <span style="padding-left: 3px;padding-right: 3px">&#8646;</span>
-    <aim-tag-editor size="mini" :tags="data[fieldName]" add="+ New Tag" style="width: 50%"/>
+<!--    <span style="padding-left: 3px;padding-right: 3px">&#8646;</span>-->
+<!--    <aim-tag-editor size="mini" :tags="data[fieldName]" add="+ New Tag" style="width: 50%"/>-->
   </div>
 </template>
 
 <script>
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import CellSelectMultiple from "@/components/cells/CellSelectMultiple.vue";
-import AimTagEditor from "@/components/AimTagEditor/index.vue";
 
 export default {
   name: 'CellSelectMultipleInput',
-  components: {AimTagEditor, CellSelectMultiple},
+  components: {CellSelectMultiple},
   mixins: [MixinCellEditorConfig],
+  props:{
+    allowCreate:{
+      type:Boolean,
+    },
+  },
 }
 </script>
 
