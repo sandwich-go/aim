@@ -9,7 +9,7 @@
         :style-override="styleOverride"
         filterable
         default-first-option
-        :allow-create="allowCreate"
+        allow-create
         :disabled="disabled"/>
 <!--    <span style="padding-left: 3px;padding-right: 3px">&#8646;</span>-->
 <!--    <aim-tag-editor size="mini" :tags="data[fieldName]" add="+ New Tag" style="width: 50%"/>-->
@@ -24,11 +24,6 @@ export default {
   name: 'CellSelectMultipleInput',
   components: {CellSelectMultiple},
   mixins: [MixinCellEditorConfig],
-  props:{
-    allowCreate:{
-      type:Boolean,
-    },
-  },
 }
 </script>
 
