@@ -8,8 +8,9 @@
     <aim-icon-selector ref="iconSelect" :style="cc.style" :element="cc.element"
                       @selected="selectedIcon"/>
     <el-input slot="reference" :disabled="disabled" size="mini" v-model="dataRef[fieldName]" readonly v-bind="$attrs">
-      <i v-if="dataRef[fieldName]" slot="prefix" :class="dataRef[fieldName]" class="el-input__icon"
-         style="height: 32px;width: 16px;"/>
+      <i v-if="!dataRef[fieldName]" slot="prefix" class="el-icon-search el-input__icon"/>
+      <i v-else-if="cc.element" slot="prefix" :class="dataRef[fieldName]" class="el-input__icon" style="height: 32px;width: 16px;" />
+      <svg-icon v-else slot="prefix" :icon-class="dataRef[fieldName]" class="el-input__icon" style="height: 32px;width: 16px;" />
     </el-input>
   </el-popover>
 </template>
