@@ -55,7 +55,7 @@ export default {
       if(this.cc.placeholder){
         return this.cc.placeholder
       }
-      return this.allowCreate?'请选择或者输入':'请选择'
+      return this.allowCreate?'请选择或输入':'请选择'
     }
   },
   methods:{
