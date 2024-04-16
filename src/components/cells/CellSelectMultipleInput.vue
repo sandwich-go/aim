@@ -7,9 +7,7 @@
         :cell-config="cellConfig"
         :style-base="styleBase"
         :style-override="styleOverride"
-        filterable
-        default-first-option
-        allow-create
+        :allow-create="true"
         :disabled="disabled"/>
 <!--    <span style="padding-left: 3px;padding-right: 3px">&#8646;</span>-->
 <!--    <aim-tag-editor size="mini" :tags="data[fieldName]" add="+ New Tag" style="width: 50%"/>-->

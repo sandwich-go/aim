@@ -10,6 +10,7 @@
         :value-key="optionValueKey"
         default-first-option
         :disabled="disabled"
+        :allow-create="allowCreate"
         :clearable="cc.hasOwnProperty('clearable')?cc.clearable:true"
         @change="change">
       <el-option v-for="val in optionsUsing"
@@ -36,6 +37,11 @@ export default {
   methods: {
     optionKey(option) {
       return option.key || jsb.isObjectOrMap(option.value) ? option.value[this.optionValueKey] : option.value
+    },
+  },
+  props:{
+    allowCreate:{
+      type:Boolean,
     },
   },
   created() {
