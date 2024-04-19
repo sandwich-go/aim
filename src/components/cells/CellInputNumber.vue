@@ -16,15 +16,16 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
+import {pathGet} from "@/components/utils/jsb";
 
 export default {
   name: 'CellInputNumber',
   mixins: [MixinCellEditorConfig],
   created() {
     this.ccConfigMerge({
-      min: -Infinity,
-      max: Infinity,
-      step: 1,
+      min: pathGet(this.fieldSchemaRef, 'min', -Infinity),
+      max: pathGet(this.fieldSchemaRef, 'max', Infinity),
+      step: pathGet(this.fieldSchemaRef, 'step', 1),
       controlsPosition:'right'
     })
     this.calcWidthPixString("100%")
