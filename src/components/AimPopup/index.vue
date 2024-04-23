@@ -90,6 +90,13 @@ export default {
       this.$emit("update:isShow", false);
       this.configData.close && this.configData.close()
     },
+    closePopup(){
+      if (this.drawer === true) {
+        this.$refs.aimPopupDrawer.closeDrawer()
+      } else {
+        this.$refs.aimPopupDialog.close()
+      }
+    }
   },
   created() {
     if(this.drawer){
