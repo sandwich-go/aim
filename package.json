@@ -1,10 +1,11 @@
 {
   "name": "@sandwich-go/aim",
   "license": "MIT",
-  "version": "0.1.764",
+  "version": "0.1.765",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib src/components/index.js",
     "lint": "vue-cli-service lint",
     "release": "yarn version --new-version patch && vue-cli-service build --target lib src/components/index.js"
   },
