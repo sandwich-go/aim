@@ -26,7 +26,7 @@ export default {
       min: pathGet(this.fieldSchemaRef, 'min', -Infinity),
       max: pathGet(this.fieldSchemaRef, 'max', Infinity),
       step: pathGet(this.fieldSchemaRef, 'step', 1),
-      controlsPosition:'right'
+      controlsPosition: 'right'
     })
     this.calcWidthPixString("100%")
   },
