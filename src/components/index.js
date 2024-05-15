@@ -4,12 +4,15 @@ import AimPopup from './AimPopup/index.vue'
 import AimTinymce from "@/components/AimTinymce/index.vue";
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
 
+import AimElementTreeLine from "@/components/AimElementTreeLine"
+
 const components = [
     AimTable,
     AimFormInput,
     AimPopup,
     AimTinymce,
     AimCodeMirror,
+    AimElementTreeLine,
 ]
 
 const install = (Vue) => {
