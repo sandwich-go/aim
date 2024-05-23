@@ -148,7 +148,9 @@ export default {
         this.inLoading = false
         aimTableError(`tryPromise ${funcName} err:${error.toString()}`,error.stack)
         done && done({error})
-        this.tryToast('error',error,error.toString())
+        if(!jsb.pathGet(error,'__toasted',false)){
+          this.tryToast('error',error,error.toString())
+        }
       }).finally(() => {
         this.inLoading = false
       })
