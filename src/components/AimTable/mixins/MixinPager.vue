@@ -12,7 +12,7 @@ export default {
       pagerConfigRef: this.pagerConfig ||{enable:false},
       PagerTotal: 0,
       PagerAutoGenPage: 0,
-      PagerAutoGenSize: this.pagerConfigRef.pageSize || jsb.ccPath('aimTablePagerSize', 20),
+      PagerAutoGenSize: jsb.ccPath('aimTablePagerSize', 20),
       PagerFreshFunc: null,
     }
   },
@@ -21,10 +21,11 @@ export default {
       enable: true,
       layout: `->,total, prev, pager, next,sizes`,
       background: true,
-      pageSize:20,
       pageSizes :[10,20,30,50],
     })
-
+    if(this.pagerConfigRef.pageSize){
+      this.PagerAutoGenSize  = this.pagerConfigRef.pageSize
+    }
     this.pagerConfigRef.cell = 'CellPager'
     this.pagerConfigRef.data = this.thisTarget()
     this.PagerInit(this.proxyQueryData)
