@@ -12,7 +12,7 @@ export default {
       pagerConfigRef: this.pagerConfig ||{enable:false},
       PagerTotal: 0,
       PagerAutoGenPage: 0,
-      PagerAutoGenSize: jsb.ccPath('aimTablePagerSize', 20),
+      PagerAutoGenSize: this.pagerConfigRef.pageSize || jsb.ccPath('aimTablePagerSize', 20),
       PagerFreshFunc: null,
     }
   },
@@ -21,6 +21,7 @@ export default {
       enable: true,
       layout: `->,total, prev, pager, next,sizes`,
       background: true,
+      pageSize:20,
       pageSizes :[10,20,30,50],
     })
 
