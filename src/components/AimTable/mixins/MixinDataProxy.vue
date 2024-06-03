@@ -388,8 +388,6 @@ export default {
       }
       return data
     },
-    onSortChange({ prop, order }){
-    }
   }
 }
 </script>

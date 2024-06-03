@@ -124,7 +124,7 @@
               :sortable="pathGet(fs,'sortable',false)"
               :resizable="pathGet(fs,'resizable',true)"
               :sort-method="fs.sortMethod"
-              :sort-orders="['desc', 'asc', null]"
+              :sort-orders="['descending', 'ascending', null]"
               :header-align="fs.headerAlign"
               :align="fs.align || 'left'"
               :fied-schema="fs"
@@ -897,7 +897,7 @@ export default {
         return null
       }
       if(jsb.isString(ret)){
-        ret = {tooltip:ret}
+        ret = {content:ret}
       }
       if(jsb.isString(ret.content)){
         ret.tooltip = {content:ret.content,placement:'top-start',effect:'light'}
@@ -1268,20 +1268,21 @@ export default {
         },
       })
     },
-    // 设置列的排序为自定义的排序
     headerCellClassName({ column }) {
-      if(this.pagerConfig.enable){
+      // fixme 分页模式下使用自定义的排序，这里我们假定分页都是走服务器模式
+      if(this.pagerConfig && this.pagerConfig.enable){
         column.order = column.multiOrder
       }
     },
     handleTableSort({ column }) {
-      if (column.sortable !== 'custom') {
+      // 分页模式下使用自定义的排序
+      if(!this.pagerConfig || !this.pagerConfig.enable){
         return
       }
       if (!column.multiOrder) {
-        column.multiOrder = 'desc'
-      } else if (column.multiOrder === 'desc') {
-        column.multiOrder = 'asc'
+        column.multiOrder = 'descending'
+      } else if (column.multiOrder === 'descending') {
+        column.multiOrder = 'ascending'
       } else {
         column.multiOrder = ''
       }
