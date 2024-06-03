@@ -27,7 +27,9 @@ export default {
       proxyConfigRef: this.proxyConfig || {},
       rowWatcher:[],
       queryCount:-1,
-      afterQueryData:null
+      afterQueryData:null,
+      // 如果走远端排序，适应分页模式下的排序
+      ordersList:[],
     }
   },
   created() {
@@ -386,6 +388,8 @@ export default {
       }
       return data
     },
+    onSortChange({ prop, order }){
+    }
   }
 }
 </script>

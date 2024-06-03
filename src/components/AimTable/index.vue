@@ -44,9 +44,12 @@
           @current-change="currentChange"
           @row-dblclick="privateRowDblClick"
           @row-click="privateRowClick"
+          @sort-change="handleTableSort"
           :row-key="xidRow"
+          :header-cell-class-name="headerCellClassName"
           @selection-change="selectionChange"
           @select="handleSelect"
+          @header-click="handleHeaderCLick"
           @select-all="handleSelectAll"
       >
 
@@ -121,6 +124,7 @@
               :sortable="pathGet(fs,'sortable',false)"
               :resizable="pathGet(fs,'resizable',true)"
               :sort-method="fs.sortMethod"
+              :sort-orders="['desc', 'asc', null]"
               :header-align="fs.headerAlign"
               :align="fs.align || 'left'"
               :fied-schema="fs"
@@ -1263,6 +1267,41 @@ export default {
           done()
         },
       })
+    },
+    // 设置列的排序为自定义的排序
+    headerCellClassName({ column }) {
+      if(this.pagerConfig.enable){
+        column.order = column.multiOrder
+      }
+    },
+    handleTableSort({ column }) {
+      if (column.sortable !== 'custom') {
+        return
+      }
+      if (!column.multiOrder) {
+        column.multiOrder = 'desc'
+      } else if (column.multiOrder === 'desc') {
+        column.multiOrder = 'asc'
+      } else {
+        column.multiOrder = ''
+      }
+      this.handleOrderChange(column.property, column.multiOrder)
+    },
+    handleHeaderCLick(column) {
+      this.handleTableSort({column})
+    },
+    handleOrderChange (column, order) {
+      let result = this.sortConfigRef.orders.find(e => e.field === column)
+      if (result) {
+        result.order = order
+      } else {
+        this.ordersList.push({
+          field: column,
+          order: order
+        })
+      }
+      // 调接口查询，在传参的时候把ordersList进行处理成后端想要的格式
+      this.fresh()
     }
   }
 }
