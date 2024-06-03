@@ -1269,6 +1269,11 @@ export default {
       })
     },
     headerCellClassName({ column }) {
+      let result = this.sortConfigRef.orders.find(e => e.field === column)
+      if(result) {
+        column.multiOrder = result.order
+        column.order = result.order
+      }
       // fixme 分页模式下使用自定义的排序，这里我们假定分页都是走服务器模式
       if(this.pagerConfig && this.pagerConfig.enable){
         column.order = column.multiOrder

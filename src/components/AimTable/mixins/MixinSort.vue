@@ -17,6 +17,15 @@ export default {
       orders:[],
       sortIdxField:'',
     })
+    jsb.each(this.sortConfigRef.orders ||[],v=>{
+      v.order = v.order.toLowerCase()
+      if(v.order === 'desc'){
+        v.order = 'descending'
+      }
+      if(v.order === 'asc'){
+        v.order = 'ascending'
+      }
+    })
   },
   methods:{
     addRemoteSortParams(params) {
