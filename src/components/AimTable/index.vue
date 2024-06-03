@@ -44,12 +44,11 @@
           @current-change="currentChange"
           @row-dblclick="privateRowDblClick"
           @row-click="privateRowClick"
-          @sort-change="handleTableSort"
+          @sort-change="handleSortChange"
           :row-key="xidRow"
           :header-cell-class-name="headerCellClassName"
           @selection-change="selectionChange"
           @select="handleSelect"
-          @header-click="handleHeaderCLick"
           @select-all="handleSelectAll"
       >
 
@@ -124,7 +123,6 @@
               :sortable="pathGet(fs,'sortable',false)"
               :resizable="pathGet(fs,'resizable',true)"
               :sort-method="fs.sortMethod"
-              :sort-orders="['descending', 'ascending', null]"
               :header-align="fs.headerAlign"
               :align="fs.align || 'left'"
               :fied-schema="fs"
@@ -1268,46 +1266,37 @@ export default {
         },
       })
     },
-    headerCellClassName({ column }) {
-      let result = this.sortConfigRef.orders.find(e => e.field === column)
+    headerCellClassName({column}) {
+      let result = this.sortConfigRef.orders.find(e => e.field === column.property)
       if(result) {
-        column.multiOrder = result.order
         column.order = result.order
       }
-      // fixme 分页模式下使用自定义的排序，这里我们假定分页都是走服务器模式
+    },
+    handleSortChange({ order,prop }) {
+      let co = this.sortConfigRef.orders.find(e => e.field === prop)
+      if(!co){
+        co = {field: prop,order:''}
+        if(this.sortConfigRef.multi){
+          this.sortConfigRef.orders.push(co)
+        }else{
+          this.sortConfigRef.orders=[co]
+        }
+      }
+      if(!order || co.order === order){
+        co.order = ''
+      }else{
+        co.order = order
+      }
+      this.handleOrderChange()
+    },
+    handleOrderChange () {
+      // 当前实现中激活了分页模式一定是接口层分页
       if(this.pagerConfig && this.pagerConfig.enable){
-        column.order = column.multiOrder
+        this.fresh()
+      }else{
+        // 本地排序
+        this.tableData = this.sortTableData(this.tableData)
       }
-    },
-    handleTableSort({ column }) {
-      // 分页模式下使用自定义的排序
-      if(!this.pagerConfig || !this.pagerConfig.enable){
-        return
-      }
-      if (!column.multiOrder) {
-        column.multiOrder = 'descending'
-      } else if (column.multiOrder === 'descending') {
-        column.multiOrder = 'ascending'
-      } else {
-        column.multiOrder = ''
-      }
-      this.handleOrderChange(column.property, column.multiOrder)
-    },
-    handleHeaderCLick(column) {
-      this.handleTableSort({column})
-    },
-    handleOrderChange (column, order) {
-      let result = this.sortConfigRef.orders.find(e => e.field === column)
-      if (result) {
-        result.order = order
-      } else {
-        this.ordersList.push({
-          field: column,
-          order: order
-        })
-      }
-      // 调接口查询，在传参的时候把ordersList进行处理成后端想要的格式
-      this.fresh()
     }
   }
 }

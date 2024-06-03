@@ -28,8 +28,6 @@ export default {
       rowWatcher:[],
       queryCount:-1,
       afterQueryData:null,
-      // 如果走远端排序，适应分页模式下的排序
-      ordersList:[],
     }
   },
   created() {
@@ -381,13 +379,29 @@ export default {
     },
     processTableData(data){
       data = cleanDataForTable(data,this.schema,this.proxyConfigRef.item2Row)
-      if(this.sortConfigRef.enable && !this.sortConfigRef.remote) {
-        if (this.sortConfigRef.orders.length > 0) {
-          data = jsb.orderBy(data,this.sortConfigRef.orders)
+      return this.sortTableData(data)
+    },
+    sortTableData(data){
+      if(!this.sortConfigRef.enable || this.sortConfigRef.remote) {
+        // 远端排序
+        return data
+      }
+      const _this = this
+      const orders = []
+      jsb.each(this.sortConfigRef.orders || [],v =>{
+        const fs = jsb.find(_this.schema,fs=>fs.field === v.field)
+        if(!fs || !v.order){
+          // 本地排序，字段必须存在否则无意义
+          return
         }
+        v.orderFunc = v.orderFunc || fs.sortMethod
+        orders.push(v.order)
+      })
+      if (orders.length > 0) {
+        data = jsb.orderBy(data,orders)
       }
       return data
-    },
+    }
   }
 }
 </script>

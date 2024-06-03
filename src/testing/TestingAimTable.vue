@@ -452,7 +452,7 @@ export default {
             },
           },
           sortable: true, align: 'center',default:0},
-        {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable:'custom', align: 'center',default:0,},
+        {field: 'SortIdx', name: 'SortIdx', type: 'input_number', sortable:true, align: 'center',default:0,},
         {field: 'TagList', name: 'TagList', type: 'select_multiple_input', sortable:true, align: 'center'},
 
         {field: 'image', name: 'image', type: 'image',sortable: false, align: 'center',width:80,          options:[{
@@ -471,7 +471,7 @@ export default {
           }],
         },
         {
-          field: 'name', name: 'Name', sortable:'custom',  uniq: true,
+          field: 'name', name: 'Name', sortable:true,  uniq: true,
           placeholder: "xxx.xx",
           shortcuts: {
             copy: true, jump: true, filter: true, edit: {

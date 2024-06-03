@@ -15,16 +15,28 @@ export default {
       enable: true,
       remote:false,
       orders:[],
+      multi:false,
+      toastInvalidField:false,
       sortIdxField:'',
     })
     jsb.each(this.sortConfigRef.orders ||[],v=>{
       v.order = v.order.toLowerCase()
+      // 使用 element 定义的关键词
       if(v.order === 'desc'){
         v.order = 'descending'
       }
       if(v.order === 'asc'){
         v.order = 'ascending'
       }
+      // 使用 schema 中定义的sortMethod
+      const fs = jsb.find(this.schema,fs=>fs.field === v.field)
+      if(!fs){
+        if(this.sortConfigRef.toastInvalidField){
+          jsb.cc.toastWarning(`排序字段${v.field}不存在`)
+        }
+        return
+      }
+      v.orderFunc = v.orderFunc || fs.sortMethod
     })
   },
   methods:{
@@ -39,7 +51,16 @@ export default {
       const _this= this
       if (this.sortConfigRef.remote) {
         jsb.each(_this.sortConfigRef.orders||[],function (item){
-          sortList.push(`${item.field} ${item.order}`)
+          let order = item.order
+          if(order === 'descending'){
+            order = 'desc'
+          }
+          if(order === 'ascending'){
+            order = 'asc'
+          }
+          if(order){
+            sortList.push(`${item.field} ${order}`)
+          }
         })
       }
       if (sortList.length > 0) {
