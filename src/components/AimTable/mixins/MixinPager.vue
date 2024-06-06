@@ -47,7 +47,12 @@ export default {
       if (!params) {
         params = {}
       }
-      params.AutoGenPage = this.PagerAutoGenPage
+      // 上层指定分页
+      if(params.AutoGenPage){
+        this.PagerAutoGenPage = params.AutoGenPage
+      }else{
+        params.AutoGenPage = this.PagerAutoGenPage
+      }
       params.AutoGenSize = this.PagerAutoGenSize
       return params
     },
