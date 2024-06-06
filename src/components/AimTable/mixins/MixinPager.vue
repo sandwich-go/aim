@@ -48,10 +48,10 @@ export default {
         params = {}
       }
       // 上层指定分页
-      if(params.AutoGenPage){
-        this.PagerAutoGenPage = params.AutoGenPage
-      }else{
+      if(jsb.isNull(params.AutoGenPage) || jsb.isUndefined(params.AutoGenPage)){
         params.AutoGenPage = this.PagerAutoGenPage
+      }else{
+        this.PagerAutoGenPage = params.AutoGenPage
       }
       params.AutoGenSize = this.PagerAutoGenSize
       return params
