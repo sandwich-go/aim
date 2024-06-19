@@ -1,5 +1,5 @@
 <template>
-  <div style="display:inline; gap: 20px">
+  <div style="display:flex; gap: 6px">
     <template v-for="(sc,shortcut) in shortcuts || {}">
       <span :key="shortcut">
         <el-link
@@ -10,7 +10,7 @@
             @click="clipCopy($event,sc)">
         <i :class="pathGet(sc,'icon','el-icon-document-copy')"/>
       </el-link>
-      <el-link
+        <el-link
           v-else-if="shortcut ==='jump' && pathGet(sc,'href',fieldValueFormatted)"
           :type="pathGet(sc,'type','primary')"
           :style="style(sc)"
@@ -19,7 +19,7 @@
           :href="pathGet(sc,'href',fieldValueFormatted)">
         <i :class="pathGet(sc,'icon','el-icon-s-promotion')"/>
       </el-link>
-      <el-link
+        <el-link
           v-else-if="shortcut ==='filter'"
           :style="style(sc)"
           :type="pathGet(sc,'type','primary')"
