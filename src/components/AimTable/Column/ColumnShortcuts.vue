@@ -33,7 +33,7 @@
             :type="pathGet(sc,'type','primary')"
             :disabled="pathGet(sc,'disabled',false)"
             @click="click(sc,shortcut)">
-        <i :class="pathGet(shortcut,'icon','el-icon-s-grid')"/>
+        <i :class="pathGet(sc,'icon','el-icon-s-grid')"/>
       </el-link>
       </span>
     </template>
