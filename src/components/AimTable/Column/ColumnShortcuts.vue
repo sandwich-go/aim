@@ -50,7 +50,11 @@ export default {
   },
   computed: {
     shortcuts() {
-      return this.pathGet(this.fieldSchema,'shortcuts',{})
+      const sc = this.pathGet(this.fieldSchema,'shortcuts',{})
+      if(jsb.isFunction(sc)){
+        return sc({row:this.row})
+      }
+      return sc
     }
   },
   data() {
