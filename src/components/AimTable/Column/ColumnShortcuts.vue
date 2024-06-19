@@ -8,7 +8,7 @@
             :style="style(sc)"
             :disabled="pathGet(sc,'disabled',false) || fieldValueFormatted===''"
             @click="clipCopy($event,sc)">
-        <i :class="pathGet(shortcut,'icon','el-icon-document-copy')"/>
+        <i :class="pathGet(sc,'icon','el-icon-document-copy')"/>
       </el-link>
       <el-link
           v-else-if="shortcut ==='jump' && pathGet(sc,'href',fieldValueFormatted)"
@@ -17,7 +17,7 @@
           target="_blank"
           :disabled="pathGet(sc,'disabled',false) || fieldValueFormatted===''"
           :href="pathGet(sc,'href',fieldValueFormatted)">
-        <i :class="pathGet(shortcut,'icon','el-icon-s-promotion')"/>
+        <i :class="pathGet(sc,'icon','el-icon-s-promotion')"/>
       </el-link>
       <el-link
           v-else-if="shortcut ==='filter'"
@@ -25,7 +25,7 @@
           :type="pathGet(sc,'type','primary')"
           :disabled="pathGet(sc,'disabled',false) || fieldValueFormatted===''"
           @click="clipFilter(sc)">
-        <i :class="pathGet(shortcut,'icon','el-icon-search')"/>
+        <i :class="pathGet(sc,'icon','el-icon-search')"/>
       </el-link>
         <el-link
             v-else
