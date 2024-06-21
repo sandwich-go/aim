@@ -14,6 +14,7 @@ export const CodeButtonTableSetting = "btnTableSetting"
 export const CodeButtonTableGroupView = "btnTableGroupView"
 export const CodeButtonSaveTableData = "btnSaveTableData" // 整表数据提交
 export const CodeButtonFilterSearch = "btnFilterSearch"
+export const CodeButtonFullscreen = "btnFullscreen"
 
 export const CodeButtonRowTemplate = "btnRowTemplate"
 export const CodeButtonRowCopy = "btnRowCopy"
@@ -47,6 +48,7 @@ code2OptionsMapping[CodeButtonSortIndex] = {
     typeTrue:'success'
 }
 
+code2OptionsMapping[CodeButtonFullscreen] = {icon: 'el-icon-full-screen', type: 'primary', circle: true, label: '全屏显示'}
 code2OptionsMapping[CodeButtonExportToExcel] = {icon: 'el-icon-download', type: 'primary', circle: true, label: '导出Excel'}
 code2OptionsMapping[CodeButtonAdd] = {icon: 'el-icon-plus', type: 'primary', circle: true, label: '新建'}
 code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primary', circle: true, label: '刷新'}

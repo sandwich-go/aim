@@ -1,51 +1,68 @@
 <template>
-  <div class="codemirror-wrapper" :style="cssVars">
+  <div>
     <loading :active.sync="proxyLoading" loader="bars" :is-full-page="false"/>
-    <el-row v-if="headerConfigRef.enable" :style="headerConfigRef.style">
-      <!-- header toolbar -->
-      <el-col v-for="direction of ['left','right']"
-              :key="direction"
-              :span="directionToolbarSpan(headerConfigRef,direction)">
-        <cell-list
-            :style="headerConfigRef[direction+'Style']"
-            :cells="headerConfigRef[direction+'Cells']"
-            :should-cell-hide="privateShouldCellHide"
-            :should-cell-disable="privateShouldCellDisable"
-            :cell-replace="cellReplace"
-            @code-cell-click="privateCellClick">
-        </cell-list>
-      </el-col>
-    </el-row>
     <div style="position: relative">
-      <template v-if="codeLatest">
-        <el-button
-            v-if="lintSupport() && !disableLint"
-            icon="el-icon-magic-stick"
-            type="info"
-            plain
-            style="position: absolute;top:4px;right:52px;z-index: 10000"
-            size="mini" @click="formatCode()">
-        </el-button>
-        <el-button
-            v-if="!disableCopy"
-            icon="el-icon-document-copy"
-            type="info"
-            plain
-            style="position: absolute;top:4px;right:4px;z-index: 10000"
-            size="mini" @click="handleCopy($event)">
-        </el-button>
-      </template>
-    <codemirror
-        :value="codeUsing"
-        :indent-with-tab="true"
-        :options="optionsUsing()"
-        @input="privateOnInputEvent"
-        @ready="this.onCmReady"
-        :placeholder="placeholder"
-        :id="codemirrorEditorID"
-        ref="codemirror"
-        @keydown.native="onKeyDown"
-    />
+      <aim-full-screen-dialog class="codemirror-wrapper"
+                              :style="cssVars"
+                              :show-button-enter="false"
+                              :show-button-exit="false"
+                              ref="fullScreen">
+        <el-row style="padding-bottom: 3px">
+          <el-col :span="directionToolbarSpan(headerConfigRef,'left')">
+            <cell-list
+                :style="headerConfigRef['leftStyle']"
+                :cells="headerConfigRef['leftCells']"
+                :should-cell-hide="privateShouldCellHide"
+                :should-cell-disable="privateShouldCellDisable"
+                :cell-replace="cellReplace"
+                @code-cell-click="privateCellClick">
+            </cell-list>
+          </el-col>
+          <el-col :span="directionToolbarSpan(headerConfigRef,'right')" :style="headerConfigRef['rightStyle']">
+            <cell-list
+                style="display:flex"
+                :cells="headerConfigRef['rightCells']"
+                :should-cell-hide="privateShouldCellHide"
+                :should-cell-disable="privateShouldCellDisable"
+                :cell-replace="cellReplace"
+                @code-cell-click="privateCellClick">
+            </cell-list>
+            <el-button
+                v-if="lintSupport() && !disableLint"
+                icon="el-icon-magic-stick"
+                type="info"
+                plain
+                :disabled="!codeLatest"
+                size="mini" @click="formatCode()">
+            </el-button>
+            <el-button
+                v-if="!disableCopy"
+                icon="el-icon-document-copy"
+                type="info"
+                plain
+                :disabled="!codeLatest"
+                size="mini" @click="handleCopy($event)">
+            </el-button>
+            <el-button
+                icon="el-icon-full-screen"
+                type="info"
+                plain
+                size="mini" @click="switchFullScreen">
+            </el-button>
+          </el-col>
+        </el-row>
+        <codemirror
+            :value="codeUsing"
+            :indent-with-tab="true"
+            :options="optionsUsing()"
+            @input="privateOnInputEvent"
+            @ready="this.onCmReady"
+            :placeholder="placeholder"
+            :id="codemirrorEditorID"
+            ref="codemirror"
+            @keydown.native="onKeyDown"
+        />
+      </aim-full-screen-dialog>
     </div>
     <aim-popup :drawer="true" :is-show.sync="visibleLintError" :config="{appendToBody:popupAppendToBody,direction:'btt',size:'40%'}">
       <template v-slot:aim-popup-body>
@@ -140,6 +157,7 @@ import {
   CodeButtonCopy, CodeButtonLint, CodeButtonRefresh, CodeButtonRowSave,
 } from "@/components/cells/const";
 import AimPopup from "@/components/AimPopup/index.vue";
+import AimFullScreenDialog from "@/components/AimFullScreenDialog/index.vue";
 // eslint-disable-next-line no-undef
 const yaml = require('js-yaml');
 
@@ -149,6 +167,7 @@ const jsb = require("@sandwich-go/jsb")
 export default {
   name: 'AimCodeMirror',
   components: {
+    AimFullScreenDialog,
     AimPopup,
     CellList,
     codemirror,
@@ -207,6 +226,7 @@ export default {
   },
   data() {
     return {
+      heightInner:this.height,
       CodeMirrorModeJSON,
       proxyLoading: false,
       codemirrorEditorID: jsb.xid(),
@@ -249,7 +269,8 @@ export default {
     cssVars() {
       return {
         "--font-size": `${this.fontSize}px`,
-        "--line-height": `${this.lineHeight}%`
+        "--line-height": `${this.lineHeight}%`,
+        "--height": `${this.heightInner}`
       };
     }
   },
@@ -438,14 +459,18 @@ export default {
     },
     refreshData(code) {
       this.codeLatest = code
-    }
+    },
+    switchFullScreen(){
+      this.$refs.fullScreen.switch()
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
-.codemirror-wrapper .CodeMirror {
+.codemirror-wrapper ::v-deep .CodeMirror {
   font-size: var(--font-size) !important;
   line-height: var(--line-height) !important;
+  height: var(--height) !important;
 }
 
 .codemirror-matchhighlight {

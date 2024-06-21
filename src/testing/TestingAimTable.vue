@@ -554,7 +554,7 @@ export default {
             {field: 'codeTesting', name: 'codeTesting', type:'code' ,          cellFormConfig: {
                 codeMirror: {
                   infoConfig: {mode: 'json'},
-                  height:'300px',
+                  height:'600px',
                   placeholder:'placeholder',
                   headerConfig: {rightCells: ['btnLint', 'btnCopy']}
                 }
@@ -935,7 +935,18 @@ export default {
           {},
           {label: "查找", code: 'link@mySearch', icon: 'el-icon-search', type: 'warning'},
         ],
-        rightCells: [CodeButtonSaveTableData, CodeButtonAdd, CodeButtonRefresh, CodeButtonCustom, CodeButtonPrint, CodeButtonExpandAll, CodeButtonTableSetting,CodeButtonTableGroupView, CodeButtonDebug],
+        rightCells: [
+            CodeButtonSaveTableData,
+          CodeButtonAdd,
+          CodeButtonRefresh,
+          CodeButtonCustom,
+          CodeButtonPrint,
+          CodeButtonExpandAll,
+          CodeButtonTableSetting,
+          CodeButtonTableGroupView,
+          CodeButtonDebug,
+            "btnFullscreen"
+        ],
       }
     }
   }

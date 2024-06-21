@@ -21,7 +21,7 @@ export default {
   components: {TestingAimFormInput, TestingAimTable, TestingEnvTable},
   data(){
     return {
-      activeName:'BugEnvTable',
+      activeName:'AimTable',
     }
   }
 }

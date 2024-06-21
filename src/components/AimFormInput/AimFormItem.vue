@@ -162,7 +162,7 @@
 import {cellConfigForForm, cellNameForForm} from "@/components/AimTable/cell";
 import jsb from "@sandwich-go/jsb";
 import {
-  CodeButtonAdd, CodeButtonRowSave,
+  CodeButtonAdd, CodeButtonFullscreen, CodeButtonRowSave,
   CodeButtonRowSelectedMinus
 } from "@/components/cells/const";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
@@ -258,7 +258,7 @@ export default {
     getCellConfigForTable(){
       const fs = this.fs
       let cc = Object.assign({
-        righterConfig: {cells: [CodeButtonAdd, CodeButtonRowSelectedMinus]},
+        righterConfig: {cells: [CodeButtonFullscreen,CodeButtonAdd, CodeButtonRowSelectedMinus]},
         proxyConfig: newLocalDataProxyWithFieldName(this.dataRef, fs.field),
         selection: true,
         rowRemoveShortcut: true,
