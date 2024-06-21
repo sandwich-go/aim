@@ -79,12 +79,12 @@ export default {
       }
       this.$set(this.fieldSchemaRef.filter.data,this.fieldSchema.field,this.fieldValueFormatted)
     },
-    clipCopy(event, sc) {
-      let clipCopy = jsb.pathGet(sc, 'click')
-      if (!clipCopy) {
-        clipCopy = jsb.clipCopy
+    clipCopy($event, sc) {
+      let clipCopy = jsb.clipCopy
+      if(jsb.isObjectOrMap(sc)){
+        clipCopy = jsb.pathGet(sc, 'click')
       }
-      clipCopy(this.fieldValueFormatted, event)
+      clipCopy(this.fieldValueFormatted, $event)
     },
     getFieldValueFormatted() {
       return this.fieldSchema.formatter ?
