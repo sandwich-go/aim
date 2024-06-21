@@ -1094,6 +1094,7 @@ export default {
           break
         case CodeButtonFullscreen:
           this.$refs.fullscreen.switch()
+          this.doLayoutNextTick()
           break
         default:
           this.toastWarning(`code ${code} no handler`)
