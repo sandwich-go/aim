@@ -47,11 +47,9 @@ export const CodeMirrorThemeRubyBlue = "rubyblue";
 
 export const CodeMirrorSettingDefault = {
     Theme:CodeMirrorThemeMbo,
-    FontSize:13,
+    FontSize:14,
     LineHeight:150,
 }
-
-export function UserCodeMirrorSetting() {return jsb.cc['CodeMirrorSetting'] || CodeMirrorSettingDefault}
 
 export const CodeMirrorThemeOptions = [
     {label:CodeMirrorThemeRubyBlue,value:CodeMirrorThemeRubyBlue},

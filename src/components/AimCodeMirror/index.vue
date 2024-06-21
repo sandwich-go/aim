@@ -147,9 +147,9 @@ import jsonlint from "jsonlint-mod";
 // require active-line.js
 import {
   CodeMirrorModeJSON,
-  CodeMirrorModeOptions, CodeMirrorModeYAML,
+  CodeMirrorModeOptions, CodeMirrorModeYAML, CodeMirrorSettingDefault,
   getCodeMirrorMode,
-  getDefaultOptions, UserCodeMirrorSetting
+  getDefaultOptions
 } from "@/components/AimCodeMirror/mode";
 import {directionToolbarSpan, initToolbarConfig} from "@/components/AimTable/toolbar";
 import CellList from "@/components/cells/CellList.vue";
@@ -210,11 +210,9 @@ export default {
     readOnly:Boolean,
     fontSize: {
       type: Number,
-      default: jsb.pathGet(UserCodeMirrorSetting(), 'FontSize', 13),
     },
     lineHeight: {
       type: Number,
-      default: jsb.pathGet(UserCodeMirrorSetting(), 'LineHeight', 150),
     },
     codeItemClick: {
       type: Function,
@@ -267,9 +265,12 @@ export default {
       return this.proxyConfigRef.enable ? this.codeProxy : this.codeLatest
     },
     cssVars() {
+      const setting = jsb.ccPath('CodeMirrorSetting',CodeMirrorSettingDefault)
+      const fontSize = this.fontSize ||  jsb.pathGet(setting, 'FontSize')
+      const lineHeight = this.lineHeight ||  jsb.pathGet(setting, 'LineHeight')
       return {
-        "--font-size": `${this.fontSize}px`,
-        "--line-height": `${this.lineHeight}%`,
+        "--font-size": `${fontSize}px`,
+        "--line-height": `${lineHeight}%`,
         "--height": `${this.heightInner}`
       };
     }
@@ -319,7 +320,7 @@ export default {
     optionsUsing() {
       let theme = this.theme
       if (!theme) {
-        theme = UserCodeMirrorSetting()['Theme']
+        theme = jsb.pathGet(jsb.ccPath('CodeMirrorSetting',CodeMirrorSettingDefault),'Theme')
       }
       this.options['mode'] = getCodeMirrorMode(this.infoConfigRef.mode)
       this.options['theme'] = theme
@@ -467,12 +468,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.codemirror-wrapper ::v-deep .CodeMirror {
-  font-size: var(--font-size) !important;
-  line-height: var(--line-height) !important;
-  height: var(--height) !important;
-}
 
+.codemirror-wrapper {
+  ::v-deep .CodeMirror {
+    font-size: var(--font-size) !important;
+    line-height: var(--line-height) !important;
+    height: var(--height) !important;
+  }
+}
 .codemirror-matchhighlight {
   background-color: #ae00ae;
 }

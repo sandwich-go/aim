@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="external-div" :class="{ hidden: dialogVisible }">
-      <div v-if="shoButtonEnter" class="sticky-button">
+      <div v-if="showButtonEnter" class="sticky-button">
         <el-link  size="mini" @click="enter"><i class="el-icon-full-screen"/></el-link>
       </div>
       <div class="content-container">
@@ -17,8 +17,8 @@
         :append-to-body="true"
         :before-close="exit"
     >
-      <div v-if="shoButtonExit" class="custom-header sticky-button">
-        <el-link  size="mini" @click="dialogVisible = false"><i class="el-icon-full-screen"/></el-link>
+      <div v-if="showButtonEnter" class="custom-header sticky-button">
+        <el-link  size="mini" @click="dialogVisible = false" style="background-color: gray"><i class="el-icon-full-screen"/></el-link>
       </div>
       <slot></slot>
     </el-dialog>
