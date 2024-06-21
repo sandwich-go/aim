@@ -84,6 +84,9 @@ export default {
       if(jsb.isObjectOrMap(sc)){
         clipCopy = jsb.pathGet(sc, 'click')
       }
+      if(!clipCopy){
+        clipCopy = jsb.clipCopy
+      }
       clipCopy(this.fieldValueFormatted, $event)
     },
     getFieldValueFormatted() {
