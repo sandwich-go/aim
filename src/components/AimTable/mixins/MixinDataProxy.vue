@@ -214,8 +214,24 @@ export default {
       }
       this.deleteAsking('deleteRows',{rows:leftRows},{done})
     },
-    // eslint-disable-next-line no-unused-vars
     deleteAsking(funcName,{row,rows}, {done} = {}) {
+      let rowDelete = CleanRowForStorage(
+          this.schema, row,
+          true,true,
+          this.proxyConfigRef.submitRemoveFieldNotInSchema,
+          this.proxyConfigRef.row2Item)
+      let rowsDelete = []
+      jsb.each(rows,v=>{
+        rowsDelete.push(CleanRowForStorage(
+            this.schema, v,
+            true,true,
+            this.proxyConfigRef.submitRemoveFieldNotInSchema,
+            this.proxyConfigRef.row2Item))
+      })
+      this.__deleteAsking(funcName,{row:rowDelete,rows:rowsDelete},{done})
+    },
+    // eslint-disable-next-line no-unused-vars
+    __deleteAsking(funcName,{row,rows}, {done} = {}) {
       this.debug && (this.debugMessage = `${funcName} called`)
       const _this = this
       const confirmDoneFunc = ()=>{
