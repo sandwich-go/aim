@@ -238,7 +238,7 @@ export default {
       }
     },
     // eslint-disable-next-line no-unused-vars
-    tryProxySaveRow(row, {done} = {}) {
+    tryProxySaveRow(row, {done,old} = {}) {
       // 本地proxy的数据依赖xid定位，保留xid数据
       const removeCtrlData = !this.proxyConfigRef.isLocalData
 
@@ -251,7 +251,7 @@ export default {
 
       const saveValidate = jsb.pathGet(this.proxyConfigRef,'saveValidate')
       if(saveValidate){
-        const validORMessage = saveValidate({row: toSave})
+        const validORMessage = saveValidate({row: toSave,old:old})
         if(jsb.isBoolean(validORMessage)){
           if(!validORMessage){
             done && done({error:true})
@@ -264,7 +264,7 @@ export default {
         }
       }
 
-      return this.tryPromise('save',{row: toSave},({error})=>{
+      return this.tryPromise('save',{row: toSave,old:old},({error})=>{
         if(!error){
           this.doLayout(true)
         }
