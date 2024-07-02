@@ -124,6 +124,7 @@ export default {
     showFormEditorForRow(row) {
       // form 表单编辑逻辑,拷贝当前编辑行
       this.rowInEditForm = jsb.clone(row)
+      this.rowInEditFormBackup = jsb.clone(this.rowInEditFormBackup)
       // 使用form的watcher
       this.cleanRowWatcher()
       this.rowFormEditorVisible = true

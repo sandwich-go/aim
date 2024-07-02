@@ -1085,11 +1085,11 @@ export default {
               form = this.$refs.aimFormInputInTreeView
             }
             form.__validateFromAimTable(() => {
-              this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditForm})
+              this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditFormBackup})
             })
           } else {
             //fixme inplace 下无法使用form的validate
-            this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditForm})
+            this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditFormBackup})
           }
           break
         case CodeButtonFullscreen:
