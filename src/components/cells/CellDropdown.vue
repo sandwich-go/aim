@@ -1,7 +1,7 @@
 <template>
   <div style="display: inline">
     <el-dropdown>
-      <span><i class="el-icon-more"></i></span>
+      <span style="padding: 18px;"><i class="el-icon-more"></i></span>
       <el-dropdown-menu slot="dropdown" style="padding: 10px 18px;">
         <template v-for="(cell,index) of cellsRef">
           <template v-if="cell.cell && registeredComponentMap[cell.cell]">
