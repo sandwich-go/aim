@@ -72,6 +72,13 @@ export default {
     fresh({done,params}={}){
       this.proxyQueryData({done,params})
     },
+    clean(){
+      this.tableData = []
+      this.PagerTotal = 0
+      if(this.pagerConfigRef){
+        this.pagerConfigRef.PagerAutoGenPage = 0
+      }
+    },
     getData(){
       return this.tableData
     },
