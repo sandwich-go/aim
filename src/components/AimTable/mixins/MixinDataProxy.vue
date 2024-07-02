@@ -248,6 +248,14 @@ export default {
           true,removeCtrlData,
           this.proxyConfigRef.submitRemoveFieldNotInSchema,
           this.proxyConfigRef.row2Item)
+      if(old){
+        old = CleanRowForStorage(
+            this.schema,
+            old,
+            true,removeCtrlData,
+            this.proxyConfigRef.submitRemoveFieldNotInSchema,
+            this.proxyConfigRef.row2Item)
+      }
 
       const saveValidate = jsb.pathGet(this.proxyConfigRef,'saveValidate')
       if(saveValidate){
