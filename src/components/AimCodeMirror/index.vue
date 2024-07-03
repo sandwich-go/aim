@@ -28,7 +28,7 @@
                 @code-cell-click="privateCellClick">
             </cell-list>
             <el-button
-                v-if="lintSupport() && !disableLint"
+                v-if="lintSupport() && !disableLint &&!useJSONEditor"
                 icon="el-icon-magic-stick"
                 type="info"
                 plain
@@ -44,6 +44,12 @@
                 size="mini" @click="handleCopy($event)">
             </el-button>
             <el-button
+                v-if="isJSON"
+                icon="el-icon-set-up"
+                type="info"
+                plain
+                size="mini" @click="useJSONEditor=!useJSONEditor"/>
+            <el-button
                 icon="el-icon-full-screen"
                 type="info"
                 plain
@@ -51,7 +57,17 @@
             </el-button>
           </el-col>
         </el-row>
+        <v-jsoneditor
+            v-if="useJSONEditor"
+            v-model="codeUsingObject"
+            :plus="true"
+            disabled
+            class="aim-json-editor"
+            :height="heightInner"
+            :options="jsonEditorOptions"
+        />
         <codemirror
+            v-else
             :value="codeUsing"
             :indent-with-tab="true"
             :options="optionsUsing()"
@@ -78,7 +94,7 @@
 import {codemirror} from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/lib/codemirror.js'
-
+import VJsoneditor from 'v-jsoneditor'
 import 'codemirror/mode/yaml-frontmatter/yaml-frontmatter.js'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -172,6 +188,7 @@ export default {
     CellList,
     codemirror,
     Loading,
+    VJsoneditor,
   },
   watch: {
     code: {
@@ -181,7 +198,11 @@ export default {
     },
     readOnly: function (val) {
       this.options['readOnly'] = val
-    }
+    },
+    codeUsingObject:function(val){
+      this.codeLatest = JSON.stringify(val)
+    },
+    codeUsing:function (){this.freshObjectForJsonEditor()}
   },
   props: {
     popupAppendToBody: Boolean,
@@ -220,7 +241,24 @@ export default {
       default: function ({code}) {
       },
     },
-    headerConfig: {}
+    headerConfig: {},
+    jsonEditorOptions: {
+      onEditable: () => {
+        return false
+      },
+      onChange: (e) => {
+        console.log(e)
+      },
+      mode: 'code',
+      modes: ['tree', 'code'],
+      search: false,
+      sortObjectKeys: false,
+      language: 'en',
+      statusBar: true,
+      enableTransform: false,
+      navigationBar: true,
+      enableSort: false
+    }
   },
   data() {
     return {
@@ -238,7 +276,9 @@ export default {
       visibleLintError: false,
       headerConfigRef: this.headerConfig || {enable:false},
       proxyConfigRef: this.proxyConfig || {enable:false},
-      infoConfigRef: this.infoConfig || {}
+      infoConfigRef: this.infoConfig || {},
+      codeUsingObject:{},
+      useJSONEditor:false,
     }
   },
   created() {
@@ -259,8 +299,12 @@ export default {
         })
       },
     })
+    this.freshObjectForJsonEditor()
   },
   computed: {
+    isJSON(){
+      return getCodeMirrorMode(this.infoConfigRef.mode) === CodeMirrorModeJSON
+    },
     codeUsing() {
       return this.proxyConfigRef.enable ? this.codeProxy : this.codeLatest
     },
@@ -289,6 +333,20 @@ export default {
   },
   methods: {
     directionToolbarSpan,
+    freshObjectForJsonEditor(){
+      if(!this.isJSON){
+        return
+      }
+      try {
+        this.codeUsingObject= JSON.parse(this.codeUsing)
+        // eslint-disable-next-line no-empty
+      } catch (_) {
+      }finally {
+        if(!this.codeUsingObject){
+          this.codeUsingObject = {}
+        }
+      }
+    },
     privateCellClick({code, jsEvent}) {
       this.debug && this.setDebugMessage(`privateCodeItemClick code: ${code}`)
       if (this.codeItemClick({code})) {
@@ -471,6 +529,11 @@ export default {
 
 .codemirror-wrapper {
   ::v-deep .CodeMirror {
+    font-size: var(--font-size) !important;
+    line-height: var(--line-height) !important;
+    height: var(--height) !important;
+  }
+  ::v-deep .aim-json-editor {
     font-size: var(--font-size) !important;
     line-height: var(--line-height) !important;
     height: var(--height) !important;
