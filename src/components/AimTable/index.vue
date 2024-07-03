@@ -266,6 +266,26 @@
       </el-row>
       <!--    popupAppendToBody 依赖该字段决定使用drawer 或者dialog显示编辑界面，对于table的一级默认显示drawer-->
       <aim-popup
+          :drawer="true"
+          :is-show.sync="formDiffPanelShow"
+          :config="{appendToBody:true,footerStyle:{position:'absolute',bottom:'3px',right:'10px'}}"
+      >
+        <template v-slot:aim-popup-body>
+          <aim-code-diff-wrapper
+              language="json"
+              :diff-content-list="[
+                {
+                  old:JSON.stringify(rowInEditFormBackup,null, 2),
+                  new:JSON.stringify(rowInEditForm,null, 2),
+                }
+            ]"
+          />
+        </template>
+        <template v-slot:aim-popup-footer>
+          <el-button type="primary" size="mini" @click="formDiffPanelSubmit">确认提交</el-button>
+        </template>
+      </aim-popup>
+      <aim-popup
           :title="rowFormEditorTitle(rowEditState)"
           :drawer="formPopupUsingDrawer"
           :is-show.sync="rowFormEditorVisible"
@@ -493,6 +513,7 @@ import CellDropdown from "@/components/cells/CellDropdown.vue";
 import AimTreeView from "@/components/AimTreeView/index.vue";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 import AimFullScreenDialog from "@/components/AimFullScreenDialog/index.vue";
+import AimCodeDiffWrapper from "@/components/AimCodeDiffWrapper/index.vue";
 
 const jsb = require("@sandwich-go/jsb")
 
@@ -610,6 +631,7 @@ export default {
     MixinFilter,
   ],
   components: {
+    AimCodeDiffWrapper,
     AimFullScreenDialog,
     CellDropdown,
     AimTreeView,
@@ -708,6 +730,8 @@ export default {
       tableSetting:{},
       tableHeightRefreshKey: 0,
       configContent:'[]',
+      formDiffPanelShow:false,
+      formDiffPanelSubmit:null,
     }
   },
 
@@ -996,6 +1020,7 @@ export default {
       const _this = this
       const editDone = ({error}={}) => {
         if (!error && fromForm) {
+          this.formDiffPanelShow = false
           this.rowFormEditorVisible = false
           // form表单编辑完后重新拉取数据
           // save操作为async模式，不主动刷新数据
@@ -1085,7 +1110,16 @@ export default {
               form = this.$refs.aimFormInputInTreeView
             }
             form.__validateFromAimTable(() => {
-              this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditFormBackup})
+              // 如果要求打开diff，则有限展现diff页面
+              const diffBeforeUpdate = jsb.pathGet(this.editConfigRef,'diffBeforeUpdate',false)
+              if(diffBeforeUpdate && this.rowEditState === AimFormInputEdit){
+                this.formDiffPanelSubmit = ()=>{
+                  this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditFormBackup})
+                }
+                this.formDiffPanelShow = true
+              }else{
+                this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditFormBackup})
+              }
             })
           } else {
             //fixme inplace 下无法使用form的validate
