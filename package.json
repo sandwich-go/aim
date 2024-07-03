@@ -1,7 +1,7 @@
 {
   "name": "@sandwich-go/aim",
   "license": "MIT",
-  "version": "0.1.807",
+  "version": "0.1.808",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -23,11 +23,11 @@
     "js-cookie": "^3.0.5",
     "js-yaml": "4.1.0",
     "jsonlint-mod": "1.7.6",
-    "v-code-diff": "^1.7.1",
     "sass": "^1.62.0",
     "sass-loader": "^13.2.2",
     "sortablejs": "^1.15.0",
     "splitpanes": "2.4.1",
+    "v-code-diff": "^1.7.1",
     "v-jsoneditor": "^1.4.1",
     "vue": "^2.6.10",
     "vue-codemirror": "^4.0.6",
