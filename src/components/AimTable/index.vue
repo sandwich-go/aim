@@ -1350,7 +1350,7 @@ export default {
     },
     handleOrderChange () {
       // 当前实现中激活了分页模式一定是接口层分页
-      if(this.pagerConfig && this.pagerConfig.enable){
+      if(this.pagerConfigRef && this.pagerConfigRef.enable){
         this.fresh()
       }else{
         // 本地排序

@@ -59,7 +59,7 @@ export default {
             order = 'asc'
           }
           if(order){
-            sortList.push(`${item.field} ${order}`)
+            sortList.push(`\`${item.field}\` ${order}`)
           }
         })
       }

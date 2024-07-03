@@ -87,6 +87,9 @@ export default {
 .full-screen-dialog .CodeMirror {
   height: calc(100vh - 150px) !important;
 }
+.full-screen-dialog .jsoneditor-box {
+  height: calc(100vh - 150px) !important;
+}
 
 .full-screen-dialog .el-table{
   height: calc(100vh - 200px) !important;

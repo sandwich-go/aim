@@ -63,7 +63,6 @@
             :plus="true"
             disabled
             class="aim-json-editor"
-            :height="heightInner"
             :options="jsonEditorOptions"
         />
         <codemirror
@@ -529,11 +528,6 @@ export default {
 
 .codemirror-wrapper {
   ::v-deep .CodeMirror {
-    font-size: var(--font-size) !important;
-    line-height: var(--line-height) !important;
-    height: var(--height) !important;
-  }
-  ::v-deep .aim-json-editor {
     font-size: var(--font-size) !important;
     line-height: var(--line-height) !important;
     height: var(--height) !important;
