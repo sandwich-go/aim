@@ -20,15 +20,15 @@
     </div>
     <slot name="code-diff-toolbar"></slot>
     <code-diff
-      v-if="diffContentList.length ===1"
-      :old-string="diffContentList[0].old"
-      :new-string="diffContentList[0].new"
-      :filename="diffContentList[0].name"
-      :language="getLang(diffContentList[0].language)"
-      :output-format="sideBySide?'side-by-side':'line-by-line'"
-      :drawFileList="true"
-      :maxHeight="maxHeightString()"
-      :context="contextLineNumber"/>
+        v-if="diffContentList.length ===1"
+        :old-string="diffContentList[0].old"
+        :new-string="diffContentList[0].new"
+        :filename="diffContentList[0].name"
+        :language="getLang(diffContentList[0].language)"
+        :output-format="sideBySide?'side-by-side':'line-by-line'"
+        :drawFileList="true"
+        :maxHeight="maxHeightString()"
+        :context="contextLineNumber"/>
     <el-tabs v-else v-model="activeTabName">
       <el-tab-pane v-for="(item,index) in diffContentList" :key="index" :label="item.name" :name="item.name">
         <span slot="label">
@@ -36,14 +36,15 @@
           <i v-if="item.changed" class="el-icon-heavy-rain"/>
         </span>
         <code-diff
-          :old-string="item.old"
-          :new-string="item.new"
-          :language="getLang(item.language)"
-          :output-format="sideBySide?'side-by-side':'line-by-line'"
-          :drawFileList="true"
-          :maxHeight="maxHeightString(80)"
-          :context="contextLineNumber"
-          @diff="(e)=>{diffEvent(e,item)}"
+            :old-string="item.old"
+            :new-string="item.new"
+            :language="getLang(item.language)"
+            :output-format="sideBySide?'side-by-side':'line-by-line'"
+            :drawFileList="true"
+            :maxHeight="maxHeightString(80)"
+            :context="contextLineNumber"
+            :is-show-no-change="true"
+            @diff="(e)=>{diffEvent(e,item)}"
         />
       </el-tab-pane>
     </el-tabs>
@@ -52,7 +53,7 @@
 
 <script>
 
-import {CodeDiff} from 'v-code-diff'
+import CodeDiff from 'vue-code-diff'
 import jsb from "@sandwich-go/jsb";
 import {getLang} from "@/components/AimCodeDiffWrapper/lang";
 

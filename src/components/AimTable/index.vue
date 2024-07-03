@@ -273,16 +273,11 @@
         <template v-slot:aim-popup-body>
           <aim-code-diff-wrapper
               language="json"
-              :diff-content-list="[
-                {
-                  old:JSON.stringify(rowInEditFormBackup,null, 2),
-                  new:JSON.stringify(rowInEditForm,null, 2),
-                }
-            ]"
+              :diff-content-list="diffContentList"
           />
         </template>
         <template v-slot:aim-popup-footer>
-          <el-button type="primary" size="mini" @click="formDiffPanelSubmit">确认提交</el-button>
+          <el-button :disabled="jsonRowInEditForm===jsonRowInEditFormBackup" type="primary" size="mini" @click="formDiffPanelSubmit">确认提交</el-button>
         </template>
       </aim-popup>
       <aim-popup
@@ -433,6 +428,7 @@ import {
   isModeInplace,
   isRowSelected,
   mustCtrlData,
+  removeCtrlData,
   rowFormEditorTitle,
   setRowSelected,
   xidRow
@@ -550,6 +546,20 @@ export default {
     }
   },
   computed: {
+    diffContentList(){
+      return [
+        {
+          old:this.jsonRowInEditFormBackup,
+          new:this.jsonRowInEditForm,
+        }
+      ]
+    },
+    jsonRowInEditFormBackup(){
+      return JSON.stringify(removeCtrlData(this.rowInEditFormBackup),null, 2)
+    },
+    jsonRowInEditForm(){
+      return JSON.stringify(removeCtrlData(this.rowInEditForm),null, 2)
+    },
     row() {
       return row
     },
@@ -792,6 +802,7 @@ export default {
   },
 
   methods: {
+    removeCtrlData,
     FillDefaultDataWithSchema,
     // updateFormMode 外部使用更新编辑状态，如对接redsource lock
     updateFormMode(mode) {
