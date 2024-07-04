@@ -325,8 +325,10 @@ export default {
   mounted() {
     // eslint-disable-next-line no-undef
     // this.codemirrorEditor = $('#' + this.codemirrorEditorID).find('.CodeMirror').get(0).CodeMirror;
-    this.codemirrorEditor = this.$refs.codemirror.codemirror
-    this.codemirrorEditor.setSize('100%', this.height);
+    if(this.$refs.codemirror){
+      this.codemirrorEditor = this.$refs.codemirror.codemirror
+      this.codemirrorEditor.setSize('100%', this.height);
+    }
     // code会由于数据通知到父组件导致父组件数据更新，导致changed判断错误
     this.refreshData(this.code)
     if (this.proxyConfigRef.enable) {
