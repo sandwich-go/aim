@@ -240,6 +240,7 @@ export default {
       default: function ({code}) {
       },
     },
+    preferJsonEditor:Boolean,
     headerConfig: {},
     jsonEditorOptions: {
       onEditable: () => {
@@ -298,6 +299,9 @@ export default {
         })
       },
     })
+    if(this.isJSON && this.preferJsonEditor){
+      this.useJSONEditor = true
+    }
     this.freshObjectForJsonEditor()
   },
   computed: {
