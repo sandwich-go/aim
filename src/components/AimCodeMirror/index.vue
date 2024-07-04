@@ -63,7 +63,7 @@
             :plus="true"
             disabled
             class="aim-json-editor"
-            :options="jsonEditorOptions"
+            :options="jsonEditorOptionsInner"
         />
         <codemirror
             v-else
@@ -90,10 +90,10 @@
 </template>
 
 <script>
+import VJsoneditor from 'v-jsoneditor'
 import {codemirror} from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/lib/codemirror.js'
-import VJsoneditor from 'v-jsoneditor'
 import 'codemirror/mode/yaml-frontmatter/yaml-frontmatter.js'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -242,26 +242,24 @@ export default {
     },
     preferJsonEditor:Boolean,
     headerConfig: {},
-    jsonEditorOptions: {
-      onEditable: () => {
-        return false
-      },
-      onChange: (e) => {
-        console.log(e)
-      },
-      mode: 'code',
-      modes: ['tree', 'code'],
-      search: false,
-      sortObjectKeys: false,
-      language: 'en',
-      statusBar: true,
-      enableTransform: false,
-      navigationBar: true,
-      enableSort: false
-    }
+    jsonEditorOptions:Object,
   },
   data() {
     return {
+      jsonEditorOptionsInner: {
+        onChange: (e) => {
+          console.log(e)
+        },
+        mode: 'code',
+        modes: ['tree', 'code','form'],
+        search: false,
+        sortObjectKeys: false,
+        language: 'en',
+        statusBar: true,
+        enableTransform: false,
+        navigationBar: true,
+        enableSort: false
+      },
       heightInner:this.height,
       CodeMirrorModeJSON,
       proxyLoading: false,
@@ -282,6 +280,9 @@ export default {
     }
   },
   created() {
+    if(this.jsonEditorOptions){
+      this.jsonEditorOptionsInner = Object.assign(this.jsonEditorOptionsInner,this.jsonEditorOptions)
+    }
     this.headerConfigRef = initToolbarConfig(this.headerConfigRef, {'padding-bottom': '9px'})
     jsb.objectAssignNX(this.infoConfigRef, {name: '', mode: ''})
     jsb.objectAssignNX(this.proxyConfigRef, {
