@@ -32,7 +32,7 @@
             </div>
             <tag v-if="item.tag" v-bind="item.tag"></tag>
           </el-tooltip>
-          <tag :key="index" v-else v-bind="item.tag"></tag>
+          <tag :key="index" v-else v-bind="item.tag">{{item.tag.label}}</tag>
     </template>
 
     <cell-view-label-tooltip
