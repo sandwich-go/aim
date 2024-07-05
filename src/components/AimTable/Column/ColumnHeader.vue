@@ -16,12 +16,23 @@
     </el-tooltip>
 
     <template v-for="(item,index) in fieldSchema['iconList'] || []">
-    <el-tooltip v-if="item['tooltip'] && item.icon" effect="light" :key="index">
-      <div slot="content">
-        <div v-html="item['tooltip']"></div>
-      </div>
-      <span><i v-if="item.icon" v-bind="item.icon"></i></span>
-    </el-tooltip>
+      <el-tooltip v-if="item['tooltip'] && item.icon" effect="light" :key="index">
+        <div slot="content">
+          <div v-html="item['tooltip']"></div>
+        </div>
+        <span><i v-bind="item.icon"></i></span>
+      </el-tooltip>
+      <i :key="index" v-else v-bind="item.icon"></i>
+    </template>
+
+        <template v-for="(item,index) in fieldSchema['tagList'] || []">
+          <el-tooltip v-if="item['tooltip'] && item.icon" effect="light" :key="index">
+            <div slot="content">
+              <div v-html="item['tooltip']"></div>
+            </div>
+            <tag v-if="item.tag" v-bind="item.tag"></tag>
+          </el-tooltip>
+          <tag :key="index" v-else v-bind="item.tag"></tag>
     </template>
 
     <cell-view-label-tooltip
