@@ -30,7 +30,7 @@
             <div slot="content">
               <div v-html="item['tooltip']"></div>
             </div>
-            <tag v-if="item.tag" v-bind="item.tag"></tag>
+            <tag v-if="item.tag" v-bind="item.tag">{{item.tag.label}}</tag>
           </el-tooltip>
           <tag :key="index" v-else v-bind="item.tag">{{item.tag.label}}</tag>
     </template>
