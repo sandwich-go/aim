@@ -121,7 +121,7 @@
                 :show-overflow-tooltip="fs.showOverflowTooltip"
                 :label="fs.name"
                 :fixed="inSortIndexEdit?false:fs.fixed"
-                :sortable="pathGet(fs,'sortable',false)"
+                :sortable="disableSort?false:pathGet(fs,'sortable',false)"
                 :resizable="pathGet(fs,'resizable',true)"
                 :sort-method="fs.sortMethod"
                 :header-align="fs.headerAlign"
@@ -731,7 +731,8 @@ export default {
       // eslint-disable-next-line no-unused-vars
       default: function ({code, scope, row, fieldSchema, fieldValue}) {
       },
-    }
+    },
+    disableSort:Boolean,
   },
   data() {
     return {
