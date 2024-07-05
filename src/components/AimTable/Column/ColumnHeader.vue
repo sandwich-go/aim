@@ -22,7 +22,7 @@
         </div>
         <span><i v-bind="item"></i></span>
       </el-tooltip>
-      <i :key="index" v-else v-bind="item"></i>
+      <i v-else :key="index" v-bind="item"></i>
     </template>
 
         <template v-for="(item,index) in fieldSchema['tagList'] || []">
@@ -30,9 +30,9 @@
             <div slot="content">
               <div v-html="item['tooltip']"></div>
             </div>
-            <tag v-bind="item">{{item.label}}</tag>
+            <el-tag v-bind="item">{{item.label}}</el-tag>
           </el-tooltip>
-          <tag :key="index" v-bind="item">{{item.label}}</tag>
+          <el-tag v-else :key="index" v-bind="item">{{item.label}}</el-tag>
     </template>
 
     <cell-view-label-tooltip
