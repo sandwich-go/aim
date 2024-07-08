@@ -558,13 +558,19 @@ export default {
       if(!this.rowInEditFormBackup){
         return ""
       }
-      return JSON.stringify(removeCtrlData(this.rowInEditFormBackup),null, 2)
+      if(!jsb.pathGet(this.editConfigRef,'diffBeforeUpdate',false)){
+        return ""
+      }
+      return JSON.stringify(removeCtrlData(jsb.clone(this.rowInEditFormBackup)),null, 2)
     },
     jsonRowInEditForm(){
       if(!this.rowInEditForm){
         return ""
       }
-      return JSON.stringify(removeCtrlData(this.rowInEditForm),null, 2)
+      if(!jsb.pathGet(this.editConfigRef,'diffBeforeUpdate',false)){
+        return ""
+      }
+      return JSON.stringify(removeCtrlData(jsb.clone(this.rowInEditForm)),null, 2)
     },
     row() {
       return row
