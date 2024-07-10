@@ -118,11 +118,11 @@ export default {
 
 .aim-title-sub-info {
   position: absolute;
-  font-size: 10px; /* 设置说明信息字号 */
+  font-size: 11px; /* 设置说明信息字号 */
   bottom: -1.6em; /* 负的字号差值，用于在主文本下方显示 */
   right: 0; /* 右对齐说明信息 */
-  color: #707070;
-  font-weight: lighter;
+  color: #919191;
+  font-weight: bold;
 }
 
 </style>
