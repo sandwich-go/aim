@@ -168,6 +168,7 @@ import {isVirtualField} from "@/components/AimTable/virtual_field";
 import {CleanRowForStorage} from "@/components/AimTable/formatterForUpdate";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
+import fa from "element-ui/src/locale/lang/fa";
 export default {
   name: "AimFormInput",
   components: {
@@ -231,11 +232,17 @@ export default {
       // 如果 options 是一个函数，则调用它并等待它的返回值
       dataGot = this.data();
       if (dataGot instanceof Promise) {
-        dataGot = await dataGot;
+        this.inLoading = true
+        dataGot = await dataGot.finally(()=>{
+          this.inLoading = false
+        });
       }
     } else if (this.data instanceof Promise) {
       // 如果 options 是一个 Promise，则等待 Promise 完成并赋值给 optionsInner
-      dataGot = await this.data;
+      this.inLoading = true
+      dataGot = await this.data.finally(()=>{
+        this.inLoading = false
+      });
     }
     this.dataRef = dataGot
     this.processSchema()
