@@ -33,9 +33,20 @@
             :type="pathGet(sc,'type','primary')"
             :disabled="pathGet(sc,'disabled',false)"
             @click="click(sc,shortcut)">
-        <i :class="pathGet(sc,'icon','el-icon-s-grid')"/>
+        <i v-if="sc.icon" :class="sc.icon"/>
+          <span v-else-if="sc.label">{{sc.label}}</span>
+        <i v-else class="el-icon-s-grid"/>
       </el-link>
       </span>
+    </template>
+    <template v-for="(item,index) in fieldSchema['dataTagList'] || []">
+      <el-tooltip v-if="item['tooltip']" effect="light" :key="index">
+        <div slot="content">
+          <div v-html="item['tooltip']"></div>
+        </div>
+        <el-tag v-bind="item" @click="clickTag(item)">{{item.label}}</el-tag>
+      </el-tooltip>
+      <el-tag v-else :key="index" v-bind="item" @click.native="clickTag(item)">{{item.label}}</el-tag>
     </template>
   </div>
 </template>
@@ -71,6 +82,12 @@ export default {
         return
       }
       jsb.cc.toastWarning(`shortcut ${shortcut} no click function`)
+    },
+    clickTag(item){
+      const v = jsb.pathGet(item,'click')
+      if(v){
+        v({row:this.row,value: this.fieldValueFormatted,})
+      }
     },
     clipFilter(){
       if(!this.fieldSchema.filter){

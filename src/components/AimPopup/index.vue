@@ -4,17 +4,9 @@
         v-if="drawer"
         modal
         ref="aimPopupDrawer"
-        :show-close="configData.showClose"
-        :with-header="configData.withHeader"
-        :destroy-on-close="configData.destroyOnClose"
-        :close-on-press-escape="configData.closeOnPressEscape"
+        v-bind="configData"
         :visible.sync="isShowPopup"
-        :size="configData.size"
-        :append-to-body="configData.appendToBody"
-        :before-close="configData.beforeClose"
-        :custom-class="configData.customClass"
-        @close="close"
-        :direction="configData.direction">
+        @close="close">
       <template v-slot:title>
         <div v-if="title" v-html="title"></div>
       </template>
@@ -32,12 +24,8 @@
         v-else
         modal
         ref="aimPopupDialog"
-        :before-close="configData.beforeClose"
-        :custom-class="configData.customClass"
+        v-bind="configData"
         :width="configData.width || configData.size"
-        :close-on-press-escape="configData.closeOnPressEscape"
-        :append-to-body="configData.appendToBody"
-        :destroy-on-close="configData.destroyOnClose"
         @close="close"
         :visible.sync="isShowPopup">
       <template v-slot:title>
@@ -119,6 +107,7 @@ export default {
       footerStyle:{},
       headerStyle:{},
       bodyStyle:{},
+      wrapperClosable:false,
     })
     if(this.title) {
       this.configData.withHeader = true

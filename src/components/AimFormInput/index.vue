@@ -168,7 +168,6 @@ import {isVirtualField} from "@/components/AimTable/virtual_field";
 import {CleanRowForStorage} from "@/components/AimTable/formatterForUpdate";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
-import fa from "element-ui/src/locale/lang/fa";
 export default {
   name: "AimFormInput",
   components: {
