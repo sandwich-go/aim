@@ -460,7 +460,7 @@ import {
   CodeButtonTableSetting,
   CodeLinkFieldCopy,
   CodeLinkFilterSearch,
-  CodeLinkFilterSearchClose
+  CodeLinkFilterSearchClose, DisableStateFollowReadOnly
 } from "@/components/cells/const";
 import {FormRulesFromSchema} from "@/components/AimTable/validate";
 import {directionToolbarSpan} from "@/components/AimTable/toolbar";
@@ -1193,7 +1193,7 @@ export default {
       exportTable2Excel(this.schema,this.tableData)
     },
     privateShouldCellDisable({code, cell, row, fieldSchema}) {
-      if (this.readOnly) {
+      if (this.readOnly && DisableStateFollowReadOnly.includes(code)) {
         // 按钮的禁用需要根据code区分，暂时全部屏蔽
         return true
       }

@@ -75,6 +75,18 @@ code2OptionsMapping[CodeButtonRowSelectedClose] = {icon: 'el-icon-close', label:
 
 
 
+export const DisableStateFollowReadOnly = [
+    CodeButtonAdd,
+    CodeButtonRowEdit,
+    CodeButtonRowCopy,
+    CodeButtonRowDelete,
+    CodeButtonRowMinus,
+    CodeButtonRowSelectedClose,
+    CodeButtonRowSelectedMinus,
+    CodeButtonRowSelectedDelete,
+    CodeButtonRowSave,
+]
+
 code2OptionsMapping[CodeButtonRowSave] = {
     icon: 'el-icon-check',
     label: '保存',
