@@ -454,7 +454,7 @@ import {
   CodeButtonRowSave,
   CodeButtonRowSelectedClose,
   CodeButtonRowSelectedDelete,
-  CodeButtonRowSelectedMinus,
+  CodeButtonRowSelectedMinus, CodeButtonRowView,
   CodeButtonSaveTableData,
   CodeButtonSortIndex, CodeButtonTableGroupView,
   CodeButtonTableSetting,
@@ -1103,6 +1103,9 @@ export default {
             initRow: this.editConfigRef.copyRow(copyRow(row)),
             isCopy: true
           })
+          break
+        case CodeButtonRowView:
+          this.rowClickWithTriggerName(row, EditTriggerManual,AimFormInputView)
           break
         case CodeButtonRowEdit:
           this.rowClickWithTriggerName(row, EditTriggerManual)

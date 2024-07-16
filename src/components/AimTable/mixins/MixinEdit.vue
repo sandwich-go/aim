@@ -80,14 +80,14 @@ export default {
         this.updateRowWatcher(this.rowInEdit)
       }
     },
-    rowClickWithTriggerName(row, triggerName) {
+    rowClickWithTriggerName(row, triggerName,mode=AimFormInputEdit) {
       this.currentChange(row)
       if (!this.isEditTriggerAccepted(triggerName)) {
         return;
       }
       const triggerRet = this.editConfigRef.triggerRowFunc({row: row})
 
-      this.rowEditState = AimFormInputEdit
+      this.rowEditState = mode
       this.rowEditorAlert = null
 
       if (jsb.isString(triggerRet)) {

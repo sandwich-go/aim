@@ -21,6 +21,7 @@ export const CodeButtonRowCopy = "btnRowCopy"
 export const CodeButtonRowSave = "btnRowSave"
 export const CodeButtonRowHistory = "btnRowHistory"
 export const CodeButtonRowEdit = "btnRowEdit"
+export const CodeButtonRowView = "CodeButtonRowView"
 
 export const CodeButtonRowClose = "btnRowClose"
 export const CodeButtonRowDelete = "btnRowDelete"
