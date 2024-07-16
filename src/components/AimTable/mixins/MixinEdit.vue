@@ -155,7 +155,7 @@ export default {
     },
     // isTriggerAccepted triggerName是否符合设定的编辑策略
     isEditTriggerAccepted(triggerName) {
-      if (this.readOnly || !this.editConfigRef || !this.editConfigRef.enable) {
+      if (!this.editConfigRef || !this.editConfigRef.enable) {
         return false;
       }
       if (this.editConfigRef.trigger === triggerName) {
