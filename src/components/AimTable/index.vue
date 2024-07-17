@@ -39,6 +39,7 @@
             :header-cell-style="tablePropertyRef.headerCellStyle"
             :highlight-current-row="tablePropertyRef.highlightCurrentRow"
             :cell-style="cellStyleWrapper"
+            :cell-class-name="cellClassName"
             :default-expand-all="defaultExpandAll"
             :row-style="tablePropertyRef.rowStyle"
             :row-class-name="privateRowClassName"
@@ -666,6 +667,7 @@ export default {
     Loading
   },
   props: {
+    cellClassName:[String, Function],
     submitRemoveFieldNotInSchema: Boolean,
     onEventDoLayout: {
       type: String,
