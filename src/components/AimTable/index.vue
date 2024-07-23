@@ -60,6 +60,7 @@
             </template>
             <template slot-scope="scope">
               <i v-if="scope.row===currentRow" :class="currentIcon"/>
+              <i v-else-if="defaultIcon" :class="defaultIcon" />
             </template>
           </el-table-column>
 
@@ -705,6 +706,7 @@ export default {
       default:"left"
     },
     currentIcon:String,
+    defaultIcon:String,
     columnExpandFixed:{
       type:String,
       default:"left"
