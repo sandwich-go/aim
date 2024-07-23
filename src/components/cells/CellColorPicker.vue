@@ -12,7 +12,7 @@
 <script>
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import {ReservedColorList} from "@/components/utils/ui";
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 export default {
   name: 'CellColorPicker',
   mixins: [MixinCellEditorConfig],

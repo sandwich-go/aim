@@ -1,4 +1,4 @@
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 import {mustCtrlData, mustCtrlRemote} from "@/components/AimTable/table";
 

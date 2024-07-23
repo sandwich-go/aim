@@ -19,7 +19,7 @@ import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConf
 import AimFormInput from "@/components/AimFormInput/index.vue";
 import CellTrigger from "@/components/cells/CellTrigger.vue";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: 'CellTriggerFormInput',

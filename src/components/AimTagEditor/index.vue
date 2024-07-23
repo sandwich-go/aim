@@ -41,7 +41,7 @@
 </template>
 
 <script>
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: 'AimTagEditor',

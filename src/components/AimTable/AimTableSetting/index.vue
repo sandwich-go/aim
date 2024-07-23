@@ -65,7 +65,7 @@ import {
   tipSlotName
 } from "@/components/AimTable/slot";
 
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {fieldSetting, fieldSettingSchema} from "@/components/AimTable/AimTableSetting/setting";
 import {newLocalDataProxyWithFieldName} from "@/components/AimTable/proxy_local";
 import {CleanTableForStorage} from "@/components/AimTable/formatterForUpdate";

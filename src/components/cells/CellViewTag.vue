@@ -33,7 +33,7 @@
 <script>
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
 import {wrapAsTagList} from "@/components/utils/jsb";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export default {
   name: 'CellViewTag',

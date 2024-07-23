@@ -57,7 +57,7 @@ import {makeCellFromString} from "@/components/cells/make";
 import {getProxySlotName} from "@/components/AimTable/slot";
 import {parseWidthToPixelString} from "@/components/utils/ui";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: "CellList",

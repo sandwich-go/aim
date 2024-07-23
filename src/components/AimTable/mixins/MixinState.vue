@@ -1,6 +1,6 @@
 <script>
 import MixinPager from "@/components/AimTable/mixins/MixinPager.vue";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {AimFormInputView} from "@/components/AimFormInput";
 import {xidRow} from "@/components/AimTable/table";
 

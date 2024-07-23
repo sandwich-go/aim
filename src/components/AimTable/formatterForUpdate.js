@@ -1,4 +1,4 @@
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {arrayProcess, boolProcess, formatValue, numberProcess, objectProcess, stringProcess} from "../cells/types";
 import {isVirtualField} from "./virtual_field";
 import {isRowSelected, removeCtrlData} from "./table";

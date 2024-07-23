@@ -2,7 +2,7 @@
 
 import {headerBackgroundColor, headerColor} from "@/components/AimTable/style";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 import {removeCtrlData, xidRow} from "@/components/AimTable/table";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 import {AimTableAutoWidthClass} from "@/components/AimTable/AutoWidth";

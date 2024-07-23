@@ -5,7 +5,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 jsb.ccAssign({PagerConfig:{
     FieldNamePagerTotal:'PagerTotal',

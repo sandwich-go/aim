@@ -1,5 +1,5 @@
 <script>
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export default {
   name: 'MixinCellEditorConfig',

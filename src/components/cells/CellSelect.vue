@@ -34,7 +34,7 @@
 </template>
 
 <script>
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import CellSelectGroup from "@/components/cells/CellSelectGroup.vue";
 export default {

@@ -1,4 +1,4 @@
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 // tree 组件树形，提供快速的 group 树形编辑支持
 export const TreeNodeSchema= [

@@ -1,4 +1,4 @@
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export function deleteConfirmConfig(proxyConfig,{row,rows}) {
     let config

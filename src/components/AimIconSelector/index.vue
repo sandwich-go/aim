@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import elementIcons from './element-icons'
 import AimSvgIcon from "@/components/AimSvgIcon/index.vue";
 export default {

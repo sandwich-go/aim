@@ -55,7 +55,7 @@ import {flexEndStyle} from "@/components/AimTable/style";
 import {CodeButtonRowSave} from "@/components/cells/const";
 import AimPopup from "@/components/AimPopup/index.vue";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: 'CellTrigger',

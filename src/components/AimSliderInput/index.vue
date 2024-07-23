@@ -86,7 +86,7 @@
 <script>
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css';
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export default {
   name: 'AimSliderInput',

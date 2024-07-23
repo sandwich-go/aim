@@ -1,4 +1,4 @@
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export function parseWidthToPixelString(width,fitText='',fixAddWidth=0){
     const widthString = String(width)

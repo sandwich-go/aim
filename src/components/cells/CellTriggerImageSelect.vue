@@ -42,7 +42,7 @@ import VueSelectImage from 'vue-select-image'
 require('vue-select-image/dist/vue-select-image.css')
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import CellTrigger from "@/components/cells/CellTrigger.vue";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import CellViewImage from "@/components/cells/CellViewImage.vue";
 
 export default {

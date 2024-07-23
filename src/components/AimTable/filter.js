@@ -1,4 +1,4 @@
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export const FilterModeStartWith = "startsWith"
 export const FilterModeIncludes = "includes"

@@ -31,7 +31,7 @@
 <script>
 
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export default {
   name: 'CellSelectGroup',

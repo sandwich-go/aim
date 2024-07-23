@@ -154,7 +154,7 @@
 import VJstree from 'vue-jstree'
 import {Splitpanes, Pane} from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {
   groupID2Path,
   groupItemIsApp,

@@ -26,7 +26,7 @@
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 import {makeCellFromString} from "@/components/cells/make";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: "CellDropdown",

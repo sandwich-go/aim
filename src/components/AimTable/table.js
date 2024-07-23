@@ -1,5 +1,5 @@
 import {AimFormInputMode2Title} from "../AimFormInput";
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 
 // inplace模式下的编辑直接在table内显示编辑控件，可以设定一个按钮将某一行设定为编辑状态与否

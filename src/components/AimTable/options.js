@@ -1,4 +1,4 @@
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 // aimTableOptionPromise 外部使用，当table的field.option是一个Promise，防止多次产生loader行为
 // eslint-disable-next-line no-unused-vars

@@ -1,6 +1,6 @@
 import {flexEndStyle, flexStartStyle} from "@/components/AimTable/style";
 
-const jsb = require("@sandwich-go/jsb");
+const jsb = require("@cg-devcenter/jsb");
 
 export function initToolbarConfig(configRef,styleToMerge={}) {
     configRef  = jsb.objectAssignNX(configRef,{

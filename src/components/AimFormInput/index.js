@@ -1,4 +1,4 @@
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export const AimFormInputInsert = "AimFormInputInsert"
 export const AimFormInputEdit = "AimFormInputEdit"

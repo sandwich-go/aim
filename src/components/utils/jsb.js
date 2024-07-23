@@ -1,4 +1,4 @@
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export function pathGet(obj, path, defaultVal) {
     return jsb.pathGet(obj, path, defaultVal)

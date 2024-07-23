@@ -25,7 +25,7 @@
 
 <script>
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
-import isString from "@sandwich-go/jsb/isString";
+import isString from "@cg-devcenter/jsb/isString";
 
 export default {
   name: "CellViewTooltip",

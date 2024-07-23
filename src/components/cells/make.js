@@ -1,4 +1,4 @@
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {code2OptionsMapping} from "@/components/cells/const";
 
 export function makeCell(initVal, ...options) {

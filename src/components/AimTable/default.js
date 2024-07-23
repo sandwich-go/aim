@@ -2,7 +2,7 @@
 // 以下情况会认为是一个虚拟列，只进行展示，不参与编辑操作
 //  - 未指定field字段
 // virtual字段会被赋默认数值，如果指定了field
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {type2DefaultVal} from "../cells/types";
 
 // FillDefaultDataWithSchema 根据schema填充默认数据

@@ -16,7 +16,7 @@
 
 <script>
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
-import isObject from "@sandwich-go/jsb/isObject";
+import isObject from "@cg-devcenter/jsb/isObject";
 import CellViewIcon from "@/components/cells/CellViewIcon.vue";
 import CellViewLabel from "@/components/cells/CellViewLabel.vue";
 

@@ -160,7 +160,7 @@
 
 <script>
 import {cellConfigForForm, cellNameForForm} from "@/components/AimTable/cell";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {
   CodeButtonAdd, CodeButtonFullscreen, CodeButtonRowSave,
   CodeButtonRowSelectedMinus

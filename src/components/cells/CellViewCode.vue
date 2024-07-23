@@ -13,7 +13,7 @@
 
 <script>
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
 
 export default {

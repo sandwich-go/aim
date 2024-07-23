@@ -15,7 +15,7 @@ import {
 } from "@/components/AimFormInput";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: 'MixinEdit',

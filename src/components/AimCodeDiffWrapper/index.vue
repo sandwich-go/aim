@@ -54,7 +54,7 @@
 <script>
 
 import CodeDiff from 'vue-code-diff'
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {getLang} from "@/components/AimCodeDiffWrapper/lang";
 
 export default {

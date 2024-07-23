@@ -1,6 +1,6 @@
 <script>
 import {initToolbarConfig} from "@/components/AimTable/toolbar";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {CreateMixinState} from "@/components/AimTable/mixins/CreateMixinState";
 
 export default {

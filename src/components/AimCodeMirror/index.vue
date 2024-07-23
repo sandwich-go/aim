@@ -176,7 +176,7 @@ import AimFullScreenDialog from "@/components/AimFullScreenDialog/index.vue";
 // eslint-disable-next-line no-undef
 const yaml = require('js-yaml');
 window.jsonlint = jsonlint;
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: 'AimCodeMirror',

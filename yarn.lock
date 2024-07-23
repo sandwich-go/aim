@@ -1033,6 +1033,16 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
+"@cg-devcenter/jsb@0.1.183":
+  version "0.1.183"
+  resolved "https://registry.yarnpkg.com/@cg-devcenter/jsb/-/jsb-0.1.183.tgz#46f5e7372ea7baafd0e362e9b9ec92af47562492"
+  integrity sha512-bAv6F73BRW6WrDTj/MFPS7E4oXnUiJYZMzBs/5/xHYasc4WNTnacEXreg8kcTd5mPArJoc4or55Jh9/m8jAvKw==
+  dependencies:
+    buffer "^6.0.3"
+    clipboard "^2.0.11"
+    moment "^2.29.4"
+    sass-loader "7.1.0"
+
 "@discoveryjs/json-ext@0.5.7":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
@@ -1163,16 +1173,6 @@
   version "1.0.0-next.25"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.25.tgz#f077fdc0b5d0078d30893396ff4827a13f99e817"
   integrity sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==
-
-"@sandwich-go/jsb@0.1.182":
-  version "0.1.182"
-  resolved "https://registry.yarnpkg.com/@sandwich-go/jsb/-/jsb-0.1.182.tgz#1fe900850dcb5583352933d193ff1b81ed696921"
-  integrity sha512-J+hEo7HomC2h5zPGjz+P0rhCuebvWQmd1Lle16Ehfqsx6zvnWoC033p4e+gaukBgozRWy9u+37IrxFC2KGTgPg==
-  dependencies:
-    buffer "^6.0.3"
-    clipboard "^2.0.11"
-    moment "^2.29.4"
-    sass-loader "7.1.0"
 
 "@sideway/address@^4.1.5":
   version "4.1.5"

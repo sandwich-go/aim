@@ -10,7 +10,7 @@
 <script>
 import AimCodeMirror from "@/components/AimCodeMirror/index.vue";
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export default {
   name: 'CellCodeMirror',

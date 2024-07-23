@@ -137,7 +137,7 @@ import {
 } from "@/components/cells/const";
 import AimPopup from "@/components/AimPopup/index.vue";
 import Cookies from "js-cookie";
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 export default {
   name: 'TestingAimTable',
   components: {AimPopup, AimTable},

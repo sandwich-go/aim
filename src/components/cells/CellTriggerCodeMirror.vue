@@ -21,7 +21,7 @@
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 import CellTrigger from "@/components/cells/CellTrigger.vue";
 import CellCodeMirror from "@/components/cells/CellCodeMirror.vue";
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 
 export default {
   name: 'CellTriggerCodeMirror',

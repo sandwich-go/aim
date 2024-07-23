@@ -11,7 +11,7 @@ export const fieldSettingSchema  = [
     // {field: 'userCouldEdit', name: '可编辑(人)', type: 'select_multiple',default:["*"]},
     {field: 'tips', name: '字段说明', type: 'html',sortable:false},
 ]
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 export function fieldSetting(schema,settingFields) {
     const ret = []

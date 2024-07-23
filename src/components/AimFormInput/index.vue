@@ -147,8 +147,8 @@
 <script>
 import mixinComponentMap from "@/components/mixins/MixinComponentMap.vue";
 
-import isString from "@sandwich-go/jsb/isString";
-import jsb from "@sandwich-go/jsb";
+import isString from "@cg-devcenter/jsb/isString";
+import jsb from "@cg-devcenter/jsb";
 import {AimFormInputCopy, AimFormInputInsert, AimFormInputView, calcLabelWidth, showForm} from "./index";
 import {CodeButtonAdd, CodeButtonRowSelectedMinus} from "@/components/cells/const";
 import {xidRow} from "@/components/AimTable/table";

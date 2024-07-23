@@ -1,4 +1,4 @@
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export const CodeButtonLint = "btnLint"
 export const CodeButtonCopy = "btnCopy"

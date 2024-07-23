@@ -1,4 +1,4 @@
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export const CodeMirrorModeShell = "text/x-sh"
 export const CodeMirrorModeYAML = "text/x-yaml"

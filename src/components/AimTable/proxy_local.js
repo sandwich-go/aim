@@ -1,4 +1,4 @@
-import jsb from "@sandwich-go/jsb";
+import jsb from "@cg-devcenter/jsb";
 import {mustCtrlData, xidRow} from "./table";
 import {CleanTableForStorage} from "./formatterForUpdate";
 

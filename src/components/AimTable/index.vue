@@ -513,7 +513,7 @@ import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
 import AimFullScreenDialog from "@/components/AimFullScreenDialog/index.vue";
 import AimCodeDiffWrapper from "@/components/AimCodeDiffWrapper/index.vue";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: "AimTable",

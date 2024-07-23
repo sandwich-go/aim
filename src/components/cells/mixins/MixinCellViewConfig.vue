@@ -1,7 +1,7 @@
 <script>
 import MixinCellEditorConfig from "@/components/cells/mixins/MixinCellEditorConfig.vue";
 
-const jsb = require("@sandwich-go/jsb")
+const jsb = require("@cg-devcenter/jsb")
 
 export default {
   name: 'MixinCellViewConfig',
