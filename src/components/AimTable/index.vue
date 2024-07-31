@@ -279,6 +279,7 @@
           />
         </template>
         <template v-slot:aim-popup-footer>
+          <slot name="slot-diff-panel-footer"/>
           <el-button :disabled="jsonRowInEditForm===jsonRowInEditFormBackup" type="primary" size="mini" @click="formDiffPanelSubmit">确认提交</el-button>
         </template>
       </aim-popup>
