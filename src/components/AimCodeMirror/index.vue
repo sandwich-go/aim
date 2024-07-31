@@ -198,7 +198,7 @@ export default {
       this.options['readOnly'] = val
     },
     codeUsingObject:function(val){
-      this.codeLatest = JSON.stringify(val,null,2)
+      this.privateOnInputEvent(JSON.stringify(val,null,2))
     },
     codeUsing:function (){this.freshObjectForJsonEditor()}
   },

@@ -561,7 +561,7 @@ export default {
       if(!this.rowInEditFormBackup){
         return ""
       }
-      if(!jsb.pathGet(this.editConfigRef,'diffBeforeUpdate',false)){
+      if(!this.diffBeforeUpdate){
         return ""
       }
       return JSON.stringify(removeCtrlData(jsb.clone(this.rowInEditFormBackup)),null, 2)
@@ -570,7 +570,7 @@ export default {
       if(!this.rowInEditForm){
         return ""
       }
-      if(!jsb.pathGet(this.editConfigRef,'diffBeforeUpdate',false)){
+      if(!this.diffBeforeUpdate){
         return ""
       }
       return JSON.stringify(removeCtrlData(jsb.clone(this.rowInEditForm)),null, 2)
@@ -679,6 +679,7 @@ export default {
       type:String,
       default:"left"
     },
+    diffBeforeUpdate:Boolean,
     selection: Boolean,// 是否支持选择
     columnSelectionFixed:{
       type:String,
@@ -1143,8 +1144,7 @@ export default {
             }
             form.__validateFromAimTable(() => {
               // 如果要求打开diff，则有限展现diff页面
-              const diffBeforeUpdate = jsb.pathGet(this.editConfigRef,'diffBeforeUpdate',false)
-              if(diffBeforeUpdate && this.rowEditState === AimFormInputEdit){
+              if(this.diffBeforeUpdate && this.rowEditState === AimFormInputEdit){
                 this.formDiffPanelSubmit = ()=>{
                   this.tryProxySaveRow(row, {done: editDone,old:this.rowInEditFormBackup})
                 }

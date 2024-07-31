@@ -372,6 +372,7 @@ export default {
       },
       editConfig: {
         mode: EditModeFormInput,
+        diffBeforeUpdate:true,
         trigger: EditTriggerManualAndDBLClick,
         triggerRowFunc: ({row}) => {
           if (row.Online) {
