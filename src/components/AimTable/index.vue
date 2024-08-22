@@ -818,7 +818,6 @@ export default {
         }
       }
     })
-    this.doLayoutNextTick(true)
   },
 
   methods: {
