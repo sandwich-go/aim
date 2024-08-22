@@ -46,6 +46,9 @@ export function flexColumnWidth(schema,tableData,force=false) {
             return
         }
         let headerExtraWidth = 0
+        if (fieldSchema['widthReserved']) {
+            headerExtraWidth = headerExtraWidth + fieldSchema['widthReserved']
+        }
         if (fieldSchema.required) {
             headerExtraWidth = headerExtraWidth + 40
         }
@@ -57,6 +60,9 @@ export function flexColumnWidth(schema,tableData,force=false) {
         }
         if (fieldSchema.tips) {
             headerExtraWidth = headerExtraWidth + 40
+        }
+        if (fieldSchema.tagList) {
+            headerExtraWidth = headerExtraWidth + jsb.size(fieldSchema.tagList||[])*40
         }
         // 两侧padding
         let headerTextWidth = jsb.textWidth(fieldSchema.name) + 20
