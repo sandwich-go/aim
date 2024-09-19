@@ -9,6 +9,7 @@
         @close="close">
       <template v-slot:title>
         <div v-if="title" v-html="title"></div>
+        <slot v-else name="aim-popup-title"></slot>
       </template>
       <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
         <slot name="aim-popup-header"></slot>
