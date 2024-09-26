@@ -21,6 +21,12 @@
                     :should-cell-disable="privateShouldCellDisable"
                     @code-cell-click="privateCellClickForToolbar"/>
             </template>
+            <template v-slot:cell-list-first>
+              <span v-if="sortIndexChangedRows.length" style="border-bottom: #ae00ae">
+                <span style="font-size: 13px;padding-right: 6px;color:dodgerblue">排序变动，是否保存?</span>
+                <el-button size="mini" type="primary" icon="el-icon-sort" @click="saveSortIndexChangedRows">保存</el-button>
+              </span>
+            </template>
           </cell-list>
         </el-col>
       </el-row>
@@ -768,6 +774,8 @@ export default {
       configContent:'[]',
       formDiffPanelShow:false,
       formDiffPanelSubmit:null,
+      sortIndexChangedRows:[],
+      xid2SortIndexOriginal:{}
     }
   },
 
@@ -781,6 +789,8 @@ export default {
       if(this.$refs.aimTreeView){
         this.$refs.aimTreeView.fetchData()
       }
+      this.sortIndexChangedRows = []
+      this.xid2SortIndexOriginal = this.sortIndexMap()
     }
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutNextTick)
@@ -800,15 +810,15 @@ export default {
     let dragCallback = null
     if (this.sortConfigRef.sortIdxField) {
       this.dragConfigRef.row = true
-      this.headerConfigRef.rightCells.push(CodeButtonSortIndex)
       dragCallback = () => {
-        if (!this.inSortIndexEdit) {
-          return
-        }
+        this.sortIndexChangedRows = []
         jsb.each(this.tableData, (v, index) => {
-          v[this.sortConfigRef.sortIdxField] = index + 1
+          const newIndex = index+1
+          if(newIndex !==this.xid2SortIndexOriginal[xidRow(v)]){
+            this.sortIndexChangedRows.push(v)
+          }
+          v[this.sortConfigRef.sortIdxField] = newIndex
         })
-        this.sortIndexChanged = true
       }
       if (this.pagerConfigRef.enable) {
         aimTableError(`分页模式 与 ${this.sortConfigRef.sortIdxField} 配置不兼容`)
@@ -829,6 +839,18 @@ export default {
 
   methods: {
     removeCtrlData,
+    sortIndexMap(){
+      const vList = {}
+      if (this.sortConfigRef.sortIdxField) {
+        jsb.each(this.tableData,v=>{
+          vList[xidRow(v)] = v[this.sortConfigRef.sortIdxField]
+        })
+      }
+      return vList
+    },
+    saveSortIndexChangedRows(){
+      return this.trySaveRows(this.sortIndexChangedRows,{okQuery:true})
+    },
     FillDefaultDataWithSchema,
     // updateFormMode 外部使用更新编辑状态，如对接redsource lock
     updateFormMode(mode) {
@@ -1067,19 +1089,6 @@ export default {
         }
       }
       switch (code) {
-        case CodeButtonSortIndex:
-          if (this.inSortIndexEdit) {
-            // 提交index变更
-            this.inSortIndexEdit = false
-            if (this.sortIndexChanged) {
-              this.trySaveField(this.sortConfigRef.sortIdxField)
-            }
-          } else {
-            this.inSortIndexEdit = true
-            this.sortIndexChanged = false
-          }
-          aimTableWarn(`sort index edit  ${this.inSortIndexEdit ? 'opened' : 'closed'}`)
-          break
         case CodeButtonDebug:
           this.debug = !this.debug
           aimTableWarn(`${this.debug ? 'opened' : 'closed'}`)

@@ -172,8 +172,8 @@ export default {
       }, `字段 ${field} 已保存`)
     },
     // eslint-disable-next-line no-unused-vars
-    trySaveTableData({done} = {}) {
-      const toSave = CleanRowForStorage(
+    trySaveTableData({done,okQuery} = {}) {
+      const rows = CleanRowForStorage(
           this.schema,
           this.tableData,
           true,
@@ -181,9 +181,17 @@ export default {
           this.proxyConfigRef.submitRemoveFieldNotInSchema,
           this.proxyConfigRef.row2Item
       )
-      return this.tryPromise('saveTableData', {tableData: toSave}, ({error}) => {
-        if (!error) {
-          this.doLayout(true)
+      return this.__save_rows(done,okQuery,'saveTableData',{tableData:rows})
+    },
+    // eslint-disable-next-line no-unused-vars
+    trySaveRows(rows,{done,okQuery} = {}) {
+      return this.__save_rows(done,okQuery,'saveRows',{rows})
+    },
+    // eslint-disable-next-line no-unused-vars
+    __save_rows(done,okQuery,funcName,params) {
+      return this.tryPromise(funcName, params, ({error}) => {
+        if (!error && okQuery) {
+          this.fresh()
         }
         done && done({error})
       }, '数据已保存')
@@ -335,17 +343,24 @@ export default {
       return this.tryPromise('query', {params: params, queryCount: this.queryCount}, ({resp, error}) => {
         if (resp) {
           // 不能直接赋值，vue检测array元素变化存在一些问题
-          if (this.isModeInplace()) {
-            // inPlace模式下直接使用传入的数据，增加入proxy，编辑，缺少提交的窗口
-            this.tableData = jsb.pathGet(resp, 'Data')
-            this.processTableData(this.tableData)
-          } else {
-            this.tableData = []
-            const _this = this
-            jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')), (item) => {
-              _this.tableData.push(item)
-            })
-          }
+          // if (this.isModeInplace()) {
+          //   // inPlace模式下直接使用传入的数据，增加入proxy，编辑，缺少提交的窗口
+          //   this.tableData = jsb.pathGet(resp, 'Data')
+          //   this.processTableData(this.tableData)
+          // } else {
+          //   this.tableData = []
+          //   const _this = this
+          //   jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')), (item) => {
+          //     _this.tableData.push(item)
+          //   })
+          // }
+          this.tableData.splice(0, this.tableData.length)
+          const _this = this
+          jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')), (item) => {
+            _this.tableData.push(item)
+          })
+
+
           this.PagerTotal = jsb.pathGet(resp, 'PagerTotal')
           if (!this.PagerTotal) {
             this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
@@ -364,7 +379,7 @@ export default {
               // 无需转行的行处理添加控制信息，如 xid
               jsb.eachTree(this.tableData, v => {
                 if (v[this.treeProps.children]) {
-                  this.processTableData(v[this.treeProps.children])
+                  v[this.treeProps.children] = this.processTableData(v[this.treeProps.children])
                 }
               })
             }
@@ -427,7 +442,7 @@ export default {
           return
         }
         v.orderFunc = v.orderFunc || fs.sortMethod
-        orders.push(v.order)
+        orders.push(v)
       })
       if (orders.length > 0) {
         data = jsb.orderBy(data, orders)

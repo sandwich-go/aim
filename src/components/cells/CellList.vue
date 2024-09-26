@@ -1,5 +1,6 @@
 <template>
   <div style="display: inline">
+    <slot name="cell-list-first"></slot>
     <template v-for="(cell,index) of cellsRef">
       <div :key="index" :style="divStyle">
         <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
