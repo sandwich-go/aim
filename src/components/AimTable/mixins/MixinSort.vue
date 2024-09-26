@@ -30,12 +30,6 @@ export default {
       }
       // 使用 schema 中定义的sortMethod
       const fs = jsb.find(this.schema,fs=>fs.field === v.field)
-      if(!fs){
-        if(this.sortConfigRef.toastInvalidField){
-          jsb.cc.toastWarning(`排序字段${v.field}不存在`)
-        }
-        return
-      }
       v.orderFunc = v.orderFunc || fs.sortMethod
     })
   },

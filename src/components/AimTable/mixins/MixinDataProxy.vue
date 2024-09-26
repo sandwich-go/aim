@@ -437,11 +437,7 @@ export default {
       const orders = []
       jsb.each(this.sortConfigRef.orders || [], v => {
         const fs = jsb.find(_this.schema, fs => fs.field === v.field)
-        if (!fs || !v.order) {
-          // 本地排序，字段必须存在否则无意义
-          return
-        }
-        v.orderFunc = v.orderFunc || fs.sortMethod
+        v.orderFunc = v.orderFunc || fs?fs.sortMethod:null
         orders.push(v)
       })
       if (orders.length > 0) {
