@@ -176,8 +176,8 @@ export default {
       if (this.cc['changeEx']) {
         this.cc['changeEx']({value:newVal,parent:this.data})
       }
-      if(this.cc.__tableCallbackOnChange){
-        this.cc.__tableCallbackOnChange({row:this.data})
+      if(this.fieldSchema.__tableCallbackOnChange){
+        this.fieldSchema.__tableCallbackOnChange({row:this.data})
       }
     },
     emitClick(jsEvent) {

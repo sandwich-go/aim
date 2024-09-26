@@ -598,9 +598,10 @@ export default {
     cellConfig() {
       return (fs, row) => {
         const ret = cellConfigForTable(fs, row)
+        const _this = this
         if(this.editConfigRef.autoSaveInPlaceRow && isModeInplace(this.editConfigRef.mode)){
-          ret.__tableCallbackOnChange = function ({row}){
-            this.tryProxySaveRow({row})
+          fs.__tableCallbackOnChange = function ({row}){
+            _this.tryProxySaveRow(row)
           }
         }
         return ret
