@@ -41,6 +41,9 @@ export default {
         // 如果只是返回字符串则：view状态，显示alert信息
         return true
       },
+      // 仅当编辑属性为inplaceNoTrigger或EditModeInplace时有效
+      // 当行数据发生变动时自动保存，通过字段的change属性触发
+      autoSaveInPlaceRow:Boolean,
       // 新建一行数据
       newRow(schema, row) {
         return FillDefaultDataWithSchema(schema, row)

@@ -176,6 +176,9 @@ export default {
       if (this.cc['changeEx']) {
         this.cc['changeEx']({value:newVal,parent:this.data})
       }
+      if(this.cc.__tableCallbackOnChange){
+        this.cc.__tableCallbackOnChange({row:this.data})
+      }
     },
     emitClick(jsEvent) {
       this.$emit('code-cell-click', {code: this.cc.code, jsEvent: jsEvent})

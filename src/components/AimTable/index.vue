@@ -597,7 +597,13 @@ export default {
     },
     cellConfig() {
       return (fs, row) => {
-        return cellConfigForTable(fs, row)
+        const ret = cellConfigForTable(fs, row)
+        if(this.editConfigRef.autoSaveInPlaceRow && isModeInplace(this.editConfigRef.mode)){
+          ret.__tableCallbackOnChange = function ({row}){
+            this.tryProxySaveRow({row})
+          }
+        }
+        return ret
       }
     },
     allCommentSlotName() {
