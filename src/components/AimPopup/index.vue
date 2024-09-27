@@ -6,6 +6,7 @@
         ref="aimPopupDrawer"
         v-bind="configData"
         :visible.sync="isShowPopup"
+        :title="title"
         @close="close">
       <template v-slot:title>
         <slot name="aim-popup-title"></slot>
@@ -27,6 +28,7 @@
         v-bind="configData"
         :width="configData.width || configData.size"
         @close="close"
+        :title="title"
         :visible.sync="isShowPopup">
       <template v-slot:title>
         <div v-if="title" v-html="title"></div>
