@@ -94,7 +94,7 @@ export default {
     }
     this.configData = jsb.objectAssignNX(this.configData, {
       showClose: true,
-      withHeader: false,
+      withHeader: true,
       destroyOnClose: true,
       closeOnPressEscape: true,
       size: '85%',
@@ -111,9 +111,10 @@ export default {
       bodyStyle:{},
       wrapperClosable:false,
     })
-    if(this.title) {
+    if(this.title || this.showClose) {
       this.configData.withHeader = true
     }
+    console.log("this.title ",this.title)
   }
 }
 </script>

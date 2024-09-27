@@ -71,14 +71,14 @@
           </el-table-column>
 
           <el-table-column v-if="expandConfig" type="expand" key="aim-table-column-expand" width="30"
-                           class-name="aim-column-fixed-width" :fixed="inSortIndexEdit?false:columnExpandFixed">
+                           class-name="aim-column-fixed-width" :fixed="columnExpandFixed">
             <template slot-scope="scope">
               <column-expand :expand-config-data="expandConfigRef" :key="xidRow(scope.row)"
                              :row="scope.row"></column-expand>
             </template>
           </el-table-column>
 
-          <el-table-column v-if="dragConfigRef.row" :fixed="inSortIndexEdit?false:columnDragFixed" align="center" width="50"
+          <el-table-column v-if="dragConfigRef.row" :fixed="columnDragFixed" align="center" width="50"
                            class-name="aim-column-fixed-width">
             <template slot-scope="{}" slot="header">
               <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
@@ -105,7 +105,7 @@
           </el-table-column>
           <el-table-column v-if="selection"
                            :selectable="selectionEnable"
-                           :fixed="inSortIndexEdit?false:columnSelectionFixed"
+                           :fixed="columnSelectionFixed"
                            class-name="aim-column-fixed-width"
                            key="aim_table_auto_column_selection"
                            width="50"
@@ -128,7 +128,7 @@
                 :min-width="fs.min_width_dynamic ||fs.min_width"
                 :show-overflow-tooltip="fs.showOverflowTooltip"
                 :label="fs.name"
-                :fixed="inSortIndexEdit?false:fs.fixed"
+                :fixed="fs.fixed"
                 :sortable="disableSort?false:pathGet(fs,'sortable',false)"
                 :resizable="pathGet(fs,'resizable',true)"
                 :sort-method="fs.sortMethod"
@@ -688,10 +688,7 @@ export default {
       type: String,
       default: 'aim_table_layout'
     },
-    columnDragFixed:{
-      type:String,
-      default:"left"
-    },
+    columnDragFixed:String,
     diffBeforeUpdate:Boolean,
     selection: Boolean,// 是否支持选择
     columnSelectionFixed:{
@@ -1222,9 +1219,6 @@ export default {
         return true
       }
       code = code || jsb.pathGet(cell, 'code')
-      if (this.inSortIndexEdit) {
-        return code !== CodeButtonSortIndex;
-      }
       if (code === CodeButtonRowSelectedMinus ||
           code === CodeButtonRowSelectedClose ||
           code === CodeButtonRowSelectedDelete) {
