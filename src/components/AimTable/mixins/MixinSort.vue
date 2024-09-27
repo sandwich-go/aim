@@ -30,7 +30,7 @@ export default {
       }
       // 使用 schema 中定义的sortMethod
       const fs = jsb.find(this.schema,fs=>fs.field === v.field)
-      v.orderFunc = v.orderFunc || fs.sortMethod
+      v.orderFunc = v.orderFunc || fs?fs.sortMethod:null
     })
   },
   methods:{
