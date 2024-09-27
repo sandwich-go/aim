@@ -82,10 +82,10 @@
                            class-name="aim-column-fixed-width">
             <template slot-scope="{}" slot="header">
               <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
-                <span>{{ dragConfigRef.header }}<i></i></span>
+                <span>{{ dragConfigRef.header }}</span>
               </el-tooltip>
             </template>
-            <template slot-scope="{}"><i class="el-icon-menu"></i></template>
+            <template slot-scope="{}"><i :class="dragConfigRef.icon || 'el-icon-menu'"></i></template>
           </el-table-column>
 
           <el-table-column v-if="rowTooltip" key="aim_table_auto_column_tooltip_icon" width="50" align="center"
@@ -262,7 +262,7 @@
               :should-cell-disable="privateShouldCellDisable"
               @code-cell-click="privateCellClickForToolbar"
           >
-            <template v-for="cell in footerConfigRef[direction+'Cells']" v-slot:[getProxySlotName(cell.slot)]="{}">
+            <template v-for="cell in footerConfigRef [direction+'Cells']" v-slot:[getProxySlotName(cell.slot)]="{}">
               <slot v-if="cell.slot" :name="cell.slot"
                     :cell-config="cell"
                     :should-cell-hide="privateShouldCellHide"
@@ -465,7 +465,7 @@ import {
   CodeButtonRowSelectedDelete,
   CodeButtonRowSelectedMinus, CodeButtonRowView,
   CodeButtonSaveTableData,
-  CodeButtonSortIndex, CodeButtonTableGroupView,
+  CodeButtonTableGroupView,
   CodeButtonTableSetting,
   CodeLinkFieldCopy,
   CodeLinkFilterSearch,
