@@ -81,7 +81,7 @@
           <el-table-column v-if="dragConfigRef.row" :fixed="columnDragFixed" align="center" width="50"
                            class-name="aim-column-fixed-width">
             <template slot-scope="{}" slot="header">
-              <el-tooltip class="item" effect="light" content="拖拽以调整显示顺序" placement="top-start">
+              <el-tooltip v-if="dragConfigRef.header" v-bind="drayHeaderTooltip">
                 <span>{{ dragConfigRef.header }}</span>
               </el-tooltip>
             </template>
@@ -555,6 +555,16 @@ export default {
     }
   },
   computed: {
+    drayHeaderTooltip(){
+      let ret = this.dragConfigRef['headerTooltip']
+      if(jsb.isString(ret)){
+        ret = {content: ret}
+      }
+      ret.content = ret.content || "拖拽以调整显示顺序"
+      ret.effect = ret.effect || 'light'
+      ret.placement = ret.placement || 'top-start'
+      return ret
+    },
     diffContentList(){
       return [
         {
