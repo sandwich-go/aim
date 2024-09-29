@@ -184,8 +184,8 @@ export default {
       return this.__save_rows(done,okQuery,'saveTableData',{tableData:rows})
     },
     // eslint-disable-next-line no-unused-vars
-    trySaveRows(rows,{done,okQuery} = {}) {
-      return this.__save_rows(done,okQuery,'saveRows',{rows})
+    sortIdxChanged(rows,{done,okQuery} = {}) {
+      return this.__save_rows(done,okQuery,'sortIdxChanged',{rows})
     },
     // eslint-disable-next-line no-unused-vars
     __save_rows(done,okQuery,funcName,params) {

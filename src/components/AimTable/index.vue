@@ -856,7 +856,7 @@ export default {
       return vList
     },
     saveSortIndexChangedRows(){
-      return this.trySaveRows(this.sortIndexChangedRows,{okQuery:true})
+      return this.sortIdxChanged(this.sortIndexChangedRows,{okQuery:true})
     },
     FillDefaultDataWithSchema,
     // updateFormMode 外部使用更新编辑状态，如对接redsource lock
