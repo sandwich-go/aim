@@ -825,7 +825,7 @@ export default {
           if(newIndex !==this.xid2SortIndexOriginal[xidRow(v)]){
             this.sortIndexChangedRows.push(v)
           }
-          v[this.sortConfigRef.sortIdxField] = newIndex
+          jsb.pathSet(v,this.sortConfigRef.sortIdxField,newIndex)
         })
       }
       if (this.pagerConfigRef.enable) {
@@ -851,7 +851,7 @@ export default {
       const vList = {}
       if (this.sortConfigRef.sortIdxField) {
         jsb.each(this.tableData,v=>{
-          vList[xidRow(v)] = v[this.sortConfigRef.sortIdxField]
+          vList[xidRow(v)] = jsb.pathGet(v,this.sortConfigRef.sortIdxField)
         })
       }
       return vList
