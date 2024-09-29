@@ -30,7 +30,7 @@ export default {
   },
   computed:{
     popover() {
-      return this.fieldSchema.popover
+      return jsb.pathGet(this.fieldSchema,'popover',false)
     },
     trigger(){
       return this.popoverContent.trigger || "hover"
