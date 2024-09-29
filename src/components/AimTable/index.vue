@@ -560,6 +560,7 @@ export default {
       if(jsb.isString(ret)){
         ret = {content: ret}
       }
+      ret = ret || {}
       ret.content = ret.content || "拖拽以调整显示顺序"
       ret.effect = ret.effect || 'light'
       ret.placement = ret.placement || 'top-start'
