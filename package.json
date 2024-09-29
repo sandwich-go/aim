@@ -14,7 +14,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@cg-devcenter/jsb": "0.1.184",
+    "@cg-devcenter/jsb": "0.1.185",
     "codemirror": "^5.41.0",
     "core-js": "^3.8.3",
     "element-ui": "2.12.0",

@@ -1033,10 +1033,10 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@cg-devcenter/jsb@0.1.184":
-  version "0.1.184"
-  resolved "https://registry.yarnpkg.com/@cg-devcenter/jsb/-/jsb-0.1.184.tgz#0867faff3700a192622e4a36b8ecc6d11f77016c"
-  integrity sha512-htQW0z1TqwvuBt/F23UhAg57mWro53RiaFGDGS2+Ops3LdFTMjEeHONMuLOBSv3kP2G+YzheIa3+orAbOMFdzA==
+"@cg-devcenter/jsb@0.1.185":
+  version "0.1.185"
+  resolved "https://registry.yarnpkg.com/@cg-devcenter/jsb/-/jsb-0.1.185.tgz#82f94c57d8511b089b84b2c482ca0b4c56ad8bc7"
+  integrity sha512-0+3afanG+8Pao9P3sThlky+eY134K0l9EgfFwTu7LarmsRsjNSBRozqmizehP6wfe8DDV2BPyfX0q75tX4zvKA==
   dependencies:
     buffer "^6.0.3"
     clipboard "^2.0.11"
