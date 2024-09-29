@@ -114,7 +114,6 @@ export default {
     if(this.title || this.showClose) {
       this.configData.withHeader = true
     }
-    console.log("this.title ",this.title)
   }
 }
 </script>
