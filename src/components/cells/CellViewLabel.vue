@@ -1,6 +1,6 @@
 <template>
   <span v-if="fieldValue">
-    <el-popover v-if="fieldSchema.popover" :trigger="trigger">
+    <el-popover v-if="popover" :trigger="trigger">
       <span v-if="popoverContent.plain">{{popoverContent.content}}</span>
       <span v-else v-html="popoverContent.content"></span>
       <el-link v-if="triggerIcon" slot="reference" size="mini" :icon="triggerIcon" style="padding-right: 6px"></el-link>
@@ -10,7 +10,7 @@
         <span slot="reference" v-else :style="fieldValue.style">{{ (fieldValue.label || fieldValue.title) || fieldValueFormatted }}</span>
       </template>
     </el-popover>
-    <template v-if="triggerIcon || fieldSchema.popover===false">
+    <template v-if="!popover || triggerIcon">
       <span v-if="!isPlainObject(fieldValue)" >{{fieldValue}}</span>
       <span v-else-if="fieldValue.html" v-html='fieldValue.html' :style="fieldValue.style"></span>
       <span v-else :style="fieldValue.style">{{ (fieldValue.label || fieldValue.title) || fieldValueFormatted }}</span>
@@ -22,7 +22,6 @@
 import MixinCellViewConfig from "@/components/cells/mixins/MixinCellViewConfig.vue";
 import {isPlainObject} from "@/components/utils/jsb";
 import jsb from "@cg-devcenter/jsb";
-import fa from "element-ui/src/locale/lang/fa";
 export default {
   name: 'CellViewLabel',
   mixins: [MixinCellViewConfig],
@@ -30,8 +29,8 @@ export default {
     isPlainObject,
   },
   computed:{
-    fa() {
-      return fa
+    popover() {
+      return this.fieldSchema.popover
     },
     trigger(){
       return this.popoverContent.trigger || "hover"
@@ -53,7 +52,7 @@ export default {
           plain:true,
         }
       }
-      return ret
+      return ret || {}
     }
   }
 }
