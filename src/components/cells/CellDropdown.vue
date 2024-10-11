@@ -4,7 +4,8 @@
       <span style="padding: 18px;"><i class="el-icon-more"></i></span>
       <el-dropdown-menu slot="dropdown" style="padding: 10px 18px;">
         <template v-for="(cell,index) of cellsRef">
-          <template v-if="cell.cell && registeredComponentMap[cell.cell]">
+          <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
+            <template v-if="cell.cell && registeredComponentMap[cell.cell]">
               <component
                   style="line-height:2.2;"
                   :is="registeredComponentMap[cell.cell]"
@@ -16,6 +17,7 @@
                   :disabled="disableTooltip(cell,row).disable"
                   @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
               />
+            </template>
           </template>
         </template>
       </el-dropdown-menu>
@@ -58,7 +60,7 @@ export default {
       jsb.each(this.cellsRef, function (codeOrItem, key) {
         if (!codeOrItem.cell && codeOrItem.code) {
           _this.cellsRef[key] = makeCellFromString(codeOrItem.code, codeOrItem)
-          codeOrItem.cell = 'CellButton'
+          codeOrItem.cell = 'CellViewButton'
         }
         // 纯字符串，认为是一个code按钮，内部如已设定了code的icon映射则直接使用
         if (jsb.isString(codeOrItem)) {

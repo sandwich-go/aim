@@ -34,6 +34,7 @@ export function makeCellLink(...options) {
 
 function parseOptions(options,strList) {
     options.circle = true
+    options.size = "mini"
     jsb.each(strList, function (v, index) {
         if (index === 0) {
             return
@@ -43,6 +44,9 @@ function parseOptions(options,strList) {
         }
         if (v.startsWith("s_") || v.startsWith("svg_")) {
             options.svg = v.substr([v.indexOf('_')+1])
+        }
+        if (v.startsWith("size_")) {
+            options.size = v.substr([v.indexOf('_')+1])
         }
         if (v.startsWith("l_") || v.startsWith("label_")) {
             options.label = v.substr([v.indexOf('_')+1])
