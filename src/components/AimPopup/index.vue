@@ -51,8 +51,6 @@
   </div>
 </template>
 <script>
-import fa from "element-ui/src/locale/lang/fa";
-
 const jsb = require("@cg-devcenter/jsb")
 
 
