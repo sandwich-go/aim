@@ -1,6 +1,6 @@
 <script>
 
-import {headerBackgroundColor, headerColor} from "@/components/AimTable/style";
+import {headerBackgroundColor} from "@/components/AimTable/style";
 
 const jsb = require("@cg-devcenter/jsb")
 import {removeCtrlData, xidRow} from "@/components/AimTable/table";

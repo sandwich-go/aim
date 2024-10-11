@@ -9,7 +9,12 @@
         :title="title"
         @close="close">
       <template v-slot:title>
-        <slot name="aim-popup-title"></slot>
+        <template v-if="configData.titleSlot">
+          <slot name="aim-popup-title"></slot>
+        </template>
+        <template v-else>
+          <div v-if="title" v-html="title"></div>
+        </template>
       </template>
       <div v-if="configData.header" class="aim-drawer-header" :style="configData.headerStyle">
         <slot name="aim-popup-header"></slot>
@@ -46,6 +51,8 @@
   </div>
 </template>
 <script>
+import fa from "element-ui/src/locale/lang/fa";
+
 const jsb = require("@cg-devcenter/jsb")
 
 
@@ -93,6 +100,7 @@ export default {
       jsb.element.fixDrawerClose(this, 'aimPopupDrawer')
     }
     this.configData = jsb.objectAssignNX(this.configData, {
+      titleSlot:false,
       showClose: true,
       withHeader: true,
       destroyOnClose: true,
