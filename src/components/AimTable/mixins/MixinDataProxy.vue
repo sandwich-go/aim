@@ -403,7 +403,7 @@ export default {
         if (!formatter) {
           formatter = jsb.pathGet(filter, 'format')
         }
-        const valFormatted = formatter ? formatter(val) : formatValue(filter.type, val)
+        const valFormatted = formatter ? formatter(val,params) : formatValue(filter.type, val)
         if (!valFormatted) {
           return
         }
