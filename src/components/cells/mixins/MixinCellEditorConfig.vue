@@ -176,7 +176,7 @@ export default {
       if (this.cc['changeEx']) {
         this.cc['changeEx']({value:newVal,parent:this.data})
       }
-      if(this.fieldSchema.__tableCallbackOnChange){
+      if(this.fieldSchema && this.fieldSchema.__tableCallbackOnChange){
         this.fieldSchema.__tableCallbackOnChange({row:this.data})
       }
     },
