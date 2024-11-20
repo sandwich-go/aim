@@ -1411,6 +1411,13 @@ export default {
   justify-content: flex-end;
 }
 
+.el-table.aim-table-tag-font-bold-border-radius-zero {
+  .el-tag {
+    font-weight: bold !important;
+    border-radius: 0;
+  }
+}
+
 .el-table.aim-table-normal-padding td, .el-table.aim-table-normal-padding th {
 }
 
