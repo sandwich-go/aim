@@ -310,6 +310,7 @@
               :schema="validSchema(schema)"
               :group-config="groupConfig"
               :data="rowInEditForm"
+              :alert-info="rowEditorAlert"
               :table-data-getter="()=>{return tableData}"
               :should-cell-disable="({row,fieldSchema,cell})=>privateShouldCellDisable({cell,row,fieldSchema})"
               :mode="rowEditState"
