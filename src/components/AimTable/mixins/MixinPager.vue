@@ -1,4 +1,6 @@
 <script>
+import Cookies from "js-cookie";
+
 const jsb = require("@cg-devcenter/jsb")
 
 export default {
@@ -26,6 +28,12 @@ export default {
     if(this.pagerConfigRef.pageSize){
       this.PagerAutoGenSize  = this.pagerConfigRef.pageSize
     }
+    if (this.pagerConfigRef.pageSizeCookieKey) {
+      const pageSizeCached = Number(Cookies.get(this.pagerConfigRef.pageSizeCookieKey))
+      if (pageSizeCached) {
+        this.PagerAutoGenSize = pageSizeCached
+      }
+    }
     this.pagerConfigRef.cell = 'CellPager'
     this.pagerConfigRef.data = this.thisTarget()
     this.PagerInit(this.proxyQueryData)
@@ -41,6 +49,9 @@ export default {
     PagerPageSizeChange(e) {
       this.PagerAutoGenPage = 0
       this.PagerAutoGenSize = e
+      if (this.pagerConfigRef.pageSizeCookieKey) {
+        Cookies.set(this.pagerConfigRef.pageSizeCookieKey, e)
+      }
       this.PagerFreshFunc()
     },
     PagerAddToParams(params) {
