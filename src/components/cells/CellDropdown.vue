@@ -61,9 +61,9 @@ export default {
         lastIsDivided = false
         if (v.cell && this.registeredComponentMap[v.cell]) {
           ret.push(v)
+        }else{
+          console.log("cell not supported", v)
         }
-        console.log("item not registered component", v)
-
       })
       return this.removeDivideElements(ret)
     }
