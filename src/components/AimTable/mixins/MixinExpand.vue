@@ -18,6 +18,7 @@ export default {
   created() {
     jsb.objectAssignNX(this.expandConfigRef, {
       isHTML: false,
+      slot:'',
       // eslint-disable-next-line no-unused-vars
       expandContent: function ({row}) {
         return JSON.stringify(row)

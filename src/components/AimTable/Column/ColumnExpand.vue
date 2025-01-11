@@ -1,11 +1,18 @@
 <template>
-  <div v-if="expandConfigData.isHTML"
-       v-html="expandContentData"
-       v-loading="expandDetailLoading"/>
-  <el-input v-else v-model="expandContentData"
-            v-loading="expandDetailLoading"
-            type="textarea" :autosize="{maxRows:25}"
-            :readonly="true"/>
+  <div>
+    <template v-if="expandConfigData.slot">
+      <slot :name="expandConfigData.slot" :row="row"/>
+    </template>
+    <template v-else>
+      <div v-if="expandConfigData.isHTML"
+           v-html="expandContentData"
+           v-loading="expandDetailLoading"/>
+      <el-input v-else v-model="expandContentData"
+                v-loading="expandDetailLoading"
+                type="textarea" :autosize="{maxRows:25}"
+                :readonly="true"/>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -26,7 +33,9 @@ export default {
   },
   created() {
     // fixme created调用了两次
-    this.freshExpandContent()
+    if(!this.expandConfigData.slot){
+      this.freshExpandContent()
+    }
   },
   methods:{
     freshExpandContent(){

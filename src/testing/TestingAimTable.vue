@@ -21,7 +21,7 @@
         :selection="true"
         current-icon="el-icon-right"
         :radio-sync-current="true"
-        :expand-config="{}"
+        :expand-config="{slot:'expand'}"
         :editor-proxy-config="editorProxyConfig"
         :edit-config="editConfig"
         :table-property="tableProperty"
@@ -32,6 +32,9 @@
         :pager-config="{}"
         :row-db-click="onRowDbClick"
         :proxy-config="proxyConfig">
+      <template v-slot:expand="{row}">
+        {{row}}
+      </template>
       <template v-slot:formSlotTesting>
         <el-table
             :data="[]"

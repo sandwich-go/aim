@@ -73,8 +73,13 @@
           <el-table-column v-if="expandConfig" type="expand" key="aim-table-column-expand" width="30"
                            class-name="aim-column-fixed-width" :fixed="columnExpandFixed">
             <template slot-scope="scope">
-              <column-expand :expand-config-data="expandConfigRef" :key="xidRow(scope.row)"
-                             :row="scope.row"></column-expand>
+              <column-expand :expand-config-data="expandConfigRef"
+                             :key="xidRow(scope.row)"
+                             :row="scope.row">
+                <template v-if="expandConfigRef.slot" v-slot:[expandConfigRef.slot]="{row}">
+                  <slot :name="expandConfigRef.slot" :row="row"/>
+                </template>
+              </column-expand>
             </template>
           </el-table-column>
 
