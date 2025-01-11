@@ -104,8 +104,7 @@ export default {
           if (codeOrItem === "divided") {
             _this.cellsRef[key] = {divided: true}
           } else {
-            codeOrItem = codeOrItem.replace("btn@", '').replace("button@", '')
-            codeOrItem = `link@${codeOrItem}`
+            codeOrItem = codeOrItem.replace("btn@",'link@').replace("button@", 'link@')
             _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
           }
         }
