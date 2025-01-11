@@ -3,24 +3,23 @@
     <el-dropdown class="aim-dropdown-menu hover-effect" trigger="hover">
       <span style="padding: 10px;"><i class="el-icon-more"></i></span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item  v-for="(cell,index) of cellsRef" :key="index">
-          <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
-            <template v-if="cell.cell && registeredComponentMap[cell.cell]">
-              <component
-                  style="line-height:2.2;"
-                  :is="registeredComponentMap[cell.cell]"
-                  :key="`toolbar_component_${index}`"
-                  :cell-config="cell"
-                  :size="cell.size||'mini'"
-                  :data="cell.data || cell"
-                  :field-name="cell.field || 'value'"
-                  :options="cell.options || []"
-                  :disabled="disableTooltip(cell,row).disable"
-                  @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
-              />
-            </template>
-          </template>
-        </el-dropdown-item>
+        <template v-for="(cell,index) of cellsShow">
+          <el-dropdown-item v-if="cell.divided" divided :key="index"> </el-dropdown-item>
+          <el-dropdown-item v-if="cell.cell && registeredComponentMap[cell.cell]" :key="index">
+            <component
+                style="line-height:2.2;"
+                :is="registeredComponentMap[cell.cell]"
+                :key="`toolbar_component_${index}`"
+                :cell-config="cell"
+                :size="cell.size||'mini'"
+                :data="cell.data || cell"
+                :field-name="cell.field || 'value'"
+                :options="cell.options || []"
+                :disabled="disableTooltip(cell,row).disable"
+                @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+            />
+          </el-dropdown-item>
+        </template>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -42,6 +41,32 @@ export default {
     shortcutButtonOptions: Object,
     cellReplace: Function,
     row: Object,
+  },
+  computed:{
+    cellsShow(){
+      const ret = []
+      let lastIsDivided = false
+      jsb.each(this.cellsRef,v=>{
+        if(this.shouldCellHide({cell:v,code:v.code ||'',row:this.row})){
+          return
+        }
+        if(v.divided){
+          if(lastIsDivided){
+            return
+          }
+          lastIsDivided = true
+          ret.push(v)
+          return
+        }
+        lastIsDivided = false
+        if(v.cell && this.registeredComponentMap[v.cell]){
+          ret.push(v)
+        }
+        console.log("item not registered component",v)
+        return
+      })
+      return ret
+    }
   },
   data() {
     return {
@@ -65,9 +90,13 @@ export default {
         }
         // 纯字符串，认为是一个code按钮，内部如已设定了code的icon映射则直接使用
         if (jsb.isString(codeOrItem)) {
-          codeOrItem = codeOrItem.replace("btn@",'').replace("button@",'')
-          codeOrItem = `link@${codeOrItem}`
-          _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
+          if(codeOrItem ==="divided"){
+            _this.cellsRef[key] = {divided:true}
+          }else{
+            codeOrItem = codeOrItem.replace("btn@",'').replace("button@",'')
+            codeOrItem = `link@${codeOrItem}`
+            _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
+          }
         }
         if (jsb.cellReplace) {
           _this.cellsRef[key] = jsb.cellReplace(_this.cellsRef[key])
