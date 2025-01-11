@@ -1,9 +1,9 @@
 <template>
   <div style="display: inline">
-    <el-dropdown>
-      <span style="padding: 18px;"><i class="el-icon-more"></i></span>
-      <el-dropdown-menu slot="dropdown" style="padding: 10px 18px;">
-        <template v-for="(cell,index) of cellsRef">
+    <el-dropdown class="aim-dropdown-menu hover-effect" trigger="hover">
+      <span style="padding: 10px;"><i class="el-icon-more"></i></span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item  v-for="(cell,index) of cellsRef" :key="index">
           <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
             <template v-if="cell.cell && registeredComponentMap[cell.cell]">
               <component
@@ -11,6 +11,7 @@
                   :is="registeredComponentMap[cell.cell]"
                   :key="`toolbar_component_${index}`"
                   :cell-config="cell"
+                  :size="cell.size||'mini'"
                   :data="cell.data || cell"
                   :field-name="cell.field || 'value'"
                   :options="cell.options || []"
@@ -19,7 +20,7 @@
               />
             </template>
           </template>
-        </template>
+        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -50,7 +51,7 @@ export default {
   methods: {
     disableTooltip(cell, row) {
       const ret = this.shouldCellDisable({cell: cell, code: cell.code || '', row: row})
-      if (jsb.isString(ret)) {
+       if (jsb.isString(ret)) {
         return {disable: true, tooltip: ret}
       }
       return {disable: ret}
@@ -64,6 +65,8 @@ export default {
         }
         // 纯字符串，认为是一个code按钮，内部如已设定了code的icon映射则直接使用
         if (jsb.isString(codeOrItem)) {
+          codeOrItem = codeOrItem.replace("btn@",'').replace("button@",'')
+          codeOrItem = `link@${codeOrItem}`
           _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
         }
         if (jsb.cellReplace) {
@@ -85,7 +88,18 @@ export default {
 </script>
 
 <style scoped>
-.el-dropdown:hover, .el-dropdown:focus {
-  color: #409EFF !important;
+
+.aim-dropdown-menu {
+  display: inline-block;
+  height: 100%;
+  font-size: 18px;
+  vertical-align: text-bottom;
+  &.hover-effect:not(.no-hover) {
+    cursor: pointer;
+    transition: background .3s;
+    &:hover {
+      background: rgba(0, 0, 0, .025)
+    }
+  }
 }
 </style>

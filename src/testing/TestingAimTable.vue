@@ -705,7 +705,7 @@ export default {
           name: '操作',
           width: 200,
           sortable: false,
-          cell: 'CellList',
+          cell: 'CellDropdown',
           cellConfig: [`btn@btnRowDelete@l_删除`, 'link@' + CodeButtonRowSave, CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
         },
       ],
