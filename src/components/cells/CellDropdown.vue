@@ -4,7 +4,7 @@
       <span style="padding: 10px;"><i class="el-icon-more"></i></span>
       <el-dropdown-menu slot="dropdown">
         <template v-for="(cell,index) of cellsShow">
-          <el-dropdown-item v-if="cell.divided" divided :key="index"> </el-dropdown-item>
+          <el-dropdown-item v-if="cell.divided" divided :key="index"></el-dropdown-item>
           <el-dropdown-item v-if="cell.cell && registeredComponentMap[cell.cell]" :key="index">
             <component
                 style="line-height:2.2;"
@@ -42,16 +42,16 @@ export default {
     cellReplace: Function,
     row: Object,
   },
-  computed:{
-    cellsShow(){
+  computed: {
+    cellsShow() {
       const ret = []
       let lastIsDivided = false
-      jsb.each(this.cellsRef,v=>{
-        if(this.shouldCellHide({cell:v,code:v.code ||'',row:this.row})){
+      jsb.each(this.cellsRef, v => {
+        if (this.shouldCellHide({cell: v, code: v.code || '', row: this.row})) {
           return
         }
-        if(v.divided){
-          if(lastIsDivided){
+        if (v.divided) {
+          if (lastIsDivided) {
             return
           }
           lastIsDivided = true
@@ -59,13 +59,13 @@ export default {
           return
         }
         lastIsDivided = false
-        if(v.cell && this.registeredComponentMap[v.cell]){
+        if (v.cell && this.registeredComponentMap[v.cell]) {
           ret.push(v)
         }
-        console.log("item not registered component",v)
-        return
+        console.log("item not registered component", v)
+
       })
-      return ret
+      return this.removeDivideElements(ret)
     }
   },
   data() {
@@ -74,14 +74,25 @@ export default {
     }
   },
   methods: {
+    removeDivideElements(arr) {
+      if (arr.length === 0) return arr;
+
+      if (arr[0] && arr[0].divide === true) {
+        arr.shift();
+      }
+      if (arr[arr.length - 1] && arr[arr.length - 1].divide === true) {
+        arr.pop();
+      }
+      return arr;
+    },
     disableTooltip(cell, row) {
       const ret = this.shouldCellDisable({cell: cell, code: cell.code || '', row: row})
-       if (jsb.isString(ret)) {
+      if (jsb.isString(ret)) {
         return {disable: true, tooltip: ret}
       }
       return {disable: ret}
     },
-    refresh(){
+    refresh() {
       const _this = this
       jsb.each(this.cellsRef, function (codeOrItem, key) {
         if (!codeOrItem.cell && codeOrItem.code) {
@@ -90,10 +101,10 @@ export default {
         }
         // 纯字符串，认为是一个code按钮，内部如已设定了code的icon映射则直接使用
         if (jsb.isString(codeOrItem)) {
-          if(codeOrItem ==="divided"){
-            _this.cellsRef[key] = {divided:true}
-          }else{
-            codeOrItem = codeOrItem.replace("btn@",'').replace("button@",'')
+          if (codeOrItem === "divided") {
+            _this.cellsRef[key] = {divided: true}
+          } else {
+            codeOrItem = codeOrItem.replace("btn@", '').replace("button@", '')
             codeOrItem = `link@${codeOrItem}`
             _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
           }
@@ -123,9 +134,11 @@ export default {
   height: 100%;
   font-size: 18px;
   vertical-align: text-bottom;
+
   &.hover-effect:not(.no-hover) {
     cursor: pointer;
     transition: background .3s;
+
     &:hover {
       background: rgba(0, 0, 0, .025)
     }
