@@ -1229,6 +1229,9 @@ export default {
     rowFormEditorClose() {
       // this.debug && (this.debugMessage = `rowFormEditorClose : ${this.summaryRow(this.currentRow)}`)
     },
+    showTableSetting(){
+      this.visitSettingDrawerVisible= true
+    },
     export2Excel() {
       exportTable2Excel(this.schema,this.tableData)
     },
