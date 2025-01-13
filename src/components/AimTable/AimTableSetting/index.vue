@@ -34,8 +34,9 @@
               slot="label"
               effect="light"
               content="自定义字段显示与否、宽度、字段级授权"
-          ><span><i class="el-icon-setting" style="padding-right: 3px"/>字段控制</span>
+          ><span><i class="el-icon-setting" style="padding-right: 3px"/>属性控制</span>
           </el-tooltip>
+          <el-checkbox v-model="autoWidth" border size="mini">自适应列宽</el-checkbox>
           <aim-table
               v-if="fields"
               :schema="fieldSettingSchema()"
@@ -43,12 +44,12 @@
               :table-property="{autoWidth:false,heightSubVH:160}"
               :popup-append-to-body="true"
               :drag-config="{icon:true}"
-              :edit-config="{}"
+              :edit-config="{mode:'inplaceNoTrigger'}"
           ></aim-table>
         </el-tab-pane>
       </template>
     </el-tabs>
-    <div class="aim-popup aim-drawer-footer" style="background-color: #b3e6c8">
+    <div class="aim-popup aim-drawer-footer">
       <el-button size="mini" type="primary" @click="save">保存</el-button>
     </div>
   </div>
@@ -80,13 +81,14 @@ export default {
     schema:Array,
     groupConfig:Array,
     proxy:Object,
+    tableAutoWidth:Boolean,
   },
   computed:{
     allCommentSlotName() {
       return allSlotName(this.schema, 'commentSlot')
     },
     tableSettingTabList(){
-      return jsb.pathGet(this.proxy,'tableSettingTab',['row_template','setting'])
+      return jsb.pathGet(this.proxy,'tableSettingTab',['setting'])
     }
   },
   data() {
@@ -96,6 +98,7 @@ export default {
       activeTabName: 'setting',
       rowTemplate: null,
       fields: null,
+      autoWidth:this.tableAutoWidth,
     }
   },
   created() {
@@ -125,6 +128,7 @@ export default {
       Promise.resolve(querySetting()).then((resp) => {
         this.rowTemplate = jsb.pathGet(resp, 'template', {})
         this.fields= fieldSetting(this.schemaCleaned,jsb.pathGet(resp, 'fields', []))
+        this.auto_width= fieldSetting(this.schemaCleaned,jsb.pathGet(resp, 'auto_width', []))
       })
     },
     save(){
@@ -139,8 +143,11 @@ export default {
         row2ItemSetting = jsb.pathGet(this.proxy,'row2Item',(v)=>{return v})
       }
       const data = {}
-      data.template = row2ItemSetting(this.$refs.rowTemplate.getDataForStorage())
+      if(this.$refs.rowTemplate){
+        data.template = row2ItemSetting(this.$refs.rowTemplate.getDataForStorage())
+      }
       data.fields = CleanTableForStorage(fieldSettingSchema,this.fields,true,true,true)
+      data.auto_width = this.autoWidth
 
       Promise.resolve(saveSetting({setting:data})).then(()=>{
         jsb.cc.toastSuccess("更新成功")

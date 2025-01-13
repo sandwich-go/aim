@@ -360,12 +360,13 @@
           </template>
         </template>
       </aim-popup>
-      <aim-popup :drawer="true" :is-show.sync="visitSettingDrawerVisible" :config="{appendToBody:popupAppendToBody}">
+      <aim-popup :drawer="true" :is-show.sync="visitSettingDrawerVisible" :config="{appendToBody:popupAppendToBody,size:'85%'}">
         <template v-slot:aim-popup-body>
           <aim-table-setting
               :schema="schema"
               :group-config="groupConfig"
               :proxy="proxyConfigRef"
+              :table-auto-width="tablePropertyRef.autoWidth"
           />
         </template>
       </aim-popup>
@@ -887,6 +888,7 @@ export default {
       Promise.resolve(querySetting()).then((resp) => {
         this.tableSetting = resp
         this.schemaApplyVisitorData(jsb.pathGet(resp,'fields',[]))
+        this.tablePropertyRef.autoWidth = jsb.pathGet(resp,'auto_width',this.tablePropertyRef.autoWidth)
       })
     },
     schemaApplyVisitorData(settingFields){

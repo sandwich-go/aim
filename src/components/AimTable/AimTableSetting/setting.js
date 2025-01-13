@@ -1,15 +1,11 @@
 export const fieldSettingSchema  = [
-    {field: 'field', name: '字段名',type:'input',sortable:false,width:200},
-    {field: 'name', name: '名称',type:'input',sortable:false,width:200},
-    {field: 'width', name: '宽度',  type: 'input_number',width:130,sortable:false},
-    {field: 'min_width', name: '最小宽度',  type: 'input_number',width:130,sortable:false},
-    {field: 'max_width', name: '最大宽度', type: 'input_number',width:130,sortable:false},
-    {field: 'show', name: '默认显示', type: 'switch',align:'center',width:100,sortable:false},
-    // {field: 'groupCouldView', name: '可查看(组)', type: 'select_multiple',default:["*"]},
-    // {field: 'groupCouldEdit', name: '可编辑(组)', type: 'select_multiple',default:["*"]},
-    // {field: 'userCouldView', name: '可查看(人)', type: 'select_multiple',default:["*"]},
-    // {field: 'userCouldEdit', name: '可编辑(人)', type: 'select_multiple',default:["*"]},
-    {field: 'tips', name: '字段说明', type: 'html',sortable:false},
+    {field: 'field', name: '字段名',cell:'CellViewLabel',sortable:false,width:200,},
+    {field: 'name', name: '名称',type:'input',sortable:false,width:200,align:'center'},
+    {field: 'width', name: '宽度(像素)',  type: 'input_number',width:130,sortable:false,align:'center'},
+    {field: 'show', name: '显示', type: 'checkbox',align:'center',width:80,sortable:false},
+    {field: 'groupCouldView', name: '可查看',width:100, cell: 'CellViewTag',default:["*"],align:'center'},
+    {field: 'groupCouldEdit', name: '可编辑', width:100,cell: 'CellViewTag',default:["*"],align:'center'},
+    {field: 'tips', name: '字段说明', type: 'input',sortable:false},
 ]
 import jsb from "@cg-devcenter/jsb";
 import {FillDefaultDataWithSchema} from "@/components/AimTable/default";
