@@ -810,45 +810,47 @@ export default {
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutNextTick)
     }
-    this.tableData = this.processTableData(this.tableData)
-    if (this.autoQuery) {
-      this.proxyQueryData()
-    }
-    this.queryTableSetting()
-    this.processSchemaFilter()
-    // 占位
-    this.getProxySlotName()
-    this.getProxyTipSlotName()
-    this.getProxyCommentSlotName()
-    this.tipSlotName()
 
-    let dragCallback = null
-    if (this.sortConfigRef.sortIdxField) {
-      this.dragConfigRef.row = true
-      dragCallback = () => {
-        this.sortIndexChangedRows = []
-        jsb.each(this.tableData, (v, index) => {
-          const newIndex = index+1
-          if(newIndex !==this.xid2SortIndexOriginal[xidRow(v)]){
-            this.sortIndexChangedRows.push(v)
-          }
-          jsb.pathSet(v,this.sortConfigRef.sortIdxField,newIndex)
-        })
+    this.queryTableSetting().then(()=>{
+      this.tableData = this.processTableData(this.tableData)
+      if (this.autoQuery) {
+        this.proxyQueryData()
       }
-      if (this.pagerConfigRef.enable) {
-        aimTableError(`分页模式 与 ${this.sortConfigRef.sortIdxField} 配置不兼容`)
-      }
-    }
-    this.initDrag(() => {
-      if (dragCallback) {
-        dragCallback()
-      }
-      if (jsb.pathGet(this.proxyConfigRef, 'isLocalData', false)) {
-        const saveTableData = jsb.pathGet(this.proxyConfigRef, 'saveTableData')
-        if (saveTableData) {
-          saveTableData({tableData: this.tableData})
+      this.processSchemaFilter()
+      // 占位
+      this.getProxySlotName()
+      this.getProxyTipSlotName()
+      this.getProxyCommentSlotName()
+      this.tipSlotName()
+
+      let dragCallback = null
+      if (this.sortConfigRef.sortIdxField) {
+        this.dragConfigRef.row = true
+        dragCallback = () => {
+          this.sortIndexChangedRows = []
+          jsb.each(this.tableData, (v, index) => {
+            const newIndex = index+1
+            if(newIndex !==this.xid2SortIndexOriginal[xidRow(v)]){
+              this.sortIndexChangedRows.push(v)
+            }
+            jsb.pathSet(v,this.sortConfigRef.sortIdxField,newIndex)
+          })
+        }
+        if (this.pagerConfigRef.enable) {
+          aimTableError(`分页模式 与 ${this.sortConfigRef.sortIdxField} 配置不兼容`)
         }
       }
+      this.initDrag(() => {
+        if (dragCallback) {
+          dragCallback()
+        }
+        if (jsb.pathGet(this.proxyConfigRef, 'isLocalData', false)) {
+          const saveTableData = jsb.pathGet(this.proxyConfigRef, 'saveTableData')
+          if (saveTableData) {
+            saveTableData({tableData: this.tableData})
+          }
+        }
+      })
     })
   },
 
@@ -880,12 +882,14 @@ export default {
       }
       this.tableHeightRefreshKey++
     },
-    queryTableSetting(){
+    async queryTableSetting(){
       const querySetting = jsb.pathGet(this.proxyConfigRef, 'querySetting')
       if (!querySetting) {
-        return
+        return new Promise((resolve) => {
+          resolve()
+        })
       }
-      Promise.resolve(querySetting()).then((resp) => {
+      return Promise.resolve(querySetting()).then((resp) => {
         this.tableSetting = resp
         this.schemaApplyVisitorData(jsb.pathGet(resp,'fields',[]))
         this.tablePropertyRef.autoWidth = jsb.pathGet(resp,'auto_width',this.tablePropertyRef.autoWidth)
