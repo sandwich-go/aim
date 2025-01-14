@@ -1,7 +1,7 @@
 <template>
   <div class="aim-table-setting">
     <div style="position: absolute; right: 20px;top:50px;z-index: 1000">
-      <el-button size="mini" type="primary" @click="save">保存</el-button>
+      <el-button size="mini" type="primary" @click="save">{{saveLabel}}</el-button>
     </div>
     <el-tabs v-model="activeTabName" @tab-click="tabChange" class="aim-table-setting-tabs">
       <template v-for="key in tableSettingTabList">
@@ -46,7 +46,7 @@
               :proxy-config="newLocalDataProxyWithFieldName(thisTarget(),'fields')"
               :table-property="{autoWidth:false,heightSubVH:160}"
               :popup-append-to-body="true"
-              :drag-config="{icon:true}"
+              :drag-config="{icon:'el-icon-sort'}"
               :edit-config="{mode:'inplaceNoTrigger'}"
           ></aim-table>
         </el-tab-pane>
@@ -84,11 +84,14 @@ export default {
     tableAutoWidth:Boolean,
   },
   computed:{
+    saveLabel(){
+      return jsb.pathGet(this.proxy,'setting.label_save',"保存")
+    },
     allCommentSlotName() {
       return allSlotName(this.schema, 'commentSlot')
     },
     tableSettingTabList(){
-      return jsb.pathGet(this.proxy,'tableSettingTab',['setting'])
+      return jsb.pathGet(this.proxy,'setting.items',['setting'])
     }
   },
   data() {
@@ -120,7 +123,7 @@ export default {
       jsb.cc.emitter.emit('aim_table_layout')
     },
     query() {
-      const querySetting = jsb.pathGet(this.proxy, 'querySetting')
+      const querySetting = jsb.pathGet(this.proxy, 'setting.query')
       if (!querySetting) {
         jsb.cc.toastWarning("querySetting not found")
         return
@@ -132,13 +135,13 @@ export default {
       })
     },
     save(){
-      const saveSetting = jsb.pathGet(this.proxy,'saveSetting')
+      const saveSetting = jsb.pathGet(this.proxy,'setting.save')
       if(!saveSetting){
         jsb.cc.toastWarning("saveSetting not found")
         return
       }
       // 不进行form级别的验证
-      let row2ItemSetting  = jsb.pathGet(this.proxy,'row2ItemSetting')
+      let row2ItemSetting  = jsb.pathGet(this.proxy,'setting.row2Item')
       if(!row2ItemSetting){
         row2ItemSetting = jsb.pathGet(this.proxy,'row2Item',(v)=>{return v})
       }

@@ -736,18 +736,20 @@ export default {
             resolve()
           })
         },
-        querySetting(){
-          const got = Cookies.get('tableSetting')
-          const setting = got?JSON.parse(got):{}
-          return new Promise((resolve) => {
-            resolve(jsb.clone(setting))
-          })
-        },
-        saveSetting({setting}){
-          Cookies.set('tableSetting',JSON.stringify(setting))
-          return new Promise((resolve) => {
-            resolve()
-          })
+        setting:{
+          query(){
+            const got = Cookies.get('tableSetting')
+            const setting = got?JSON.parse(got):{}
+            return new Promise((resolve) => {
+              resolve(jsb.clone(setting))
+            })
+          },
+          save({setting}){
+            Cookies.set('tableSetting',JSON.stringify(setting))
+            return new Promise((resolve) => {
+              resolve()
+            })
+          },
         },
         query({params}) {
           const dataRet = jsb.clone(_this.tableData)

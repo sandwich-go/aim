@@ -828,7 +828,6 @@ export default {
       this.getProxyTipSlotName()
       this.getProxyCommentSlotName()
       this.tipSlotName()
-
       let dragCallback = null
       if (this.sortConfigRef.sortIdxField) {
         this.dragConfigRef.row = true
@@ -889,7 +888,7 @@ export default {
       this.tableHeightRefreshKey++
     },
     async queryTableSetting(){
-      const querySetting = jsb.pathGet(this.proxyConfigRef, 'querySetting')
+      const querySetting = jsb.pathGet(this.proxyConfigRef, 'setting.query')
       if (!querySetting) {
         return new Promise((resolve) => {
           resolve()
@@ -918,6 +917,7 @@ export default {
         fs.max_width = jsb.pathGet(tmp,'max_width',fs.max_width)
         fs.show  = jsb.pathGet(tmp,'show',fs.show)
         fs.tipsHTML  = jsb.pathGet(tmp,'tips',fs.tipsHTML)
+        fs.tips  = jsb.pathGet(tmp,'tips',fs.tips)
         if(!fs.width){
           delete fs.width
         }

@@ -1,5 +1,5 @@
 export const fieldSettingSchema  = [
-    {field: 'field', name: '字段名',cell:'CellViewLabel',sortable:false,width:200,},
+    // {field: 'field', name: '字段名',cell:'CellViewLabel',sortable:false,width:200,},
     {field: 'name', name: '名称',type:'input',sortable:false,width:200,align:'center'},
     {field: 'width', name: '宽度(像素)',  type: 'input_number',width:130,sortable:false,align:'center'},
     {field: 'show', name: '显示', type: 'checkbox',align:'center',width:80,sortable:false},
