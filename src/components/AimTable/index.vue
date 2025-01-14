@@ -21,7 +21,7 @@
                     :should-cell-disable="privateShouldCellDisable"
                     @code-cell-click="privateCellClickForToolbar"/>
             </template>
-            <template v-slot:cell-list-custom-button>
+            <template v-slot:cell-list-custom-button="{cell}">
               <el-popover
                   placement="left-start"
                   v-model="visibleCustomView"
@@ -35,13 +35,13 @@
                   </template>
                 </el-checkbox-group>
                 <el-button
-                    size="mini"
-                    icon="el-icon-s-grid"
-                    circle
-                    type="primary"
-                    plain
+                    :type="cell.type || 'primary'"
+                    :circle="cell.circle"
+                    :plain="cell.plain"
+                    :size="cell.size || 'mini'"
+                    :icon="cell.icon||'el-icon-s-grid'"
                     slot="reference"
-                ></el-button>
+                >{{cell.label||''}}</el-button>
               </el-popover>
             </template>
             <template v-slot:cell-list-first>

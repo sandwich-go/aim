@@ -105,6 +105,9 @@ export default {
             _this.cellsRef[key] = {divided: true}
           } else {
             codeOrItem = codeOrItem.replace("btn@",'link@').replace("button@", 'link@')
+            if(!codeOrItem.startsWith("link@")){
+              codeOrItem=`link@${codeOrItem}`
+            }
             _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
           }
         }

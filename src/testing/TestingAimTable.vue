@@ -128,7 +128,7 @@ import {
 } from "@/components/AimTable/table";
 import {
   CodeButtonAdd,
-  CodeButtonCustom, CodeButtonDebug, CodeButtonExpandAll,
+  CodeButtonCustom, CodeButtonExpandAll,
   CodeButtonPrint,
   CodeButtonRefresh, CodeButtonRowClose,
   CodeButtonRowCopy,
@@ -946,12 +946,11 @@ export default {
             CodeButtonSaveTableData,
           CodeButtonAdd,
           CodeButtonRefresh,
-          CodeButtonCustom,
           CodeButtonPrint,
           CodeButtonExpandAll,
           CodeButtonTableSetting,
           CodeButtonTableGroupView,
-          CodeButtonDebug,
+          'btn@btnCustom@l_字段显示',
             "btnFullscreen",
         ],
       }

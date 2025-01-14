@@ -5,7 +5,7 @@
       <div :key="index" :style="divStyle">
         <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
           <template v-if="cell.code ==='btnCustom'">
-            <slot name="cell-list-custom-button"></slot>
+            <slot name="cell-list-custom-button" :cell="cell"></slot>
           </template>
           <template v-else-if="cell.cell && registeredComponentMap[cell.cell]">
             <el-tooltip v-if="disableTooltip(cell,row).tooltip" :content="disableTooltip(cell,row).tooltip">
