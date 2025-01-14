@@ -727,6 +727,7 @@ export default {
         }
       },
       proxyConfig: {
+        id:'testing-table',
         treeConfigQuery(){
           return Cookies.get('treeConfigQuery')
         },
@@ -951,7 +952,7 @@ export default {
           CodeButtonTableSetting,
           CodeButtonTableGroupView,
           CodeButtonDebug,
-            "btnFullscreen"
+            "btnFullscreen",
         ],
       }
     }

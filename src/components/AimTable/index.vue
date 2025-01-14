@@ -21,6 +21,29 @@
                     :should-cell-disable="privateShouldCellDisable"
                     @code-cell-click="privateCellClickForToolbar"/>
             </template>
+            <template v-slot:cell-list-custom-button>
+              <el-popover
+                  placement="left-start"
+                  v-model="visibleCustomView"
+                  style="z-index:1000"
+                  trigger="click">
+                <el-checkbox-group v-model="filedShowChecked" @change="filedShowCheckedChanged">
+                  <template v-for="field in schema">
+                    <div :key="`${field.name}-${field.field}`">
+                      <el-checkbox :label="field.name" :key="`${field.name}-${field.field}`">{{field.name}}</el-checkbox>
+                    </div>
+                  </template>
+                </el-checkbox-group>
+                <el-button
+                    size="mini"
+                    icon="el-icon-s-grid"
+                    circle
+                    type="primary"
+                    plain
+                    slot="reference"
+                ></el-button>
+              </el-popover>
+            </template>
             <template v-slot:cell-list-first>
               <span v-if="sortIndexChangedRows.length" style="border-bottom: #ae00ae">
                 <span style="font-size: 13px;padding-right: 6px;color:dodgerblue">排序变动，是否保存?</span>
@@ -457,7 +480,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
 import {
-  CodeButtonAdd,
+  CodeButtonAdd, CodeButtonCustom,
   CodeButtonDebug,
   CodeButtonExpandAll,
   CodeButtonExportToExcel,
@@ -777,6 +800,7 @@ export default {
   },
   data() {
     return {
+      CodeButtonCustom,
       AimFormInputEdit:AimFormInputEdit,
       AimFormInputInsert:AimFormInputInsert,
       CtrlDataInRowData:CtrlDataInRowData,
@@ -791,7 +815,9 @@ export default {
       formDiffPanelShow:false,
       formDiffPanelSubmit:null,
       sortIndexChangedRows:[],
-      xid2SortIndexOriginal:{}
+      xid2SortIndexOriginal:{},
+      visibleCustomView:false,
+      filedShowChecked: this.filedShowCheckedLoad(),
     }
   },
 
@@ -816,7 +842,14 @@ export default {
         v.show = true
       }
     })
-
+    if(this.filedShowChecked.length === 0){
+      const _this = this
+      jsb.each(this.schema,v=>{
+        if(_this.originalFieldShow(v)){
+          _this.filedShowChecked.push(v.name)
+        }
+      })
+    }
     this.queryTableSetting().then(()=>{
       this.tableData = this.processTableData(this.tableData)
       if (this.autoQuery) {
@@ -1018,12 +1051,15 @@ export default {
       ret.icon = ret.icon || {class:'el-icon-info'}
       return ret
     },
-    fieldShow(fs) {
+    originalFieldShow(fs) {
       const show = jsb.pathGet(fs, 'show', true)
       if (jsb.isFunction(show)) {
         return show()
       }
       return show
+    },
+    fieldShow(fs) {
+      return jsb.find(this.filedShowChecked,v=>v===fs.name)
     },
     pathGet(data, fieldPath, defaultVal = undefined) {
       return jsb.pathGet(data, fieldPath, defaultVal)
@@ -1173,6 +1209,9 @@ export default {
           break
         case CodeButtonTableSetting:
           this.visitSettingDrawerVisible = true
+          break
+        case CodeButtonCustom:
+          this.visibleCustomView = true
           break
         case CodeButtonTableGroupView:
           this.groupViewDrawerVisible = true
@@ -1415,6 +1454,36 @@ export default {
         // 本地排序
         this.tableData = this.sortTableData(this.tableData)
       }
+    },
+    // 显示字段
+    filedShowCheckedChanged(){
+      const key = this.cacheKeyFieldsShow()
+      if(!key){
+        return
+      }
+      Cookies.set(key,JSON.stringify(this.filedShowChecked))
+    },
+    filedShowCheckedLoad(){
+      const key = this.cacheKeyFieldsShow()
+      if(!key){
+        return []
+      }
+      const v = Cookies.get(key)
+      if(v){
+        try {
+          return  JSON.parse(v)
+        }catch (e) {
+          console.log(`load key ${key} got err:${e}`)
+        }
+      }
+      return []
+    },
+    cacheKeyFieldsShow(){
+      const tableID = jsb.pathGet(this.proxyConfig,"id")
+      if(!tableID){
+        return
+      }
+      return `aim-table-fields-show-${tableID}}`
     }
   }
 }

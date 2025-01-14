@@ -54,7 +54,7 @@ code2OptionsMapping[CodeButtonExportToExcel] = {icon: 'el-icon-download', type: 
 code2OptionsMapping[CodeButtonAdd] = {icon: 'el-icon-plus', type: 'primary', circle: true, label: '新建'}
 code2OptionsMapping[CodeButtonRefresh] = {icon: 'el-icon-refresh', type: 'primary', circle: true, label: '刷新'}
 code2OptionsMapping[CodeButtonPrint] = {icon: 'el-icon-printer', type: 'primary', circle: true, label: '导出'}
-code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-s-grid', type: 'primary', circle: true, label: '配置'}
+code2OptionsMapping[CodeButtonCustom] = {icon: 'el-icon-s-grid', type: 'primary', circle: true, label: '表格设定'}
 code2OptionsMapping[CodeButtonExpandAll] = {icon: 'el-icon-more', type: 'primary', circle: true, label: '展开所有'}
 
 code2OptionsMapping[CodeButtonSaveTableData] = {icon: 'el-icon-check', type: 'primary', circle: true, label: '保存全表'}
