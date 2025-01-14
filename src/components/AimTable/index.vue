@@ -367,6 +367,7 @@
               :group-config="groupConfig"
               :proxy="proxyConfigRef"
               :table-auto-width="tablePropertyRef.autoWidth"
+              @setting-changed="v=>applyTableSetting(v)"
           />
         </template>
       </aim-popup>
@@ -559,7 +560,7 @@ export default {
         })
         this.doLayoutNextTick(true)
       }
-    }
+    },
   },
   computed: {
     drayHeaderTooltip(){
@@ -810,6 +811,11 @@ export default {
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.on(this.onEventDoLayout, this.doLayoutNextTick)
     }
+    jsb.each(this.schema,v=>{
+      if(jsb.isNull(v.show) || jsb.isUndefined(v.show)){
+        v.show = true
+      }
+    })
 
     this.queryTableSetting().then(()=>{
       this.tableData = this.processTableData(this.tableData)
@@ -890,10 +896,13 @@ export default {
         })
       }
       return Promise.resolve(querySetting()).then((resp) => {
-        this.tableSetting = resp
-        this.schemaApplyVisitorData(jsb.pathGet(resp,'fields',[]))
-        this.tablePropertyRef.autoWidth = jsb.pathGet(resp,'auto_width',this.tablePropertyRef.autoWidth)
+        this.applyTableSetting(resp)
       })
+    },
+    applyTableSetting(setting){
+      this.tableSetting = setting
+      this.schemaApplyVisitorData(jsb.pathGet(setting,'fields',[]))
+      this.tablePropertyRef.autoWidth = jsb.pathGet(setting,'auto_width',this.tablePropertyRef.autoWidth)
     },
     schemaApplyVisitorData(settingFields){
       if(!settingFields || settingFields.length === 0){
@@ -909,7 +918,6 @@ export default {
         fs.max_width = jsb.pathGet(tmp,'max_width',fs.max_width)
         fs.show  = jsb.pathGet(tmp,'show',fs.show)
         fs.tipsHTML  = jsb.pathGet(tmp,'tips',fs.tipsHTML)
-
         if(!fs.width){
           delete fs.width
         }

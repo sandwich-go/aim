@@ -1,5 +1,8 @@
 <template>
   <div class="aim-table-setting">
+    <div style="position: absolute; right: 20px;top:50px;z-index: 1000">
+      <el-button size="mini" type="primary" @click="save">保存</el-button>
+    </div>
     <el-tabs v-model="activeTabName" @tab-click="tabChange" class="aim-table-setting-tabs">
       <template v-for="key in tableSettingTabList">
         <el-tab-pane v-if="key==='row_template'" name="row_template" :key="key">
@@ -49,9 +52,6 @@
         </el-tab-pane>
       </template>
     </el-tabs>
-    <div class="aim-popup aim-drawer-footer">
-      <el-button size="mini" type="primary" @click="save">保存</el-button>
-    </div>
   </div>
 </template>
 
@@ -151,6 +151,7 @@ export default {
 
       Promise.resolve(saveSetting({setting:data})).then(()=>{
         jsb.cc.toastSuccess("更新成功")
+        this.$emit("setting-changed",data)
         return true}
       )
     },
