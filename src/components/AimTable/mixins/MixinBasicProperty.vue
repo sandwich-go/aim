@@ -58,6 +58,8 @@ export default {
       heightSubVH: 0,
       heightCookieKey:''
     })
+    this.tablePropertyRef.rowStyle = this.tablePropertyRef.rowStyle || {}
+    this.tablePropertyRef.rowStyle.height = this.tablePropertyRef.rowStyle.height || '35px'
 
     if(this.tablePropertyRef.autoWidth){
       this.tablePropertyRef.class.push(AimTableAutoWidthClass)
