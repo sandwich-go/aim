@@ -950,7 +950,7 @@ export default {
           CodeButtonExpandAll,
           CodeButtonTableSetting,
           CodeButtonTableGroupView,
-          'btn@btnCustom@l_字段显示',
+          'btn@btnCustom',
             "btnFullscreen",
         ],
       }

@@ -1,7 +1,7 @@
 import jsb from "@cg-devcenter/jsb";
 import {code2OptionsMapping} from "@/components/cells/const";
 
-export function makeCell(initVal,options) {
+export function makeCell(initVal, ...options) {
     let cc = {
         code: '',
         icon: '',
@@ -12,7 +12,6 @@ export function makeCell(initVal,options) {
         plain:true,
         cell:'CellViewLabel',
     }
-    options = jsb.filter(options,v=>!jsb.isEmpty(v))
     cc = Object.assign(cc, initVal)
     jsb.each(options, function (opt) {
         cc = Object.assign(cc, opt)
@@ -23,9 +22,14 @@ export function makeCell(initVal,options) {
     return cc
 }
 
-export function makeCellLink(options) {
+export function makeCellButton(...options) {
+    options.push({cell:'CellViewButton'})
+    return makeCell({type: 'primary', plain: true}, ...options)
+}
+
+export function makeCellLink(...options) {
     options.push({cell:'CellViewLink'})
-    return makeCell({type: 'primary'},options)
+    return makeCell({type: 'primary'}, ...options)
 }
 
 function parseOptions(options,strList) {
@@ -86,14 +90,10 @@ export function makeCellFromString(codeOrDescription, ...options) {
             options.unshift(parseOptions({code:cellCode},strList))
         }
         if (strList[0] === 'link') {
-            return makeCellLink(options)
+            return makeCellLink(...options)
         } else if (strList[0] === 'btn' || strList[0] === 'button') {
-            return makeCellButton(options)
+            return makeCellButton(...options)
         }
     }
-    return makeCell({label: codeOrDescription},options)
-}
-export function makeCellButton(options) {
-    options.push({cell:'CellViewButton'})
-    return makeCell({type: 'primary', plain: true},options)
+    return makeCell({label: codeOrDescription}, ...options)
 }

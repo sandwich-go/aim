@@ -96,7 +96,7 @@ export default {
       const _this = this
       jsb.each(this.cellsRef, function (codeOrItem, key) {
         if (!codeOrItem.cell && codeOrItem.code) {
-          _this.cellsRef[key] = makeCellFromString(codeOrItem.code, codeOrItem)
+          _this.cellsRef[key] = makeCellFromString(codeOrItem.code, codeOrItem,{circle:false})
           codeOrItem.cell = 'CellViewButton'
         }
         // 纯字符串，认为是一个code按钮，内部如已设定了code的icon映射则直接使用
@@ -108,7 +108,7 @@ export default {
             if(!codeOrItem.startsWith("link@")){
               codeOrItem=`link@${codeOrItem}`
             }
-            _this.cellsRef[key] = makeCellFromString(codeOrItem, _this.shortcutButtonOptions)
+            _this.cellsRef[key] = makeCellFromString(codeOrItem,{circle:false})
           }
         }
         if (jsb.cellReplace) {

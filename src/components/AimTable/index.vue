@@ -41,7 +41,7 @@
                     :size="cell.size || 'mini'"
                     :icon="cell.icon||'el-icon-s-grid'"
                     slot="reference"
-                >{{cell.label||''}}</el-button>
+                >{{cell.circle?'':cell.label}}</el-button>
               </el-popover>
             </template>
             <template v-slot:cell-list-first>
