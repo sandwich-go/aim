@@ -1,7 +1,7 @@
 {
   "name": "@cg-devcenter/aim",
   "license": "MIT",
-  "version": "0.1.886",
+  "version": "0.1.887",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
