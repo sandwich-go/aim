@@ -53,7 +53,7 @@
           </cell-list>
         </el-col>
       </el-row>
-      <el-row class="aim-component-flex-end" style="align-items: start;gap: 3px">
+      <el-row class="aim-component-flex-end" style="align-items: start">
         <el-table
             ref="table"
             :height="tableHeight"
@@ -264,7 +264,7 @@
           <div style="float:right">
             <cell-list
                 :cells="righterConfigRef.cells"
-                :div-style="{'padding-bottom':'6px'}"
+                :div-style="{'padding-bottom':'6px','padding-left':'3px'}"
                 :should-cell-hide="privateShouldCellHide"
                 :should-cell-disable="privateShouldCellDisable"
                 @code-cell-click="privateCellClickForToolbar">

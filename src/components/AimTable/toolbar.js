@@ -13,12 +13,6 @@ export function initToolbarConfig(configRef,styleToMerge={}) {
     })
     configRef.leftStyle = jsb.objectAssignNX(configRef.leftStyle,flexStartStyle)
     configRef.rightStyle = jsb.objectAssignNX(configRef.flexEndStyle,flexEndStyle)
-    if(!styleToMerge['padding-right']){
-        styleToMerge['padding-right'] = '3px'
-    }
-    if(!styleToMerge['padding-left']){
-        styleToMerge['padding-left'] = '3px'
-    }
     configRef.style = jsb.objectAssignNX(configRef.style,styleToMerge)
     return configRef
 }
