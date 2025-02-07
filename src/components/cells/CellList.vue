@@ -69,7 +69,7 @@ export default {
   props: {
     shouldCellDisable: Function,
     shouldCellHide: Function,
-    cells: Array, // 组件列表
+    cells: [Array,Object], // 组件列表
     divStyle:Object,
     shortcutButtonOptions:Object,
     cellReplace:Function,
@@ -101,6 +101,7 @@ export default {
     },
   },
   created() {
+    this.cellsRef = jsb.filter(jsb.wrapArray(this.cells),v=>!jsb.isEmpty(v))
     const _this = this
     jsb.each(this.cellsRef , function (codeOrItem, key) {
       if (!codeOrItem.cell && codeOrItem.code) {
