@@ -167,20 +167,23 @@
 
             >
               <template slot="header">
-                <column-header :field-schema="fs" :name="fs['name']" :show-static-help="true"
-                               :sub="fs['nameSub']"
-                               :container-style-for-sub="{'margin-bottom':'16px'}">
-                  <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
-                    <slot :name="tipSlotName(fs)" :field-schema="fs"/>
-                  </template>
-                </column-header>
-                <el-link
-                    v-for="(link,index) in fs['headerLinkList']"
-                    :key="index"
-                    @click="(event)=>headerLinkClick(event,link,fs)"
-                    v-bind="link">
-                  <span v-if="link.label">{{link.label}}</span>
-                </el-link>
+                <slot v-if="fs.columnHeader" :name="fs.columnHeader" :field-schema="fs"/>
+                <template v-else>
+                  <column-header :field-schema="fs" :name="fs['name']" :show-static-help="true"
+                                 :sub="fs['nameSub']"
+                                 :container-style-for-sub="{'margin-bottom':'16px'}">
+                    <template v-if="tipSlotName(fs)" v-slot:[getProxyTipSlotName(fs)]="{}">
+                      <slot :name="tipSlotName(fs)" :field-schema="fs"/>
+                    </template>
+                  </column-header>
+                  <el-link
+                      v-for="(link,index) in fs['headerLinkList']"
+                      :key="index"
+                      @click="(event)=>headerLinkClick(event,link,fs)"
+                      v-bind="link">
+                    <span v-if="link.type">{{link.type}}</span>
+                  </el-link>
+                </template>
               </template>
               <template slot-scope="scope">
                 <div :style="columnStyle(fs)">
