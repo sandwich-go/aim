@@ -181,7 +181,7 @@
                       :key="index"
                       @click="(event)=>headerLinkClick(event,link,fs)"
                       v-bind="link">
-                    <span v-if="link.type">{{link.type}}</span>
+                    <span v-if="link.label">{{link.label}}</span>
                   </el-link>
                 </template>
               </template>
