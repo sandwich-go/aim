@@ -3,7 +3,6 @@
       :disabled="disabled"
       :timestamp.sync="dataRef[fieldName]"
       type="datetime"
-      :default-time="cc.defaultTime"
       :placeholder="cc.placeholder"
       @change="change"
       size="mini"
