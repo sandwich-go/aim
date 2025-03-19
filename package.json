@@ -23,6 +23,7 @@
     "js-cookie": "^3.0.5",
     "js-yaml": "4.1.0",
     "jsonlint-mod": "1.7.6",
+    "moment-timezone": "^0.5.47",
     "sass": "^1.62.0",
     "sass-loader": "^13.2.2",
     "sortablejs": "^1.15.0",

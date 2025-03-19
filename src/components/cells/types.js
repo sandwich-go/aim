@@ -107,6 +107,14 @@ export const typeDefaults = {
         label:'日期时间选择',
         placeholderSupport:true,
     },
+    datetimeTZ:  {
+        table:'CellViewLabel',
+        form:'CellTimeZoneDatetimePicker',
+        default: () => jsb.dateTime(),
+        minTableColumnWidth:200,
+        label:'日期时间选择',
+        placeholderSupport:true,
+    },
     datetime_range:  {
         table:'CellDateRangePicker',
         form:'CellDateRangePicker',

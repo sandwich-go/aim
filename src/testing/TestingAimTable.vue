@@ -675,6 +675,15 @@ export default {
           },
         },
         {
+          field: 'DatetimeTZ',
+          type: 'datetimeTZ',
+          name: 'DatetimeTZ',
+          cell: 'CellTimeZoneDatetimePicker',
+          cellForm: 'CellTimeZoneDatetimePicker',
+          filter: {
+          },
+        },
+        {
           field: 'DatetimeRange',
           type: 'datetime_range',
           name: 'Datetime',
