@@ -692,7 +692,7 @@ export default {
         },
         {
           field: 'DatetimeTZRange',
-          type: 'datetime_range',
+          type: 'datetimeTZ_range',
           name: 'DatetimeTZ',
           cell: 'CellTimeZoneDatetimeRangePicker',
           cellForm: 'CellTimeZoneDatetimeRangePicker',

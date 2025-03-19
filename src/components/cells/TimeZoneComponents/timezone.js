@@ -1,5 +1,23 @@
 import momentTimeZone from 'moment-timezone';
+import Cookies from "js-cookie";
 
+// 允许临时修改本地时区
+const timezoneKey = 'pmt_tmp_timezone'
+
+// 获取时区，如果指定了key，则获取本地临时设定的时区
+export function getSystemTimezone(){
+    const keyVal = Cookies.get(timezoneKey)
+    return keyVal?Number(keyVal) : 0
+}
+
+// 临时修改本地时区
+export function changeLocalSystemTimezone(val){
+    Cookies.set(timezoneKey,val)
+}
+
+export function convertTimestampDateToSettingTimezone(tsOrTimeStr) {
+    return convertTimestampDateToTimezone(tsOrTimeStr,getSystemTimezone())
+}
 //convertTimestampDateToTimezone 将给定的时间戳或者字符串转换为目标时区的时间
 export function convertTimestampDateToTimezone(tsOrTimeStr, utcOffset) {
     if(!isNaN(tsOrTimeStr)){
