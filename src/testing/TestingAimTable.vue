@@ -691,6 +691,15 @@ export default {
           cellForm: 'CellDateRangePicker',
         },
         {
+          field: 'DatetimeTZRange',
+          type: 'datetime_range',
+          name: 'DatetimeTZ',
+          cell: 'CellTimeZoneDatetimeRangePicker',
+          cellForm: 'CellTimeZoneDatetimeRangePicker',
+          filter: {
+          },
+        },
+        {
           field: 'Color',
           name: 'Color',
           //min_width: 180,

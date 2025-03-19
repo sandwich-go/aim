@@ -123,6 +123,14 @@ export const typeDefaults = {
         label:'日期时间范围选择',
         placeholderSupport:true,
     },
+    datetimeTZ_range:  {
+        table:'CellTimeZoneDatetimeRangePicker',
+        form:'CellTimeZoneDatetimeRangePicker',
+        default: () => jsb.dateTime(),
+        minTableColumnWidth:360,
+        label:'日期时间范围选择',
+        placeholderSupport:true,
+    },
     switch:  {
         table:'CellViewBoolean',
         form:'CellSwitch',
