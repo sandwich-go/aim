@@ -28,7 +28,7 @@ export default {
     this.ccConfigMerge({
       defaultTime: "00:00:00",
       placeholder: "选择日期时间"
-    }, ["valueFormat", "format", "defaultTime"])
+    }, ["valueFormat", "format"])
     this.calcWidthPixString("100%")
     this.myDisabledDate = jsb.pathGet(this.cc, "pickerOptions.myDisabledDate", undefined)
   },
