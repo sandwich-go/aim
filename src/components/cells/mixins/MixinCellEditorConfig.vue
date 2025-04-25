@@ -150,7 +150,7 @@ export default {
       this.cc.style.width = this.cc.style.width?(jsb.isString(this.cc.style.width)?this.cc.style.width : `${ this.cc.style.width}px`):defaultVal
       return this.cc.style.width
     },
-    ccConfigMerge(initVal = {}) {
+    ccConfigMerge(initVal = {},copyVal =[]) {
       const _this = this
       // styleDefault => styleBase => styleUser => styleOverride
       const mergeFiled = ['style']
@@ -162,11 +162,16 @@ export default {
           _this.cc[key] = val
         }
       })
+      jsb.each(copyVal, function (val) {
+        const value = jsb.pathGet(_this.fieldSchema, val)
+        value && jsb.pathSet(_this.cc, val, value)
+      })
       if (jsb.isPlainObject(this.cellConfig)) {
         this.cc = Object.assign(this.cc, this.cellConfig)
       }
       this.cc.style = jsb.assign(this.cc.style, this.styleOverride)
       this.cc.placeholder = jsb.pathGet(this.fieldSchema,'placeholder',this.cc.placeholder )
+      this.cc.pickerOptions = jsb.pathGet(this.fieldSchema,'pickerOptions',this.cc.pickerOptions )
     },
     change(newVal) {
       this.$forceUpdate()
@@ -191,7 +196,7 @@ export default {
         // 这里使用实际数据
         fieldValue:jsb.pathGet(this.data,this.fieldName)
       },options)
-    }
+    },
   }
 }
 </script>
