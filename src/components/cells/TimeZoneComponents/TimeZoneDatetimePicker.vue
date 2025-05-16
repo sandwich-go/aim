@@ -22,9 +22,13 @@
         :picker-options="pickerOptionsUsing"
     />
     <time-zone-tag-with-select
+        style="margin-left:6px"
         :utc-timezone-offset-minutes="utcTimezoneOffsetMinutesUsing"
         :on-time-zone-change="(v)=>{utcTimezoneOffsetMinutesUsing=v}"
-    ></time-zone-tag-with-select>
+    />
+    <span v-if="utcTimezoneOffsetMinutesUsing" style="font-size: 13px;color: #bababa;margin-left: 6px">
+      {{ utcTooltip }}
+    </span>
   </div>
 </template>
 <script>
@@ -32,7 +36,7 @@ import {datetimePickerOptionsNext} from "@/components/cells/TimeZoneComponents/d
 import {
   convertDateWithTimeZoneToTimestamp,
   convertTimestampDateToTimezone,
-  DatetimeFormatWithoutTimezone,
+  DatetimeFormatWithoutTimezone, DatetimeFormatWithTimezone,
   getSystemTimezone,
 } from "@/components/cells/TimeZoneComponents/timezone";
 import moment from "moment";
@@ -70,6 +74,24 @@ export default {
       default: false
     }
   },
+  computed:{
+    utcTooltip(){
+      if (this.type === 'datetimerange') {
+        if(this.utcTimezoneOffsetMinutesUsing !== 0){
+          const ret=[]
+          this.timestampRangeInner.forEach((item) => {
+            ret.push(convertTimestampDateToTimezone(item, 0).format(DatetimeFormatWithTimezone))
+          });
+          return ret.join(" ~ ")
+        }
+      }else{
+        if(this.utcTimezoneOffsetMinutesUsing !== 0){
+          return convertTimestampDateToTimezone(this.timestampInner, 0).format(DatetimeFormatWithTimezone)
+        }
+      }
+      return ""
+    },
+  },
   watch: {
     timestamp(newValue) {
       this.update(newValue)
@@ -99,7 +121,9 @@ export default {
   },
   data() {
     return {
+      convertTimestampDateToTimezone,
       DatetimeFormatWithoutTimezone,
+      DatetimeFormatWithTimezone,
       dateTimeRange: [],
       dateTime: '',
       showTimezoneSelect: false,

@@ -6,7 +6,10 @@
                       :on-visible-change="(v)=>{ if(!v){showTimezoneSelect=false}}"
                       :utc-offset.sync="utcTimezoneOffsetMinutesUsing"></time-zone-select>
     <el-tooltip v-else effect="light" :content="tooltip">
-      <time-zone-tag id="time-zone-tag" @click.native="showTimezoneSelect=true" tag-style="border-radius: 0;margin-left: -4px" :utc-timezone-offset-minutes="utcTimezoneOffsetMinutesUsing" />
+      <time-zone-tag id="time-zone-tag"
+                     @click.native="showTimezoneSelect=true"
+                     tag-style="border-radius: 0;margin-left: -4px"
+                     :utc-timezone-offset-minutes="utcTimezoneOffsetMinutesUsing" />
     </el-tooltip>
   </div>
 </template>
