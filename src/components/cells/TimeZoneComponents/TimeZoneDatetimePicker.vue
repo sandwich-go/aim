@@ -26,7 +26,7 @@
         :utc-timezone-offset-minutes="utcTimezoneOffsetMinutesUsing"
         :on-time-zone-change="(v)=>{utcTimezoneOffsetMinutesUsing=v}"
     />
-    <span v-if="utcTimezoneOffsetMinutesUsing" style="font-size: 13px;color: #bababa;margin-left: 6px">
+    <span v-if="utcTimezoneOffsetMinutesUsing" style="font-size: 13px;color: #a7a7a7;margin-left: 6px">
       {{ utcTooltip }}
     </span>
   </div>
