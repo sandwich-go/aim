@@ -28,8 +28,8 @@
                   style="z-index:1000"
                   trigger="click">
                 <el-checkbox-group v-model="filedShowChecked" @change="filedShowCheckedChanged">
-                  <template v-for="field in schema" :key="`${field.name}-${field.field}`">
-                    <el-checkbox v-if="!field['hideCustom']" :label="field.name">{{field['nameCustom']||field.name }}</el-checkbox>
+                  <template v-for="field in schema">
+                    <el-checkbox :key="`${field.name}-${field.field}`" v-if="!field['hideCustom']" :label="field.name">{{field['nameCustom']||field.name }}</el-checkbox>
                   </template>
                 </el-checkbox-group>
                 <el-button
