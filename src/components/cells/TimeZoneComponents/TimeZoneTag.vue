@@ -1,5 +1,5 @@
 <template>
-  <el-tag type="primary" size="medium" :style="tagStyle">时区 : {{`${utfOffsetMinutesToName(utcTimezoneOffsetMinutes)}`}}</el-tag>
+  <el-tag type="primary" size="medium" :style="tagStyle">{{`${utfOffsetMinutesToName(utcTimezoneOffsetMinutes)}`}}</el-tag>
 </template>
 <script>
 

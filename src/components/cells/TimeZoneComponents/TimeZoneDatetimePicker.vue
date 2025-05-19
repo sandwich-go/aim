@@ -22,13 +22,18 @@
         :picker-options="pickerOptionsUsing"
     />
     <time-zone-tag-with-select
-        style="margin-left:6px"
+        style="margin-left:3px"
         :utc-timezone-offset-minutes="utcTimezoneOffsetMinutesUsing"
         :on-time-zone-change="(v)=>{utcTimezoneOffsetMinutesUsing=v}"
     />
-    <span v-if="utcTimezoneOffsetMinutesUsing" style="font-size: 13px;color: #a7a7a7;margin-left: 6px">
-      {{ utcTooltip }}
-    </span>
+    <template v-if="utcTimezoneOffsetMinutesUsing">
+      <el-divider direction="vertical"/>
+      <el-tooltip  content="UTC时间" effect="light">
+      <span style="font-size: 13px;color: #a7a7a7;">
+      UTC : {{ utcTooltip }}
+      </span>
+      </el-tooltip>
+    </template>
   </div>
 </template>
 <script>
@@ -74,24 +79,6 @@ export default {
       default: false
     }
   },
-  computed:{
-    utcTooltip(){
-      if (this.type === 'datetimerange') {
-        if(this.utcTimezoneOffsetMinutesUsing !== 0){
-          const ret=[]
-          this.timestampRangeInner.forEach((item) => {
-            ret.push(convertTimestampDateToTimezone(item, 0).format(DatetimeFormatWithTimezone))
-          });
-          return ret.join(" ~ ")
-        }
-      }else{
-        if(this.utcTimezoneOffsetMinutesUsing !== 0){
-          return convertTimestampDateToTimezone(this.timestampInner, 0).format(DatetimeFormatWithTimezone)
-        }
-      }
-      return ""
-    },
-  },
   watch: {
     timestamp(newValue) {
       this.update(newValue)
@@ -106,11 +93,14 @@ export default {
           value = [this.toValTimestamp(this.dateTimeRange[0]), this.toValTimestamp(this.dateTimeRange[1])]
         }
         this.$emit("update:timestampRange", value);
+        this.update(value)
       },
       deep: true
     },
     dateTime() {
-      this.$emit("update:timestamp", this.toValTimestamp(this.dateTime));
+      const newValue = this.toValTimestamp(this.dateTime)
+      this.$emit("update:timestamp",newValue);
+      this.update(newValue)
     },
     utcTimezoneOffsetMinutesUsing() {
       this.cleanData()
@@ -126,6 +116,7 @@ export default {
       DatetimeFormatWithTimezone,
       dateTimeRange: [],
       dateTime: '',
+      utcTooltip:'',
       showTimezoneSelect: false,
       timestampRangeInner: this.timestampRange,
       // 查看场景下，如果逻辑层未设定时间戳，默认值0 或者空，这里不应该更新为moment().unix()
@@ -199,6 +190,23 @@ export default {
         } else {
           this.dateTime = ""
         }
+      }
+      this.updateUTCTooltip()
+    },
+    updateUTCTooltip(){
+      if(this.utcTimezoneOffsetMinutesUsing === 0){
+        this.utcTooltip = ''
+        return
+      }
+      if (this.type === 'datetimerange') {
+        const ret=[]
+        const timeRange  = this.timestampRangeInner  || []
+        timeRange.forEach((item) => {
+          ret.push(convertTimestampDateToTimezone(item, 0).format(DatetimeFormatWithTimezone))
+        });
+        this.utcTooltip=ret.join(" ~ ")
+      }else{
+        this.utcTooltip = convertTimestampDateToTimezone(this.timestampInner, 0).format(DatetimeFormatWithTimezone)
       }
     },
   },
