@@ -8,7 +8,7 @@
     <el-tooltip v-else effect="light" :content="tooltip">
       <time-zone-tag id="time-zone-tag"
                      @click.native="showTimezoneSelect=true"
-                     tag-style="border-radius: 0;margin-left: -4px"
+                     tag-style="font-weight:bold"
                      :utc-timezone-offset-minutes="utcTimezoneOffsetMinutesUsing" />
     </el-tooltip>
   </div>

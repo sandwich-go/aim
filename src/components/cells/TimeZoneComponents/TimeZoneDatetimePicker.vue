@@ -175,6 +175,10 @@ export default {
       return true;
     },
     toValTimestamp(val) {
+      if(!val){
+        // 用户清除当前所选时间
+        return null
+      }
       const value = convertDateWithTimeZoneToTimestamp(val, this.utcTimezoneOffsetMinutesUsing)
       return this.outValueTypeString ? String(value) : value
     },
