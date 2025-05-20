@@ -162,9 +162,9 @@ export default {
           _this.cc[key] = val
         }
       })
-      jsb.each(copyVal, function (val) {
-        const value = jsb.pathGet(_this.fieldSchema, val)
-        value && jsb.pathSet(_this.cc, val, value)
+      jsb.each(copyVal, function (key) {
+        const value = jsb.pathGet(_this.fieldSchema, key)
+        value && jsb.pathSet(_this.cc, key, value)
       })
       if (jsb.isPlainObject(this.cellConfig)) {
         this.cc = Object.assign(this.cc, this.cellConfig)

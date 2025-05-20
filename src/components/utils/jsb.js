@@ -58,9 +58,9 @@ export function wrapAsTagList(val, options) {
 
         if (!found) {
             tagList.push(Object.assign({
-                type: 'info',
-                effect: 'light',
-                label: v
+                type: 'danger',
+                effect: 'dark',
+                label: `关联描述丢失(${v}`
             }))
         }
     }

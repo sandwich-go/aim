@@ -22,9 +22,18 @@
         :picker-options="pickerOptionsUsing"
     />
     <time-zone-tag-with-select
+        style="margin-left:3px"
         :utc-timezone-offset-minutes="utcTimezoneOffsetMinutesUsing"
         :on-time-zone-change="(v)=>{utcTimezoneOffsetMinutesUsing=v}"
-    ></time-zone-tag-with-select>
+    />
+    <template v-if="utcTimezoneOffsetMinutesUsing">
+      <el-divider direction="vertical"/>
+      <el-tooltip  content="UTC时间" effect="light">
+      <span style="font-size: 13px;color: #a7a7a7;">
+      UTC : {{ utcTooltip }}
+      </span>
+      </el-tooltip>
+    </template>
   </div>
 </template>
 <script>
@@ -32,7 +41,7 @@ import {datetimePickerOptionsNext} from "@/components/cells/TimeZoneComponents/d
 import {
   convertDateWithTimeZoneToTimestamp,
   convertTimestampDateToTimezone,
-  DatetimeFormatWithoutTimezone,
+  DatetimeFormatWithoutTimezone, DatetimeFormatWithTimezone,
   getSystemTimezone,
 } from "@/components/cells/TimeZoneComponents/timezone";
 import moment from "moment";
@@ -84,11 +93,14 @@ export default {
           value = [this.toValTimestamp(this.dateTimeRange[0]), this.toValTimestamp(this.dateTimeRange[1])]
         }
         this.$emit("update:timestampRange", value);
+        this.update(value)
       },
       deep: true
     },
     dateTime() {
-      this.$emit("update:timestamp", this.toValTimestamp(this.dateTime));
+      const newValue = this.toValTimestamp(this.dateTime)
+      this.$emit("update:timestamp",newValue);
+      this.update(newValue)
     },
     utcTimezoneOffsetMinutesUsing() {
       this.cleanData()
@@ -99,9 +111,12 @@ export default {
   },
   data() {
     return {
+      convertTimestampDateToTimezone,
       DatetimeFormatWithoutTimezone,
+      DatetimeFormatWithTimezone,
       dateTimeRange: [],
       dateTime: '',
+      utcTooltip:'',
       showTimezoneSelect: false,
       timestampRangeInner: this.timestampRange,
       // 查看场景下，如果逻辑层未设定时间戳，默认值0 或者空，这里不应该更新为moment().unix()
@@ -151,6 +166,10 @@ export default {
       return true;
     },
     toValTimestamp(val) {
+      if(!val){
+        // 用户清除当前所选时间
+        return null
+      }
       const value = convertDateWithTimeZoneToTimestamp(val, this.utcTimezoneOffsetMinutesUsing)
       return this.outValueTypeString ? String(value) : value
     },
@@ -171,6 +190,23 @@ export default {
         } else {
           this.dateTime = ""
         }
+      }
+      this.updateUTCTooltip()
+    },
+    updateUTCTooltip(){
+      if(this.utcTimezoneOffsetMinutesUsing === 0){
+        this.utcTooltip = ''
+        return
+      }
+      if (this.type === 'datetimerange') {
+        const ret=[]
+        const timeRange  = this.timestampRangeInner  || []
+        timeRange.forEach((item) => {
+          ret.push(convertTimestampDateToTimezone(item, 0).format(DatetimeFormatWithTimezone))
+        });
+        this.utcTooltip=ret.join(" ~ ")
+      }else{
+        this.utcTooltip = convertTimestampDateToTimezone(this.timestampInner, 0).format(DatetimeFormatWithTimezone)
       }
     },
   },

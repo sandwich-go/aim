@@ -21,7 +21,7 @@ export default {
     this.ccConfigMerge({
       activeColor: '#13ce66',
       inactiveColor: '#ff4949',
-    })
+    },["activeColor", "inactiveColor"])
   },
 }
 </script>
