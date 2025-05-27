@@ -162,13 +162,13 @@ export default {
           _this.cc[key] = val
         }
       })
+      if (jsb.isPlainObject(this.cellConfig)) {
+        this.cc = Object.assign(this.cc, this.cellConfig)
+      }
       jsb.each(copyVal, function (key) {
         const value = jsb.pathGet(_this.fieldSchema, key)
         value && jsb.pathSet(_this.cc, key, value)
       })
-      if (jsb.isPlainObject(this.cellConfig)) {
-        this.cc = Object.assign(this.cc, this.cellConfig)
-      }
       this.cc.style = jsb.assign(this.cc.style, this.styleOverride)
       this.cc.placeholder = jsb.pathGet(this.fieldSchema,'placeholder',this.cc.placeholder )
       this.cc.pickerOptions = jsb.pathGet(this.fieldSchema,'pickerOptions',this.cc.pickerOptions )

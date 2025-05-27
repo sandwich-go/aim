@@ -55,7 +55,7 @@ export default {
     asImage:Boolean,
   },
   created() {
-    this.ccConfigMerge()
+    this.ccConfigMerge({},["autosize"])
   },
   methods:{
     divClass(){

@@ -488,9 +488,9 @@ export default {
       })
     },
     // __validatePrivate 外部不要直接调用
-    __validatePrivate(validCallback,notValidCallback=()=>{},onValidCallbackRunError=(e)=>{jsb.cc.toastWarning(e)},processor=(v)=>{return v}) {
+    __validatePrivate(validCallback,notValidCallback,onValidCallbackRunError=(e)=>{jsb.cc.toastWarning(e)},processor=(v)=>{return v}) {
       const _this = this
-      this.$refs['form'].validate((valid) => {
+      this.$refs['form'].validate((valid,invalidFields) => {
         if (valid) {
           try {
             const tmp = processor(_this.dataRef)
@@ -501,7 +501,17 @@ export default {
             }
           }
         }else{
-          notValidCallback && notValidCallback()
+          notValidCallback ? notValidCallback() :
+              Object.values(invalidFields).forEach(errors => {
+                if (Array.isArray(errors)) {
+                  errors.forEach(error => {
+                    const {message} = error
+                    if (message) {
+                      jsb.cc.toastWarning(message)
+                    }
+                  })
+                }
+              })
         }
       })
     },

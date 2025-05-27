@@ -6,6 +6,7 @@
       :cell-config="cellConfig"
       :style-base="styleBase"
       :style-override="styleOverride"
+      :field-schema="fieldSchema"
       :disabled="disabled"/>
 </template>
 
