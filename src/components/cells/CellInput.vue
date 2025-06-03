@@ -7,7 +7,8 @@
         @change="change"
         size="mini"
     ></el-input>
-    <div style="padding-left: 3px;display:inline-flex;align-items: center">
+    <div v-if="asImage||isValidImageUrl(dataRef[fieldName])"
+         style="padding-left: 3px;display:inline-flex;align-items: center">
       <template v-if="asImage">
         <cell-trigger-image-select
             v-if="options"
@@ -55,7 +56,7 @@ export default {
     asImage:Boolean,
   },
   created() {
-    this.ccConfigMerge({},["autosize"])
+    this.ccConfigMerge({},["autosize","maxlength"])
   },
   methods:{
     divClass(){
