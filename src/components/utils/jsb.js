@@ -60,7 +60,7 @@ export function wrapAsTagList(val, options) {
             tagList.push(Object.assign({
                 type: 'danger',
                 effect: 'dark',
-                label: `关联描述丢失(${v}`
+                label: `描述丢失(${v})`
             }))
         }
     }
