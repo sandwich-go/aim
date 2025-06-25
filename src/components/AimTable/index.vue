@@ -106,7 +106,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column v-if="dragConfigRef.row" :fixed="columnDragFixed" align="center" width="50"
+          <el-table-column v-if="dragConfigRef.row" :fixed="columnDragFixed" align="center" width="60"
                            class-name="aim-column-fixed-width">
             <template slot-scope="{}" slot="header">
               <el-tooltip v-if="dragConfigRef.header" v-bind="drayHeaderTooltip">
