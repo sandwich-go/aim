@@ -30,6 +30,9 @@ export default {
   },
   created() {
     this.tableDataProxy = newLocalDataProxyWithFieldName(this,'tableData')
+    this.tableDataProxy.saveValidate = ({row}) =>{
+      console.log("row.EnvVars ",row.EnvVars)
+    }
   },
   methods:{
     aimHandler(){

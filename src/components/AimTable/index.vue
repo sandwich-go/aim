@@ -470,7 +470,7 @@ import {
   EventCurrentRowChange,
   isModeInplace,
   isRowSelected,
-  mustCtrlData,
+  mustCtrlData, mustCtrlRemote,
   removeCtrlData,
   rowFormEditorTitle,
   setRowSelected,
@@ -1270,7 +1270,10 @@ export default {
 
       if(editor){
         if (this.isModeInplace()) {
-          // inplace编辑模式
+          // inplace编辑模式,自动保存数据已提交对端，加上remote标记
+          if(this.editConfigRef.autoSaveInPlaceRow){
+            newRow = mustCtrlRemote(newRow)
+          }
           this.tableData.push(newRow)
         } else {
           // form 表单编辑逻辑
