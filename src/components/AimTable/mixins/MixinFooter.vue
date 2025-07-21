@@ -29,7 +29,8 @@ export default {
         }
       })
     })
-    if (this.pagerConfigRef.enable && !pagerFound) {
+    // 不启用pager请求数据，但是使用组件显示总数
+    if ((this.pagerConfigRef.enable || this.pagerConfigRef.showTotal) && !pagerFound) {
       this.footerConfigRef.rightCells.push(this.pagerConfigRef)
     }
   }
