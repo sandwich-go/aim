@@ -1,5 +1,6 @@
 <template>
   <cell-view-icon
+      v-if="fieldValue || !!falseIcon"
       :cell-config="cellConfigTrans()"
   ></cell-view-icon>
 </template>
@@ -12,12 +13,17 @@ export default {
   name: "CellViewBoolean",
   components: {CellViewIcon},
   mixins: [MixinCellViewConfig],
+  computed: {
+    falseIcon(){
+      return this.fieldSchema?this.fieldSchema.falseIcon:'el-icon-close'
+    },
+  },
   methods:{
     cellConfigTrans(){
       if(this.fieldValue){
         return {class: 'el-icon-check', style: 'color:green;'}
       }else{
-        return {class: 'el-icon-close', style: 'color:red;'}
+        return {class: this.falseIcon, style: 'color:red;'}
       }
     }
   },
