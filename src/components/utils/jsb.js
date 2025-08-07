@@ -59,8 +59,8 @@ export function wrapAsTagList(val, options) {
         if (!found) {
             tagList.push(Object.assign({
                 type: 'danger',
-                effect: 'dark',
-                label: `描述丢失(${v})`
+                label: v,
+                style:{'font-style':'italic'}
             }))
         }
     }
