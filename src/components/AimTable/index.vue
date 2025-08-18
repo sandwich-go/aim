@@ -324,7 +324,13 @@
           :title="rowFormEditorTitle(rowEditState)"
           :drawer="formPopupUsingDrawer"
           :is-show.sync="rowFormEditorVisible"
-          :config="{appendToBody:popupAppendToBody,close:rowFormEditorClose,footer: true,header:editConfigRef.formHeaderSlot,destroyOnClose:true}">
+          :config="{
+            appendToBody:popupAppendToBody,
+            close:rowFormEditorClose,
+            size:this.formPopupSize,
+            header:editConfigRef.formHeaderSlot,
+            footer: true,
+            destroyOnClose:true}">
 
         <template v-slot:aim-popup-header v-if="rowInEditForm && rowFormEditorVisible">
           <slot v-if="editConfigRef.formHeaderSlot"
@@ -782,6 +788,7 @@ export default {
     radioSyncCurrent: Boolean,
     selectionSyncCurrent: Boolean,
     formPopupUsingDrawer: {type: Boolean, default: true},
+    formPopupSize: {type:String,default:"%85"},
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true，当设定为true时，启用dialog编辑
     onSelectionChange:Function,
     onRadioChange:Function,
