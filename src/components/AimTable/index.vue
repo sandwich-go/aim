@@ -327,7 +327,7 @@
           :config="{
             appendToBody:popupAppendToBody,
             close:rowFormEditorClose,
-            size:this.formPopupSize,
+            size:formPopupUsingDrawer?this.formPopupDrawerSize:this.formPopupDialogSize,
             header:editConfigRef.formHeaderSlot,
             footer: true,
             destroyOnClose:true}">
@@ -788,7 +788,8 @@ export default {
     radioSyncCurrent: Boolean,
     selectionSyncCurrent: Boolean,
     formPopupUsingDrawer: {type: Boolean, default: true},
-    formPopupSize: {type:String,default:"%85"},
+    formPopupDrawerSize: {type:String,default:"85%"},
+    formPopupDialogSize: {type:String,default:"50%"},
     popupAppendToBody: Boolean, //如果table为一级页面则为false，否则为true，当设定为true时，启用dialog编辑
     onSelectionChange:Function,
     onRadioChange:Function,
