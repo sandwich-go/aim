@@ -1,3 +1,4 @@
+import row from "element-ui/packages/row";
 
 const jsb = require("@cg-devcenter/jsb")
 
@@ -9,6 +10,10 @@ const uniqueFieldNameValidator = (fieldSchema,params) => {
         const rowData = jsb.pathGet(params,'row',{})
         const tableData =  jsb.pathGet(params,'data',{})
         const xidCurrent = xidRow(rowData)
+        if(!row[fieldSchema.field]){
+            callback();
+            return;
+        }
         jsb.every(tableData, function (row) {
             if (xidRow(row) === xidCurrent) {
                 return true

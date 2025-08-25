@@ -70,6 +70,9 @@ export default {
     jsb.each(this.schema,fs=>{
       if(fs.uniq) {
         _this.privateRowClassNameSlice.push((row)=>{
+          if(!row[fs.field]){
+            return ''
+          }
           const exist = jsb.find(_this.tableData,v=>v[fs.field] === row[fs.field] && xidRow(row)!==xidRow(v))
           return exist?'aim-warning-row':''
         })
