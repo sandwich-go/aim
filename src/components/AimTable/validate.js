@@ -10,7 +10,7 @@ const uniqueFieldNameValidator = (fieldSchema,params) => {
         const rowData = jsb.pathGet(params,'row',{})
         const tableData =  jsb.pathGet(params,'data',{})
         const xidCurrent = xidRow(rowData)
-        if(!row[fieldSchema.field]){
+        if(!rowData[fieldSchema.field]){
             callback();
             return;
         }
