@@ -1,5 +1,3 @@
-import row from "element-ui/packages/row";
-
 const jsb = require("@cg-devcenter/jsb")
 
 import {xidRow} from "@/components/AimTable/table";
