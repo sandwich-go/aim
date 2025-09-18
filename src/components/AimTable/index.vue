@@ -202,6 +202,7 @@
                     <template v-if="cellName(fs,scope.row)==='CellDropdown'">
                       <cell-dropdown
                           :style="columnStyle(fs)"
+                          :fixed-cells="dropDownFixedCells(fs, scope.row)"
                           :cells="cellConfig(fs,scope.row)"
                           :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
                           :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
@@ -528,7 +529,7 @@ import CellList from "@/components/cells/CellList.vue";
 import {
   cellConfigForTable,
   cellNameForTable,
-  cellShowWhenLostForTable,
+  cellShowWhenLostForTable, FieldPathFixedCellsForDropdown,
   formatterFunction
 } from "@/components/AimTable/cell";
 import {
@@ -650,6 +651,11 @@ export default {
     cellName() {
       return (fs, row) => {
         return cellNameForTable(fs, row, isModeInplace(this.editConfigRef.mode))
+      }
+    },
+    dropDownFixedCells() {
+      return (fs, row) => {
+        return cellConfigForTable(fs, row, FieldPathFixedCellsForDropdown, [])
       }
     },
     cellConfig() {

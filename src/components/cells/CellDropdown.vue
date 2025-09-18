@@ -1,5 +1,18 @@
 <template>
   <div style="display: inline">
+    <template v-for="(cell,index) of fixedCellsRef">
+      <component v-if="cell.cell && registeredComponentMap[cell.cell]"
+         :is="registeredComponentMap[cell.cell]"
+         :key="`fixed_cell_${index}`"
+         :cell-config="cell"
+         :size="cell.size||'mini'"
+         :data="cell.data || cell"
+         :field-name="cell.field || 'value'"
+         :options="cell.options || []"
+         :disabled="disableTooltip(cell,row).disable"
+         @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+      />
+    </template>
     <el-dropdown class="aim-dropdown-menu hover-effect" trigger="hover">
       <span style="padding: 10px;"><i class="el-icon-more"></i></span>
       <el-dropdown-menu slot="dropdown">
@@ -41,6 +54,7 @@ export default {
     shortcutButtonOptions: Object,
     cellReplace: Function,
     row: Object,
+    fixedCells: Array, // 固定显示的按钮
   },
   computed: {
     cellsShow() {
@@ -71,6 +85,7 @@ export default {
   data() {
     return {
       cellsRef: this.cells,
+      fixedCellsRef: this.fixedCells,
     }
   },
   methods: {
@@ -104,22 +119,38 @@ export default {
           if (codeOrItem === "divided") {
             _this.cellsRef[key] = {divided: true}
           } else {
-            codeOrItem = codeOrItem.replace("btn@",'link@').replace("button@", 'link@')
-            if(!codeOrItem.startsWith("link@")){
-              codeOrItem=`link@${codeOrItem}`
-            }
-            _this.cellsRef[key] = makeCellFromString(codeOrItem,{circle:false})
+            _this.cellsRef[key] = _this.parseCode(codeOrItem)
           }
         }
         if (jsb.cellReplace) {
           _this.cellsRef[key] = jsb.cellReplace(_this.cellsRef[key])
         }
       })
-    }
+
+      jsb.each(this.fixedCells, (code,key)=> {
+        if (jsb.isString(code)) {
+          _this.fixedCellsRef[key] = _this.parseCode(code,false)
+        }
+      })
+      console.log("refreshFixedCells==>", this.fixedCellsRef)
+    },
+    parseCode(code, mustLink=true) {
+      if (mustLink) {
+        code = code.replace("btn@",'link@').replace("button@", 'link@')
+        if(!code.startsWith("link@")){
+          code=`link@${code}`
+        }
+      }
+      return makeCellFromString(code,{circle:false})
+    },
   },
   watch: {
     cells() {
       this.cellsRef = this.cells
+      this.refresh()
+    },
+    fixedCells() {
+      this.fixedCellsRef = this.fixedCells
       this.refresh()
     }
   },
