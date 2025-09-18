@@ -9,6 +9,7 @@ const jsb = require("@cg-devcenter/jsb")
 // Table 内组件
 export const FieldPathCellNameForTable = 'cell'
 export const FieldPathCellConfigForTable = 'cellConfig'
+export const FieldPathFixedCellsForDropdown = 'fixedCells'
 export const FieldPathFormatter= 'formatter'
 
 // Form内组件名称、配置路径
@@ -37,8 +38,8 @@ export function formatterFunction(fs) {
     return jsb.pathGet(fs, FieldPathFormatter)
 }
 // cellConfigForTable 获取table内cell的配置
-export function cellConfigForTable(fs,row) {
-    let cc = jsb.pathGet(fs, FieldPathCellConfigForTable,{})
+export function cellConfigForTable(fs,row, field=FieldPathCellConfigForTable,defaultValue={}) {
+    let cc = jsb.pathGet(fs, field,defaultValue)
     if (jsb.isFunction(cc)) {
         cc = cc({row, fs, fieldValue: jsb.pathGet(row, fs.field)})
     }
