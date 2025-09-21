@@ -204,6 +204,7 @@
                           :style="columnStyle(fs)"
                           :fixed-cells="dropDownFixedCells(fs, scope.row)"
                           :cells="cellConfig(fs,scope.row)"
+                          :row="scope.row"
                           :should-cell-hide="({cell,code})=>privateShouldCellHide({cell,code,row:scope.row,fieldSchema:fs})"
                           :should-cell-disable="({cell,code})=>privateShouldCellDisable({cell,code,row:scope.row,fieldSchema:fs})"
                           @code-cell-click="({code,jsEvent})=>privateCellClickForRow({row:scope.row,code,jsEvent,fieldSchema:fs})"
