@@ -132,7 +132,6 @@ export default {
           _this.fixedCellsRef[key] = _this.parseCode(code,false)
         }
       })
-      console.log("refreshFixedCells==>", this.fixedCellsRef)
     },
     parseCode(code, mustLink=true) {
       if (mustLink) {
