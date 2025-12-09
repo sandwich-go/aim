@@ -1455,9 +1455,13 @@ export default {
       if(!co){
         co = {field: prop,order:''}
         if(this.sortConfigRef.multi){
+          // 多列排序：添加到数组
           this.sortConfigRef.orders.push(co)
         }else{
-          this.sortConfigRef.orders=[co]
+          // 单列排序：如果当前字段不在数组中，添加它
+          if(!this.sortConfigRef.orders.find(e => e.field === prop)){
+            this.sortConfigRef.orders.push(co)
+          }
         }
       }
       if(!order || co.order === order){
@@ -1465,7 +1469,17 @@ export default {
       }else{
         co.order = order
       }
-      this.handleOrderChange()
+      // 单列排序模式下，清除其他字段的排序值（但保留配置项）
+      if(!this.sortConfigRef.multi){
+        this.sortConfigRef.orders.forEach(item => {
+          if(item.field !== prop && item.order){
+            item.order = ''
+          }
+        })
+      }
+      this.$nextTick(() => {
+        this.handleOrderChange()
+      })
     },
     handleOrderChange () {
       // 当前实现中激活了分页模式一定是接口层分页
