@@ -1462,7 +1462,6 @@ export default {
           if(!this.sortConfigRef.orders.find(e => e.field === prop)){
             this.sortConfigRef.orders.push(co)
           }
-          console.log('this.sortConfigRef.orders', this.sortConfigRef.orders)
         }
       }
       if(!order || co.order === order){
