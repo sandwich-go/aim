@@ -114,6 +114,15 @@
         <el-button size="mini" type="primary">Save</el-button>
       </template>
     </aim-popup>
+    <!-- 新增 本地分页 测试 -->
+    <aim-table
+        ref="tableLocalPager"
+        :schema="schemaLocalPager"
+        :pager-config="{isLocal:true}"
+        :sort-config="{remote:false}"
+        :filter-config="{remote:false}"
+        :proxy-config="proxyConfigLocalPager">
+    </aim-table>
   </div>
 </template>
 
@@ -150,6 +159,31 @@ export default {
   data() {
     const _this = this
     return {
+      schemaLocalPager: [
+        {field: 'id', name: 'ID', type: 'input', sortable: true, align: 'center',default:0,},
+        {field: 'name', name: 'Name', type: 'input', sortable: true, align: 'center',default:0,},
+        {field: 'age', name: 'Age', type: 'input_number', sortable: true, align: 'center',default:0,},
+        {field: 'sex', name: 'Sex', type: 'select', sortable: true, align: 'center',default:0,options:[{label: 'Male', value: 1}, {label: 'Female', value: 2}, {label: 'Unknown', value: 3}], filter: true},
+      ],
+      proxyConfigLocalPager: {
+        id:'testing-table-local-pager',
+        query() {
+          console.log('query')
+          const tableDataLocalPagerData = []
+          for (let i = 0; i < 100; i++) {
+            tableDataLocalPagerData.push({
+              id: i + 1,
+              name: 'Name' + (i + 1),
+              age: i + 1,
+              sex: i % 2 === 0 ? 1 : 2,
+            })
+          }
+          return Promise.resolve({
+            Data: tableDataLocalPagerData,
+            Total: tableDataLocalPagerData.length,
+          })
+        },
+      },
       setting:{
         template:{
           "html":"1112323232323232"

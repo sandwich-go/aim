@@ -19,6 +19,8 @@ export default {
       stateXID: jsb.xid(),
       tableData: [],
       tableDataFiltered: null,
+      filteredData: null, // 存储完整的筛选结果
+      isFiltered: false, // 是否处于筛选状态
       currentRow: null,
       radioChecked:null,
       rowInEdit: null,

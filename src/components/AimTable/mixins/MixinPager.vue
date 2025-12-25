@@ -16,16 +16,18 @@ export default {
       PagerAutoGenPage: 0,
       PagerAutoGenSize: jsb.ccPath('aimTablePagerSize', 20),
       PagerFreshFunc: null,
+      PagerConfigDefault:{
+        enable: true,
+        showTotal:false,
+        layout: `->,total, prev, pager, next,sizes`,
+        background: true,
+        pageSizes :[10,20,30,50],
+        isLocal: false, // 是否本地分页
+      }
     }
   },
   created() {
-    this.pagerConfigRef = jsb.objectAssignNX(this.pagerConfigRef, {
-      enable: true,
-      showTotal:false,
-      layout: `->,total, prev, pager, next,sizes`,
-      background: true,
-      pageSizes :[10,20,30,50],
-    })
+    this.pagerConfigRef = jsb.objectAssignNX(this.pagerConfigRef, this.PagerConfigDefault)
     if(this.pagerConfigRef.pageSize){
       this.PagerAutoGenSize  = this.pagerConfigRef.pageSize
     }
@@ -66,6 +68,7 @@ export default {
         this.PagerAutoGenPage = params.AutoGenPage
       }
       params.AutoGenSize = this.PagerAutoGenSize
+      params.isLocal = this.pagerConfigRef.isLocal
       return params
     },
   },
