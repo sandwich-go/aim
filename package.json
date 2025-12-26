@@ -1,7 +1,7 @@
 {
   "name": "@cg-devcenter/aim",
   "license": "MIT",
-  "version": "0.1.941",
+  "version": "0.1.942",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -66,5 +66,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "description": "## Project setup ``` yarn install ```",
+  "keywords": [],
+  "author": ""
 }

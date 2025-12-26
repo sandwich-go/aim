@@ -1487,7 +1487,20 @@ export default {
         this.fresh()
       }else{
         // 本地排序
-        this.tableData = this.sortTableData(this.tableData)
+        this.tableData = jsb.clone(this.sortTableData(this.tableData))
+        let sortedData = jsb.clone(this.tableData)
+        if (this.isFiltered) {
+          // 更新筛选结果
+          sortedData = this.sortTableData(this.filteredData)
+          this.filteredData = jsb.clone(sortedData)
+        }
+
+        // 如果是本地分页模式，需要触发分页更新
+        if (this.pagerConfigRef.isLocal) {
+          this.$nextTick(() => {
+            this.doLocalPagination({data: sortedData})
+          })
+        }
       }
     },
     // 显示字段

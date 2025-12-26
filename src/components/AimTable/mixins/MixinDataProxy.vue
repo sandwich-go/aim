@@ -314,6 +314,8 @@ export default {
     // eslint-disable-next-line no-unused-vars
     filterSearch({done, params, mode = {}} = {}) {
       if (this.isFilterRemote()) {
+        // 远程筛选时，重置页码到第一页
+        this.PagerAutoGenPage = 0
         params = params || {}
         params.FilterMode = mode
         this.proxyQueryData({done, params})
@@ -322,10 +324,28 @@ export default {
       // 本地筛选数据
       const conditions = {}
       this.remoteFilterDataToParams(conditions)
-      if (jsb.keys(conditions).length === 0) {
+      const hasFilterConditions = jsb.keys(conditions).length > 0
+
+      if (!hasFilterConditions) {
+        // 没有筛选条件，取消筛选
         this.tableDataFiltered = null
+        this.PagerAutoGenPage = 0
+        this.isFiltered = false
+        this.filteredData = null
+        if (this.pagerConfigRef.isLocal) {
+          // 本地分页模式：执行本地分页，使用原始数据
+          this.doLocalPagination()
+        }
       } else {
-        this.tableDataFiltered = localFilter(this.tableData, conditions, mode)
+        // 有筛选条件时，重置页码到第一页
+        this.PagerAutoGenPage = 0
+        this.isFiltered = true
+        // 存储完整的筛选结果
+        this.filteredData = localFilter(this.tableData, conditions, mode)
+        // 本地筛选数据: 先筛选全部数据，然后判断是否需要本地分页进行本地分页操作
+        if (this.pagerConfigRef.isLocal) {
+          this.doLocalPagination({data: this.filteredData})
+        }
       }
     },
     // eslint-disable-next-line no-unused-vars
@@ -340,6 +360,37 @@ export default {
       params = this.addRemoteSortParams(params)
 
       this.queryCount += 1
+      if (params.isLocal) {
+        // 本地分页模式：如果 tableData 为空，先调用 query 获取所有数据
+        if (!this.tableData || this.tableData.length === 0) {
+          // 先获取所有数据，不传分页参数
+          const queryParams = jsb.clone(params)
+          delete queryParams.AutoGenPage
+          delete queryParams.AutoGenSize
+          delete queryParams.isLocal
+          return this.tryPromise('query', {params: queryParams, queryCount: this.queryCount}, ({resp, error}) => {
+            if (resp) {
+              // 填充所有数据到 tableData
+              if (!this.tableData) {
+                this.tableData = []
+              }
+              this.tableData.splice(0, this.tableData.length)
+              const _this = this
+              jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')), (item) => {
+                _this.tableData.push(item)
+              })
+              // 然后进行本地分页
+              _this.doLocalPagination()
+            }
+            done && done({error})
+          })
+        } else {
+          // 数据已存在，直接进行本地分页
+          this.doLocalPagination()
+          done && done({error: null})
+        }
+        return
+      }
       return this.tryPromise('query', {params: params, queryCount: this.queryCount}, ({resp, error}) => {
         if (resp) {
           // 不能直接赋值，vue检测array元素变化存在一些问题
@@ -392,6 +443,35 @@ export default {
         done && done({error})
       })
     },
+    // doLocalPagination 本地分页处理
+    doLocalPagination({data = null, params = {
+      AutoGenPage: this.PagerAutoGenPage,
+      AutoGenSize: this.PagerAutoGenSize,
+    }} = {}) {
+      // 通过 AutoGenSize 和 AutoGenPage 获取数据 然后给 tableDataFiltered
+      const tableData = this.isFiltered ? this.filteredData : this.tableData
+      let sourceData = jsb.clone(data || tableData)
+      if (!sourceData || sourceData.length === 0) {
+        // 如果没有数据，直接返回
+        // 如果处于筛选状态，设置为空数组表示筛选结果为空；否则设置为null表示不使用筛选数据
+        this.tableDataFiltered = this.isFiltered ? [] : null
+        this.PagerTotal = 0
+        this.doLayoutNextTick(true)
+        if (this.afterQueryData) {
+          this.afterQueryData()
+        }
+        return
+      }
+      
+      const start = params.AutoGenPage * params.AutoGenSize
+      const end = start + params.AutoGenSize
+      this.tableDataFiltered = sourceData.slice(start, end)
+      this.PagerTotal = sourceData.length
+      this.doLayoutNextTick(true)
+      if (this.afterQueryData) {
+        this.afterQueryData()
+      }
+    },
     // remoteFilterDataToParams 远端模式下使用该方式填充数据并进行格式化操作
     remoteFilterDataToParams(params) {
       params = params || {}
@@ -433,6 +513,9 @@ export default {
         // 远端排序
         return data
       }
+      return this.localSortTableData(data)
+    },
+    localSortTableData(data) {
       const _this = this
       const orders = []
       jsb.each(this.sortConfigRef.orders || [], v => {
@@ -440,7 +523,10 @@ export default {
         v.orderFunc = v.orderFunc || fs?fs.sortMethod:null
         orders.push(v)
       })
-      if (orders.length > 0) {
+      const filteredOrders = orders.filter(v => v.order) // 过滤掉 undefined的排序字段 否则jsb.orderBy会排序失败  todo jsb
+      if (filteredOrders.length > 0) {
+        data = jsb.orderBy(data, filteredOrders)
+      } else {
         data = jsb.orderBy(data, orders)
       }
       return data
