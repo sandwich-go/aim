@@ -115,6 +115,7 @@
       </template>
     </aim-popup>
     <!-- 新增 本地分页 测试 -->
+    <el-input placeholder="输入名称过滤 回车确认" v-model="inputValue" @change="onInputChange" />
     <aim-table
         ref="tableLocalPager"
         :schema="schemaLocalPager"
@@ -159,6 +160,7 @@ export default {
   data() {
     const _this = this
     return {
+      inputValue: '',
       schemaLocalPager: [
         {field: 'id', name: 'ID', type: 'input', sortable: true, align: 'center',default:0,},
         {field: 'name', name: 'Name', type: 'input', sortable: true, align: 'center',default:0,},
@@ -167,8 +169,7 @@ export default {
       ],
       proxyConfigLocalPager: {
         id:'testing-table-local-pager',
-        query() {
-          console.log('query')
+        query({params}) {
           const tableDataLocalPagerData = []
           for (let i = 0; i < 100; i++) {
             tableDataLocalPagerData.push({
@@ -177,6 +178,9 @@ export default {
               age: i + 1,
               sex: i % 2 === 0 ? 1 : 2,
             })
+          }
+          if (params.name) {
+            jsb.remove(tableDataLocalPagerData, item => !item.name.includes(params.name))
           }
           return Promise.resolve({
             Data: tableDataLocalPagerData,
@@ -915,6 +919,9 @@ export default {
   methods: {
     selectionEnable(){
       return true
+    },
+    onInputChange() {
+      this.$refs.tableLocalPager.fresh({params: {name: this.inputValue}})
     },
     toolbarAlert(name, val) {
       this.alertTitle = `toolbar ${name} change to ${val}`
