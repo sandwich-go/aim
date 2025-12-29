@@ -360,38 +360,12 @@ export default {
       params = this.addRemoteSortParams(params)
 
       this.queryCount += 1
+      const queryParams = jsb.clone(params)
       if (params.isLocal) {
-        // 本地分页模式：如果 tableData 为空，先调用 query 获取所有数据
-        if (!this.tableData || this.tableData.length === 0) {
-          // 先获取所有数据，不传分页参数
-          const queryParams = jsb.clone(params)
-          delete queryParams.AutoGenPage
-          delete queryParams.AutoGenSize
-          delete queryParams.isLocal
-          return this.tryPromise('query', {params: queryParams, queryCount: this.queryCount}, ({resp, error}) => {
-            if (resp) {
-              // 填充所有数据到 tableData
-              if (!this.tableData) {
-                this.tableData = []
-              }
-              this.tableData.splice(0, this.tableData.length)
-              const _this = this
-              jsb.each(this.processTableData(jsb.pathGet(resp, 'Data')), (item) => {
-                _this.tableData.push(item)
-              })
-              // 然后进行本地分页
-              _this.doLocalPagination()
-            }
-            done && done({error})
-          })
-        } else {
-          // 数据已存在，直接进行本地分页
-          this.doLocalPagination()
-          done && done({error: null})
-        }
-        return
+        delete queryParams.AutoGenPage
+        delete queryParams.AutoGenSize
       }
-      return this.tryPromise('query', {params: params, queryCount: this.queryCount}, ({resp, error}) => {
+      return this.tryPromise('query', {params: queryParams, queryCount: this.queryCount}, ({resp, error}) => {
         if (resp) {
           // 不能直接赋值，vue检测array元素变化存在一些问题
           // if (this.isModeInplace()) {
@@ -438,6 +412,9 @@ export default {
           this.doLayoutNextTick(true)
           if (this.afterQueryData) {
             this.afterQueryData()
+          }
+          if (this.pagerConfigRef.isLocal){
+            this.doLocalPagination()
           }
         }
         done && done({error})
