@@ -114,21 +114,13 @@
         <el-button size="mini" type="primary">Save</el-button>
       </template>
     </aim-popup>
-    <!-- 新增 本地分页 测试 -->
-    <el-input placeholder="输入名称过滤 回车确认" v-model="inputValue" @change="onInputChange" />
-    <aim-table
-        ref="tableLocalPager"
-        :schema="schemaLocalPager"
-        :pager-config="{isLocal:true}"
-        :sort-config="{remote:false}"
-        :filter-config="{remote:false}"
-        :proxy-config="proxyConfigLocalPager">
-    </aim-table>
+    <testing-local-pager></testing-local-pager>
   </div>
 </template>
 
 <script>
 import AimTable from "@/components/AimTable/index.vue";
+import TestingLocalPager from "@/testing/TestingLocalPager.vue";
 import {
   EditTriggerDBLClick,
   EditTriggerManualAndDBLClick,
@@ -153,41 +145,13 @@ import Cookies from "js-cookie";
 const jsb = require("@cg-devcenter/jsb")
 export default {
   name: 'TestingAimTable',
-  components: {AimPopup, AimTable},
+  components: {AimPopup, AimTable, TestingLocalPager},
   props: {
     msg: String
   },
   data() {
     const _this = this
     return {
-      inputValue: '',
-      schemaLocalPager: [
-        {field: 'id', name: 'ID', type: 'input', sortable: true, align: 'center',default:0,},
-        {field: 'name', name: 'Name', type: 'input', sortable: true, align: 'center',default:0,},
-        {field: 'age', name: 'Age', type: 'input_number', sortable: true, align: 'center',default:0,},
-        {field: 'sex', name: 'Sex', type: 'select', sortable: true, align: 'center',default:0,options:[{label: 'Male', value: 1}, {label: 'Female', value: 2}, {label: 'Unknown', value: 3}], filter: true},
-      ],
-      proxyConfigLocalPager: {
-        id:'testing-table-local-pager',
-        query({params}) {
-          const tableDataLocalPagerData = []
-          for (let i = 0; i < 100; i++) {
-            tableDataLocalPagerData.push({
-              id: i + 1,
-              name: 'Name' + (i + 1),
-              age: i + 1,
-              sex: i % 2 === 0 ? 1 : 2,
-            })
-          }
-          if (params.name) {
-            jsb.remove(tableDataLocalPagerData, item => !item.name.includes(params.name))
-          }
-          return Promise.resolve({
-            Data: tableDataLocalPagerData,
-            Total: tableDataLocalPagerData.length,
-          })
-        },
-      },
       setting:{
         template:{
           "html":"1112323232323232"
@@ -919,9 +883,6 @@ export default {
   methods: {
     selectionEnable(){
       return true
-    },
-    onInputChange() {
-      this.$refs.tableLocalPager.fresh({params: {name: this.inputValue}})
     },
     toolbarAlert(name, val) {
       this.alertTitle = `toolbar ${name} change to ${val}`

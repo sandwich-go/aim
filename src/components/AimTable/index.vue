@@ -56,6 +56,7 @@
       <el-row class="aim-component-flex-end" style="align-items: start">
         <el-table
             ref="table"
+            :key="tableDataFilteredKey"
             :height="tableHeight"
             :tree-props="pathGet(treeProps,'enable',false)?treeProps:{}"
             :max-height="tablePropertyRef.maxHeight"
@@ -1477,6 +1478,8 @@ export default {
           }
         })
       }
+      // 把order为'' 或 undefined的项 且 !orderFunc 的挪到最后
+      this.sortConfigRef.orders = this.sortConfigRef.orders.filter(item => item.order || item.orderFunc).concat(this.sortConfigRef.orders.filter(item => !item.order && !item.orderFunc))
       this.$nextTick(() => {
         this.handleOrderChange()
       })
@@ -1497,9 +1500,8 @@ export default {
 
         // 如果是本地分页模式，需要触发分页更新
         if (this.pagerConfigRef.isLocal) {
-          this.$nextTick(() => {
-            this.doLocalPagination({data: sortedData})
-          })
+          // 确保使用排序后的数据，立即调用分页（不使用nextTick，避免异步导致的数据不一致）
+          this.doLocalPagination({data: sortedData})
         }
       }
     },
