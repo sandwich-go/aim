@@ -443,6 +443,8 @@ export default {
       const start = params.AutoGenPage * params.AutoGenSize
       const end = start + params.AutoGenSize
       this.tableDataFiltered = sourceData.slice(start, end)
+      // 递增 key 值，强制表格组件重新渲染
+      this.tableDataFilteredKey++
       this.PagerTotal = sourceData.length
       this.doLayoutNextTick(true)
       if (this.afterQueryData) {
@@ -461,7 +463,8 @@ export default {
           formatter = jsb.pathGet(filter, 'format')
         }
         const valFormatted = formatter ? formatter(val,params) : formatValue(filter.type, val)
-        if (!valFormatted) {
+        // 使用严格判断，避免 0 值被误判为 false
+        if (valFormatted === null || valFormatted === undefined || valFormatted === '') {
           return
         }
         hasFilterData = true
@@ -500,11 +503,8 @@ export default {
         v.orderFunc = v.orderFunc || fs?fs.sortMethod:null
         orders.push(v)
       })
-      const filteredOrders = orders.filter(v => v.order) // 过滤掉 undefined的排序字段 否则jsb.orderBy会排序失败  todo jsb
-      if (filteredOrders.length > 0) {
-        data = jsb.orderBy(data, filteredOrders)
-      } else {
-        data = jsb.orderBy(data, orders)
+      if (orders.length > 0) {
+        return jsb.clone(jsb.orderBy(data, orders))
       }
       return data
     }

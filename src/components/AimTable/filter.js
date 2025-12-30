@@ -21,7 +21,8 @@ export function localFilter(data,conditions,filterMode) {
             }
             // 如果是字符串类型，才调用 trim，否则直接转换为字符串
             const filterVal = typeof v === 'string' ? v.trim() : String(v)
-            const rowVal = String(row[k] ||'')
+            // 使用 ?? 而不是 ||，避免 0 值被误判为 false
+            const rowVal = String(row[k] ?? '')
             const mode = jsb.pathGet(filterMode,k,FilterModeIncludes)
             // 如果已经不符合条件，跳过后续检查
             if(!valid){

@@ -21,6 +21,7 @@ export default {
       tableDataFiltered: null,
       filteredData: null, // 存储完整的筛选结果
       isFiltered: false, // 是否处于筛选状态
+      tableDataFilteredKey: 0, // 用于强制表格重新渲染的 key
       currentRow: null,
       radioChecked:null,
       rowInEdit: null,
