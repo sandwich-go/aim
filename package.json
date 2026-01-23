@@ -1,20 +1,21 @@
 {
   "name": "@cg-devcenter/aim",
   "license": "MIT",
-  "version": "0.1.946",
+  "version": "0.1.948",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lib": "vue-cli-service build --target lib src/components/index.js",
     "lint": "vue-cli-service lint",
-    "release": "yarn version --new-version patch && vue-cli-service build --target lib src/components/index.js"
+    "release": "yarn version --new-version patch && vue-cli-service build --target lib src/components/index.js",
+    "publish:local": "yarn lib && yalc publish"
   },
   "main": "dist/aim.umd.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@cg-devcenter/jsb": "0.1.186",
+    "@cg-devcenter/jsb": "0.1.187",
     "codemirror": "^5.41.0",
     "core-js": "^3.8.3",
     "element-ui": "2.12.0",
