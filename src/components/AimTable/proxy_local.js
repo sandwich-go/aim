@@ -63,7 +63,13 @@ export function newLocalDataProxyWithFieldName(parent,fieldName, options = {}) {
             return afterTableDataChanged(parent[fieldName],aimTableSchema)
         },
         saveTableData: ({tableData,aimTableSchema}) => {
-            parent[fieldName] = tableData
+            // 就地更新源数组，保持 parent[fieldName] 引用不变，Vue 能检测 splice；且表单/嵌套表仍指向同一数组
+            const arr = parent[fieldName]
+            if (Array.isArray(arr) && Array.isArray(tableData)) {
+                arr.splice(0, arr.length, ...tableData) // ...tableData 先求值再 splice，tableData===arr 时也安全
+            } else {
+                parent[fieldName] = tableData
+            }
             return afterTableDataChanged(parent[fieldName],aimTableSchema)
         },
     }

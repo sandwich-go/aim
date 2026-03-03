@@ -1,7 +1,7 @@
 const jsb = require("@cg-devcenter/jsb")
 
 export const EnvVarsTableFields = [
-    {field: 'Key', name: 'Key', type:'input',uniq:true,
+    {field: 'Key', name: 'Key', type:'input',uniq:true, sortable: true,
         headerLinkList: [
             {
                 'icon': 'el-icon-refresh',
@@ -11,7 +11,7 @@ export const EnvVarsTableFields = [
             }
         ],
     },
-    {field: 'Value', name: 'Value', type:'input'},
+    {field: 'Value', name: 'Value', type:'input', sortable: true},
     {field: 'Comment', name: '注释', type:'input'},
 ]
 
