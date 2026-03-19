@@ -1489,8 +1489,20 @@ export default {
       if(this.sortConfigRef.remote){
         this.fresh()
       }else{
-        // 本地排序
-        this.tableData = jsb.clone(this.sortTableData(this.tableData))
+        // 本地排序：优先使用 table 当前展示顺序（和用户看到的一致）。依赖 Element Table 内部 store.states.data，升级时需确认兼容
+        const tableDisplayData = this.$refs.table && this.$refs.table.store && this.$refs.table.store.states && this.$refs.table.store.states.data
+        if (Array.isArray(tableDisplayData) && tableDisplayData.length === this.tableData.length) {
+          this.tableData = tableDisplayData.slice()
+        } else {
+          this.tableData = this.sortTableData(this.tableData)
+        }
+        // 本地 proxy 时写回 source（proxy 内用 splice 就地更新），保证数据一致且不破坏响应式
+        if (jsb.pathGet(this.proxyConfigRef, 'isLocalData', false)) {
+          const saveTableData = jsb.pathGet(this.proxyConfigRef, 'saveTableData')
+          if (saveTableData) {
+            saveTableData({tableData: this.tableData, aimTableSchema: this.schema})
+          }
+        }
         let sortedData = jsb.clone(this.tableData)
         if (this.isFiltered) {
           // 更新筛选结果

@@ -31,7 +31,17 @@ export default {
   created() {
     this.tableDataProxy = newLocalDataProxyWithFieldName(this,'tableData')
     this.tableDataProxy.saveValidate = ({row}) =>{
-      console.log("row.EnvVars ",row.EnvVars)
+      const envVars = (row && row.EnvVars) || []
+      console.log("envVars ", envVars)
+      for (let i = 0; i < envVars.length; i++) {
+        const item = envVars[i]
+        if (!item.Key || !item.Value || item.Key.trim() === '' || item.Value.trim() === '') {
+          this.$message.error('环境变量的 Key 或 Value 不能为空')
+          return false
+        }
+      }
+      this.$message.success('保存成功')
+      return true
     }
   },
   methods:{
