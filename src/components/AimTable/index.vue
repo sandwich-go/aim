@@ -568,6 +568,14 @@ const jsb = require("@cg-devcenter/jsb")
 export default {
   name: "AimTable",
   watch:{
+    schema: {
+      handler() {
+        if (!this.shouldUseFieldShowChecked()) {
+          this.filedShowChecked = this.buildFiledShowCheckedFromSchema()
+        }
+      },
+      deep: true,
+    },
     'treeProps.enable'(newVal,oldVal) {
       if(oldVal === newVal){
         return
@@ -836,6 +844,7 @@ export default {
       sortIndexChangedRows:[],
       xid2SortIndexOriginal:{},
       visibleCustomView:false,
+      fieldShowCheckedTouched: false,
       filedShowChecked: this.filedShowCheckedLoad(),
     }
   },
@@ -861,13 +870,13 @@ export default {
         v.show = true
       }
     })
-    if(this.filedShowChecked.length === 0){
-      const _this = this
-      jsb.each(this.schema,v=>{
-        if(_this.originalFieldShow(v)){
-          _this.filedShowChecked.push(v.name)
-        }
-      })
+    this.filedShowChecked = this.normalizeFiledShowChecked(this.filedShowChecked)
+    if (this.shouldUseFieldShowChecked()) {
+      if(this.filedShowChecked.length === 0){
+        this.filedShowChecked = this.buildFiledShowCheckedFromSchema()
+      }
+    } else {
+      this.filedShowChecked = this.buildFiledShowCheckedFromSchema()
     }
     this.queryTableSetting().then(()=>{
       this.tableData = this.processTableData(this.tableData)
@@ -980,6 +989,12 @@ export default {
           delete fs.max_width
         }
       })
+      if (this.shouldUseFieldShowChecked()) {
+        this.filedShowChecked = this.normalizeFiledShowChecked(this.filedShowChecked)
+        this.filedShowCheckedChanged()
+      } else {
+        this.filedShowChecked = this.buildFiledShowCheckedFromSchema()
+      }
       this.doLayoutNextTick(true)
     },
     commentSlotName,
@@ -1077,7 +1092,42 @@ export default {
       }
       return show
     },
+    shouldIgnoreFieldShowCache(fs) {
+      return jsb.pathGet(fs, 'hideCustom', false) && !this.originalFieldShow(fs)
+    },
+    shouldUseFieldShowChecked() {
+      return !!this.cacheKeyFieldsShow() || this.fieldShowCheckedTouched
+    },
+    buildFiledShowCheckedFromSchema() {
+      const fieldNames = []
+      jsb.each(this.schema, (fieldSchema) => {
+        if (this.originalFieldShow(fieldSchema)) {
+          fieldNames.push(fieldSchema.name)
+        }
+      })
+      return this.normalizeFiledShowChecked(fieldNames)
+    },
+    normalizeFiledShowChecked(fieldNames = []) {
+      const normalized = []
+      jsb.each(fieldNames, (fieldName) => {
+        if (normalized.includes(fieldName)) {
+          return
+        }
+        const fieldSchema = jsb.find(this.schema, v => v.name === fieldName)
+        if (!fieldSchema || this.shouldIgnoreFieldShowCache(fieldSchema)) {
+          return
+        }
+        normalized.push(fieldName)
+      })
+      return normalized
+    },
     fieldShow(fs) {
+      if (this.shouldIgnoreFieldShowCache(fs)) {
+        return false
+      }
+      if (!this.shouldUseFieldShowChecked()) {
+        return this.originalFieldShow(fs)
+      }
       return jsb.find(this.filedShowChecked,v=>v===fs.name)
     },
     pathGet(data, fieldPath, defaultVal = undefined) {
@@ -1519,11 +1569,16 @@ export default {
     },
     // 显示字段
     filedShowCheckedChanged(){
+      this.fieldShowCheckedTouched = true
       const key = this.cacheKeyFieldsShow()
+      const normalized = this.normalizeFiledShowChecked(this.filedShowChecked)
+      if (JSON.stringify(normalized) !== JSON.stringify(this.filedShowChecked)) {
+        this.filedShowChecked = normalized
+      }
       if(!key){
         return
       }
-      Cookies.set(key,JSON.stringify(this.filedShowChecked))
+      Cookies.set(key,JSON.stringify(normalized))
     },
     filedShowCheckedLoad(){
       const key = this.cacheKeyFieldsShow()
