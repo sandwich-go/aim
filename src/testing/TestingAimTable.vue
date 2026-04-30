@@ -726,10 +726,23 @@ export default {
           backgroundAsHeader: true,
           fixed: 'right',
           name: '操作',
-          width: 200,
+          width: 320,
           sortable: false,
           cell: 'CellDropdown',
-          cellConfig: [`btn@btnRowDelete@l_删除`, 'link@' + CodeButtonRowSave,'divided','divided',CodeButtonRowDelete, CodeButtonRowCopy, CodeButtonRowHistory]
+          fixedCells: [
+            CodeButtonRowCopy,
+            'link@handleDeleteFixed@t_danger@l_固定删除@e_plain',
+          ],
+          cellConfig: [
+            'link@handleDelete@t_danger@l_删除@e_plain',
+            'link@disableOnly@t_info@l_禁用无提示@e_plain',
+            'link@disableWithTip@t_warning@l_禁用+提示@e_plain',
+            'link@rowSensitiveTip@t_success@l_按行提示@e_plain',
+            'divided',
+            CodeButtonRowDelete,
+            CodeButtonRowSave,
+            CodeButtonRowHistory,
+          ]
         },
       ],
 
@@ -888,8 +901,34 @@ export default {
       this.alertTitle = `toolbar ${name} change to ${val}`
     },
     shouldCellDisable({code, row, fieldSchema}) {
+      if (row) {
+        if (code === 'disableOnly') {
+          return true
+        }
+        if (code === 'disableWithTip') {
+          return '固定提示示例：这个按钮被禁用，但现在支持 hover tip'
+        }
+        if (code === 'rowSensitiveTip') {
+          if (row.id === 4) {
+            return false
+          }
+          return `按行提示示例：只有 ID=4 的行允许点击，当前行为 ID=${row.id}`
+        }
+        if (code === 'handleDelete') {
+          if (row.id === 4) {
+            return false
+          }
+          return `自定义删除示例：第 ${row.id} 行不允许删除，可通过 hover 查看原因`
+        }
+        if (code === 'handleDeleteFixed') {
+          if (row.id === 4) {
+            return false
+          }
+          return `固定按钮示例：第 ${row.id} 行的删除入口被禁用`
+        }
+      }
       if (row && code === CodeButtonRowDelete) {
-        return true
+        return '内置删除按钮示例：禁用时同样支持 hover tip'
       }
       if (row && fieldSchema) {
         return fieldSchema.field === 'name' && row[fieldSchema.field] < 2000
