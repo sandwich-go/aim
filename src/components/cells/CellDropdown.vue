@@ -1,36 +1,50 @@
 <template>
   <div style="display: inline">
     <template v-for="(cell,index) of fixedCellsRef">
-      <component v-if="cell.cell && registeredComponentMap[cell.cell]"
-         :is="registeredComponentMap[cell.cell]"
-         :key="`fixed_cell_${index}`"
-         :cell-config="cell"
-         :size="cell.size||'mini'"
-         :data="cell.data || cell"
-         :field-name="cell.field || 'value'"
-         :options="cell.options || []"
-         :disabled="disableTooltip(cell,row).disable"
-         @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
-      />
+      <el-tooltip v-if="cell.cell && registeredComponentMap[cell.cell]"
+                  :key="`fixed_cell_tooltip_${index}`"
+                  effect="light"
+                  :disabled="!disableTooltip(cell,row).tooltip"
+                  :content="disableTooltip(cell,row).tooltip || ''">
+        <span style="display: inline-block">
+          <component
+              :is="registeredComponentMap[cell.cell]"
+              :key="`fixed_cell_${index}`"
+              :cell-config="cell"
+              :size="cell.size||'mini'"
+              :data="cell.data || cell"
+              :field-name="cell.field || 'value'"
+              :options="cell.options || []"
+              :disabled="disableTooltip(cell,row).disable"
+              @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+          />
+        </span>
+      </el-tooltip>
     </template>
     <el-dropdown class="aim-dropdown-menu hover-effect" trigger="hover">
       <span style="padding: 10px;"><i class="el-icon-more"></i></span>
       <el-dropdown-menu slot="dropdown">
         <template v-for="(cell,index) of cellsShow">
-          <el-dropdown-item v-if="cell.divided" divided :key="index"></el-dropdown-item>
-          <el-dropdown-item v-if="cell.cell && registeredComponentMap[cell.cell]" :key="index">
-            <component
-                style="line-height:2.2;"
-                :is="registeredComponentMap[cell.cell]"
-                :key="`toolbar_component_${index}`"
-                :cell-config="cell"
-                :size="cell.size||'mini'"
-                :data="cell.data || cell"
-                :field-name="cell.field || 'value'"
-                :options="cell.options || []"
-                :disabled="disableTooltip(cell,row).disable"
-                @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
-            />
+          <el-dropdown-item v-if="cell.divided" divided :key="`dropdown_divided_${index}`"></el-dropdown-item>
+          <el-dropdown-item v-if="cell.cell && registeredComponentMap[cell.cell]" :key="`dropdown_item_${index}`">
+            <el-tooltip effect="light"
+                        :disabled="!disableTooltip(cell,row).tooltip"
+                        :content="disableTooltip(cell,row).tooltip || ''">
+              <span style="display: inline-block">
+                <component
+                    style="line-height:2.2;"
+                    :is="registeredComponentMap[cell.cell]"
+                    :key="`toolbar_component_${index}`"
+                    :cell-config="cell"
+                    :size="cell.size||'mini'"
+                    :data="cell.data || cell"
+                    :field-name="cell.field || 'value'"
+                    :options="cell.options || []"
+                    :disabled="disableTooltip(cell,row).disable"
+                    @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+                />
+              </span>
+            </el-tooltip>
           </el-dropdown-item>
         </template>
       </el-dropdown-menu>
