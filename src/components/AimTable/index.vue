@@ -6,6 +6,7 @@
         <!-- header toolbar -->
         <el-col v-for="direction of ['left','right']"
                 :key="direction"
+                :class="`aim-table-header-${direction}`"
                 :span="directionToolbarSpan(headerConfigRef,direction)">
           <cell-list
               :style="headerConfigRef[direction+'Style']"

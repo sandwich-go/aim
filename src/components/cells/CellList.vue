@@ -1,8 +1,7 @@
 <template>
-  <div style="display: inline">
+  <div style="display: inline" class="aim-cell-list">
     <slot name="cell-list-first"></slot>
-    <template v-for="(cell,index) of cellsRef">
-      <div :key="index" :style="divStyle">
+    <div v-for="(cell,index) of cellsRef" :class="`aim-cell-list-item ${cell.slot ? 'aim-cell-list-item-slot' : ''}`" :key="index" :style="divStyle">
         <template v-if="!shouldCellHide({cell:cell,code:cell.code ||'',row:row})">
           <template v-if="cell.code ==='btnCustom'">
             <slot name="cell-list-custom-button" :cell="cell"></slot>
@@ -52,7 +51,6 @@
           </template>
         </template>
       </div>
-    </template>
   </div>
 </template>
 <script>
