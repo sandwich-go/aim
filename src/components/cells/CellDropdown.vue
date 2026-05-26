@@ -26,11 +26,11 @@
       <el-dropdown-menu slot="dropdown">
         <template v-for="(cell,index) of cellsShow">
           <el-dropdown-item v-if="cell.divided" divided :key="`dropdown_divided_${index}`"></el-dropdown-item>
-          <el-dropdown-item v-if="cell.cell && registeredComponentMap[cell.cell]" :key="`dropdown_item_${index}`">
+          <el-dropdown-item v-if="cell.cell && registeredComponentMap[cell.cell]" :key="`dropdown_item_${index}`" @click.native="onDropdownItemClick(cell, $event)">
             <el-tooltip effect="light"
                         :disabled="!disableTooltip(cell,row).tooltip"
                         :content="disableTooltip(cell,row).tooltip || ''">
-              <span style="display: inline-block">
+              <span style="display: block; width: 100%;">
                 <component
                     style="line-height:2.2;"
                     :is="registeredComponentMap[cell.cell]"
@@ -41,7 +41,7 @@
                     :field-name="cell.field || 'value'"
                     :options="cell.options || []"
                     :disabled="disableTooltip(cell,row).disable"
-                    @code-cell-click="({code,jsEvent}) => $emit('code-cell-click',{code,jsEvent})"
+                    @code-cell-click="onDropdownCellClick"
                 />
               </span>
             </el-tooltip>
@@ -106,13 +106,31 @@ export default {
     removeDivideElements(arr) {
       if (arr.length === 0) return arr;
 
-      if (arr[0] && arr[0].divide === true) {
+      if (arr[0] && arr[0].divided === true) {
         arr.shift();
       }
-      if (arr[arr.length - 1] && arr[arr.length - 1].divide === true) {
+      if (arr[arr.length - 1] && arr[arr.length - 1].divided === true) {
         arr.pop();
       }
       return arr;
+    },
+    onDropdownCellClick({code, jsEvent}) {
+      if (jsEvent) {
+        jsEvent.__aimDropdownHandled = true
+      }
+      this.$emit('code-cell-click', {code, jsEvent})
+    },
+    onDropdownItemClick(cell, jsEvent) {
+      if (jsEvent && jsEvent.__aimDropdownHandled) {
+        return
+      }
+      if (this.disableTooltip(cell, this.row).disable) {
+        return
+      }
+      const code = cell.code || ''
+      if (code) {
+        this.$emit('code-cell-click', {code, jsEvent})
+      }
     },
     disableTooltip(cell, row) {
       const ret = this.shouldCellDisable({cell: cell, code: cell.code || '', row: row})

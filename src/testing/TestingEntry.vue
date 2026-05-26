@@ -9,6 +9,9 @@
     <el-tab-pane label="BugEnvTable" name="BugEnvTable">
       <testing-env-table/>
     </el-tab-pane>
+    <el-tab-pane label="CellDropdown" name="CellDropdown">
+      <testing-cell-dropdown/>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -16,9 +19,10 @@
 import TestingEnvTable from "@/testing/TestingEnvTable.vue";
 import TestingAimTable from "@/testing/TestingAimTable.vue";
 import TestingAimFormInput from "@/testing/TestingAimFormInput.vue";
+import TestingCellDropdown from "@/testing/TestingCellDropdown.vue";
 export default {
   name: "TestingEntry",
-  components: {TestingAimFormInput, TestingAimTable, TestingEnvTable},
+  components: {TestingAimFormInput, TestingAimTable, TestingEnvTable, TestingCellDropdown},
   data(){
     return {
       activeName:'AimTable',
