@@ -577,6 +577,9 @@ export default {
       },
       deep: true,
     },
+    tableDataFilteredKey() {
+      this.$nextTick(() => this.bindInfiniteScroll())
+    },
     'treeProps.enable'(newVal,oldVal) {
       if(oldVal === newVal){
         return
@@ -847,10 +850,17 @@ export default {
       visibleCustomView:false,
       fieldShowCheckedTouched: false,
       filedShowChecked: this.filedShowCheckedLoad(),
+      infiniteScrollBodyWrapper: null,
+      infiniteScrollHandling: false,
     }
   },
 
+  mounted() {
+    this.bindInfiniteScroll()
+    this.ensureInfiniteScrollFilled && this.ensureInfiniteScrollFilled()
+  },
   beforeDestroy() {
+    this.unbindInfiniteScroll()
     if (this.onEventDoLayout && jsb.cc.emitter) {
       jsb.cc.emitter.off(this.onEventDoLayout, this.doLayoutNextTick)
     }
@@ -922,6 +932,50 @@ export default {
   },
 
   methods: {
+    bindInfiniteScroll() {
+      if (!this.isInfiniteScroll()) {
+        this.unbindInfiniteScroll()
+        return
+      }
+      const table = this.getTableRef()
+      const bodyWrapper = table && table.bodyWrapper
+      if (!bodyWrapper || bodyWrapper === this.infiniteScrollBodyWrapper) {
+        return
+      }
+      this.unbindInfiniteScroll()
+      this.infiniteScrollBodyWrapper = bodyWrapper
+      bodyWrapper.addEventListener('scroll', this.handleInfiniteScroll, {passive: true})
+    },
+    unbindInfiniteScroll() {
+      if (this.infiniteScrollBodyWrapper) {
+        this.infiniteScrollBodyWrapper.removeEventListener('scroll', this.handleInfiniteScroll)
+        this.infiniteScrollBodyWrapper = null
+      }
+    },
+    handleInfiniteScroll(event) {
+      if (!this.isInfiniteScroll() || this.infiniteScrollHandling) {
+        return
+      }
+      const bodyWrapper = event.target
+      const distanceToBottom = bodyWrapper.scrollHeight - bodyWrapper.scrollTop - bodyWrapper.clientHeight
+      if (distanceToBottom > 80) {
+        return
+      }
+      this.infiniteScrollHandling = true
+      this.loadMoreInfiniteData()
+      this.$nextTick(() => {
+        this.infiniteScrollHandling = false
+        this.bindInfiniteScroll()
+      })
+    },
+    clearSelection() {
+      const table = this.getTableRef()
+      return table && table.clearSelection && table.clearSelection()
+    },
+    toggleRowSelection(row, selected) {
+      const table = this.getTableRef()
+      return table && table.toggleRowSelection && table.toggleRowSelection(row, selected)
+    },
     removeCtrlData,
     sortIndexMap(){
       const vList = {}
@@ -1562,7 +1616,9 @@ export default {
         }
 
         // 如果是本地分页模式，需要触发分页更新
-        if (this.pagerConfigRef.isLocal) {
+        if (this.isInfiniteScroll()) {
+          this.doInfinitePagination({data: sortedData})
+        } else if (this.pagerConfigRef.isLocal) {
           // 确保使用排序后的数据，立即调用分页（不使用nextTick，避免异步导致的数据不一致）
           this.doLocalPagination({data: sortedData})
         }

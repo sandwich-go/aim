@@ -28,6 +28,9 @@ export default {
       rowWatcher: [],
       queryCount: -1,
       afterQueryData: null,
+      // 无限加载仍把全量数据保存在 tableData；这里只记录已显示的本地段数。
+      infiniteDisplayCount: 0,
+      infiniteScrollFilling: false,
     }
   },
   created() {
@@ -100,6 +103,89 @@ export default {
     })
   },
   methods: {
+    isInfiniteScroll() {
+      // 无限加载只支持已在前端持有全量数据的本地分页，不能用于后端分页。
+      return !!this.pagerConfigRef.isLocal && !!this.pagerConfigRef.infiniteScroll && !this.PagerVisible
+    },
+    getInfiniteSourceData(data = null) {
+      return data || (this.isFiltered ? this.filteredData : this.tableData) || []
+    },
+    getInfinitePageSize() {
+      const size = Number(this.pagerConfigRef.infinitePageSize || this.PagerAutoGenSize)
+      return Number.isFinite(size) && size > 0 ? size : 50
+    },
+    doInfinitePagination({data = null, reset = false} = {}) {
+      const sourceData = this.getInfiniteSourceData(data)
+      if (reset || !this.infiniteDisplayCount) {
+        this.infiniteDisplayCount = Math.min(this.getInfinitePageSize(), sourceData.length)
+      }
+      this.tableDataFiltered = sourceData.slice(0, this.infiniteDisplayCount)
+      // 不能更新 el-table 的 key：触底追加时重建表格会把滚动位置重置到顶部。
+      if (reset) {
+        this.resetInfiniteScrollPosition()
+      }
+      this.PagerTotal = sourceData.length
+      this.doLayoutNextTick(true)
+      if (this.afterQueryData) {
+        this.afterQueryData()
+      }
+      this.ensureInfiniteScrollFilled()
+    },
+    loadMoreInfiniteData() {
+      if (!this.isInfiniteScroll()) {
+        return false
+      }
+      const sourceData = this.getInfiniteSourceData()
+      if (this.infiniteDisplayCount >= sourceData.length) {
+        return false
+      }
+      this.infiniteDisplayCount = Math.min(
+        this.infiniteDisplayCount + this.getInfinitePageSize(),
+        sourceData.length,
+      )
+      this.doInfinitePagination()
+      return true
+    },
+    // 未设置 height/maxHeight 时，Element Table 不会产生内部滚动条；此时需要继续补齐数据，
+    // 否则页面滚动不会触发 bodyWrapper 的 scroll 事件，用户只能看到第一批。
+    ensureInfiniteScrollFilled() {
+      if (!this.isInfiniteScroll() || this.infiniteScrollFilling) {
+        return
+      }
+      this.infiniteScrollFilling = true
+      const fillUntilScrollable = () => {
+        this.$nextTick(() => {
+          // Element Table 的 doLayout 会在 nextTick 后继续执行一次；等待其稳定，避免连续布局触发 ResizeObserver loop。
+          setTimeout(() => {
+            if (!this.isInfiniteScroll()) {
+              this.infiniteScrollFilling = false
+              return
+            }
+            const table = this.getTableRef && this.getTableRef()
+            const bodyWrapper = table && table.bodyWrapper
+            if (!bodyWrapper || bodyWrapper.scrollHeight > bodyWrapper.clientHeight + 1) {
+              this.infiniteScrollFilling = false
+              return
+            }
+            if (!this.loadMoreInfiniteData()) {
+              this.infiniteScrollFilling = false
+              return
+            }
+            fillUntilScrollable()
+          }, 60)
+        })
+      }
+      fillUntilScrollable()
+    },
+    resetInfiniteScrollPosition() {
+      this.$nextTick(() => {
+        const table = this.getTableRef && this.getTableRef()
+        const bodyWrapper = table && table.bodyWrapper
+        if (bodyWrapper) {
+          bodyWrapper.scrollTop = 0
+        }
+      })
+    },
     tryToast(toastType, info, toastContentDefault) {
       let toastContent = toastContentDefault
       let needToast = !this.proxyConfigRef.isLocalData
@@ -332,7 +418,9 @@ export default {
         this.PagerAutoGenPage = 0
         this.isFiltered = false
         this.filteredData = null
-        if (this.pagerConfigRef.isLocal) {
+        if (this.isInfiniteScroll()) {
+          this.doInfinitePagination({reset: true})
+        } else if (this.pagerConfigRef.isLocal) {
           // 本地分页模式：执行本地分页，使用原始数据
           this.doLocalPagination()
         }
@@ -343,7 +431,9 @@ export default {
         // 存储完整的筛选结果
         this.filteredData = localFilter(this.tableData, conditions, mode)
         // 本地筛选数据: 先筛选全部数据，然后判断是否需要本地分页进行本地分页操作
-        if (this.pagerConfigRef.isLocal) {
+        if (this.isInfiniteScroll()) {
+          this.doInfinitePagination({data: this.filteredData, reset: true})
+        } else if (this.pagerConfigRef.isLocal) {
           this.doLocalPagination({data: this.filteredData})
         }
       }
@@ -354,7 +444,7 @@ export default {
       if (this.isFilterRemote()) {
         hasFilter = this.remoteFilterDataToParams(params)
       }
-      if (this.pagerConfigRef.enable) {
+      if (this.pagerConfigRef.enable || this.isInfiniteScroll()) {
         params = this.PagerAddToParams(params)
       }
       params = this.addRemoteSortParams(params)
@@ -391,7 +481,7 @@ export default {
             this.PagerTotal = jsb.pathGet(resp, 'Total', this.tableData.length)
           }
           // 没有filter 且没有激活pager的情况下检测数据长度
-          if (!hasFilter && !this.pagerConfigRef.enable && this.PagerTotal > this.tableData.length) {
+          if (!hasFilter && !this.pagerConfigRef.enable && !this.isInfiniteScroll() && this.PagerTotal > this.tableData.length) {
             this.toastWarning(`未激活分页模式，获取到 ${this.tableData.length} 行数据，总数据行数 ${this.PagerTotal}`)
           }
 
@@ -413,7 +503,9 @@ export default {
           if (this.afterQueryData) {
             this.afterQueryData()
           }
-          if (this.pagerConfigRef.isLocal){
+          if (this.isInfiniteScroll()) {
+            this.doInfinitePagination({reset: true})
+          } else if (this.pagerConfigRef.isLocal){
             this.doLocalPagination()
           }
         }
