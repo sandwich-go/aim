@@ -16,6 +16,8 @@ export default {
       PagerAutoGenPage: 0,
       PagerAutoGenSize: jsb.ccPath('aimTablePagerSize', 20),
       PagerFreshFunc: null,
+      // 仅 paginationToggle 启用时使用；保留 footer，才能在隐藏页码后重新开启。
+      PagerVisible: true,
       PagerConfigDefault:{
         enable: true,
         showTotal:false,
@@ -28,6 +30,9 @@ export default {
   },
   created() {
     this.pagerConfigRef = jsb.objectAssignNX(this.pagerConfigRef, this.PagerConfigDefault)
+    this.PagerVisible = this.pagerConfigRef.paginationToggle
+      ? this.pagerConfigRef.paginationDefault !== false
+      : this.pagerConfigRef.enable
     if(this.pagerConfigRef.pageSize){
       this.PagerAutoGenSize  = this.pagerConfigRef.pageSize
     }
@@ -56,6 +61,21 @@ export default {
         Cookies.set(this.pagerConfigRef.pageSizeCookieKey, e)
       }
       this.PagerFreshFunc()
+    },
+    PagerTogglePagination(visible) {
+      if (!this.pagerConfigRef.paginationToggle || !this.pagerConfigRef.isLocal || !this.pagerConfigRef.infiniteScroll) {
+        return
+      }
+      this.PagerVisible = visible
+      this.PagerAutoGenPage = 0
+      if (this.isInfiniteScroll && this.isInfiniteScroll()) {
+        this.doInfinitePagination({reset: true})
+      } else if (this.pagerConfigRef.isLocal) {
+        this.doLocalPagination()
+      } else {
+        this.PagerFreshFunc()
+      }
+      this.$nextTick(() => this.bindInfiniteScroll && this.bindInfiniteScroll())
     },
     PagerAddToParams(params) {
       if (!params) {

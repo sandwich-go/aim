@@ -59,7 +59,10 @@ export default {
       heightCookieKey:''
     })
     this.tablePropertyRef.rowStyle = this.tablePropertyRef.rowStyle || {}
-    this.tablePropertyRef.rowStyle.height = this.tablePropertyRef.rowStyle.height || '35px'
+    // 保持 AIM 既有对象样式的默认行高；传入函数时，行高完全由调用方按行决定。
+    if (typeof this.tablePropertyRef.rowStyle !== 'function') {
+      this.tablePropertyRef.rowStyle.height = this.tablePropertyRef.rowStyle.height || '35px'
+    }
 
     if(this.tablePropertyRef.autoWidth){
       this.tablePropertyRef.class.push(AimTableAutoWidthClass)
